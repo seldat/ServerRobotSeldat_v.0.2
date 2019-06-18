@@ -121,10 +121,6 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public DateTime endTimeProcedure = new DateTime();
             public double totalTimeProcedure { get; set; }
             public bool onAssiged = false;
-
-
-
-
         }
         public string userName { get; set; } // dia chi Emei
         public string codeID;
