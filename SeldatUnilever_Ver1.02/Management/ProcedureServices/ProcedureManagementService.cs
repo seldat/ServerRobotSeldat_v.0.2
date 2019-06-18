@@ -97,7 +97,7 @@ namespace SeldatMRMS
                     procrc.Start ();
                     break;
                 case ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY:
-                    ProcedureRobotToReady procrr = new ProcedureRobotToReady (robot, robot.properties.ChargeID, trafficService,chargerService);
+                    ProcedureRobotToReady procrr = new ProcedureRobotToReady (robot, robot.properties.ChargeID, trafficService,chargerService, doorService.DoorMezzamineUp.config.PointCheckInGate);
                     ProcedureDataItems procrrDataItems = new ProcedureDataItems ();
                     procrrDataItems.StartTaskTime = DateTime.Now;
                     RegisterProcedureItem itemprocrr = new RegisterProcedureItem () { item = procrr, robot = robot, procedureDataItems = procrrDataItems };
@@ -111,7 +111,7 @@ namespace SeldatMRMS
                     procrr.Start ();
                     break;
                 case ProcedureItemSelected.PROCEDURE_ROBOT_READY_TO_READY:
-                    ProcedureRobotToReady procRrr = new ProcedureRobotToReady(robot, robot.properties.ChargeID, trafficService, chargerService);
+                    ProcedureRobotToReady procRrr = new ProcedureRobotToReady(robot, robot.properties.ChargeID, trafficService, chargerService,doorService.DoorMezzamineUp.config.PointCheckInGate);
                     ProcedureDataItems procRrrDataItems = new ProcedureDataItems();
                     procRrrDataItems.StartTaskTime = DateTime.Now;
                     RegisterProcedureItem itemprocRrr = new RegisterProcedureItem() { item = procRrr, robot = robot, procedureDataItems = procRrrDataItems };

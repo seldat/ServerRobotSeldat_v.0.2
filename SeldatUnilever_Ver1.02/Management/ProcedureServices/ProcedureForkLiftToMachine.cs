@@ -164,7 +164,6 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                                                             // robot.ShowText( "FORMACH_ROBOT_WAITTING_GOTO_GATE ===> FLAG " + Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position));
                         if (false == robot.CheckInZoneBehavior(ds.config.PointFrontLine.Position))
                         {
-                           
                             rb.UpdateRiskAraParams(40, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             rb.SendPoseStamped(ds.config.PointFrontLine);
