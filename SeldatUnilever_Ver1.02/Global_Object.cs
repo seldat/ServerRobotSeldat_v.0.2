@@ -63,13 +63,13 @@ namespace SeldatMRMS
 
         public static DoorManagementService doorManagementServiceCtrl;
 
-        public static bool getGateStatus(int id)
+        public static bool getGateStatus(int id) // gate {1,2} ; FlagGateBusy-Array: 0, 1
         {
-            return FlagGateBusy[id];
+            return FlagGateBusy[id-1];
         }
         public static void setGateStatus(int id, bool status)
         {
-            FlagGateBusy[id]=status;
+            FlagGateBusy[id-1]=status;
         }
         //#######################################
         public static bool ServerAlive(string hostUri = "localhost", int portNumber = 8081)

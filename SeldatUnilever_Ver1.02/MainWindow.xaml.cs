@@ -271,6 +271,8 @@ namespace SeldatUnilever_Ver1._02
             if(result== MessageBoxResult.Yes)
             {
                 Global_Object.onFlagDoorBusy = false;
+                Global_Object.setGateStatus(0, false); // gate 1
+                Global_Object.setGateStatus(1, false); // gate 2
                 Global_Object.onFlagRobotComingGateBusy = false;
             }
         }

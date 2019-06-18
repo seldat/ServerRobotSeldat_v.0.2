@@ -220,20 +220,27 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 if (typeReq == (int)TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
                 {
                     int gate=(int)results["gate"];
-                    if (PendingOrderList.Count==0)
-                    {
-                        /*if(Global_Object.onFlagDoorBusy)
-                        {
-                            statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
-                            return statusOrderResponse;
-                        }*/
-                    }
-                    else
+                    if (Global_Object.getGateStatus(gate))
                     {
                         statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
                         return statusOrderResponse;
                     }
-                    
+                    /*   if (PendingOrderList.Count==0)
+                       {
+                           //if(Global_Object.onFlagDoorBusy)
+                          // {
+                          //     statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
+                          //     return statusOrderResponse;
+                         //  }
+
+
+                       }
+                       else
+                       {
+                           statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
+                           return statusOrderResponse;
+                       }*/
+
                     OrderItem order = new OrderItem();
                     order.typeReq = (TyeRequest)typeReq;
                     order.userName = (String)results["userName"];
@@ -259,7 +266,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
                     if (Convert.ToInt32(CreatePlanBuffer(order)) > 0)
                     {
-                        Global_Object.onFlagDoorBusy = true;
+                        //  Global_Object.onFlagDoorBusy = true;
+                        Global_Object.setGateStatus(gate,true);
                         PendingOrderList.Add(order);
                         OrderedItemList.Add(order);
                     }
@@ -279,20 +287,28 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 }
                 if (typeReq == (int)TyeRequest.TYPEREQUEST_FORLIFT_TO_MACHINE)
                 {
-                    if (PendingOrderList.Count == 0)
-                    {
-                        if (Global_Object.onFlagDoorBusy)
-                        {
-                            statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
-                            return statusOrderResponse;
-                        }
-                    }
-                    else
+                    int gate = (int)results["gate"];
+                    if (Global_Object.getGateStatus(gate))
                     {
                         statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
                         return statusOrderResponse;
                     }
-                    Global_Object.onFlagDoorBusy = true;
+                    /* if (PendingOrderList.Count == 0)
+                     {
+                         if (Global_Object.onFlagDoorBusy)
+                         {
+                             statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
+                             return statusOrderResponse;
+                         }
+                     }
+                     else
+                     {
+                         statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
+                         return statusOrderResponse;
+                     }*/
+
+                    Global_Object.setGateStatus(gate, true);
+                    //Global_Object.onFlagDoorBusy = true;
                     OrderItem order = new OrderItem();
                     order.typeReq = (TyeRequest)typeReq;
                     order.userName = (String)results["userName"];

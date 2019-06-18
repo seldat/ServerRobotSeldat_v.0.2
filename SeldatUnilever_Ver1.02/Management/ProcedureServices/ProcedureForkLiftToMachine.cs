@@ -31,7 +31,17 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             StateForkLiftToMachine = ForkLiftToMachine.FORMACH_IDLE;
             resCmd = ResponseCommand.RESPONSE_NONE;
             this.robot = robot;
-            door = doorservice.DoorMezzamineUp;
+
+            if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP)
+            {
+                door = doorservice.DoorMezzamineUp;
+            }
+            else if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP_NEW)
+            {
+                door = doorservice.DoorMezzamineUpNew;
+            }
+
+          //  door = doorservice.DoorMezzamineUp;
             this.Traffic = traffiicService;
             procedureCode = ProcedureCode.PROC_CODE_FORKLIFT_TO_BUFFER;
 
@@ -52,7 +62,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         public void Destroy()
         {
-            Global_Object.onFlagDoorBusy = false;
+           // Global_Object.onFlagDoorBusy = false;
+            Global_Object.setGateStatus(order.gate, false);
             ProRunStopW = false;
             robot.orderItem = null;
             robot.SwitchToDetectLine(false);
@@ -248,7 +259,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             if(rb.SendPoseStamped(FlToMach.GetFrontLineMachine()))
                             {
-                                Global_Object.onFlagDoorBusy = false;
+                                Global_Object.setGateStatus(order.gate, false);
+                               // Global_Object.onFlagDoorBusy = false;
                                 StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
                                 robot.ShowText("FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
                             }
