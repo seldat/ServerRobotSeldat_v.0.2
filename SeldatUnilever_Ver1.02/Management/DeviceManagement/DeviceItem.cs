@@ -121,6 +121,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public DateTime endTimeProcedure = new DateTime();
             public double totalTimeProcedure { get; set; }
             public bool onAssiged = false;
+            public int gate { get;set; }
 
 
 
@@ -218,13 +219,14 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 int typeReq = (int)results["typeReq"];
                 if (typeReq == (int)TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
                 {
+                    int gate=(int)results["gate"];
                     if (PendingOrderList.Count==0)
                     {
-                        if(Global_Object.onFlagDoorBusy)
+                        /*if(Global_Object.onFlagDoorBusy)
                         {
                             statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
                             return statusOrderResponse;
-                        }
+                        }*/
                     }
                     else
                     {
@@ -242,6 +244,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     order.deviceId = (int)results["deviceId"];
                     order.timeWorkId = (int)results["timeWorkId"];
                     order.activeDate = (string)results["activeDate"];
+                    order.gate = (int)results["gate"];
                     // order.palletStatus = (String)results["palletStatus"];
                     dynamic product = new JObject();
                     product.timeWorkId = order.timeWorkId;
@@ -300,6 +303,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     order.deviceId = (int)results["deviceId"];
                     order.timeWorkId = (int)results["timeWorkId"];
                     order.activeDate = (string)results["activeDate"];
+                    order.gate = (int)results["gate"];
                     // order.palletStatus = (String)results["palletStatus"];
                     dynamic product = new JObject();
                     product.timeWorkId = order.timeWorkId;
