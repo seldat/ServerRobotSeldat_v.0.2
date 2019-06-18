@@ -31,8 +31,9 @@ namespace DoorControllerService
         public enum DoorId
         {
             DOOR_MEZZAMINE_UP = 0x01,
-            DOOR_MEZZAMINE_RETURN, /* 0x02 */
-            DOOR_ELEVATOR, /* 0x03 */
+            DOOR_MEZZAMINE_UP_NEW, /* 0x02 */
+            DOOR_MEZZAMINE_RETURN, /* 0x03 */
+            DOOR_ELEVATOR, /* 0x04 */
         }
         public enum DoorType
         {
@@ -620,7 +621,7 @@ namespace DoorControllerService
 #endif
             return ret;
         }
-        private bool Open(DoorType id)
+        public bool Open(DoorType id)
         {
 #if false
             bool ret = true;
@@ -639,7 +640,7 @@ namespace DoorControllerService
 #endif
             return ret;
         }
-        private bool Close(DoorType id)
+        public bool Close(DoorType id)
         {
 #if false
             bool ret = true;

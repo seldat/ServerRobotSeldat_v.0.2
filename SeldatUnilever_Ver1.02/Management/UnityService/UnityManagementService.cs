@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static DoorControllerService.DoorService;
 
 namespace SeldatMRMS.Management.UnityService
 {
@@ -38,6 +39,16 @@ namespace SeldatMRMS.Management.UnityService
         {
             robotManagementService = new RobotManagementService(this.mainWindow.map);
             doorManagementService = new DoorManagementService();
+
+            // Test door
+            //doorManagementService.DoorMezzamineUpNew.LampOn(DoorType.DOOR_FRONT);
+            //doorManagementService.DoorMezzamineUpNew.LampOff(DoorType.DOOR_FRONT);
+            //doorManagementService.DoorMezzamineUpNew.Open(DoorType.DOOR_FRONT);
+            //doorManagementService.DoorMezzamineUpNew.Close(DoorType.DOOR_FRONT);
+            //doorManagementService.DoorMezzamineUpNew.Open(DoorType.DOOR_BACK);
+            //doorManagementService.DoorMezzamineUpNew.Close(DoorType.DOOR_BACK);
+            // End
+
             procedureManagementService = new ProcedureManagementService();
             chargerService = new ChargerManagementService();
             trafficService = new TrafficManagementService();

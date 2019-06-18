@@ -24,6 +24,7 @@ namespace SeldatMRMS.Management.DoorServices
         public List<DoorInfoConfig> PropertiesDoor_List;
         private List<DoorInfoConfig> DoorInfoConfigList;
         public DoorService DoorMezzamineUp;
+        public DoorService DoorMezzamineUpNew;
         public DoorService DoorMezzamineReturn;
         public DoorElevator DoorElevator;
         public DoorConfigure doorConfigure;
@@ -39,7 +40,8 @@ namespace SeldatMRMS.Management.DoorServices
                 LoadConfigure();
 
                 DoorMezzamineUp = new DoorService(DoorInfoConfigList[0]);
-                DoorMezzamineReturn = new DoorService(DoorInfoConfigList[1]);
+                DoorMezzamineUpNew = new DoorService(DoorInfoConfigList[1]);
+                DoorMezzamineReturn = new DoorService(DoorInfoConfigList[2]);
                 try
                 {
                     doorConfigure = new DoorConfigure(this);
@@ -69,6 +71,20 @@ namespace SeldatMRMS.Management.DoorServices
             PropertiesDoor_List.Add(doorICF_MUB);
             DoorInfoConfigList.Add(doorICF_MUB);
 
+            DoorInfoConfig doorICF_MUB_New = new DoorInfoConfig()
+            {
+                Id = DoorId.DOOR_MEZZAMINE_UP_NEW,
+                Ip = "192.168.1.242",
+                Port = 8081,
+                infoPallet = "{\"pallet\":0,\"dir_main\":1,\"dir_out\":1,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
+                PointFrontLineStr = "2.54,-6.78,90",
+                PointCheckInGateStr = "17.88,0.7,0"
+            };
+            doorICF_MUB_New.ParsePointCheckInGateValue(doorICF_MUB_New.PointCheckInGateStr);
+            doorICF_MUB_New.ParsePointFrontLineValue(doorICF_MUB_New.PointFrontLineStr);
+            PropertiesDoor_List.Add(doorICF_MUB_New);
+            DoorInfoConfigList.Add(doorICF_MUB_New);
+
             DoorInfoConfig doorICF_MRB = new DoorInfoConfig()
             {
                 Id = DoorId.DOOR_MEZZAMINE_RETURN,
@@ -82,7 +98,7 @@ namespace SeldatMRMS.Management.DoorServices
             doorICF_MRB.ParsePointFrontLineValue(doorICF_MRB.PointFrontLineStr);
             PropertiesDoor_List.Add(doorICF_MRB);
             DoorInfoConfigList.Add(doorICF_MRB);
-
+            
             Grouped_PropertiesDoor.Refresh();
         }
         public void SaveConfig(String data)

@@ -57,6 +57,7 @@ namespace SeldatMRMS
             resCmd = ResponseCommand.RESPONSE_NONE;
             this.robot = robot;
             // this.points = new DataForkLiftToBuffer();
+            
             door = doorservice.DoorMezzamineUp;
             // this.points.PointFrontLineGate = this.door.config.PointFrontLine;
             // this.points.PointPickPalletIn = this.door.config.PointOfPallet;
