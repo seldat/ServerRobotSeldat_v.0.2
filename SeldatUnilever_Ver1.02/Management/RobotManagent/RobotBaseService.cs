@@ -66,7 +66,8 @@ namespace SeldatMRMS.Management.RobotManagent
                     if (proRegistryInRobot.pMR != null)
                     {
                         Global_Object.onFlagRobotComingGateBusy = false;
-                        Global_Object.onFlagDoorBusy = false;
+                        Global_Object.setGateStatus(proRegistryInRobot.pMR.order.gate, false);
+                        //Global_Object.onFlagDoorBusy = false;
                         proRegistryInRobot.pMR.Destroy();
                        // proRegistryInRobot.pMR = null;
                     }

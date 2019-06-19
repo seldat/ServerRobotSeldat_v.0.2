@@ -39,6 +39,8 @@ namespace SeldatMRMS
         public static string userName = "";
         public static int userAuthor = -2;
         public static bool onFlagRobotComingGateBusy = false;
+        public static bool [] FlagGateBusy= new bool[2]{ false,false }; // gate1
+        public static bool onFlagDoorBusy_G2 = false; // gate2
         public static bool onFlagDoorBusy = false;
         public static bool onAcceptDevice =true;
 
@@ -60,6 +62,15 @@ namespace SeldatMRMS
         public static string messageTitileWarning = "Warning";
 
         public static DoorManagementService doorManagementServiceCtrl;
+
+        public static bool getGateStatus(int id) // gate {1,2} ; FlagGateBusy-Array: 0, 1
+        {
+            return FlagGateBusy[id-1];
+        }
+        public static void setGateStatus(int id, bool status)
+        {
+            FlagGateBusy[id-1]=status;
+        }
         //#######################################
         public static bool ServerAlive(string hostUri = "localhost", int portNumber = 8081)
         {

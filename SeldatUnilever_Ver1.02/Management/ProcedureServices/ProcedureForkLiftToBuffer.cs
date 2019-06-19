@@ -57,8 +57,15 @@ namespace SeldatMRMS
             resCmd = ResponseCommand.RESPONSE_NONE;
             this.robot = robot;
             // this.points = new DataForkLiftToBuffer();
-            
-            door = doorservice.DoorMezzamineUp;
+
+            if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP)
+            {
+                door = doorservice.DoorMezzamineUp;
+            }
+            else if((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP_NEW)
+            {
+                door = doorservice.DoorMezzamineUpNew;
+            }
             // this.points.PointFrontLineGate = this.door.config.PointFrontLine;
             // this.points.PointPickPalletIn = this.door.config.PointOfPallet;
             this.Traffic = trafficService;
@@ -84,7 +91,8 @@ namespace SeldatMRMS
         }
         public void Destroy()
         {
-            Global_Object.onFlagDoorBusy = false;
+            Global_Object.setGateStatus(order.gate, false);
+           // Global_Object.onFlagDoorBusy = false;
             ProRunStopW = false;
             robot.orderItem = null;
             robot.robotTag = RobotStatus.IDLE;
@@ -338,7 +346,8 @@ namespace SeldatMRMS
                                     if (rb.SendPoseStamped(FlToBuf.GetCheckInBuffer(true)))
 
                                     {
-                                        Global_Object.onFlagDoorBusy = false;
+                                        Global_Object.setGateStatus(order.gate, false);
+                                      //  Global_Object.onFlagDoorBusy = false;
                                         StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
                                         onFlagResetedGate = false;
                                         robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER");
@@ -497,7 +506,8 @@ namespace SeldatMRMS
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             if (rb.SendPoseStamped(flToMachineInfo.frontLinePose))
                             {
-                                Global_Object.onFlagDoorBusy = false;
+                                Global_Object.setGateStatus(order.gate, false);
+                                // Global_Object.onFlagDoorBusy = false;
                                 StateForkLift = ForkLift.FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
                                 robot.ShowText("FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
                                 onFlagResetedGate = false;
