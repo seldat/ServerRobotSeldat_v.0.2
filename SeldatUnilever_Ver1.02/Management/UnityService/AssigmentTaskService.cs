@@ -1,5 +1,6 @@
 ﻿using SeldatMRMS;
 using SeldatMRMS.Management.RobotManagent;
+using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using System;
 using System.Collections.Generic;
@@ -300,21 +301,31 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         }
                         break;
                     case ProcessAssignTaskReady.PROC_READY_ASSIGN_ANTASK:
-                        if (!robotatready.CheckRobotWorkinginReady() )
-                        {
-                            //  if (!trafficService.HasRobotUnityinArea("RD5") && !trafficService.HasRobotUnityinArea("OPA3") && !trafficService.HasRobotUnityinArea("READY") )
-                            if (!trafficService.HasRobotUnityinArea("ATR"))
-                            {
-                                robotatready.TurnOnSupervisorTraffic(true);
-                                Console.WriteLine(processAssignTaskReady);
-                                SelectProcedureItem(robotatready, orderItem_ready);
-                                deviceItemsList[0].RemoveFirstOrder();
-                                MoveElementToEnd(); // sort Task List
-                                orderItem_ready.status = StatusOrderResponseCode.DELIVERING;
-                                processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_ROBOT_OUTSIDEREADY;
-                            }
-                        }
-                        break;
+                    /* if (!robotatready.CheckRobotWorkinginReady() )
+                     {
+                         //  if (!trafficService.HasRobotUnityinArea("RD5") && !trafficService.HasRobotUnityinArea("OPA3") && !trafficService.HasRobotUnityinArea("READY") )
+                         if (!trafficService.HasRobotUnityinArea("ATR"))
+                         {
+                             robotatready.TurnOnSupervisorTraffic(true);
+                             Console.WriteLine(processAssignTaskReady);
+                             SelectProcedureItem(robotatready, orderItem_ready);
+                             deviceItemsList[0].RemoveFirstOrder();
+                             MoveElementToEnd(); // sort Task List
+                             orderItem_ready.status = StatusOrderResponseCode.DELIVERING;
+                             processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_ROBOT_OUTSIDEREADY;
+                         }
+                     }*/
+                    if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robotatready))
+                    {
+                            robotatready.TurnOnSupervisorTraffic(true);
+                            Console.WriteLine(processAssignTaskReady);
+                            SelectProcedureItem(robotatready, orderItem_ready);
+                            deviceItemsList[0].RemoveFirstOrder();
+                            MoveElementToEnd(); // sort Task List
+                            orderItem_ready.status = StatusOrderResponseCode.DELIVERING;
+                            processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_ROBOT_OUTSIDEREADY;
+                    }
+                    break;
                     case ProcessAssignTaskReady.PROC_READY_SET_TRAFFIC_RISKAREA_ON:
                         robotatready.TurnOnSupervisorTraffic(true);
                         processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_ASSIGN_ANTASK;
@@ -324,11 +335,12 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         // kiem tra robot vẫn còn tai vung ready
                         if (!trafficService.RobotIsInArea("READY", robotatready.properties.pose.Position))
                         {
-                            // xoa khoi list cho
+                        // xoa khoi list cho
+                        TrafficRountineConstants.RegIntZone_READY.Release(robotatready);
                             robotManageService.RemoveRobotUnityReadyList(robotatready);
                             processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST;
 
-                    }
+                        }
 
                         break;
                 }

@@ -11,6 +11,7 @@ using SeldatMRMS.Management;
 using SeldatMRMS.Management.DoorServices;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
+using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using static DoorControllerService.DoorService;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
@@ -75,9 +76,11 @@ namespace SeldatMRMS
         public void Start(ForkLift state = ForkLift.FORBUF_ROBOT_GOTO_CHECKIN_GATE)
         {
             // public void Start (ForkLiftToBuffer state = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED) {
-            robot.robotTag = RobotStatus.WORKING;
+
             errorCode = ErrorCode.RUN_OK;
+            robot.robotTag = RobotStatus.WORKING;
             robot.ProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
+            robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.GOING_INSIDE_GATE;
             StateForkLift = state;
 
             Task ProForkLift = new Task(() => this.Procedure(this));
@@ -88,6 +91,7 @@ namespace SeldatMRMS
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             robot.robotRegistryToWorkingZone.onRobotwillCheckInsideGate = true;
             order.startTimeProcedure = DateTime.Now;
+ 
         }
         public void Destroy()
         {
@@ -305,6 +309,7 @@ namespace SeldatMRMS
                             // FlToBuf.UpdatePalletState(PalletStatus.F);
                             //   rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE;
+                            robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.GOING_OUTSIDE_GATE;
                             robot.ShowText("FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
@@ -343,6 +348,11 @@ namespace SeldatMRMS
                                 try
 
                                 {
+                                    if(TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
+                                    {
+                                        break;
+                                    }
+
                                     if (rb.SendPoseStamped(FlToBuf.GetCheckInBuffer(true)))
 
                                     {
@@ -389,6 +399,8 @@ namespace SeldatMRMS
                             //robot.ShowText("RELEASED ZONE");
                             if (!onFlagResetedGate)
                             {
+                                TrafficRountineConstants.RegIntZone_READY.Release(robot);
+                                robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.IDLE;
                                 Global_Object.onFlagRobotComingGateBusy = false;
                                 robot.ReleaseWorkingZone();
                                 onFlagResetedGate = true;
@@ -528,7 +540,9 @@ namespace SeldatMRMS
                             {
                                 if (!onFlagResetedGate)
                                 {
+                                    TrafficRountineConstants.RegIntZone_READY.Release(robot);
                                     onFlagResetedGate = true;
+                                    robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.IDLE;
                                     Global_Object.onFlagRobotComingGateBusy = false;
                                     robot.ReleaseWorkingZone();
                                 }
@@ -607,6 +621,7 @@ namespace SeldatMRMS
                     case ForkLift.FORMAC_ROBOT_DESTROY: // trả robot về robotmanagement để nhận quy trình mới
                         robot.SwitchToDetectLine(false);
                         robot.ReleaseWorkingZone();
+                        robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.IDLE;
                         robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
                         ProRun = false;
                         UpdateInformationInProc(this, ProcessStatus.F);

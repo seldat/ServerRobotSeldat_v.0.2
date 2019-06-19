@@ -301,8 +301,10 @@
     <Compile Include="Management\TrafficManager\ConfigureRiskZone.xaml.cs">
       <DependentUpon>ConfigureRiskZone.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Management\TrafficManager\RegistryIntersectionZone.cs" />
     <Compile Include="Management\TrafficManager\TrafficManagementService.cs" />
     <Compile Include="Management\TrafficManager\TrafficRounterService.cs" />
+    <Compile Include="Management\TrafficManager\TrafficRountineConstants.cs" />
     <Compile Include="Management\UnityService\AssigmentTaskService.cs" />
     <Compile Include="Management\UnityService\TaskRounterService.cs" />
     <Compile Include="Management\UnityService\UnityManagementService.cs" />

@@ -10,6 +10,7 @@ using SeldatMRMS.Management.DoorServices;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
 using SeldatUnilever_Ver1._02.Management.McuCom;
+using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
@@ -552,7 +553,8 @@ namespace SeldatMRMS
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_CAME_CHECKIN_READYSTATION:
-                        if ((false == robot.CheckInZoneBehavior(p.PointFrontLine.Position))||(false == rb.CheckRobotWorkinginReady()))
+                        // if ((false == robot.CheckInZoneBehavior(p.PointFrontLine.Position))||(false == rb.CheckRobotWorkinginReady()))
+                        if(TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
                         {
                             rb.SendPoseStamped(p.PointFrontLine);
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION;
@@ -612,7 +614,8 @@ namespace SeldatMRMS
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_RELEASED:
-                      
+
+                        TrafficRountineConstants.RegIntZone_READY.Release(robot);
                         robot.robotTag = RobotStatus.IDLE;
                         robot.SetSafeYellowcircle(false);
                         robot.SetSafeBluecircle(false);

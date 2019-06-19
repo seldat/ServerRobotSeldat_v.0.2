@@ -25,11 +25,13 @@ namespace SeldatMRMS.Management
             ROBOT_PLACE_HIGHWAY_READY,
             ROBOT_PLACE_IDLE
         }
-        public enum RobotBahaviorAtGate
+        public enum RobotBahaviorAtReadyGate
         {
             IDLE=0,
-            GOING_INSIDE,
-            GOING_OUTSIDE,
+            GOING_INSIDE_GATE,
+            GOING_OUTSIDE_GATE,
+            GOING_INSIDE_READY,
+            GOING_OUTSIDE_READY,
             GOING_INSIDE_GATE1,
             GOING_OUTSIDE_GATE1,
             GOING_INSIDE_GATE2,
@@ -146,7 +148,7 @@ namespace SeldatMRMS.Management
         public RobotRegistryToWorkingZone robotRegistryToWorkingZone;
         public RobotStatus robotTag;
         public String STATE_SPEED = "";
-        public RobotBahaviorAtGate robotBahaviorAtGate;
+        public RobotBahaviorAtReadyGate robotBahaviorAtGate;
         public TrafficRobotUnity() : base()
         {
             TurnOnSupervisorTraffic(false);
@@ -526,6 +528,8 @@ namespace SeldatMRMS.Management
             bool hasRobotWorking = false;
             foreach (RobotUnity robot in RobotUnitylist)
             {
+                if (robot == this) // kiem tra robot bằng chính nó bỏ qua
+                    continue;
                 if (trafficManagementService.GetTypeZone(robot.properties.pose.Position, 0, 200) == TypeZone.READY)
                 {
                     if (robot.robotTag == RobotStatus.WORKING)

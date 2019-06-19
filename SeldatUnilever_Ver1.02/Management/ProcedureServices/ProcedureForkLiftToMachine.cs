@@ -3,6 +3,7 @@ using SeldatMRMS;
 using SeldatMRMS.Management.DoorServices;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
+using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -49,6 +50,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         public void Start(ForkLiftToMachine state = ForkLiftToMachine.FORMACH_ROBOT_GOTO_CHECKIN_GATE)
         {
             robot.robotTag = RobotStatus.WORKING;
+            robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.GOING_INSIDE_GATE;
             errorCode = ErrorCode.RUN_OK;
             robot.ProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
             StateForkLiftToMachine = state;
@@ -62,7 +64,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         public void Destroy()
         {
-           // Global_Object.onFlagDoorBusy = false;
+            // Global_Object.onFlagDoorBusy = false;
+            robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.IDLE;
             Global_Object.setGateStatus(order.gate, false);
             ProRunStopW = false;
             robot.orderItem = null;
@@ -225,6 +228,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             // FlToMach.UpdatePalletState(PalletStatus.F);
                             StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE;
+                            robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.GOING_OUTSIDE_GATE;
                             robot.ShowText("FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
@@ -254,7 +258,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             //if (true == ds.Close(DoorService.DoorType.DOOR_BACK))
                             //{
-                       
+                            if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
+                            {
+                                break;
+                            }
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             if(rb.SendPoseStamped(FlToMach.GetFrontLineMachine()))
                             {
@@ -286,6 +293,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                 //  robot.ShowText("RELEASED ZONE");
                                 if (!onFlagResetedGate)
                                 {
+                                    TrafficRountineConstants.RegIntZone_READY.Release(robot);
+                                    robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.IDLE;
                                     onFlagResetedGate = true;
                                     Global_Object.onFlagRobotComingGateBusy = false;
                                     robot.ReleaseWorkingZone();
