@@ -41,7 +41,7 @@ namespace SeldatMRMS.Management.DoorServices
 
                 DoorMezzamineUp = new DoorService(DoorInfoConfigList[0]);
                 DoorMezzamineUpNew = new DoorService(DoorInfoConfigList[1]);
-                DoorMezzamineReturn = new DoorService(DoorInfoConfigList[2]);
+                DoorMezzamineReturn = new DoorService(DoorInfoConfigList[1]); // kiem tra lai 
                 try
                 {
                     doorConfigure = new DoorConfigure(this);

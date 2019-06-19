@@ -154,17 +154,14 @@ namespace SeldatUnilever_Ver1._02
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            CenterWindowOnScreen();
+           /*CenterWindowOnScreen();
             myManagementWindow.Visibility = Visibility.Hidden;
             LoginForm frm = new LoginForm(Thread.CurrentThread.CurrentCulture.ToString());
-            frm.ShowDialog();
+            frm.ShowDialog();*/
+            Global_Object.userAuthor = 2;
             if (Global_Object.userAuthor <= 2)
             {
                 myManagementWindow.Visibility = Visibility.Visible;
-                /* Dispatcher.BeginInvoke(new ThreadStart(() =>
-              //    {
-              //        canvasControlService.ReloadAllStation();
-              //    }));*/
                 unityService = new UnityManagementService(this);
                 unityService.Initialize();
                 ctrR = new CtrlRobot(unityService.robotManagementService);

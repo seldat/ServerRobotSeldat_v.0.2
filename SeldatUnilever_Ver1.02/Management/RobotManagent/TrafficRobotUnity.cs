@@ -25,6 +25,16 @@ namespace SeldatMRMS.Management
             ROBOT_PLACE_HIGHWAY_READY,
             ROBOT_PLACE_IDLE
         }
+        public enum RobotBahaviorAtGate
+        {
+            IDLE=0,
+            GOING_INSIDE,
+            GOING_OUTSIDE,
+            GOING_INSIDE_GATE1,
+            GOING_OUTSIDE_GATE1,
+            GOING_INSIDE_GATE2,
+            GOING_OUTSIDE_GATE2,
+        }
         public class PriorityLevel
         {
             public PriorityLevel()
@@ -136,6 +146,7 @@ namespace SeldatMRMS.Management
         public RobotRegistryToWorkingZone robotRegistryToWorkingZone;
         public RobotStatus robotTag;
         public String STATE_SPEED = "";
+        public RobotBahaviorAtGate robotBahaviorAtGate;
         public TrafficRobotUnity() : base()
         {
             TurnOnSupervisorTraffic(false);
