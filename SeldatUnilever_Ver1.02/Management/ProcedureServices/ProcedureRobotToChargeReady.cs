@@ -545,6 +545,15 @@ namespace SeldatMRMS
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_CHECKIN_READYSTATION:
+                        // nếu robot đang đi về ready , trạng thái không phải để charge. Kiểm tra có còn task nếu còn thì tiếp tục đi nhận task khác
+                        if (!robot.properties.RequestChargeBattery)
+                        {
+                            if (DetermineHasTaskWaitingAnRobotAvailable())
+                            {
+                                StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITINGREADY_FORCERELEASED;
+                                break;
+                            }
+                        }
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -572,15 +581,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION: // Robot dang di toi dau line ready station
-                        // nếu robot đang đi về ready , trạng thái không phải để charge. Kiểm tra có còn task nếu còn thì tiếp tục đi nhận task khác
-                        if(!robot.properties.RequestChargeBattery)
-                        {
-                            if(DetermineHasTaskWaitingAnRobotAvailable())
-                            {
-                                StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITINGREADY_FORCERELEASED;
-                                break;
-                            }
-                        }
+
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         //if ( robot.ReachedGoal())
                         {
