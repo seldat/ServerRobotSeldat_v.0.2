@@ -350,6 +350,7 @@ namespace SeldatMRMS
                                 {
                                     if(TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
                                     {
+                                        Thread.Sleep(500);
                                         break;
                                     }
 

@@ -42,7 +42,8 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             ROAD,
             READY,
             OPZ, // Operation Zone
-            OPZS, // Operation Zone
+            OPZS, // Operation Zone special
+            GATE,
             GATE_CHECKOUT,
             GATE_CHECKINT,
             TEMP

@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Reflection;
+using System.Resources;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -105,7 +107,8 @@ namespace SeldatUnilever_Ver1._02
             Closed += MainWindow_Closed;
             canvasMatrixTransform = new MatrixTransform(1, 0, 0, -1, 0, 0);
 
-            ImageBrush img = LoadImage("Map_aTan___Copy2");
+            //  ImageBrush img = LoadImage("Map_aTan___Copy2");
+            ImageBrush img = LoadImage("Map_layout1");
             map.Width = img.ImageSource.Width;
             map.Height = img.ImageSource.Height;
             map.Background = img;
@@ -117,7 +120,6 @@ namespace SeldatUnilever_Ver1._02
 
             //DataContext = this;
             //DataContext = new ViewModel();
-
         }
 
         private void MainWindow_Closed(object sender, EventArgs e)

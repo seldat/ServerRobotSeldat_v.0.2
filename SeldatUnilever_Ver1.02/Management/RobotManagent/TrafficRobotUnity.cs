@@ -23,6 +23,7 @@ namespace SeldatMRMS.Management
             ROBOT_PLACE_BUFFER,
             ROBOT_PLACE_HIGHWAY_DETECTLINE,
             ROBOT_PLACE_HIGHWAY_READY,
+            ROBOT_PLACE_GATE,
             ROBOT_PLACE_IDLE
         }
         public enum RobotBahaviorAtReadyGate
@@ -575,6 +576,10 @@ namespace SeldatMRMS.Management
             {
                 robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER;
             }
+            if (_type == TypeZone.GATE)
+            {
+                robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_GATE;
+            }
             switch (robotBahaviorAtAnyPlace)
             {
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_IDLE:
@@ -644,6 +649,12 @@ namespace SeldatMRMS.Management
                         SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
                     }
                     // tắt vòng tròn nhỏ
+                    break;
+                case RobotBahaviorAtAnyPlace.ROBOT_PLACE_GATE:
+                    SetSafeOrgancircle(false);
+                    SetSafeSmallcircle(false);
+                    SetSafeBluecircle(false);
+                    SetSafeYellowcircle(false);
                     break;
             }
         }

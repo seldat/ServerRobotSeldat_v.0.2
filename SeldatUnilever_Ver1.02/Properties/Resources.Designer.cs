@@ -192,6 +192,16 @@ namespace SeldatUnilever_Ver1._02.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Map_layout1 {
+            get {
+                object obj = ResourceManager.GetObject("Map_layout1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap mapbackground {
             get {
                 object obj = ResourceManager.GetObject("mapbackground", resourceCulture);
@@ -576,6 +586,15 @@ namespace SeldatUnilever_Ver1._02.Properties {
             get {
                 object obj = ResourceManager.GetObject("test34", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string text1 {
+            get {
+                return ResourceManager.GetString("text1", resourceCulture);
             }
         }
         

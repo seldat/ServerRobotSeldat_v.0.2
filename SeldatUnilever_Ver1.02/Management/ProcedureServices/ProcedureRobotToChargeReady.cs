@@ -556,9 +556,11 @@ namespace SeldatMRMS
                         // if ((false == robot.CheckInZoneBehavior(p.PointFrontLine.Position))||(false == rb.CheckRobotWorkinginReady()))
                         if(TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
                         {
-                            rb.SendPoseStamped(p.PointFrontLine);
-                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION;
-                            robot.ShowText("ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION");
+                            if (rb.SendPoseStamped(p.PointFrontLine))
+                            {
+                                StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION;
+                                robot.ShowText("ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION");
+                            }
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION: // ROBOT cho tiến vào vị trí đầu line charge su dung laser

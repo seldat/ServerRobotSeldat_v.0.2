@@ -467,6 +467,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -476,6 +477,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="RobotView\CurveInfo.resx">
       <DependentUpon>CurveInfo.cs</DependentUpon>
@@ -723,6 +725,8 @@
     <None Include="Resources\test3.jpg" />
     <None Include="Resources\ALARM.wav" />
     <None Include="Resources\Map_aTan - Copy2.jpg" />
+    <None Include="Resources\Map_layout1.jpg" />
+    <None Include="Resources\text1.txt" />
     <Content Include="sharpdx_direct3d11_1_effects_arm.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

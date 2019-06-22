@@ -260,6 +260,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             //{
                             if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
                             {
+                                Thread.Sleep(500);
                                 break;
                             }
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;

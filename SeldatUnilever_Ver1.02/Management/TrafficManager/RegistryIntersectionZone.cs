@@ -9,6 +9,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
 {
     public class RegistryIntersectionZone
     {
+        private const int NUM_ROBOT_REG = 3;
         public String Name{ get; set; }
         private List<RobotUnity> Registryrobotlist = new List<RobotUnity>();
         public RegistryIntersectionZone(String Name)
@@ -17,7 +18,9 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         }
         public void Registry(RobotUnity robot)
         {
-                Registryrobotlist.Add(robot);
+            if (Registryrobotlist.Count > NUM_ROBOT_REG)
+                return;
+            Registryrobotlist.Add(robot);
         }
         public bool Contains(RobotUnity robot)
         {
@@ -25,7 +28,9 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         }
         public int GetIndex(RobotUnity robot)
         {
-            return Registryrobotlist.IndexOf(robot);
+            if(Registryrobotlist.Contains(robot))
+                return Registryrobotlist.IndexOf(robot);
+            return -1;
         }
         public bool Remove(RobotUnity robot)
         {
@@ -33,11 +38,13 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         }
         public bool CheckPermission(RobotUnity robot)
         {
+            int index = GetIndex(robot);
             if (GetIndex(robot) == 0)
             {
                 return true;
             }
-            return false;
+            else
+                return false;
         }
         public void Release(RobotUnity robot)
         {
