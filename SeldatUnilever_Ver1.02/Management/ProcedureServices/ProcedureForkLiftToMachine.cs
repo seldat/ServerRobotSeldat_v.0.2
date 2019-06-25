@@ -24,7 +24,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         public bool onFlagResetedGate = false;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
-
+        private DoorManagementService doorservice;
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
         public ProcedureForkLiftToMachine(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService traffiicService) : base(robot)
@@ -32,7 +32,14 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             StateForkLiftToMachine = ForkLiftToMachine.FORMACH_IDLE;
             resCmd = ResponseCommand.RESPONSE_NONE;
             this.robot = robot;
+            this.doorservice = doorservice;
+          //  door = doorservice.DoorMezzamineUp;
+            this.Traffic = traffiicService;
+            procedureCode = ProcedureCode.PROC_CODE_FORKLIFT_TO_BUFFER;
 
+        }
+        public void Start(ForkLiftToMachine state = ForkLiftToMachine.FORMACH_ROBOT_GOTO_CHECKIN_GATE)
+        {
             if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP)
             {
                 door = doorservice.DoorMezzamineUp;
@@ -41,14 +48,6 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             {
                 door = doorservice.DoorMezzamineUpNew;
             }
-
-          //  door = doorservice.DoorMezzamineUp;
-            this.Traffic = traffiicService;
-            procedureCode = ProcedureCode.PROC_CODE_FORKLIFT_TO_BUFFER;
-
-        }
-        public void Start(ForkLiftToMachine state = ForkLiftToMachine.FORMACH_ROBOT_GOTO_CHECKIN_GATE)
-        {
             robot.robotTag = RobotStatus.WORKING;
             robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.GOING_INSIDE_GATE;
             errorCode = ErrorCode.RUN_OK;

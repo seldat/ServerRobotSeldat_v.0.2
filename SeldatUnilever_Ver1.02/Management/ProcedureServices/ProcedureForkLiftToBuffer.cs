@@ -44,7 +44,7 @@ namespace SeldatMRMS
         TrafficManagementService Traffic;
         public bool onFlagResetedGate = false;
         private DeviceRegistrationService deviceService;
-
+        private DoorManagementService doorservice;
         public override event Action<Object> ReleaseProcedureHandler;
 
         public void Registry(DeviceRegistrationService deviceService)
@@ -58,15 +58,8 @@ namespace SeldatMRMS
             resCmd = ResponseCommand.RESPONSE_NONE;
             this.robot = robot;
             // this.points = new DataForkLiftToBuffer();
+            this.doorservice = doorservice;
 
-            if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP)
-            {
-                door = doorservice.DoorMezzamineUp;
-            }
-            else if((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP_NEW)
-            {
-                door = doorservice.DoorMezzamineUpNew;
-            }
             // this.points.PointFrontLineGate = this.door.config.PointFrontLine;
             // this.points.PointPickPalletIn = this.door.config.PointOfPallet;
             this.Traffic = trafficService;
@@ -76,7 +69,14 @@ namespace SeldatMRMS
         public void Start(ForkLift state = ForkLift.FORBUF_ROBOT_GOTO_CHECKIN_GATE)
         {
             // public void Start (ForkLiftToBuffer state = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED) {
-
+            if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP)
+            {
+                door = this.doorservice.DoorMezzamineUp;
+            }
+            else if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP_NEW)
+            {
+                door = this.doorservice.DoorMezzamineUpNew;
+            }
             errorCode = ErrorCode.RUN_OK;
             robot.robotTag = RobotStatus.WORKING;
             robot.ProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
