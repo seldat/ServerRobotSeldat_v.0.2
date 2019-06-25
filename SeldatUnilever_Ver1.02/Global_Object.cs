@@ -69,6 +69,8 @@ namespace SeldatMRMS
         }
         public static void setGateStatus(int id, bool status)
         {
+            if ((id - 1) < 0)
+                return;
             FlagGateBusy[id-1]=status;
         }
         //#######################################

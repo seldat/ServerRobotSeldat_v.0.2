@@ -219,7 +219,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 int typeReq = (int)results["typeReq"];
                 if (typeReq == (int)TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
                 {
-                    int gate=(int)results["gate"];
+                    //int gate=(int)results["gate"];
+                    int gate = 1;
                     if (Global_Object.getGateStatus(gate))
                     {
                         statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
@@ -251,7 +252,10 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     order.deviceId = (int)results["deviceId"];
                     order.timeWorkId = (int)results["timeWorkId"];
                     order.activeDate = (string)results["activeDate"];
-                    order.gate = (int)results["gate"];
+
+                    // order.gate = (int)results["gate"];
+
+                    order.gate = 1;
                     // order.palletStatus = (String)results["palletStatus"];
                     dynamic product = new JObject();
                     product.timeWorkId = order.timeWorkId;

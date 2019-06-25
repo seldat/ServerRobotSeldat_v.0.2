@@ -1,5 +1,6 @@
 ﻿using SeldatMRMS.RobotView;
 using SeldatUnilever_Ver1._02.Management.RobotManagent;
+using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -395,22 +396,23 @@ namespace SeldatMRMS.Management.RobotManagent
                 border.ToolTip = "Name: " + properties.Label + Environment.NewLine + "Zone: " + typezone +
                     Environment.NewLine + " Location: " + position.X.ToString("0.00") + " / " +
                     position.Y.ToString("0.00") + " / " + angle.ToString("0.00") + Environment.NewLine +
-                    "Place: "+ TyprPlaceStr + Environment.NewLine+
+                    "Place: " + TyprPlaceStr + Environment.NewLine +
                     "Working Zone: " + robotRegistryToWorkingZone.WorkingZone + Environment.NewLine +
                     "Radius _S" + Radius_S + Environment.NewLine +
                     "Radius _Y" + Radius_Y + Environment.NewLine +
                     "Radius _B" + Radius_B + Environment.NewLine +
                     "Speed Set :" + properties.speedInSpecicalArea + Environment.NewLine +
                     "STATE: " + STATE_SPEED + Environment.NewLine +
-                    "MIDDLE :" + MiddleHeaderCv().X.ToString("0.00") + " /" + MiddleHeaderCv().Y.ToString("0.00") + Environment.NewLine+
-                    "MIDDLE1 :" + MiddleHeaderCv1().X.ToString("0.00") + " /" + MiddleHeaderCv1().Y.ToString("0.00") + Environment.NewLine+
+                    "MIDDLE :" + MiddleHeaderCv().X.ToString("0.00") + " /" + MiddleHeaderCv().Y.ToString("0.00") + Environment.NewLine +
+                    "MIDDLE1 :" + MiddleHeaderCv1().X.ToString("0.00") + " /" + MiddleHeaderCv1().Y.ToString("0.00") + Environment.NewLine +
                     "MIDDLE2 :" + MiddleHeaderCv2().X.ToString("0.00") + " /" + MiddleHeaderCv2().Y.ToString("0.00") + Environment.NewLine +
-                    "ValueR SC:" + valueSC+ Environment.NewLine +
-                    "ValueR BigC:" + valueBigC + Environment.NewLine+
-                    "RobotTag:" + robotTag + Environment.NewLine+
-                    "CheckGate: " + robotRegistryToWorkingZone.onRobotwillCheckInsideGate + Environment.NewLine+
-                    "Order: "+ OrderStr +Environment.NewLine+
-                    "Battery Level: " + properties.BatteryLevelRb + Environment.NewLine
+                    "ValueR SC:" + valueSC + Environment.NewLine +
+                    "ValueR BigC:" + valueBigC + Environment.NewLine +
+                    "RobotTag:" + robotTag + Environment.NewLine +
+                    "CheckGate: " + robotRegistryToWorkingZone.onRobotwillCheckInsideGate + Environment.NewLine +
+                    "Order: " + OrderStr + Environment.NewLine +
+                    "Battery Level: " + properties.BatteryLevelRb + Environment.NewLine +
+                    "Robots Registry in Ready: " + TrafficRountineConstants.RegIntZone_READY.getNames()+ Environment.NewLine
                     ;
             }
             catch { }
