@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using static DoorControllerService.DoorService;
 using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
 using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterService;
 
@@ -412,7 +413,9 @@ namespace SeldatMRMS.Management.RobotManagent
                     "CheckGate: " + robotRegistryToWorkingZone.onRobotwillCheckInsideGate + Environment.NewLine +
                     "Order: " + OrderStr + Environment.NewLine +
                     "Battery Level: " + properties.BatteryLevelRb + Environment.NewLine +
-                    "Robots Registry in Ready: " + TrafficRountineConstants.RegIntZone_READY.getNames()+ Environment.NewLine
+                    "Robots Registry in Ready: " + TrafficRountineConstants.RegIntZone_READY.getNames()+ Environment.NewLine+
+                    "Gate 1: " + Global_Object.getGateStatus((int)DoorId.DOOR_MEZZAMINE_UP) + Environment.NewLine+
+                    "Gate 2: " + Global_Object.getGateStatus((int)DoorId.DOOR_MEZZAMINE_UP_NEW) + Environment.NewLine
                     ;
             }
             catch { }
@@ -436,6 +439,8 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 case MessageBoxResult.OK:
                     DisposeProcedure();
+                    KillPID();
+                    KillActionLib();
                     TurnOnSupervisorTraffic(false);
                     this.PreProcedureAs = ProcedureControlAssign.PRO_READY;
                     robotService.RemoveRobotUnityReadyList(this);
@@ -489,6 +494,7 @@ namespace SeldatMRMS.Management.RobotManagent
             DisposeProcedure();
             Dispose();
             KillPID();
+            KillActionLib();
             MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
             onBinding = false;
             Reset();
@@ -537,6 +543,8 @@ namespace SeldatMRMS.Management.RobotManagent
                 case MessageBoxResult.OK:
 
                     DisposeProcedure();
+                    KillPID();
+                    KillActionLib();
                     TurnOnSupervisorTraffic(true);
                     this.PreProcedureAs = ProcedureControlAssign.PRO_IDLE;
                     robotService.RemoveRobotUnityReadyList(this);

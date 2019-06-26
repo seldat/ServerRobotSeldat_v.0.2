@@ -26,6 +26,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static DoorControllerService.DoorService;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
 namespace SeldatUnilever_Ver1._02
@@ -270,8 +271,8 @@ namespace SeldatUnilever_Ver1._02
             if(result== MessageBoxResult.Yes)
             {
                 Global_Object.onFlagDoorBusy = false;
-                Global_Object.setGateStatus(1, false); // gate 1
-                Global_Object.setGateStatus(2, false); // gate 2
+                Global_Object.setGateStatus((int)DoorId.DOOR_MEZZAMINE_UP_NEW, false); // gate 1
+                Global_Object.setGateStatus((int)DoorId.DOOR_MEZZAMINE_UP, false); // gate 2
                 Global_Object.onFlagRobotComingGateBusy = false;
             }
         }

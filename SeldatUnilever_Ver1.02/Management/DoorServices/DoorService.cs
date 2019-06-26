@@ -30,8 +30,8 @@ namespace DoorControllerService
         }
         public enum DoorId
         {
-            DOOR_MEZZAMINE_UP = 0x01,
-            DOOR_MEZZAMINE_UP_NEW, /* 0x02 */
+            DOOR_MEZZAMINE_UP_NEW=1, /* 0x02 */
+            DOOR_MEZZAMINE_UP =2,
             DOOR_MEZZAMINE_RETURN, /* 0x03 */
             DOOR_ELEVATOR, /* 0x04 */
         }

@@ -13,6 +13,7 @@ using SeldatUnilever_Ver1._02.Management.McuCom;
 using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
+using static DoorControllerService.DoorService;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnity;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
@@ -563,8 +564,15 @@ namespace SeldatMRMS
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_CAME_CHECKIN_READYSTATION:
                         // if ((false == robot.CheckInZoneBehavior(p.PointFrontLine.Position))||(false == rb.CheckRobotWorkinginReady()))
-                        if(TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
+
+                        if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
                         {
+                            // truong hop robot 3 vao ready , robot khac dang dung tai gate 1
+                            if (checkinRobot3(robot))
+                            {
+                                Thread.Sleep(1000);
+                                break;
+                            }
                             if (rb.SendPoseStamped(p.PointFrontLine))
                             {
                                 StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION;
@@ -660,6 +668,18 @@ namespace SeldatMRMS
                 Thread.Sleep(500);
             }
             StateRobotGoToReady = RobotGoToReady.ROBREA_IDLE;
+        }
+        // do vung layout moi vung gate 1 va ready robot 3 gan nhau nen kiem tra dieu kien
+        public bool checkinRobot3(RobotUnity robot)
+        {
+            if (robot.properties.Label.Equals("Robot3"))
+            {
+                if (Global_Object.getGateStatus((int)DoorId.DOOR_MEZZAMINE_UP_NEW))
+                {
+                    return true;
+                }
+            }
+           return false;
         }
         // xác định còn task trong order
         public bool DetermineHasTaskWaitingAnRobotAvailable()

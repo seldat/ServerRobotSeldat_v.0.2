@@ -219,29 +219,12 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 int typeReq = (int)results["typeReq"];
                 if (typeReq == (int)TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
                 {
-                    //int gate=(int)results["gate"];
-                    int gate = 1;
+                    int gate=(int)results["gate"];
                     if (Global_Object.getGateStatus(gate))
                     {
                         statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
                         return statusOrderResponse;
                     }
-                    /*   if (PendingOrderList.Count==0)
-                       {
-                           //if(Global_Object.onFlagDoorBusy)
-                          // {
-                          //     statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
-                          //     return statusOrderResponse;
-                         //  }
-
-
-                       }
-                       else
-                       {
-                           statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
-                           return statusOrderResponse;
-                       }*/
-
                     OrderItem order = new OrderItem();
                     order.typeReq = (TyeRequest)typeReq;
                     order.userName = (String)results["userName"];
@@ -253,9 +236,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     order.timeWorkId = (int)results["timeWorkId"];
                     order.activeDate = (string)results["activeDate"];
 
-                    // order.gate = (int)results["gate"];
-
-                    order.gate = 1;
+                    order.gate = (int)results["gate"];
                     // order.palletStatus = (String)results["palletStatus"];
                     dynamic product = new JObject();
                     product.timeWorkId = order.timeWorkId;
@@ -297,20 +278,6 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
                         return statusOrderResponse;
                     }
-                    /* if (PendingOrderList.Count == 0)
-                     {
-                         if (Global_Object.onFlagDoorBusy)
-                         {
-                             statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
-                             return statusOrderResponse;
-                         }
-                     }
-                     else
-                     {
-                         statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
-                         return statusOrderResponse;
-                     }*/
-
                     Global_Object.setGateStatus(gate, true);
                     //Global_Object.onFlagDoorBusy = true;
                     OrderItem order = new OrderItem();

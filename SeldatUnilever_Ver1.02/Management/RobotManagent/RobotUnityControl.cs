@@ -190,6 +190,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public int publication_EmergencyRobot;
             public int publication_ctrlrobotdriving;
             public int publication_robotnavigation;
+            public int publication_killActionLid;
             public int publication_linedetectionctrl;
             public int publication_checkAliveTimeOut;
             public int publication_postPallet;
@@ -308,6 +309,7 @@ namespace SeldatMRMS.Management.RobotManagent
             paramsRosSocket.publication_robotnavigation = this.Advertise("/robot_navigation", "geometry_msgs/PoseStamped");
 
             paramsRosSocket.publication_killpid = this.Advertise("/key_press", "std_msgs/String");
+            paramsRosSocket.publication_killActionLid = this.Advertise("/killActionLidcallback", "std_msgs/Int32");
             float subscription_publication_batteryvol = this.Subscribe ("/battery_vol", "std_msgs/Int32", BatteryVolHandler);
             int subscription_AGV_LaserError = this.Subscribe ("/stm_error", "std_msgs/String", AGVLaserErrorHandler);
             int subscription_AGV_LaserWarning = this.Subscribe ("/stm_warning", "std_msgs/String", AGVLaserWarningHandler);
@@ -518,7 +520,17 @@ namespace SeldatMRMS.Management.RobotManagent
             }
             catch { MessageBox.Show("Kill PID error !"); }
         }
-
+        // kill navigation
+        public void KillActionLib()
+        {
+            try
+            {
+                StandardInt32 msg = new StandardInt32();
+                msg.data = 0;
+                this.Publish(paramsRosSocket.publication_killActionLid, msg);
+            }
+            catch { MessageBox.Show("Kill PID error !"); }
+        }
         public void FinishedStatesPublish (int message) {
             StandardInt32 msg = new StandardInt32 ();
             msg.data = message;
