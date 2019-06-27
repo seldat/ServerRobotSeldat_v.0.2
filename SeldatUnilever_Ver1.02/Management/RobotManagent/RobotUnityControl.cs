@@ -309,7 +309,7 @@ namespace SeldatMRMS.Management.RobotManagent
             paramsRosSocket.publication_robotnavigation = this.Advertise("/robot_navigation", "geometry_msgs/PoseStamped");
 
             paramsRosSocket.publication_killpid = this.Advertise("/key_press", "std_msgs/String");
-            paramsRosSocket.publication_killActionLid = this.Advertise("/killActionLidcallback", "std_msgs/Int32");
+            paramsRosSocket.publication_killActionLid = this.Advertise("/killActionLibCallback", "std_msgs/Int32");
             float subscription_publication_batteryvol = this.Subscribe ("/battery_vol", "std_msgs/Int32", BatteryVolHandler);
             int subscription_AGV_LaserError = this.Subscribe ("/stm_error", "std_msgs/String", AGVLaserErrorHandler);
             int subscription_AGV_LaserWarning = this.Subscribe ("/stm_warning", "std_msgs/String", AGVLaserWarningHandler);

@@ -65,8 +65,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             TYPEREQUEST_MACHINE_TO_RETURN = 4,
             TYPEREQUEST_RETURN_TO_GATE = 5,
             TYPEREQUEST_CLEAR = 6,
-            TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET = 7,
-            TYPEREQUEST_CLOSE_FRONTDOOR_DELIVERY_PALLET = 8,
+            TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET_GATE_1 = 7,
+            TYPEREQUEST_CLOSE_FRONTDOOR_DELIVERY_PALLET_GATE_1 = 8,
             TYPEREQUEST_OPEN_FRONTDOOR_RETURN_PALLET = 9,
             TYPEREQUEST_CLOSE_FRONTDOOR_RETURN_PALLET = 10,
             TYPEREQUEST_CLEAR_FORLIFT_TO_BUFFER = 11,
@@ -74,6 +74,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             TYPEREQUEST_WMS_RETURNPALLET_BUFFER = 13, // santao jujeng cap bottle
             TYPEREQUEST_CHARGE = 14, // santao jujeng cap bottle
             TYPEREQUEST_GOTO_READY = 15, // santao jujeng cap bottle
+            TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET_GATE_2 = 16,
+            TYPEREQUEST_CLOSE_FRONTDOOR_DELIVERY_PALLET_GATE_2 = 17,
         }
         public enum TabletConTrol
         {
@@ -544,7 +546,21 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                      }
 
                  }*/
-                else if (typeReq == (int)TyeRequest.TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET)
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET_GATE_1)
+                {
+                    // same deviceID forklift
+                    try
+                    {
+                        Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.openDoor(DoorType.DOOR_FRONT);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("control door failed");
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, ErrorMessage = e.Message };
+                        return statusOrderResponse;
+                    }
+                }
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET_GATE_2)
                 {
                     // same deviceID forklift
                     try
@@ -558,7 +574,21 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         return statusOrderResponse;
                     }
                 }
-                else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLOSE_FRONTDOOR_DELIVERY_PALLET)
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLOSE_FRONTDOOR_DELIVERY_PALLET_GATE_1)
+                {
+                    // same deviceID forklift
+                    try
+                    {
+                        Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.closeDoor(DoorType.DOOR_FRONT);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("control door failed");
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, ErrorMessage = e.Message };
+                        return statusOrderResponse;
+                    }
+                }
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLOSE_FRONTDOOR_DELIVERY_PALLET_GATE_2)
                 {
                     // same deviceID forklift
                     try
