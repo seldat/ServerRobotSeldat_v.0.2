@@ -34,14 +34,15 @@ namespace SeldatMRMS.Management.DoorServices
             DoorInfoConfigList = new List<DoorInfoConfig>();
             PropertiesDoor_List = new List<DoorInfoConfig>();
             Grouped_PropertiesDoor = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesDoor_List);
-            if(fistInit == false)
+            if (fistInit == false)
             {
                 fistInit = true;
                 LoadConfigure();
 
-                DoorMezzamineUp = new DoorService(DoorInfoConfigList[0]);
-                DoorMezzamineUpNew = new DoorService(DoorInfoConfigList[1]);
-                DoorMezzamineReturn = new DoorService(DoorInfoConfigList[1]); // kiem tra lai 
+
+                DoorMezzamineUpNew = new DoorService(DoorInfoConfigList[0]);
+                DoorMezzamineUp = new DoorService(DoorInfoConfigList[1]);
+                //            DoorMezzamineReturn = new DoorService(DoorInfoConfigList[2]); // kiem tra lai 
                 try
                 {
                     doorConfigure = new DoorConfigure(this);
