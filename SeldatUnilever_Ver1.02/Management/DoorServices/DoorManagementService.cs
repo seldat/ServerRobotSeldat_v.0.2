@@ -39,9 +39,9 @@ namespace SeldatMRMS.Management.DoorServices
                 fistInit = true;
                 LoadConfigure();
 
-
-                DoorMezzamineUpNew = new DoorService(DoorInfoConfigList[0]);
-                DoorMezzamineUp = new DoorService(DoorInfoConfigList[1]);
+                DoorMezzamineUp = new DoorService(DoorInfoConfigList[0]);
+                DoorMezzamineUpNew = new DoorService(DoorInfoConfigList[1]);
+           
                 //            DoorMezzamineReturn = new DoorService(DoorInfoConfigList[2]); // kiem tra lai 
                 try
                 {
@@ -64,8 +64,8 @@ namespace SeldatMRMS.Management.DoorServices
                 Ip = "192.168.1.240",
                 Port = 8081,
                 infoPallet = "{\"pallet\":0,\"dir_main\":1,\"dir_out\":1,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
-                PointFrontLineStr = "2.54,-6.78,90",
-                PointCheckInGateStr = "17.88,0.7,0"
+                PointCheckInGateStr = "2.54,-6.78,90",
+                PointFrontLineStr     = "17.88,0.7,0"
             };
             doorICF_MUB.ParsePointCheckInGateValue(doorICF_MUB.PointCheckInGateStr);
             doorICF_MUB.ParsePointFrontLineValue(doorICF_MUB.PointFrontLineStr);
@@ -78,8 +78,8 @@ namespace SeldatMRMS.Management.DoorServices
                 Ip = "192.168.1.242",
                 Port = 8081,
                 infoPallet = "{\"pallet\":0,\"dir_main\":1,\"dir_out\":1,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
-                PointFrontLineStr = "2.54,-6.78,90",
-                PointCheckInGateStr = "17.88,0.7,0"
+                PointCheckInGateStr  = "2.54,-6.78,90",
+                PointFrontLineStr = "15.1,0.7,0"
             };
             doorICF_MUB_New.ParsePointCheckInGateValue(doorICF_MUB_New.PointCheckInGateStr);
             doorICF_MUB_New.ParsePointFrontLineValue(doorICF_MUB_New.PointFrontLineStr);
@@ -92,8 +92,8 @@ namespace SeldatMRMS.Management.DoorServices
                 Ip = "192.168.1.241",
                 Port = 8081,
                 infoPallet = "{\"pallet\":1,\"dir_main\":1,\"dir_out\":1,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
-                 PointFrontLineStr = "2.54,-6.78,90",
-                PointCheckInGateStr = "17.88,0.7,0"
+                PointCheckInGateStr   = "2.54,-6.78,90",
+                PointFrontLineStr = "17.88,0.7,0"
             };
             doorICF_MRB.ParsePointCheckInGateValue(doorICF_MRB.PointCheckInGateStr);
             doorICF_MRB.ParsePointFrontLineValue(doorICF_MRB.PointFrontLineStr);
