@@ -36,18 +36,22 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         }
         public bool Remove(RobotUnity robot)
         {
-            return Registryrobotlist.Remove(robot);
+                return Registryrobotlist.Remove(robot);
+           
         }
         
         public String getNames()
         {
             String str = "";
+            int index = 0;
             if(Registryrobotlist.Count>0)
             {
                 foreach(RobotUnity r in Registryrobotlist)
                 {
                     str += r.properties.Label;
+                    str += "["+ index + "]";
                     str += "/ ";
+                    index++;
                 }
             }
             return str;
@@ -55,7 +59,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         public bool CheckPermission(RobotUnity robot)
         {
             int index = GetIndex(robot);
-            if (GetIndex(robot) == 0)
+            if (index == 0)
             {
                 return true;
             }

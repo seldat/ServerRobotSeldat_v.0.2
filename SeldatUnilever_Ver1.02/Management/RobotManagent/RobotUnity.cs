@@ -503,6 +503,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void Reset()
         {
+            TrafficRountineConstants.RegIntZone_READY.Release(this);
             properties.pose.Position = properties.poseRoot.Position;
             properties.pose.Angle = properties.poseRoot.Angle;
             properties.pose.AngleW = properties.poseRoot.AngleW;

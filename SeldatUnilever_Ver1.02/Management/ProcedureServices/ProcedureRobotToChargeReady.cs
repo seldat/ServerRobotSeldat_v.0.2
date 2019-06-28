@@ -674,6 +674,10 @@ namespace SeldatMRMS
         {
             if (robot.properties.Label.Equals("Robot3"))
             {
+                if(TrafficRountineConstants.RegIntZone_READY.GetIndex(robot)==0)
+                {
+                    return false;
+                }
                 if (Global_Object.getGateStatus((int)DoorId.DOOR_MEZZAMINE_UP_NEW))
                 {
                     return true;

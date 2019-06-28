@@ -177,7 +177,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                                                             // robot.ShowText( "FORMACH_ROBOT_WAITTING_GOTO_GATE ===> FLAG " + Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position));
                         if (false == robot.CheckInZoneBehavior(ds.config.PointFrontLine.Position))
                         {
-                            if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
+                            if (!TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
                             {
                                 Thread.Sleep(500);
                                 break;
@@ -263,7 +263,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             //if (true == ds.Close(DoorService.DoorType.DOOR_BACK))
                             //{
-                            if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
+                            if (!TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
                             {
                                 Thread.Sleep(500);
                                 break;

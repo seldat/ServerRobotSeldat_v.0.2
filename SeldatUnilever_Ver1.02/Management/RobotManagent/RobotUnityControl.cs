@@ -494,7 +494,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     responsed = true;
                     break;
                 }
-                if (sw.ElapsedMilliseconds > 5000) break;
+                if (sw.ElapsedMilliseconds > 10000) break;
             }
             robotLogOut.ShowText(this.properties.Label, "CheckResponseTimeOut= " + respCtrlCallBack + " " + responsed);
             respCtrlCallBack = ResponseCtrl.RESPONSE_NONE;

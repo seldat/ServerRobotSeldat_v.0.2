@@ -327,7 +327,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     }
                     break;
                     case ProcessAssignTaskReady.PROC_READY_SET_TRAFFIC_RISKAREA_ON:
-                        robotatready.TurnOnSupervisorTraffic(true);
+                        //robotatready.TurnOnSupervisorTraffic(true);
                         processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_ASSIGN_ANTASK;
                         break;
                     case ProcessAssignTaskReady.PROC_READY_CHECK_ROBOT_OUTSIDEREADY:

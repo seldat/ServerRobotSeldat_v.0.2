@@ -252,7 +252,7 @@ namespace SeldatMRMS
                                                                   // robot.ShowText( "FORBUF_ROBOT_WAITTING_GOTO_GATE ===> FLAG " + Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position));
                         if (false == robot.CheckInZoneBehavior(ds.config.PointFrontLine.Position))
                         {
-                            if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
+                            if (!TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
                             {
                                 Thread.Sleep(500);
                                 break;
@@ -353,7 +353,7 @@ namespace SeldatMRMS
                                 try
 
                                 {
-                                    if(TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
+                                    if(!TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
                                     {
                                         Thread.Sleep(500);
                                         break;
