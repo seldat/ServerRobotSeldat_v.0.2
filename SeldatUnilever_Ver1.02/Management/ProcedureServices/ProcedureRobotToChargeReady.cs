@@ -568,11 +568,11 @@ namespace SeldatMRMS
                         if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
                         {
                             // truong hop robot 3 vao ready , robot khac dang dung tai gate 1
-                            if (checkinRobot3(robot))
+                            /*if (checkinRobot3(robot))
                             {
                                 Thread.Sleep(1000);
                                 break;
-                            }
+                            }*/
                             if (rb.SendPoseStamped(p.PointFrontLine))
                             {
                                 StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION;

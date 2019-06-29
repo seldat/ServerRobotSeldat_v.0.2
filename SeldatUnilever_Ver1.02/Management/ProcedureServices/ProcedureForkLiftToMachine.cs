@@ -177,16 +177,20 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                                                             // robot.ShowText( "FORMACH_ROBOT_WAITTING_GOTO_GATE ===> FLAG " + Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position));
                         if (false == robot.CheckInZoneBehavior(ds.config.PointFrontLine.Position))
                         {
-                            if (!TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
+                            if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
+                            {
+
+                                rb.UpdateRiskAraParams(40, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                rb.SendPoseStamped(ds.config.PointFrontLine);
+                                StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOTO_GATE;
+                                robot.ShowText("FORMACH_ROBOT_WAITTING_GOTO_GATE");
+                            }
+                            else
                             {
                                 Thread.Sleep(500);
                                 break;
                             }
-                            rb.UpdateRiskAraParams(40, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                            rb.SendPoseStamped(ds.config.PointFrontLine);
-                            StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOTO_GATE;
-                            robot.ShowText("FORMACH_ROBOT_WAITTING_GOTO_GATE");
                         }
                         break;
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOTO_GATE:
@@ -263,20 +267,24 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             //if (true == ds.Close(DoorService.DoorType.DOOR_BACK))
                             //{
-                            if (!TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
+                            if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
+                            {
+
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                if (rb.SendPoseStamped(FlToMach.GetFrontLineMachine()))
+                                {
+                                    Global_Object.setGateStatus(order.gate, false);
+                                    // Global_Object.onFlagDoorBusy = false;
+                                    StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
+                                    robot.ShowText("FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
+                                }
+                            }
+                            else
                             {
                                 Thread.Sleep(500);
                                 break;
                             }
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                            if(rb.SendPoseStamped(FlToMach.GetFrontLineMachine()))
-                            {
-                                Global_Object.setGateStatus(order.gate, false);
-                               // Global_Object.onFlagDoorBusy = false;
-                                StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
-                                robot.ShowText("FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
-                            }
-                                //}
+                            //}
                             //else
                             //{
                             //    // errorCode = ErrorCode.CLOSE_DOOR_ERROR;

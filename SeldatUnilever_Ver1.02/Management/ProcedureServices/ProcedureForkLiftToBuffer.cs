@@ -252,17 +252,21 @@ namespace SeldatMRMS
                                                                   // robot.ShowText( "FORBUF_ROBOT_WAITTING_GOTO_GATE ===> FLAG " + Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position));
                         if (false == robot.CheckInZoneBehavior(ds.config.PointFrontLine.Position))
                         {
-                            if (!TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
+                            if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
+                            {
+
+                                rb.UpdateRiskAraParams(4, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                if (rb.SendPoseStamped(ds.config.PointFrontLine))
+                                {
+                                    StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE;
+                                    robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_GATE");
+                                }
+                            }
+                            else
                             {
                                 Thread.Sleep(500);
                                 break;
-                            }
-                            rb.UpdateRiskAraParams(4, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                            if (rb.SendPoseStamped(ds.config.PointFrontLine))
-                            {
-                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE;
-                                robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_GATE");
                             }
                         }
                         break;
@@ -353,23 +357,23 @@ namespace SeldatMRMS
                                 try
 
                                 {
-                                    if(!TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
+                                    if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
                                     {
-                                        Thread.Sleep(500);
-                                        break;
-                                    }
 
-                                    if (rb.SendPoseStamped(FlToBuf.GetCheckInBuffer(true)))
+                                        if (rb.SendPoseStamped(FlToBuf.GetCheckInBuffer(true)))
 
-                                    {
-                                        Global_Object.setGateStatus(order.gate, false);
-                                      //  Global_Object.onFlagDoorBusy = false;
-                                        StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
-                                        onFlagResetedGate = false;
-                                        robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER");
+                                        {
+                                            Global_Object.setGateStatus(order.gate, false);
+                                            //  Global_Object.onFlagDoorBusy = false;
+                                            StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
+                                            onFlagResetedGate = false;
+                                            robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER");
+                                        }
                                     }
                                     else
                                     {
+                                        Thread.Sleep(500);
+                                        break;
                                     }
                                 }
                                 catch
