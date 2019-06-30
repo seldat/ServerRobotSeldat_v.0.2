@@ -554,6 +554,7 @@ namespace SeldatMRMS
                                 StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITINGREADY_FORCERELEASED;
                                 break;
                             }
+                            Thread.Sleep(500);
                         }
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
@@ -707,7 +708,8 @@ namespace SeldatMRMS
                             return false;
                         else
                         {
-                            if(!Traffic.HasRobotUnityinArea("READY", robot))
+                            //GATE_CHECKIN
+                            if (!Traffic.HasRobotUnityinArea("READY", robot) || !Traffic.HasRobotUnityinArea("GATE_CHECKIN", robot))
                             {
                                 return true;
                             }

@@ -659,7 +659,13 @@ namespace SeldatMRMS.Management
             }
         }
 
-      
+      public void setTrafficAllCircles(bool cSmall,bool cOrg, bool cBlue, bool cYell)
+      {
+            SetSafeOrgancircle(cOrg);
+            SetSafeSmallcircle(cSmall);
+            SetSafeBluecircle(cBlue);
+            SetSafeYellowcircle(cYell);
+      }
         public bool checkOrgancCircle()
         {
             bool onstop = false;
