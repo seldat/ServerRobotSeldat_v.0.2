@@ -252,6 +252,7 @@
     <Compile Include="Management\ComSocket\TranferData.cs" />
     <Compile Include="Management\DeviceManagement\DeviceItem.cs" />
     <Compile Include="Management\DeviceManagement\DeviceRegistrationService.cs" />
+    <Compile Include="Management\DeviceManagement\DeviceService.cs" />
     <Compile Include="Management\DoorServices\DoorConfigure.xaml.cs">
       <DependentUpon>DoorConfigure.xaml</DependentUpon>
     </Compile>

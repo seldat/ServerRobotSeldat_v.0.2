@@ -135,7 +135,17 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
         }
         protected bool Tranfer(byte[] dataSend) {
             DataReceive data = new DataReceive();
-            return Tranfer(dataSend,ref data);
+
+            bool onTranfer = false;
+            try
+            {
+                onTranfer= Tranfer(dataSend, ref data);
+            }
+            catch
+            {
+
+            }
+            return onTranfer;
         }
     }
 }

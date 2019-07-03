@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SeldatUnilever_Ver1._02.Management.DeviceManagement;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SelDatUnilever_Ver1._00.Management
 {
-    public class NotifyUIBase : INotifyPropertyChanged
+    public class NotifyUIBase : DeviceService, INotifyPropertyChanged
     {
         // Very minimal implementation of INotifyPropertyChanged matching msdn
         // Note that this is dependent on .net 4.5+ because of CallerMemberName

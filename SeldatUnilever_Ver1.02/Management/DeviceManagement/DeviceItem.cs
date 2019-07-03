@@ -2,11 +2,13 @@
 using SeldatMRMS;
 using SeldatMRMS.Management.DoorServices;
 using SeldatUnilever_Ver1._02;
+using SeldatUnilever_Ver1._02.Management.DeviceManagement;
 using SelDatUnilever_Ver1._00.Communication.HttpBridge;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -31,8 +33,6 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             NO_BUFFER_DATA = 304,
             CHANGED_FORKLIFT = 305,
             DESTROYED = 306,
-
-
         }
 
         public class StatusOrderResponse
@@ -103,9 +103,9 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public String productDetailName { get; set; }
             public int productId { get; set; }
             public int productDetailId { get; set; }
-       
 
-              public String activeDate;
+
+            public String activeDate;
             public String dateTime { get; set; }
 
             public int timeWorkId;
@@ -119,14 +119,11 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 
             public int bufferId;
             public int palletAmount;
-            public DateTime startTimeProcedure=new DateTime();
+            public DateTime startTimeProcedure = new DateTime();
             public DateTime endTimeProcedure = new DateTime();
             public double totalTimeProcedure { get; set; }
             public bool onAssiged = false;
-            public int gate { get;set; }
-
-
-
+            public int gate { get; set; }
 
         }
         public string userName { get; set; } // dia chi Emei
@@ -221,7 +218,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 int typeReq = (int)results["typeReq"];
                 if (typeReq == (int)TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
                 {
-                    int gate=(int)results["gate"];
+                    int gate = (int)results["gate"];
                     if (Global_Object.getGateStatus(gate))
                     {
                         statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
@@ -254,7 +251,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     if (Convert.ToInt32(CreatePlanBuffer(order)) > 0)
                     {
                         //  Global_Object.onFlagDoorBusy = true;
-                        Global_Object.setGateStatus(gate,true);
+                        Global_Object.setGateStatus(gate, true);
                         PendingOrderList.Add(order);
                         OrderedItemList.Add(order);
                     }
@@ -263,17 +260,17 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, ErrorMessage = "" };
                         return statusOrderResponse;
                     }
-                    try
-                    {
-                        if(gate==(int)DoorId.DOOR_MEZZAMINE_UP)
-                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampOn(DoorType.DOOR_FRONT);
-                        if (gate == (int)DoorId.DOOR_MEZZAMINE_UP_NEW)
-                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampOn(DoorType.DOOR_FRONT);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("control lamp failed"+e);
-                    }
+                    /*  try
+                      {
+                          if(gate==(int)DoorId.DOOR_MEZZAMINE_UP)
+                              Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampOn(DoorType.DOOR_FRONT);
+                          if (gate == (int)DoorId.DOOR_MEZZAMINE_UP_NEW)
+                              Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampOn(DoorType.DOOR_FRONT);
+                      }
+                      catch (Exception e)
+                      {
+                          Console.WriteLine("control lamp failed"+e);
+                      }*/
                 }
                 if (typeReq == (int)TyeRequest.TYPEREQUEST_FORLIFT_TO_MACHINE)
                 {
@@ -345,8 +342,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     {
                         if (productDetailId == ord.productDetailId)
                         {
-                            if(ord.status==StatusOrderResponseCode.PENDING)
-                            cntOrderReg++;
+                            if (ord.status == StatusOrderResponseCode.PENDING)
+                                cntOrderReg++;
                         }
                     }
 
@@ -370,7 +367,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         }
                         else
                         {
-                            orderAmount =   len- availableOrder;
+                            orderAmount = len - availableOrder;
                         }
 
                     }
@@ -479,7 +476,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     PendingOrderList.Add(order);
                     OrderedItemList.Add(order);
                 }
-                else if(typeReq == (int)TyeRequest.TYPEREQUEST_WMS_RETURNPALLET_BUFFER)
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_WMS_RETURNPALLET_BUFFER)
                 {
                     OrderItem order = new OrderItem();
                     order.typeReq = (TyeRequest)typeReq;
@@ -630,15 +627,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             catch { }
             return statusOrderResponse;
         }
-        public String RequestDataProcedure(String dataReq, String url)
-        {
-            //String url = Global_Object.url+"plan/getListPlanPallet";
-            BridgeClientRequest clientRequest = new BridgeClientRequest();
-            // String url = "http://localhost:8080";
-            var data = clientRequest.PostCallAPI(url, dataReq);
 
-            return data.Result;
-        }
 
         public void RemoveCallBack(OrderItem item)
         {
@@ -662,124 +651,27 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         }
         public void ReorderCallBack(OrderItem item)
         {
-            if (item.typeReq == TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
+            if (item.status == StatusOrderResponseCode.ROBOT_ERROR)
             {
-                if (item.status == StatusOrderResponseCode.DESTROYED || item.status == StatusOrderResponseCode.NO_BUFFER_DATA || item.status == StatusOrderResponseCode.ROBOT_ERROR)
+                if (item.typeReq == TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
                 {
+
                     PendingOrderList.Add(item);
                     OrderedItemList.Add(item);
                     CreatePlanBuffer(item);
                 }
-            }
-            else if (item.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
-            {
-                // if (item.status == StatusOrderResponseCode.PENDING)
+                else if (item.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
                 {
-                    PendingOrderList.Add(item);
-                    OrderedItemList.Add(item);
-                }
-            }
-        }
-        public String CreatePlanBuffer(OrderItem order)
-        {
-            dynamic product = new JObject();
-            product.timeWorkId = 1;
-            product.activeDate = order.activeDate;
-            product.productId = order.productId;
-            product.productDetailId = order.productDetailId;
-            product.updUsrId = Global_Object.userLogin;
-            product.deviceId = order.deviceId;
-            product.palletAmount = 1;
-            String response = RequestDataProcedure(product.ToString(), Global_Object.url + "plan/createPlanPallet");
-            return response;
-        }
-
-        public void FreePlanedBuffer(OrderItem order)
-        {
-            String url = Global_Object.url + "pallet/updatePalletStatus";
-            int _palletId = GetPalletId(order);
-            if (_palletId > 0)
-            {
-                dynamic product = new JObject();
-                product.palletId = _palletId;
-                product.planId = order.planId;
-                product.palletStatus = PalletStatus.F.ToString();
-                product.updUsrId = Global_Object.userLogin;
-                var data = RequestDataProcedure(product.ToString(), url);
-
-            }
-
-        }
-
-        public DataPallet GetLineMachineInfo(int deviceId)
-        {
-            try
-            {
-                dynamic product = new JObject();
-                product.deviceId = deviceId;
-                Pose poseTemp = null;
-                String collectionData = RequestDataProcedure(product.ToString(), Global_Object.url + "/device/getListDevicePallet");
-
-
-                if (collectionData.Length > 0)
-                {
-                    JArray results = JArray.Parse(collectionData);
-                    var result = results[0];
-                    String jsonDPst = (string)result["dataPallet"];
-                    JObject stuffPallet = JObject.Parse(jsonDPst);
-                    double xx = (double)stuffPallet["line"]["x"];
-                    double yy = (double)stuffPallet["line"]["y"];
-                    double angle = (double)stuffPallet["line"]["angle"];
-                    int row = (int)stuffPallet["pallet"]["row"];
-                    int bay = (int)stuffPallet["pallet"]["bay"];
-                    int directMain = (int)stuffPallet["pallet"]["dir_main"];
-                    int directSub = (int)stuffPallet["pallet"]["dir_sub"];
-                    int directOut = (int)stuffPallet["pallet"]["dir_out"];
-                    int line_ord = (int)stuffPallet["pallet"]["line_ord"];
-                    return new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub, directOut = directOut, line_ord = line_ord };
-
-                }
-            }
-            catch { Console.WriteLine("Error in DeviceIte at GetLineMachineInfo"); }
-            return null;
-        }
-        public int GetPalletId(OrderItem order)
-        {
-            int palletId = -1;
-            try
-            {
-                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
-                if (collectionData.Length > 0)
-                {
-                    try
+                    // if (item.status == StatusOrderResponseCode.PENDING)
                     {
-                        JArray results = JArray.Parse(collectionData);
-                        foreach (var result in results)
-                        {
-                            int temp_planId = (int)result["planId"];
-                            if (temp_planId == order.planId)
-                            {
-                                var bufferResults = result["buffers"][0];
-                                var palletInfo = bufferResults["pallets"][0];
-                                palletId = (int)palletInfo["palletId"];
-                                break;
-                            }
-                        }
-
+                        PendingOrderList.Add(item);
+                        OrderedItemList.Add(item);
                     }
-                    catch { }
-
                 }
             }
-            catch
-            {
-                Console.WriteLine("Errror Get palletID");
-            }
-            return palletId;
         }
-
     }
-
+       
 }
 /*
  * {
