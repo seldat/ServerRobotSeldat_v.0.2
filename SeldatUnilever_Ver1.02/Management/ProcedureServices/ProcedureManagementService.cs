@@ -135,6 +135,19 @@ namespace SeldatMRMS
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
                     procfm.Start();
                     break;
+                case ProcedureItemSelected.PROCEDURE_BUFFER_TO_BUFFER:
+                    ProcedureBufferToBuffer procbb = new ProcedureBufferToBuffer(robot, trafficService);
+                    ProcedureDataItems prcobbDataItems = new ProcedureDataItems();
+                    prcobbDataItems.StartTaskTime = DateTime.Now;
+                    RegisterProcedureItem itemprocbb = new RegisterProcedureItem() { item = procbb, robot = robot, procedureDataItems = prcobbDataItems };
+                    procbb.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
+                    procbb.ErrorProcedureHandler += ErrorApprearInProcedureItem;
+                    // RegisterProcedureItemList.Add (itemprocbr);
+                    procbb.AssignAnOrder(orderItem);
+                    robot.proRegistryInRobot.pBB = procbb;
+                    robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_BUFFER_TO_RETURN;
+                    procbb.Start();
+                    break;
             }
         }
 

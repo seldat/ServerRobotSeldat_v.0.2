@@ -43,10 +43,10 @@ namespace SeldatMRMS.Management
             public PriorityLevel()
             {
                 this.IndexOnMainRoad = 0;
-                this.OnAuthorizedPriorityProcedure = false;
+                //this.OnAuthorizedPriorityProcedure = false;
             }
             public int IndexOnMainRoad { get; set; } //  Index on Road;
-            public bool OnAuthorizedPriorityProcedure { get; set; }
+            //public bool OnAuthorizedPriorityProcedure { get; set; }
 
         }
         public enum TrafficBehaviorState
@@ -659,13 +659,13 @@ namespace SeldatMRMS.Management
             }
         }
 
-      public void setTrafficAllCircles(bool cSmall,bool cOrg, bool cBlue, bool cYell)
-      {
+        public void setTrafficAllCircles(bool cSmall,bool cOrg, bool cBlue, bool cYell)
+        {
             SetSafeOrgancircle(cOrg);
             SetSafeSmallcircle(cSmall);
             SetSafeBluecircle(cBlue);
             SetSafeYellowcircle(cYell);
-      }
+        }
         public bool checkOrgancCircle()
         {
             bool onstop = false;

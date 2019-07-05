@@ -57,7 +57,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             ProForkLiftToMachine.Start(this);
             ProRun = true;
             ProRunStopW = true;
-            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+            //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             robot.robotRegistryToWorkingZone.onRobotwillCheckInsideGate = true;
             order.startTimeProcedure = DateTime.Now;
         }
@@ -72,7 +72,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             robot.robotTag = RobotStatus.IDLE;
             robot.ReleaseWorkingZone();
             order.status = StatusOrderResponseCode.ROBOT_ERROR;
-            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+            //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
             order.status = StatusOrderResponseCode.ROBOT_ERROR;
@@ -167,7 +167,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 
                             
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             rb.UpdateRiskAraParams(0, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
                             StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_CAME_CHECKIN_GATE;
                             robot.ShowText("FORMACH_ROBOT_CAME_CHECKIN_GATE");
@@ -181,7 +181,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             {
 
                                 rb.UpdateRiskAraParams(40, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped(ds.config.PointFrontLine);
                                 StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOTO_GATE;
                                 robot.ShowText("FORMACH_ROBOT_WAITTING_GOTO_GATE");
@@ -200,7 +200,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             TrafficRountineConstants.RegIntZone_READY.Release(robot);
                             robot.SwitchToDetectLine(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_CAME_GATE_POSITION;
                             robot.ShowText("FORMACH_ROBOT_CAME_GATE_POSITION");
                         }
@@ -270,7 +270,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
                             {
 
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 if (rb.SendPoseStamped(FlToMach.GetFrontLineMachine()))
                                 {
                                     Global_Object.setGateStatus(order.gate, false);

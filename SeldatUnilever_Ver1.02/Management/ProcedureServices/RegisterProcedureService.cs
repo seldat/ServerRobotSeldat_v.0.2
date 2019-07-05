@@ -61,7 +61,8 @@ namespace SeldatMRMS
             PROCEDURE_ROBOT_READY_TO_READY,
             PROCEDURE_ROBOT_TO_CHARGE,
             PROCEDURE_RETURN_TO_GATE,
-            PROCEDURE_FORLIFT_TO_MACHINE
+            PROCEDURE_FORLIFT_TO_MACHINE,
+            PROCEDURE_BUFFER_TO_BUFFER
         }
         public void RegistryService(TrafficManagementService trafficService)
         {

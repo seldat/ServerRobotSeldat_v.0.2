@@ -43,6 +43,7 @@ namespace SeldatMRMS {
             PROC_CODE_ROBOT_TO_READY,
             PROC_CODE_ROBOT_WAITINGTO_READY,
             PROC_CODE_ROBOT_TO_CHARGE,
+            PROC_CODE_BUFFER_TO_BUFFER,
         }
         public enum ErrorCode {
             RUN_OK = 0,
@@ -146,6 +147,25 @@ namespace SeldatMRMS {
             BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE,
             BUFMAC_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
             BUFMAC_ROBOT_DESTROY, // trả robot về robotmanagement để nhận quy trình mới
+        }
+
+        public enum BufferToBuffer
+        {
+            BUFTOBUF_IDLE,
+            BUFTOBUF_ROBOT_GOTO_CHECKIN_BUFFER_A,
+            BUFTOBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_A, // doi robot di den khu vuc checkin cua vung buffer
+            BUFTOBUF_ROBOT_WAITTING_ZONE_BUFFER_READY_A, // doi khu vuc buffer san sang de di vao
+            BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A, // den dau line buffer, chuyen mode do line
+            BUFTOBUF_ROBOT_WAITTING_PICKUP_PALLET_BUFFER_A, // doi robot do line den pallet  va tha pallet
+            BUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_A, // doi robot di den dau line buffer.
+
+            BUFTOBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_B, // doi robot di den khu vuc checkin cua vung buffer
+            BUFTOBUF_ROBOT_WAITTING_ZONE_BUFFER_READY_B, // doi khu vuc buffer san sang de di vao
+            BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B, // den dau line buffer, chuyen mode do line
+            BUFTOBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER_B, // doi robot do line den pallet  va tha pallet
+            FBUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_B, // doi robot di den dau line buffer.
+            BUFTOBUF_ROBOT_DESTROY,
+            BUFTOBUF_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
 
         public enum BufferToReturn {

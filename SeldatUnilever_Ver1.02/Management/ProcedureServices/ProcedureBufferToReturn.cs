@@ -51,7 +51,7 @@ namespace SeldatMRMS
             procedureStatus = ProcedureStatus.PROC_ALIVE;
             ProRun = true;
             ProRunStopW = true;
-            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+            //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             order.startTimeProcedure = DateTime.Now;
         }
         public void Destroy()
@@ -62,7 +62,7 @@ namespace SeldatMRMS
             robot.SwitchToDetectLine(false);
             robot.robotTag = RobotStatus.IDLE;
             robot.ReleaseWorkingZone();
-            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+            //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
             order.status = StatusOrderResponseCode.ROBOT_ERROR;
@@ -146,7 +146,7 @@ namespace SeldatMRMS
                             //{
                            
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_ZONE_BUFFER_READY;
                             robot.ShowText("BUFRET_ROBOT_WAITTING_ZONE_BUFFER_READY");
                             //}
@@ -158,7 +158,7 @@ namespace SeldatMRMS
                             if (false == robot.CheckInZoneBehavior(BfToRe.GetAnyPointInBuffer_Return(order.bufferId).Position))
                             {
                           
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 if (rb.SendPoseStamped(BfToRe.GetFrontLineBuffer()))
                                 {
                                     StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
@@ -183,7 +183,7 @@ namespace SeldatMRMS
                                 if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletBuffer_Return(PistonPalletCtrl.PISTON_PALLET_UP,order.bufferId)))
                                 {
                                     StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
-                                    rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                     robot.ShowText("BUFRET_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
                                 }
                             }
@@ -245,7 +245,7 @@ namespace SeldatMRMS
                                 robot.ReleaseWorkingZone();
                                 robot.SwitchToDetectLine(false);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 if (rb.SendPoseStamped(BfToRe.GetCheckInReturn()))
                                 {
                                     StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_GOTO_CHECKIN_RETURN;
@@ -269,7 +269,7 @@ namespace SeldatMRMS
                         //if (robot.ReachedGoal())
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             rb.UpdateRiskAraParams(0, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_CAME_CHECKIN_RETURN;
                             robot.ShowText("BUFRET_ROBOT_CAME_CHECKIN_RETURN");
@@ -282,7 +282,7 @@ namespace SeldatMRMS
                             {
                                 Global_Object.onFlagRobotComingGateBusy = true;
                                 rb.UpdateRiskAraParams(40, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 if (rb.SendPoseStamped(BfToRe.GetFrontLineReturn()))
                                 {
                                     StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET;
@@ -307,7 +307,7 @@ namespace SeldatMRMS
                                 if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_DOWN)))
                                 {
                                     StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
-                                    rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                     robot.ShowText("BUFRET_ROBOT_WAITTING_DROPDOWN_PALLET");
                                 }
                             }
@@ -348,7 +348,7 @@ namespace SeldatMRMS
                         {
                             robot.SwitchToDetectLine(false);
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
                             robot.ShowText("BUFRET_ROBOT_RELEASED");
                         }

@@ -21,6 +21,7 @@ namespace SeldatMRMS.Management.RobotManagent
             PRO_CHARGE,
             PRO_READY,
             PRO_FORKLIFT_TO_MACHINE,
+            PRO_BUFFER_TO_BUFFER,
             PRO_IDLE,
             PRO_WAIT_TASK
         }
@@ -40,6 +41,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public ProcedureMachineToReturn pMR { get; set; }
             public ProcedureRobotToCharger pRC { get; set; }
             public ProcedureRobotToReady pRR { get; set; }
+            public ProcedureBufferToBuffer pBB { get; set; }
         }
         public object ProcedureControl;
         public ProcedureRegistryInRobotUnity proRegistryInRobot=new ProcedureRegistryInRobotUnity();

@@ -88,7 +88,7 @@ namespace SeldatMRMS
             ProForkLift.Start();
             ProRun = true;
             ProRunStopW = true;
-            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+            //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             robot.robotRegistryToWorkingZone.onRobotwillCheckInsideGate = true;
             order.startTimeProcedure = DateTime.Now;
  
@@ -242,7 +242,7 @@ namespace SeldatMRMS
                         {
                          
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             rb.UpdateRiskAraParams(0, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
                             StateForkLift = ForkLift.FORBUF_ROBOT_CAME_CHECKIN_GATE;
                             robot.ShowText("FORBUF_ROBOT_CAME_CHECKIN_GATE");
@@ -256,7 +256,7 @@ namespace SeldatMRMS
                             {
 
                                 rb.UpdateRiskAraParams(4, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 if (rb.SendPoseStamped(ds.config.PointFrontLine))
                                 {
                                     StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE;
@@ -278,7 +278,7 @@ namespace SeldatMRMS
                             TrafficRountineConstants.RegIntZone_READY.Release(robot);
                             robot.SwitchToDetectLine(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateForkLift = ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION;
                             robot.ShowText("FORBUF_ROBOT_CAME_GATE_POSITION");
                         }
@@ -354,7 +354,7 @@ namespace SeldatMRMS
                             flToMachineInfo = GetPriorityTaskForkLiftToMachine(order.productId);
                             if (flToMachineInfo == null)
                             {
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 try
 
                                 {
@@ -424,7 +424,7 @@ namespace SeldatMRMS
                         {
                            
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY;
                             robot.ShowText("FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY");
                         }
@@ -437,7 +437,7 @@ namespace SeldatMRMS
                             {
                                
                                 // createPlanBuffer();
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
 
                                 if (rb.SendPoseStamped(FlToBuf.GetFrontLineBuffer(true)))
                                 {
@@ -463,7 +463,7 @@ namespace SeldatMRMS
                                 if (rb.SendCmdAreaPallet(FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true)))
                                 {
                                     // rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_FORWARD_DIRECTION);
-                                    rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                     StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER;
                                     robot.ShowText("FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER");
                                 }
@@ -497,7 +497,7 @@ namespace SeldatMRMS
                             robot.ReleaseWorkingZone();
                             robot.SwitchToDetectLine(false);
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateForkLift = ForkLift.FORBUF_ROBOT_RELEASED;
                             robot.ShowText("FORBUF_ROBOT_RELEASED");
                         }
@@ -526,7 +526,7 @@ namespace SeldatMRMS
                         try
                         {
                        
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             if (rb.SendPoseStamped(flToMachineInfo.frontLinePose))
                             {
                                 Global_Object.setGateStatus(order.gate, false);
@@ -565,7 +565,7 @@ namespace SeldatMRMS
                            
                                 if (rb.SendCmdAreaPallet(flToMachineInfo.infoPallet))
                                 {
-                                    rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                     StateForkLift = ForkLift.FORMAC_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE;
                                     robot.ShowText("FORMAC_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE");
                                 }
@@ -598,7 +598,7 @@ namespace SeldatMRMS
                         {
                             robot.SwitchToDetectLine(false);
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateForkLift = ForkLift.FORMAC_ROBOT_RELEASED;
                             robot.ShowText("FORMAC_ROBOT_RELEASED");
                         }
@@ -633,7 +633,7 @@ namespace SeldatMRMS
                         robot.SwitchToDetectLine(false);
                         robot.ReleaseWorkingZone();
                         robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.IDLE;
-                        robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                        //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
                         ProRun = false;
                         UpdateInformationInProc(this, ProcessStatus.F);
                         order.status = StatusOrderResponseCode.ROBOT_ERROR;

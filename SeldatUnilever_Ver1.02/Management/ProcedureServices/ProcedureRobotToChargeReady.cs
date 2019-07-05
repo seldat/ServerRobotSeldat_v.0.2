@@ -89,13 +89,13 @@ namespace SeldatMRMS
             ProRobotToCharger.Start(this);
             procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE;
             ProRun = true;
-            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+            //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
         }
         public void Destroy()
         {
             // StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
             robot.robotTag = RobotStatus.IDLE;
-            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+            //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
             selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
@@ -490,7 +490,7 @@ namespace SeldatMRMS
             ProRobotToReady.Start(this);
             procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_READY;
             ProRun = true;
-            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+            //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             order.startTimeProcedure = DateTime.Now;
         }
         public void Destroy()
@@ -500,7 +500,7 @@ namespace SeldatMRMS
             robot.SetSafeBluecircle(false);
             robot.SetSafeSmallcircle(false);
             robot.robotTag = RobotStatus.IDLE;
-            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+            //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
             selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
@@ -595,7 +595,7 @@ namespace SeldatMRMS
                         //if ( robot.ReachedGoal())
                         {
                             //rb.SendCmdAreaPallet(RbToRd.points.PointOfCharger);
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_READYAREA);
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION;
                             robot.ShowText("ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION");
@@ -615,7 +615,7 @@ namespace SeldatMRMS
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION: // đến vị trả robot về robotmanagement để nhận quy trình mới
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOTO_POSITION)
                         {
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
                             robot.ShowText("ROBREA_ROBOT_RELEASED");
                         }

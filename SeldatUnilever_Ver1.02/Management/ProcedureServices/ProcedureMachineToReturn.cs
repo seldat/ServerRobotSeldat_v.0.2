@@ -48,7 +48,7 @@ namespace SeldatMRMS
             ProMachineToReturn.Start(this);
             ProRun = true;
             ProRunStopW = true;
-            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+            //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             order.startTimeProcedure = DateTime.Now;
         }
         public void Destroy()
@@ -57,7 +57,7 @@ namespace SeldatMRMS
             robot.orderItem = null;
             robot.robotTag = RobotStatus.IDLE;
             // StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
-            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+            //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
             order.status = StatusOrderResponseCode.ROBOT_ERROR;
@@ -145,7 +145,7 @@ namespace SeldatMRMS
                                 if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_UP)))
                                 {
                                     // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
-                                    rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                     StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
                                     robot.ShowText("MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
                                 }
@@ -189,7 +189,7 @@ namespace SeldatMRMS
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 if (rb.SendPoseStamped(BfToRe.GetCheckInReturn()))
                                 {
                                     StateMachineToReturn = MachineToReturn.MACRET_ROBOT_GOTO_CHECKIN_RETURN;
@@ -213,7 +213,7 @@ namespace SeldatMRMS
                         //if (robot.ReachedGoal())
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             rb.UpdateRiskAraParams(0, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
                             StateMachineToReturn = MachineToReturn.MACRET_ROBOT_CAME_CHECKIN_RETURN;
                             robot.ShowText("MACRET_ROBOT_CAME_CHECKIN_RETURN");
@@ -227,7 +227,7 @@ namespace SeldatMRMS
                             {
                                 Global_Object.onFlagRobotComingGateBusy = true;
                                 rb.UpdateRiskAraParams(40, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 if (rb.SendPoseStamped(BfToRe.GetFrontLineReturn()))
                                 {
                                     StateMachineToReturn = MachineToReturn.MACRET_ROBOT_GOTO_FRONTLINE_RETURN;
@@ -251,7 +251,7 @@ namespace SeldatMRMS
 
                                 if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_DOWN)))
                                 {
-                                    rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                     StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_DROPDOWN_PALLET;
                                     robot.ShowText("MACRET_ROBOT_WAITTING_DROPDOWN_PALLET");
                                 }
@@ -311,7 +311,7 @@ namespace SeldatMRMS
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
                             robot.ShowText("MACRET_ROBOT_RELEASED");
                         }
