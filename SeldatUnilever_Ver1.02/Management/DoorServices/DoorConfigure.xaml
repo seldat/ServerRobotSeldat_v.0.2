@@ -27,6 +27,8 @@
                   AutoGenerateColumns="False">
 
                 <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Header="Name" 
+                                        Binding="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="Id" 
                                         Binding="{Binding Path=Id, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="Ip" 

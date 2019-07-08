@@ -1,9 +1,11 @@
-﻿using SeldatMRMS.Management.RobotManagent;
+﻿using SeldatMRMS;
+using SeldatMRMS.Management.RobotManagent;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SeldatUnilever_Ver1._02.Management.TrafficManager
 {
@@ -13,10 +15,19 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         private int numReg;
         public String Name{ get; set; }
         private List<RobotUnity> Registryrobotlist = new List<RobotUnity>();
+        private Point[] pointData;
         public RegistryIntersectionZone(String Name,int nRobot= NUM_ROBOT_REG)
         {
             this.Name = Name;
             numReg = nRobot;
+        }
+        public void setPoints(Point[] pList)
+        {
+            Array.Copy(pList, pointData, pList.Length);
+        }
+        public bool ObjectInZone(Point pos)
+        {
+            return ExtensionService.IsInPolygon(pointData, pos);
         }
         public void Registry(RobotUnity robot)
         {

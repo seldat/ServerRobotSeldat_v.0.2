@@ -24,8 +24,11 @@ namespace SeldatMRMS.Management.DoorServices
         public List<DoorInfoConfig> PropertiesDoor_List;
         private List<DoorInfoConfig> DoorInfoConfigList;
         public DoorService DoorMezzamineUp;
+        public DoorService DoorMezzamineUp_InV; // toa độ đầu line inverse
         public DoorService DoorMezzamineUpNew;
+        public DoorService DoorMezzamineUpNew_InV;
         public DoorService DoorMezzamineReturn;
+        public DoorService DoorMezzamineReturn_InV;
         public DoorElevator DoorElevator;
         public DoorConfigure doorConfigure;
         static public bool fistInit = false;
@@ -40,9 +43,11 @@ namespace SeldatMRMS.Management.DoorServices
                 LoadConfigure();
 
                 DoorMezzamineUp = new DoorService(DoorInfoConfigList[0]);
-                DoorMezzamineUpNew = new DoorService(DoorInfoConfigList[1]);
-           
-                //            DoorMezzamineReturn = new DoorService(DoorInfoConfigList[2]); // kiem tra lai 
+                DoorMezzamineUp_InV = new DoorService(DoorInfoConfigList[1]);
+                DoorMezzamineUpNew = new DoorService(DoorInfoConfigList[2]);
+                DoorMezzamineUpNew_InV = new DoorService(DoorInfoConfigList[3]);
+                DoorMezzamineReturn = new DoorService(DoorInfoConfigList[4]); // kiem tra lai 
+                DoorMezzamineReturn_InV = new DoorService(DoorInfoConfigList[5]); // kiem tra lai 
                 try
                 {
                     doorConfigure = new DoorConfigure(this);
@@ -58,8 +63,39 @@ namespace SeldatMRMS.Management.DoorServices
         }
         public void Initialize()
         {
+            DoorInfoConfig doorICF_MUB_New = new DoorInfoConfig()
+            {
+                Name = "GATE1",
+                Id = DoorId.DOOR_MEZZAMINE_UP_NEW,
+                Ip = "192.168.1.242",
+                Port = 8081,
+                infoPallet = "{\"pallet\":0,\"dir_main\":1,\"dir_out\":1,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
+                PointCheckInGateStr = "2.54,-6.78,90",
+                PointFrontLineStr = "15.1,0.7,0"
+            };
+            doorICF_MUB_New.ParsePointCheckInGateValue(doorICF_MUB_New.PointCheckInGateStr);
+            doorICF_MUB_New.ParsePointFrontLineValue(doorICF_MUB_New.PointFrontLineStr);
+            PropertiesDoor_List.Add(doorICF_MUB_New);
+            DoorInfoConfigList.Add(doorICF_MUB_New);
+
+            DoorInfoConfig doorICF_MUB_NEW_INV = new DoorInfoConfig()
+            {
+                Name = "GATE1-INV",
+                Id = DoorId.DOOR_MEZZAMINE_UP_NEW,
+                Ip = "192.168.1.242",
+                Port = 8081,
+                infoPallet = "{\"pallet\":0,\"dir_main\":1,\"dir_out\":1,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
+                PointCheckInGateStr = "2.54,-6.78,90",
+                PointFrontLineStr = "15.1,0.7,0"
+            };
+            doorICF_MUB_NEW_INV.ParsePointCheckInGateValue(doorICF_MUB_NEW_INV.PointCheckInGateStr);
+            doorICF_MUB_NEW_INV.ParsePointFrontLineValue(doorICF_MUB_NEW_INV.PointFrontLineStr);
+            PropertiesDoor_List.Add(doorICF_MUB_NEW_INV);
+            DoorInfoConfigList.Add(doorICF_MUB_NEW_INV);
+
             DoorInfoConfig doorICF_MUB = new DoorInfoConfig()
             {
+                Name="GATE2",
                 Id = DoorId.DOOR_MEZZAMINE_UP,
                 Ip = "192.168.1.240",
                 Port = 8081,
@@ -72,22 +108,26 @@ namespace SeldatMRMS.Management.DoorServices
             PropertiesDoor_List.Add(doorICF_MUB);
             DoorInfoConfigList.Add(doorICF_MUB);
 
-            DoorInfoConfig doorICF_MUB_New = new DoorInfoConfig()
+            DoorInfoConfig doorICF_MUB_INV = new DoorInfoConfig()
             {
-                Id = DoorId.DOOR_MEZZAMINE_UP_NEW,
-                Ip = "192.168.1.242",
+                Name = "GATE2-INV",
+                Id = DoorId.DOOR_MEZZAMINE_UP,
+                Ip = "192.168.1.240",
                 Port = 8081,
                 infoPallet = "{\"pallet\":0,\"dir_main\":1,\"dir_out\":1,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
-                PointCheckInGateStr  = "2.54,-6.78,90",
-                PointFrontLineStr = "15.1,0.7,0"
+                PointCheckInGateStr = "2.54,-6.78,90",
+                PointFrontLineStr = "17.88,0.7,0"
             };
-            doorICF_MUB_New.ParsePointCheckInGateValue(doorICF_MUB_New.PointCheckInGateStr);
-            doorICF_MUB_New.ParsePointFrontLineValue(doorICF_MUB_New.PointFrontLineStr);
-            PropertiesDoor_List.Add(doorICF_MUB_New);
-            DoorInfoConfigList.Add(doorICF_MUB_New);
+            doorICF_MUB_INV.ParsePointCheckInGateValue(doorICF_MUB_INV.PointCheckInGateStr);
+            doorICF_MUB_INV.ParsePointFrontLineValue(doorICF_MUB_INV.PointFrontLineStr);
+            PropertiesDoor_List.Add(doorICF_MUB_INV);
+            DoorInfoConfigList.Add(doorICF_MUB_INV);
+
+
 
             DoorInfoConfig doorICF_MRB = new DoorInfoConfig()
             {
+                Name = "GATE_RETURN",
                 Id = DoorId.DOOR_MEZZAMINE_RETURN,
                 Ip = "192.168.1.241",
                 Port = 8081,
@@ -99,7 +139,22 @@ namespace SeldatMRMS.Management.DoorServices
             doorICF_MRB.ParsePointFrontLineValue(doorICF_MRB.PointFrontLineStr);
             PropertiesDoor_List.Add(doorICF_MRB);
             DoorInfoConfigList.Add(doorICF_MRB);
-            
+
+            DoorInfoConfig doorICF_MRB_INV = new DoorInfoConfig()
+            {
+                Name = "GATE_RETURN_INV",
+                Id = DoorId.DOOR_MEZZAMINE_RETURN,
+                Ip = "192.168.1.241",
+                Port = 8081,
+                infoPallet = "{\"pallet\":1,\"dir_main\":1,\"dir_out\":1,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
+                PointCheckInGateStr = "2.54,-6.78,90",
+                PointFrontLineStr = "17.88,0.7,0"
+            };
+            doorICF_MRB_INV.ParsePointCheckInGateValue(doorICF_MRB_INV.PointCheckInGateStr);
+            doorICF_MRB_INV.ParsePointFrontLineValue(doorICF_MRB_INV.PointFrontLineStr);
+            PropertiesDoor_List.Add(doorICF_MRB_INV);
+            DoorInfoConfigList.Add(doorICF_MRB_INV);
+
             Grouped_PropertiesDoor.Refresh();
         }
         public void SaveConfig(String data)

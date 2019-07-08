@@ -11,6 +11,7 @@ using SeldatMRMS.Management;
 using SeldatMRMS.Management.DoorServices;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
+using SeldatUnilever_Ver1._02.Management.ProcedureServices;
 using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using static DoorControllerService.DoorService;
@@ -22,7 +23,7 @@ using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 namespace SeldatMRMS
 {
 
-    public class ProcedureForkLiftToBuffer : ProcedureControlServices
+    public class ProcedureForkLiftToBuffer : TrafficProcedureService
     {
         public struct DataForkLiftToBuffer
         {
@@ -68,15 +69,7 @@ namespace SeldatMRMS
         }
         public void Start(ForkLift state = ForkLift.FORBUF_ROBOT_GOTO_CHECKIN_GATE)
         {
-            // public void Start (ForkLiftToBuffer state = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED) {
-            if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP)
-            {
-                door = this.doorservice.DoorMezzamineUp;
-            }
-            else if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP_NEW)
-            {
-                door = this.doorservice.DoorMezzamineUpNew;
-            }
+
             errorCode = ErrorCode.RUN_OK;
             robot.robotTag = RobotStatus.WORKING;
             robot.ProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
@@ -147,8 +140,9 @@ namespace SeldatMRMS
         {
             ProcedureForkLiftToBuffer FlToBuf = (ProcedureForkLiftToBuffer)ojb;
             RobotUnity rb = FlToBuf.robot;
+            DoorService ds = getDoorService();
             // DataForkLiftToBuffer p = FlToBuf.points;
-            DoorService ds = FlToBuf.door;
+            //DoorService ds = FlToBuf.door;
             TrafficManagementService Traffic = FlToBuf.Traffic;
             ForkLiftToMachineInfo flToMachineInfo = new ForkLiftToMachineInfo();
             rb.mcuCtrl.TurnOnLampRb();
@@ -160,6 +154,41 @@ namespace SeldatMRMS
                 {
                     case ForkLift.FORBUF_IDLE:
                         robot.ShowText("FORBUF_IDLE");
+                        break;
+                    case ForkLift.FORBUF_SELECT_BEHAVIOR_ONZONE:
+                        
+                        if(Traffic.RobotIsInArea("VIM",robot.properties.pose.Position))
+                        {
+                            // đi tới đầu line cổng theo tọa độ chỉ định. gate 1 , 2, 3
+                            if (rb.SendPoseStamped(ds.config.PointFrontLine))
+                            {
+                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE;
+                                robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_GATE");
+                            }
+                        }
+                        if (Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position))
+                        {
+                            // public void Start (ForkLiftToBuffer state = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED) {
+                           
+                            if (rb.SendPoseStamped(ds.config.PointCheckInGate))
+                            {
+                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
+                                robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE");
+                            }
+                        }
+                        if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
+                        {
+                            if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
+                            {
+                                if (false == rb.CheckInGateFromReadyZoneBehavior(ds.config.PointFrontLine.Position))
+                                {
+
+                                    robot.ShowText("FORBUF_ROBOT_GOTO_BACK_FRONTLINE_READY");
+                                    StateForkLift = ForkLift.FORBUF_ROBOT_GOTO_BACK_FRONTLINE_READY;
+
+                                }
+                            }
+                        }
                         break;
                     case ForkLift.FORBUF_ROBOT_GOTO_CHECKIN_GATE: //gui toa do di den khu vuc checkin cong
                         if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
@@ -238,7 +267,6 @@ namespace SeldatMRMS
                         break;
                    case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE:
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
-                        //if ( robot.ReachedGoal())
                         {
                          
                             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -282,6 +310,10 @@ namespace SeldatMRMS
                             StateForkLift = ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION;
                             robot.ShowText("FORBUF_ROBOT_CAME_GATE_POSITION");
                         }
+                        break;
+                    case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM:
+                        // kiem tra vung đăng ký tai khu vuc xac định
+
                         break;
                     case ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
                         robot.robotRegistryToWorkingZone.onRobotwillCheckInsideGate = false;

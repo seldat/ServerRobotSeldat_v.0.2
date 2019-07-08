@@ -280,6 +280,7 @@
     <Compile Include="Management\ProcedureServices\SolvedProblem.xaml.cs">
       <DependentUpon>SolvedProblem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Management\ProcedureServices\TrafficProcedureService.cs" />
     <Compile Include="Management\RobotManagent\ConfigureRobotUnity.xaml.cs">
       <DependentUpon>ConfigureRobotUnity.xaml</DependentUpon>
     </Compile>

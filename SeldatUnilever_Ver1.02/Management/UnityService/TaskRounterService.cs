@@ -118,7 +118,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         else
                             return null;
                     }
-                    else if (item.typeReq == TyeRequest.TYPEREQUEST_WMS_RETURNPALLET_BUFFER)
+                    else if (item.typeReq == TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFER)
                     {
                          // item.status = StatusOrderResponseCode.DELIVERING;
                           return item;

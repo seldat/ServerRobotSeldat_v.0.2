@@ -80,7 +80,8 @@ namespace DoorControllerService
 
         public class DoorInfoConfig : NotifyUIBase
         {
-
+            private String _Name;
+            public String Name { get => _Name; set { _Name = value; RaisePropertyChanged("Name"); } }
             private String _Ip;
             public String Ip { get => _Ip; set { _Ip = value; RaisePropertyChanged("Ip"); } }
             private Int32 _Port;

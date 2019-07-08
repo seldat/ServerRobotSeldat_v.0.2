@@ -69,11 +69,13 @@ namespace SeldatMRMS {
         }
         public enum ForkLift {
             FORBUF_IDLE,
+            FORBUF_SELECT_BEHAVIOR_ONZONE,
             FORBUF_ROBOT_GOTO_CHECKIN_GATE, // vị trí check in liệu có quy trình nào tại cổng
             FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE,
             FORBUF_ROBOT_GOTO_BACK_FRONTLINE_READY,
             FORBUF_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.
             FORBUF_ROBOT_WAITTING_GOTO_GATE, // doi robot di den khu vuc cong
+            FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM, // doi robot di den khu vuc cong
             FORBUF_ROBOT_CAME_GATE_POSITION, // da den khu vuc cong , gui yeu cau mo cong.
             FORBUF_ROBOT_WAITTING_OPEN_DOOR, //doi mo cong
             FORBUF_ROBOT_OPEN_DOOR_SUCCESS, // mo cua thang cong ,gui toa do line de robot di vao gap hang
