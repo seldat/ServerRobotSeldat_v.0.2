@@ -23,7 +23,9 @@ namespace SeldatMRMS.Management.RobotManagent
             PRO_FORKLIFT_TO_MACHINE,
             PRO_BUFFER_TO_BUFFER,
             PRO_IDLE,
-            PRO_WAIT_TASK
+            PRO_WAIT_TASK,
+            PRO_BUFFER_TO_GATE,
+            PRO_MACHINE_TO_GATE,
         }
         public enum RobotInModeCode
         {
