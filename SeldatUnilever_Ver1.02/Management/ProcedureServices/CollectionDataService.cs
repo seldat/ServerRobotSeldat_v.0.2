@@ -201,6 +201,419 @@ namespace SelDatUnilever_Ver1
                 if (sw.ElapsedMilliseconds > ms) break;
             }
         }
+        #region [ Check In, AnyPoint, FrontLine, GetPalletInfo ] [BufferReturn to Buffer401]  
+        #region GET CHECK IN BUFFERRETURN [ BufferReturn to Buffer401]
+        public Pose GetCheckInBuffer_BufferReturn(String dataReq)
+        {
+            Pose poseTemp = null;
+            try
+            {
+                String collectionData = RequestDataProcedure(dataReq, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    foreach (var result in results)
+                    {
+                        int deviceId = (int)result["deviceId"];
+                        if (deviceId == order.deviceId)
+                        {
+                            foreach (var buffer in result["buffers"])
+                            {
+                                int bufferId = (int)buffer["bufferId"];
+                                if (bufferId == order.bufferId)
+                                {
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        String checkinResults = (String)buffer["bufferCheckIn"];
+                                        JObject stuff = JObject.Parse(checkinResults);
+                                        double x = (double)stuff["checkin"]["x"];
+                                        double y = (double)stuff["checkin"]["y"];
+                                        double angle = (double)stuff["checkin"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                        planId = order.planId;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    
+                }
+            }
+            catch { Console.WriteLine("Error check in data collection"); }
+            return poseTemp;
+        }
+        #endregion
+        #region GET ANY POINT BUFFER [ BufferReturn to Buffer401]
+        public Pose GetAnyPointInBuffer_BufferReturn(String dataReq) // đổi 
+        {
+
+            Pose poseTemp = null;
+            try
+            {
+                String collectionData = RequestDataProcedure(dataReq, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+
+                    foreach (var result in results)
+                    {
+                        int deviceId = (int)result["deviceId"];
+                        if (deviceId == order.deviceId)
+                        {
+                            foreach (var buffer in result["buffers"])
+                            {
+                                int bufferId = (int)buffer["bufferId"];
+                                if (bufferId == order.bufferId)
+                                {
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        //var bufferResults = result["buffers"][0];
+                                        String checkinResults = (String)buffer["bufferCheckIn"];
+                                        JObject stuff = JObject.Parse(checkinResults);
+                                        double x = (double)stuff["headpoint"]["x"];
+                                        double y = (double)stuff["headpoint"]["y"];
+                                        double angle = (double)stuff["headpoint"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Get AnyPoint Error");
+            }
+            return poseTemp;
+        }
+        #endregion
+        #region GET FRONT LINE BUFFER [ BufferReturn to Buffer401]
+        public Pose GetFrontLineBuffer_BufferReturnToB401(String dataReq)
+        {
+            Pose poseTemp = null;
+            try
+            {
+                String collectionData = RequestDataProcedure(dataReq, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    foreach (var result in results)
+                    {
+                        int deviceId = (int)result["deviceId"];
+                        if (deviceId == order.deviceId)
+                        {
+                            //var bufferResults = result["buffers"][0];
+                            foreach (var buffer in result["buffers"])
+                            {
+                                int bufferId = (int)buffer["bufferId"];
+                                if (bufferId == order.bufferId)
+                                {
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        //JObject stuff = JObject.Parse((String)buffer["pallets"][0]["dataPallet"]);
+                                        var palletInfo = buffer["pallets"][0];
+                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                        double x = (double)stuff["line"]["x"];
+                                        double y = (double)stuff["line"]["y"];
+                                        double angle = (double)stuff["line"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                //  Console.WriteLine(""+poseTemp.Position.ToString());
+            }
+            catch
+            {
+                Console.WriteLine("Error Front Line");
+            }
+            return poseTemp;
+        }
+        #endregion
+        #region GET PALLET INFO BUFFER [ BufferReturn to Buffer401]
+        public String GetInfoOfPalletBuffer_BufferReturn(TrafficRobotUnity.PistonPalletCtrl pisCtrl,String dataReq)
+        {
+            JInfoPallet infoPallet = new JInfoPallet();
+            try
+            {
+                String collectionData = RequestDataProcedure(dataReq, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    foreach (var result in results)
+                    {
+                        int deviceId = (int)result["deviceId"];
+                        if (deviceId == order.deviceId)
+                        {
+
+                            //var bufferResults = result["buffers"][0];
+                            foreach (var buffer in result["buffers"])
+                            {
+                                int bufferId = (int)buffer["bufferId"];
+                                if (bufferId == order.bufferId)
+                                {
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        var palletInfo = buffer["pallets"][0];
+                                        palletId = (int)palletInfo["palletId"];
+                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                        int row = (int)stuff["pallet"]["row"];
+                                        int bay = (int)stuff["pallet"]["bay"];
+                                        int directMain = (int)stuff["pallet"]["dir_main"];
+                                        int directSub = (int)stuff["pallet"]["dir_sub"];
+                                        int directOut = (int)stuff["pallet"]["dir_out"];
+                                        int line_ord = (int)stuff["pallet"]["line_ord"];
+                                        string subline = (string)stuff["pallet"]["hasSubLine"];
+
+                                        infoPallet.pallet = pisCtrl; /* dropdown */
+                                        infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
+                                        infoPallet.bay = bay;
+                                        infoPallet.hasSubLine = subline; /* yes or no */
+                                        infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
+                                        infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
+                                        infoPallet.row = row;
+                                        infoPallet.line_ord = line_ord;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Error at GetInfoOfPalletBuffer");
+                return "";
+            }
+            return JsonConvert.SerializeObject(infoPallet);
+        }
+        #endregion
+
+        #region GET CHECK IN BUFFER401 [ BufferReturn to Buffer401]
+        public Pose GetCheckInBuffer_Buffer401(String dataReq)
+        {
+            Pose poseTemp = null;
+            try
+            {
+                String collectionData = RequestDataProcedure(dataReq, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    foreach (var result in results)
+                    {
+                        int deviceIdPut = (int)result["deviceIdPut"];
+                        if (deviceIdPut == order.deviceIdPut)
+                        {
+                            foreach (var buffer in result["buffers"])
+                            {
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        String checkinResults = (String)buffer["bufferCheckIn"];
+                                        JObject stuff = JObject.Parse(checkinResults);
+                                        double x = (double)stuff["checkin"]["x"];
+                                        double y = (double)stuff["checkin"]["y"];
+                                        double angle = (double)stuff["checkin"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                        planId = order.planId;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+
+                            }
+                        }
+                    }
+
+
+                }
+            }
+            catch { Console.WriteLine("Error check in data collection"); }
+            return poseTemp;
+        }
+        #endregion
+
+        #region GET ANY POINT BUFFER [ BufferReturn to Buffer401]
+        public Pose GetAnyPointInBuffer_Buffer401(String dataReq) // đổi 
+        {
+
+            Pose poseTemp = null;
+            try
+            {
+                String collectionData = RequestDataProcedure(dataReq, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+
+                    foreach (var result in results)
+                    {
+                        int deviceIdPut = (int)result["deviceIdPut"];
+                        if (deviceIdPut == order.deviceIdPut)
+                        {
+                            foreach (var buffer in result["buffers"])
+                            {
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        //var bufferResults = result["buffers"][0];
+                                        String checkinResults = (String)buffer["bufferCheckIn"];
+                                        JObject stuff = JObject.Parse(checkinResults);
+                                        double x = (double)stuff["headpoint"]["x"];
+                                        double y = (double)stuff["headpoint"]["y"];
+                                        double angle = (double)stuff["headpoint"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Get AnyPoint Error");
+            }
+            return poseTemp;
+        }
+        #endregion
+
+        #region GET FRONT LINE BUFFER [ BufferReturn to Buffer401]
+        public Pose GetFrontLineBuffer_BufferB401(String dataReq)
+        {
+            Pose poseTemp = null;
+            try
+            {
+                String collectionData = RequestDataProcedure(dataReq, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    foreach (var result in results)
+                    {
+                        int deviceIdPut = (int)result["deviceIdPut"];
+                        if (deviceIdPut == order.deviceIdPut)
+                        {
+                            //var bufferResults = result["buffers"][0];
+                            foreach (var buffer in result["buffers"])
+                            {
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        //JObject stuff = JObject.Parse((String)buffer["pallets"][0]["dataPallet"]);
+                                        var palletInfo = buffer["pallets"][0];
+                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                        double x = (double)stuff["line"]["x"];
+                                        double y = (double)stuff["line"]["y"];
+                                        double angle = (double)stuff["line"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                            }
+                        }
+                    }
+                }
+                //  Console.WriteLine(""+poseTemp.Position.ToString());
+            }
+            catch
+            {
+                Console.WriteLine("Error Front Line");
+            }
+            return poseTemp;
+        }
+        #endregion
+
+        #region GET PALLET INFO BUFFER401 [ BufferReturn to Buffer401]
+        public String GetInfoOfPalletBuffer_BufferB401(TrafficRobotUnity.PistonPalletCtrl pisCtrl, String dataReq)
+        {
+            JInfoPallet infoPallet = new JInfoPallet();
+            try
+            {
+
+                String collectionData = RequestDataProcedure(dataReq, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    foreach (var result in results)
+                    {
+                        int deviceId = (int)result["deviceId"];
+                        if (deviceId == order.deviceId)
+                        {
+                            //var bufferResults = result["buffers"][0];
+                            foreach (var buffer in result["buffers"])
+                            {
+                                if (buffer["pallets"].Count() > 0)
+                                {
+                                    var palletInfo = buffer["pallets"][0];
+                                    palletId = (int)palletInfo["palletId"];
+                                    JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                    int row = (int)stuff["pallet"]["row"];
+                                    int bay = (int)stuff["pallet"]["bay"];
+                                    int directMain = (int)stuff["pallet"]["dir_main"];
+                                    int directSub = (int)stuff["pallet"]["dir_sub"];
+                                    int directOut = (int)stuff["pallet"]["dir_out"];
+                                    int line_ord = (int)stuff["pallet"]["line_ord"];
+                                    string subline = (string)stuff["pallet"]["hasSubLine"];
+
+                                    infoPallet.pallet = pisCtrl; /* dropdown */
+                                    infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
+                                    infoPallet.bay = bay;
+                                    infoPallet.hasSubLine = subline; /* yes or no */
+                                    infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
+                                    infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
+                                    infoPallet.row = row;
+                                    infoPallet.line_ord = line_ord;
+                                    break;
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Error at GetInfoOfPalletBuffer");
+                return "";
+            }
+            return JsonConvert.SerializeObject(infoPallet);
+        }
+        #endregion
+        #endregion
+        #region [ Check In, AnyPoint, FrontLine, GetPalletInfo ] [ FF-> BF / BF -> MACH] 
+        #region GET CHECK IN BUFFER
         public Pose GetCheckInBuffer(bool onPlandId=false)
         {
             Pose poseTemp = null;
@@ -247,6 +660,11 @@ namespace SelDatUnilever_Ver1
                         var result = results[0];
                         foreach (var buffer in result["buffers"])
                         {
+                            String bufferDataStr = (String)buffer["bufferData"];
+                            JObject stuffBData = JObject.Parse(bufferDataStr);
+                            bool canOpEdit = (bool)stuffBData["canOpEdit"];
+                            if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy
+                                continue;
                             if (buffer["pallets"].Count() > 0)
                             {
                                 String checkinResults = (String)buffer["bufferCheckIn"];
@@ -277,6 +695,289 @@ namespace SelDatUnilever_Ver1
             catch { Console.WriteLine("Error check in data collection"); }
             return poseTemp;
         }
+        #endregion
+        #region GET ANY POINT BUFFER
+        public Pose GetAnyPointInBuffer(bool onPlandId = false) // đổi 
+        {
+
+            Pose poseTemp = null;
+            try
+            {
+                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    if (onPlandId)
+                    {
+                        foreach (var result in results)
+                        {
+                            int temp_planId = (int)result["planId"];
+                            if (temp_planId == order.planId)
+                            {
+                                //var bufferResults = result["buffers"][0];
+                                foreach (var buffer in result["buffers"])
+                                {
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        String checkinResults = (String)buffer["bufferCheckIn"];
+                                        JObject stuff = JObject.Parse(checkinResults);
+                                        double x = (double)stuff["headpoint"]["x"];
+                                        double y = (double)stuff["headpoint"]["y"];
+                                        double angle = (double)stuff["headpoint"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
+
+                                break;
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var result = results[0];
+                        foreach (var buffer in result["buffers"])
+                        {
+                            String bufferDataStr = (String)buffer["bufferData"];
+                            JObject stuffBData = JObject.Parse(bufferDataStr);
+                            bool canOpEdit = (bool)stuffBData["canOpEdit"];
+                            if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy
+                                continue;
+                            if (buffer["pallets"].Count() > 0)
+                            {
+                                //var bufferResults = result["buffers"][0];
+                                String checkinResults = (String)buffer["bufferCheckIn"];
+                                JObject stuff = JObject.Parse(checkinResults);
+                                double x = (double)stuff["headpoint"]["x"];
+                                double y = (double)stuff["headpoint"]["y"];
+                                double angle = (double)stuff["headpoint"]["angle"];
+                                poseTemp = new Pose(x, y, angle);
+                                break;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Get AnyPoint Error");
+            }
+            return poseTemp;
+        }
+        #endregion
+        #region GET FRONT LINE BUFFER
+        public Pose GetFrontLineBuffer(bool onPlandId = false)
+        {
+            Pose poseTemp = null;
+            try
+            {
+                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    if (onPlandId)
+                    {
+                        foreach (var result in results)
+                        {
+                            int temp_planId = (int)result["planId"];
+                            if (temp_planId == order.planId)
+                            {
+                                //var bufferResults = result["buffers"][0];
+                                foreach (var buffer in result["buffers"])
+                                {
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        var palletInfo = buffer["pallets"][0];
+                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                        double x = (double)stuff["line"]["x"];
+                                        double y = (double)stuff["line"]["y"];
+                                        double angle = (double)stuff["line"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
+
+                                break;
+
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                        var result = results[0];
+                        //var bufferResults = result["buffers"][0];
+                        foreach (var buffer in result["buffers"])
+                        {
+                            String bufferDataStr = (String)buffer["bufferData"];
+                            JObject stuffBData = JObject.Parse(bufferDataStr);
+                            bool canOpEdit = (bool)stuffBData["canOpEdit"];
+                            if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy
+                                continue;
+                            if (buffer["pallets"].Count() > 0)
+                            {
+                                //JObject stuff = JObject.Parse((String)buffer["pallets"][0]["dataPallet"]);
+                                var palletInfo = buffer["pallets"][0];
+                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                double x = (double)stuff["line"]["x"];
+                                double y = (double)stuff["line"]["y"];
+                                double angle = (double)stuff["line"]["angle"];
+                                poseTemp = new Pose(x, y, angle);
+                                break;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                        //foreach (var palletInfo in bufferResults["pallets"])
+                        //{
+                        //    // var palletInfo = bufferResults["pallets"][0];
+                        //    try
+                        //    {
+                        //        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                        //        double x = (double)stuff["line"]["x"];
+                        //        double y = (double)stuff["line"]["y"];
+                        //        double angle = (double)stuff["line"]["angle"];
+                        //        poseTemp = new Pose(x, y, angle);
+                        //        break;
+                        //    }
+                        //    catch { }
+                        //}
+
+                    }
+                }
+                //  Console.WriteLine(""+poseTemp.Position.ToString());
+            }
+            catch
+            {
+                Console.WriteLine("Error Front Line");
+            }
+            return poseTemp;
+        }
+        #endregion
+        #region GET PALLET INFO BUFFER
+        public String GetInfoOfPalletBuffer(TrafficRobotUnity.PistonPalletCtrl pisCtrl, bool onPlandId = false)
+        {
+            JInfoPallet infoPallet = new JInfoPallet();
+            try
+            {
+
+                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    if (onPlandId)
+                    {
+                        foreach (var result in results)
+                        {
+                            int temp_planId = (int)result["planId"];
+                            if (temp_planId == order.planId)
+                            {
+                                foreach (var buffer in result["buffers"])
+                                {
+                                    //var bufferResults = result["buffers"][0];
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        var palletInfo = buffer["pallets"][0];
+
+                                        palletId = (int)palletInfo["palletId"];
+                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+
+                                        int row = (int)stuff["pallet"]["row"];
+                                        int bay = (int)stuff["pallet"]["bay"];
+                                        int directMain = (int)stuff["pallet"]["dir_main"];
+                                        int directSub = (int)stuff["pallet"]["dir_sub"];
+                                        int directOut = (int)stuff["pallet"]["dir_out"];
+                                        int line_ord = (int)stuff["pallet"]["line_ord"];
+                                        string subline = (string)stuff["pallet"]["hasSubLine"];
+
+                                        infoPallet.pallet = pisCtrl; /* dropdown */
+                                        infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
+                                        infoPallet.bay = bay;
+                                        infoPallet.hasSubLine = subline; /* yes or no */
+                                        infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
+                                        infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
+                                        infoPallet.row = row;
+                                        infoPallet.line_ord = line_ord;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                        var result = results[0];
+
+                        //var bufferResults = result["buffers"][0];
+                        foreach (var buffer in result["buffers"])
+                        {
+                            String bufferDataStr = (String)buffer["bufferData"];
+                            JObject stuffBData = JObject.Parse(bufferDataStr);
+                            bool canOpEdit = (bool)stuffBData["canOpEdit"];
+                            if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy, áp dụng trong quy trình Buffer -> Machine
+                                continue;
+                            if (buffer["pallets"].Count() > 0)
+                            {
+                                var palletInfo = buffer["pallets"][0];
+                                palletId = (int)palletInfo["palletId"];
+                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                int row = (int)stuff["pallet"]["row"];
+                                int bay = (int)stuff["pallet"]["bay"];
+                                int directMain = (int)stuff["pallet"]["dir_main"];
+                                int directSub = (int)stuff["pallet"]["dir_sub"];
+                                int directOut = (int)stuff["pallet"]["dir_out"];
+                                int line_ord = (int)stuff["pallet"]["line_ord"];
+                                string subline = (string)stuff["pallet"]["hasSubLine"];
+
+                                infoPallet.pallet = pisCtrl; /* dropdown */
+                                infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
+                                infoPallet.bay = bay;
+                                infoPallet.hasSubLine = subline; /* yes or no */
+                                infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
+                                infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
+                                infoPallet.row = row;
+                                infoPallet.line_ord = line_ord;
+                                break;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Error at GetInfoOfPalletBuffer");
+                return "";
+            }
+            return JsonConvert.SerializeObject(infoPallet);
+        }
+        #endregion
+        #endregion
         public Pose GetCheckInBuffer_Return(int bufferId)
         {
             Pose poseTemp = null;
@@ -324,78 +1025,7 @@ namespace SelDatUnilever_Ver1
             catch { Console.WriteLine("Error check in data collection"); }
             return poseTemp;
         }
-        public Pose GetAnyPointInBuffer(bool onPlandId = false) // đổi 
-        {
-
-            Pose poseTemp = null;
-            try
-            {
-                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
-                if (collectionData.Length > 0)
-                {
-                    JArray results = JArray.Parse(collectionData);
-                    if (onPlandId)
-                    {
-                        foreach (var result in results)
-                        {
-                            int temp_planId = (int)result["planId"];
-                            if (temp_planId == order.planId)
-                            {
-                                //var bufferResults = result["buffers"][0];
-                                foreach (var buffer in result["buffers"])
-                                {
-                                    if (buffer["pallets"].Count() > 0)
-                                    {
-                                        String checkinResults = (String)buffer["bufferCheckIn"];
-                                        JObject stuff = JObject.Parse(checkinResults);
-                                        double x = (double)stuff["headpoint"]["x"];
-                                        double y = (double)stuff["headpoint"]["y"];
-                                        double angle = (double)stuff["headpoint"]["angle"];
-                                        poseTemp = new Pose(x, y, angle);
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        continue;
-                                    }
-                                }
-                                
-                                break;
-
-                            }
-                        }
-                    }
-                    else
-                    {
-                        var result = results[0];
-                        foreach (var buffer in result["buffers"])
-                        {
-                            if (buffer["pallets"].Count() > 0)
-                            {
-                                //var bufferResults = result["buffers"][0];
-                                String checkinResults = (String)buffer["bufferCheckIn"];
-                                JObject stuff = JObject.Parse(checkinResults);
-                                double x = (double)stuff["headpoint"]["x"];
-                                double y = (double)stuff["headpoint"]["y"];
-                                double angle = (double)stuff["headpoint"]["angle"];
-                                poseTemp = new Pose(x, y, angle);
-                                break;
-                            }
-                            else
-                            {
-                                continue;
-                            }
-                        }
-                        
-                    }
-                }
-            }
-            catch
-            {
-                Console.WriteLine("Get AnyPoint Error");
-            }
-            return poseTemp;
-        }
+        
 
         public Pose GetAnyPointInBuffer_Return(int bufferId) // đổi 
         {
@@ -440,94 +1070,7 @@ namespace SelDatUnilever_Ver1
         }
 
 
-        public Pose GetFrontLineBuffer(bool onPlandId = false)
-        {
-            Pose poseTemp = null;
-            try
-            {
-                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
-                if (collectionData.Length > 0)
-                {
-                    JArray results = JArray.Parse(collectionData);
-                    if (onPlandId)
-                    {
-                        foreach (var result in results)
-                        {
-                            int temp_planId = (int)result["planId"];
-                            if (temp_planId == order.planId)
-                            {
-                                //var bufferResults = result["buffers"][0];
-                                foreach (var buffer in result["buffers"])
-                                {
-                                    if (buffer["pallets"].Count() > 0)
-                                    {
-                                        var palletInfo = buffer["pallets"][0];
-                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                        double x = (double)stuff["line"]["x"];
-                                        double y = (double)stuff["line"]["y"];
-                                        double angle = (double)stuff["line"]["angle"];
-                                        poseTemp = new Pose(x, y, angle);
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        continue;
-                                    }
-                                }
-                                
-                                break;
-
-                            }
-                        }
-                    }
-                    else
-                    {
-
-                        var result = results[0];
-                        //var bufferResults = result["buffers"][0];
-                        foreach (var buffer in result["buffers"])
-                        {
-                            if (buffer["pallets"].Count() > 0)
-                            {
-                                //JObject stuff = JObject.Parse((String)buffer["pallets"][0]["dataPallet"]);
-                                var palletInfo = buffer["pallets"][0];
-                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                double x = (double)stuff["line"]["x"];
-                                double y = (double)stuff["line"]["y"];
-                                double angle = (double)stuff["line"]["angle"];
-                                poseTemp = new Pose(x, y, angle);
-                                break;
-                            }
-                            else
-                            {
-                                continue;
-                            }
-                        }
-                        //foreach (var palletInfo in bufferResults["pallets"])
-                        //{
-                        //    // var palletInfo = bufferResults["pallets"][0];
-                        //    try
-                        //    {
-                        //        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                        //        double x = (double)stuff["line"]["x"];
-                        //        double y = (double)stuff["line"]["y"];
-                        //        double angle = (double)stuff["line"]["angle"];
-                        //        poseTemp = new Pose(x, y, angle);
-                        //        break;
-                        //    }
-                        //    catch { }
-                        //}
-
-                    }
-                }
-                //  Console.WriteLine(""+poseTemp.Position.ToString());
-            }
-            catch
-            {
-                Console.WriteLine("Error Front Line");
-            }
-            return poseTemp;
-        }
+       
 
         public Pose GetFrontLineMachine()
         {
@@ -606,106 +1149,7 @@ namespace SelDatUnilever_Ver1
 
         /*
          */
-        public String GetInfoOfPalletBuffer(TrafficRobotUnity.PistonPalletCtrl pisCtrl, bool onPlandId = false)
-        {
-            JInfoPallet infoPallet = new JInfoPallet();
-            try
-            {
-                
-                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
-                if (collectionData.Length > 0)
-                {
-                    JArray results = JArray.Parse(collectionData);
-                    if (onPlandId)
-                    {
-                        foreach (var result in results)
-                        {
-                            int temp_planId = (int)result["planId"];
-                            if (temp_planId == order.planId)
-                            {
-                                foreach (var buffer in result["buffers"])
-                                {
-                                    //var bufferResults = result["buffers"][0];
-                                    if (buffer["pallets"].Count() > 0)
-                                    {
-                                        var palletInfo = buffer["pallets"][0];
-
-                                        palletId = (int)palletInfo["palletId"];
-                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-
-                                        int row = (int)stuff["pallet"]["row"];
-                                        int bay = (int)stuff["pallet"]["bay"];
-                                        int directMain = (int)stuff["pallet"]["dir_main"];
-                                        int directSub = (int)stuff["pallet"]["dir_sub"];
-                                        int directOut = (int)stuff["pallet"]["dir_out"];
-                                        int line_ord = (int)stuff["pallet"]["line_ord"];
-                                        string subline = (string)stuff["pallet"]["hasSubLine"];
-
-                                        infoPallet.pallet = pisCtrl; /* dropdown */
-                                        infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
-                                        infoPallet.bay = bay;
-                                        infoPallet.hasSubLine = subline; /* yes or no */
-                                        infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
-                                        infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
-                                        infoPallet.row = row;
-                                        infoPallet.line_ord = line_ord;
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        continue;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-
-                        var result = results[0];
-
-                        //var bufferResults = result["buffers"][0];
-                        foreach (var buffer in result["buffers"])
-                        {
-                            if (buffer["pallets"].Count() > 0)
-                            {
-                                var palletInfo = buffer["pallets"][0];
-                                palletId = (int)palletInfo["palletId"];
-                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                int row = (int)stuff["pallet"]["row"];
-                                int bay = (int)stuff["pallet"]["bay"];
-                                int directMain = (int)stuff["pallet"]["dir_main"];
-                                int directSub = (int)stuff["pallet"]["dir_sub"];
-                                int directOut = (int)stuff["pallet"]["dir_out"];
-                                int line_ord = (int)stuff["pallet"]["line_ord"];
-                                string subline = (string)stuff["pallet"]["hasSubLine"];
-
-                                infoPallet.pallet = pisCtrl; /* dropdown */
-                                infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
-                                infoPallet.bay = bay;
-                                infoPallet.hasSubLine = subline; /* yes or no */
-                                infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
-                                infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
-                                infoPallet.row = row;
-                                infoPallet.line_ord = line_ord;
-                                break;
-                            }
-                            else
-                            {
-                                continue;
-                            }
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                Console.WriteLine("Error at GetInfoOfPalletBuffer");
-                return "";
-            }
-            return JsonConvert.SerializeObject(infoPallet);
-        }
+        
 
         public String GetInfoOfPalletBuffer_Return(TrafficRobotUnity.PistonPalletCtrl pisCtrl,int bufferId)
         {

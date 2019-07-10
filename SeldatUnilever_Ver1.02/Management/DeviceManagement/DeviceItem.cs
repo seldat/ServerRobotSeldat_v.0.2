@@ -71,13 +71,13 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             TYPEREQUEST_CLOSE_FRONTDOOR_RETURN_PALLET = 10,
             TYPEREQUEST_CLEAR_FORLIFT_TO_BUFFER = 11,
             TYPEREQUEST_FORLIFT_TO_MACHINE = 12, // santao jujeng cap bottle
-            TYPEREQUEST_WMS_RETURN_PALLET_BUFFER = 13, // santao jujeng cap bottle
+            TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN = 13, // santao jujeng cap bottle
             TYPEREQUEST_CHARGE = 14, // santao jujeng cap bottle
             TYPEREQUEST_GOTO_READY = 15, // santao jujeng cap bottle
             TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET_GATE_2 = 16,
             TYPEREQUEST_CLOSE_FRONTDOOR_DELIVERY_PALLET_GATE_2 = 17,
             TYPEREQUEST_WMS_RETURN_PALLET_GATE = 18, // 
-            TYPEREQUEST_WMS_RETURN_PALLET_BUFFER401 = 19, // 
+            TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401 = 19, // 
         }
         public enum TabletConTrol
         {
@@ -102,6 +102,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             private String OrderId { get; set; }
             public int planId { get; set; }
             public int deviceId;
+            public int deviceIdPut;
             public String productDetailName { get; set; }
             public int productId { get; set; }
             public int productDetailId { get; set; }
@@ -116,10 +117,13 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public int updUsrId;
             public int lengthPallet;
             public String dataRequest;
+            public String dataRequest_BufferReturn;
+            public String dataRequest_Buffer401;
             // public bool status = false; // chua hoan thanh
             public DataPallet palletAtMachine;
 
             public int bufferId;
+            public int bufferIdPut;
             public int palletAmount;
             public DateTime startTimeProcedure = new DateTime();
             public DateTime endTimeProcedure = new DateTime();
@@ -218,6 +222,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             {
                 JObject results = JObject.Parse(dataReq);
                 int typeReq = (int)results["typeReq"];
+                #region TYPEREQUEST_FORLIFT_TO_BUFFER
                 if (typeReq == (int)TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
                 {
                     int gate = (int)results["gate"];
@@ -274,6 +279,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                           Console.WriteLine("control lamp failed"+e);
                       }*/
                 }
+                #endregion
+                #region TYPEREQUEST_FORLIFT_TO_MACHINE
                 if (typeReq == (int)TyeRequest.TYPEREQUEST_FORLIFT_TO_MACHINE)
                 {
                     int gate = (int)results["gate"];
@@ -331,6 +338,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         Console.WriteLine("control lamp failed");
                     }
                 }
+                #endregion
+                #region TYPEREQUEST_BUFFER_TO_MACHINE
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
                 {
                     Console.WriteLine(dataReq);
@@ -348,7 +357,6 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                                 cntOrderReg++;
                         }
                     }
-
                     if (cntOrderReg == 0) // chưa có order với productdetailID nào uoc đăng ký. thêm vào đúng số lượng trong orderlist
                     {
                         if (len <= palletAmountInBuffer) // nếu số lượn yêu cầu nhỏ hơn bằng số pallet có trong buffer add vào orderlist 
@@ -415,6 +423,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     }
 
                 }
+                #endregion
+                #region TYPEREQUEST_MACHINE_TO_RETURN
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_MACHINE_TO_RETURN)
                 {
                     int len = (int)results["length"];
@@ -454,6 +464,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 
                     }
                 }
+                #endregion
+                #region TYPEREQUEST_BUFFER_TO_RETURN
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_BUFFER_TO_RETURN)
                 {
                     OrderItem order = new OrderItem();
@@ -478,7 +490,42 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     PendingOrderList.Add(order);
                     OrderedItemList.Add(order);
                 }
-                else if (typeReq == (int)TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFER)
+                #endregion
+                #region TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN)
+                {
+                    OrderItem order = new OrderItem();
+                    order.typeReq = (TyeRequest)typeReq;
+                    order.userName = (String)results["userName"];
+                    order.productDetailId = (int)results["productDetailId"];
+                    order.productDetailName = (String)results["productDetailName"];
+                    order.productId = (int)results["productId"];
+                    // order.planId = (int)results["planId"];
+                    order.deviceId = (int)results["deviceId"];
+                    order.bufferId = (int)results["bufferId"];
+                    order.deviceIdPut = (int)results["deviceIdPut"];
+                    order.bufferIdPut = (int)results["bufferIdPut"];
+                    order.timeWorkId = 1;
+                    // order.activeDate = (string)DateTime.Now.ToString("yyyy-MM-dd");
+                    // order.palletStatus = (String)results["palletStatus"];
+
+                    dynamic product = new JObject();
+                    product.timeWorkId = order.timeWorkId;
+                    product.activeDate = order.activeDate;
+                    order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
+                    product.productId = order.productId;
+                    product.productDetailId = order.productDetailId;
+                    // chu y sua 
+                    product.palletStatus = PalletStatus.R.ToString(); // W
+                 //   product.deviceId = order.deviceId;
+                    order.dataRequest = product.ToString();
+                    order.status = StatusOrderResponseCode.PENDING;
+                    PendingOrderList.Add(order);
+                    OrderedItemList.Add(order);
+                }
+                #endregion
+                #region TYPEREQUEST_WMS_RETURN_PALLET_BUFFER_TO_BUFFER
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401)
                 {
                     OrderItem order = new OrderItem();
                     order.typeReq = (TyeRequest)typeReq;
@@ -500,12 +547,14 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     product.productDetailId = order.productDetailId;
                     // chu y sua 
                     product.palletStatus = PalletStatus.R.ToString(); // W
-                 //   product.deviceId = order.deviceId;
+                                                                      //   product.deviceId = order.deviceId;
                     order.dataRequest = product.ToString();
                     order.status = StatusOrderResponseCode.PENDING;
                     PendingOrderList.Add(order);
                     OrderedItemList.Add(order);
                 }
+                #endregion
+                #region TYPEREQUEST_CLEAR
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLEAR)
                 {
                     String userName = (String)results["userName"];
@@ -526,32 +575,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     }
 
                 }
-                /* else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLEAR_FORLIFT_TO_BUFFER)
-                 {
-                     String userName = (String)results["userName"];
-                     int productDetailId = (int)results["productDetailId"];
-
-                     // kiểm tra quy trình và hủy task 
-
-                     foreach (OrderItem ord in PendingOrderList)
-                     {
-                         if (ord.productDetailId == productDetailId)
-                         {
-                             PendingOrderList.Remove(ord);
-                             break;
-                         }
-                     }
-                     foreach (OrderItem ord in OrderedItemList)
-                     {
-                         if (ord.productDetailId == productDetailId)
-                             if (ord.status == StatusOrderResponseCode.PENDING)
-                             {
-                                 ord.status = StatusOrderResponseCode.DESTROYED;
-                                 break;
-                             }
-                     }
-
-                 }*/
+                #endregion
+                #region TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET_GATE_1
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET_GATE_1)
                 {
                     // same deviceID forklift
@@ -566,6 +591,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         return statusOrderResponse;
                     }
                 }
+                #endregion
+                #region TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET_GATE_2
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET_GATE_2)
                 {
                     // same deviceID forklift
@@ -580,6 +607,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         return statusOrderResponse;
                     }
                 }
+                #endregion
+                #region TYPEREQUEST_CLOSE_FRONTDOOR_DELIVERY_PALLET_GATE_1
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLOSE_FRONTDOOR_DELIVERY_PALLET_GATE_1)
                 {
                     // same deviceID forklift
@@ -594,6 +623,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         return statusOrderResponse;
                     }
                 }
+                #endregion
+                #region TYPEREQUEST_CLOSE_FRONTDOOR_DELIVERY_PALLET_GATE_2
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLOSE_FRONTDOOR_DELIVERY_PALLET_GATE_2)
                 {
                     // same deviceID forklift
@@ -608,6 +639,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         return statusOrderResponse;
                     }
                 }
+                #endregion
                 statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_SUCCESS, ErrorMessage = "" };
             }
             catch (Exception e)
