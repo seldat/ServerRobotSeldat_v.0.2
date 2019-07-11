@@ -31,58 +31,6 @@ using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
 namespace SeldatUnilever_Ver1._02
 {
-    public class Student
-    {
-        public String Name { get; set; }
-        public String Lastname { get; set; }
-    }
-
-    public class School
-    {
-        public String Name { get; set; }
-        public List<Student> Students { get; set; }
-    }
-
-    public static class SchoolData
-    {
-        /// <summary>
-        /// Returns a list of schools containing a list of students
-        /// </summary>
-        public static IList<School> GetSchoolData()
-        {
-            IList<School> schools = new List<School>(){
-            new School() {
-                Name = "school1",
-                Students = new List<Student>() {
-                    new Student(){Name="name0",Lastname="lastname0"},
-                    new Student(){Name="name1",Lastname="lastname1"},
-                    new Student(){Name="name2",Lastname="lastname2"},
-                    new Student(){Name="name3",Lastname="lastname3"},
-            }},
-            new School() {
-                Name = "school2" ,
-                Students = new List<Student>() {
-                    new Student(){Name="name10",Lastname="lastname10"},
-                    new Student(){Name="name11",Lastname="lastname11"},
-                    new Student(){Name="name12",Lastname="lastname12"},
-                    new Student(){Name="name13",Lastname="lastname13"},
-            }}
-        };
-
-            return schools;
-        }
-    }
-
-    public class ViewModel : DependencyObject
-    {
-        public IList<School> Schools { get; set; }
-
-        public ViewModel()
-        {
-            Schools = SchoolData.GetSchoolData();
-        }
-    }
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -115,9 +63,6 @@ namespace SeldatUnilever_Ver1._02
             map.Background = img;
             canvasControlService = new CanvasControlService(this);
             DataContext = canvasControlService;
-
-
-
 
             //DataContext = this;
             //DataContext = new ViewModel();
@@ -175,9 +120,6 @@ namespace SeldatUnilever_Ver1._02
                 stationtimer.Enabled = true;
 
             }
-
-
-
         }
 
 
@@ -483,7 +425,6 @@ namespace SeldatUnilever_Ver1._02
 
                 }
             }
-
         }
 
         private void Window_Closing_1(object sender, System.ComponentModel.CancelEventArgs e)

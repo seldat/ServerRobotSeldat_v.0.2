@@ -148,6 +148,28 @@ namespace SeldatMRMS
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_BUFFER_TO_RETURN;
                     procbb.Start();
                     break;
+                case ProcedureItemSelected.PROCEDURE_BUFER_TO_GATE:
+                    ProcedureBufferToGate procbg = new ProcedureBufferToGate(robot, doorService, trafficService);
+                    ProcedureDataItems probgDataItems = new ProcedureDataItems();
+                    probgDataItems.StartTaskTime = DateTime.Now;
+                    RegisterProcedureItem itemprocbg = new RegisterProcedureItem() { item = procbg, robot = robot, procedureDataItems = probgDataItems };
+                    procbg.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
+                    procbg.ErrorProcedureHandler += ErrorApprearInProcedureItem;
+                    // RegisterProcedureItemList.Add (itemprocrg);
+                    procbg.AssignAnOrder(orderItem);
+                    procbg.Start();
+                    break;
+                case ProcedureItemSelected.PROCEDURE_MACHINE_TO_GATE:
+                    ProcedureBufferToGate procmg = new ProcedureBufferToGate(robot, doorService, trafficService);
+                    ProcedureDataItems promgDataItems = new ProcedureDataItems();
+                    promgDataItems.StartTaskTime = DateTime.Now;
+                    RegisterProcedureItem itemprocmg = new RegisterProcedureItem() { item = procmg, robot = robot, procedureDataItems = promgDataItems };
+                    procmg.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
+                    procmg.ErrorProcedureHandler += ErrorApprearInProcedureItem;
+                    // RegisterProcedureItemList.Add (itemprocrg);
+                    procmg.AssignAnOrder(orderItem);
+                    procmg.Start();
+                    break;
             }
         }
 

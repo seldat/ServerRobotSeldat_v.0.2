@@ -44,6 +44,8 @@ namespace SeldatMRMS {
             PROC_CODE_ROBOT_WAITINGTO_READY,
             PROC_CODE_ROBOT_TO_CHARGE,
             PROC_CODE_BUFFER_TO_BUFFER,
+            PROC_CODE_BUFFER_TO_GATE,
+            PROC_CODE_MACHINE_TO_GATE,
         }
         public enum ErrorCode {
             RUN_OK = 0,
@@ -214,6 +216,7 @@ namespace SeldatMRMS {
             MACRET_ROBOT_WAITTING_GOTO_FRONTLINE,
             MACRET_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
+
         public enum ReturnToGate {
             RETGATE_IDLE,
             RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_RETURN, // doi robot di den khu vuc checkin cua vung buffer
@@ -234,6 +237,46 @@ namespace SeldatMRMS {
             RETGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN, // doi robot gap hang
             RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE, //doi robot di tro lai dau line cong.
             RETGATE_ROBOT_WAITTING_CLOSE_GATE, // doi dong cong.
+        }
+
+        public enum BufferToGate
+        {
+            BUFGATE_IDLE,
+            BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER, // doi robot di den khu vuc checkin cua vung buffer
+            BUFGATE_ROBOT_WAITTING_ZONE_BUFFER_READY, // doi khu vuc buffer san sang de di vao
+            BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER, // den dau line buffer, chuyen mode do line
+            BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER, // doi robot do line den pallet  va tha pallet
+            BUFGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER, // doi robot di den dau line buffer.
+            BUFGATE_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
+            BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE,
+            BUFGATE_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.
+            BUFGATE_ROBOT_WAITTING_GOTO_GATE, // doi robot di den khu vuc cong
+            BUFGATE_ROBOT_CAME_GATE_POSITION, // da den khu vuc cong , gui yeu cau mo cong.
+            BUFGATE_ROBOT_WAITTING_OPEN_DOOR, //doi mo cong
+            BUFGATE_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER, // doi robot gap hang
+            BUFGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE, //doi robot di tro lai dau line cong.
+            BUFGATE_ROBOT_WAITTING_CLOSE_GATE, // doi dong cong.
+        }
+
+        public enum MachineToGate
+        {
+            MACGATE_IDLE,
+            MACGATE_ROBOT_GOTO_FRONTLINE_MACHINE,
+            MACGATE_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
+            // MACGATE_ROBOT_GOTO_PICKUP_PALLET_MACHINE,
+            MACGATE_ROBOT_WAITTING_PICKUP_PALLET_MACHINE, // doi robot do line den pallet  va tha pallet
+            MACGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE, // doi robot di den dau line buffer.
+            MACGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE,
+            MACGATE_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.
+            MACGATE_ROBOT_WAITTING_GOTO_GATE, // doi robot di den khu vuc cong
+            MACGATE_ROBOT_CAME_GATE_POSITION, // da den khu vuc cong , gui yeu cau mo cong.
+            MACGATE_ROBOT_WAITTING_OPEN_DOOR, //doi mo cong
+            // MACGATE_ROBOT_OPEN_DOOR_SUCCESS, // mo cua thang cong ,gui toa do line de robot di vao gap hang
+            // MACGATE_ROBOT_GOTO_POSITION_PALLET_RETURN, //cho robot den toa do pallet
+            MACGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN, // doi robot gap hang
+            MACGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE, //doi robot di tro lai dau line cong.
+            MACGATE_ROBOT_WAITTING_CLOSE_GATE, // doi dong cong.
+            MACGATE_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
 
         public enum RobotGoToCharge {

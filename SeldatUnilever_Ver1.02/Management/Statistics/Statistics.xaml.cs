@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media;
-using Excel = Microsoft.Office.Interop.Excel;
 
 namespace SeldatUnilever_Ver1._02.Management.Statistics
 {
@@ -149,156 +148,156 @@ namespace SeldatUnilever_Ver1._02.Management.Statistics
 
         private void BtnExport_Click(object sender, RoutedEventArgs e)
         {
-            Excel.Application excel = new Excel.Application();
-            Excel.Workbook workbook = excel.Workbooks.Add(Type.Missing);
-            Excel.Worksheet worksheet = null;
+            //Excel.Application excel = new Excel.Application();
+            //Excel.Workbook workbook = excel.Workbooks.Add(Type.Missing);
+            //Excel.Worksheet worksheet = null;
 
-            try
-            {
-                SaveFileDialog saveDialog = new SaveFileDialog();
-                saveDialog.Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*";
-                saveDialog.FilterIndex = 2;
-                if (saveDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    this.Cursor = System.Windows.Input.Cursors.Wait;
+            //try
+            //{
+            //    SaveFileDialog saveDialog = new SaveFileDialog();
+            //    saveDialog.Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*";
+            //    saveDialog.FilterIndex = 2;
+            //    if (saveDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //    {
+            //        this.Cursor = System.Windows.Input.Cursors.Wait;
 
-                    excel.DisplayAlerts = false;
-                    worksheet = workbook.ActiveSheet;
-                    //worksheet.Name = "Report Robot Process";
+            //        excel.DisplayAlerts = false;
+            //        worksheet = workbook.ActiveSheet;
+            //        //worksheet.Name = "Report Robot Process";
 
-                    worksheet.Cells[1, 1] = "Report Robot Process".ToUpper();
-                    worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[1, 12]].Merge();
-                    worksheet.Cells[1, 1].HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                    worksheet.Cells[1, 1].VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
-                    worksheet.Cells[1, 1].Font.Bold = true;
-                    worksheet.Cells[1, 1].Font.Size = 24;
-                    worksheet.Cells[1, 1].RowHeight = 70;
+            //        worksheet.Cells[1, 1] = "Report Robot Process".ToUpper();
+            //        worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[1, 12]].Merge();
+            //        worksheet.Cells[1, 1].HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            //        worksheet.Cells[1, 1].VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+            //        worksheet.Cells[1, 1].Font.Bold = true;
+            //        worksheet.Cells[1, 1].Font.Size = 24;
+            //        worksheet.Cells[1, 1].RowHeight = 70;
 
-                    worksheet.Cells[2, 1].RowHeight = 20;
+            //        worksheet.Cells[2, 1].RowHeight = 20;
 
-                    worksheet.Cells[3, 1] = "Robot";
-                    worksheet.Cells[3, 2] = "Robot Task Id";
-                    worksheet.Cells[3, 3] = "Gate Key";
-                    worksheet.Cells[3, 4] = "Device";
-                    worksheet.Cells[3, 5] = "Product";
-                    worksheet.Cells[3, 6] = "Product Detail";
-                    worksheet.Cells[3, 7] = "Buffer";
-                    worksheet.Cells[3, 8] = "Operation Type";
-                    worksheet.Cells[3, 9] = "Status";
-                    worksheet.Cells[3, 10] = "Shift";
-                    worksheet.Cells[3, 11] = "Active Date";
-                    worksheet.Cells[3, 12] = "Detail";
+            //        worksheet.Cells[3, 1] = "Robot";
+            //        worksheet.Cells[3, 2] = "Robot Task Id";
+            //        worksheet.Cells[3, 3] = "Gate Key";
+            //        worksheet.Cells[3, 4] = "Device";
+            //        worksheet.Cells[3, 5] = "Product";
+            //        worksheet.Cells[3, 6] = "Product Detail";
+            //        worksheet.Cells[3, 7] = "Buffer";
+            //        worksheet.Cells[3, 8] = "Operation Type";
+            //        worksheet.Cells[3, 9] = "Status";
+            //        worksheet.Cells[3, 10] = "Shift";
+            //        worksheet.Cells[3, 11] = "Active Date";
+            //        worksheet.Cells[3, 12] = "Detail";
 
-                    worksheet.Range[worksheet.Cells[3, 1], worksheet.Cells[3, 12]].HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                    worksheet.Range[worksheet.Cells[3, 1], worksheet.Cells[3, 12]].VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
-                    worksheet.Range[worksheet.Cells[3, 1], worksheet.Cells[3, 12]].Font.Bold = true;
-                    worksheet.Range[worksheet.Cells[3, 1], worksheet.Cells[3, 12]].Font.Size = 15;
-                    worksheet.Range[worksheet.Cells[3, 1], worksheet.Cells[3, 12]].RowHeight = 35;
+            //        worksheet.Range[worksheet.Cells[3, 1], worksheet.Cells[3, 12]].HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            //        worksheet.Range[worksheet.Cells[3, 1], worksheet.Cells[3, 12]].VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+            //        worksheet.Range[worksheet.Cells[3, 1], worksheet.Cells[3, 12]].Font.Bold = true;
+            //        worksheet.Range[worksheet.Cells[3, 1], worksheet.Cells[3, 12]].Font.Size = 15;
+            //        worksheet.Range[worksheet.Cells[3, 1], worksheet.Cells[3, 12]].RowHeight = 35;
 
-                    int cellRowIndex = 4;
-                    int cellColumnIndex = 1;
+            //        int cellRowIndex = 4;
+            //        int cellColumnIndex = 1;
 
-                    for (int i = 0; i < grvReportRobotProcess.Items.Count; i++)
-                    {
-                        for (int j = 0; j < 12; j++)
-                        {
-                            if (j == 0)//Robot
-                            {
-                                worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
-                            }
-                            if (j == 1) //Robot Task Id
-                            {
-                                //worksheet.Cells[cellRowIndex, cellColumnIndex] = grvReportRobotProcess.Rows[i].Cells["robotTaskId"].Value.ToString();
-                                //worksheet.Cells[cellRowIndex, cellColumnIndex] = statisticsModel.listRobotProcess[i].robotTaskId.ToString();
-                                worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
-                            }
-                            if (j == 2) //gateKey
-                            {
-                                worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
-                            }
+            //        for (int i = 0; i < grvReportRobotProcess.Items.Count; i++)
+            //        {
+            //            for (int j = 0; j < 12; j++)
+            //            {
+            //                if (j == 0)//Robot
+            //                {
+            //                    worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
+            //                }
+            //                if (j == 1) //Robot Task Id
+            //                {
+            //                    //worksheet.Cells[cellRowIndex, cellColumnIndex] = grvReportRobotProcess.Rows[i].Cells["robotTaskId"].Value.ToString();
+            //                    //worksheet.Cells[cellRowIndex, cellColumnIndex] = statisticsModel.listRobotProcess[i].robotTaskId.ToString();
+            //                    worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
+            //                }
+            //                if (j == 2) //gateKey
+            //                {
+            //                    worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
+            //                }
 
-                            if (j == 3)//Device
-                            {
-                                worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
-                            }
+            //                if (j == 3)//Device
+            //                {
+            //                    worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
+            //                }
 
-                            if (j == 4)//Product
-                            {
-                                worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
-                            }
+            //                if (j == 4)//Product
+            //                {
+            //                    worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
+            //                }
 
-                            if (j == 5)//Product Detail
-                            {
-                                worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
-                            }
+            //                if (j == 5)//Product Detail
+            //                {
+            //                    worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
+            //                }
 
-                            if (j == 6)//Buffer
-                            {
-                                worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
-                            }
+            //                if (j == 6)//Buffer
+            //                {
+            //                    worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
+            //                }
 
-                            if (j == 7)//Operation Typ
-                            {
-                                worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
-                            }
+            //                if (j == 7)//Operation Typ
+            //                {
+            //                    worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
+            //                }
 
-                            if (j == 8)//Status
-                            {
-                                worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
-                            }
+            //                if (j == 8)//Status
+            //                {
+            //                    worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
+            //                }
 
-                            if (j == 9) //Shift
-                            {
-                                worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
-                            }
+            //                if (j == 9) //Shift
+            //                {
+            //                    worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
+            //                }
 
-                            if (j == 10) //Active Date
-                            {
-                                worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
-                            }
+            //                if (j == 10) //Active Date
+            //                {
+            //                    worksheet.Cells[cellRowIndex, cellColumnIndex] = GetCellValue(grvReportRobotProcess, i, j);
+            //                }
 
-                            if (j == 11) //Detail
-                            {
-                                Dictionary<string, string> strDetail = JsonConvert.DeserializeObject<Dictionary<string, string>>(statisticsModel.listRobotProcess[i].orderContent.ToString());
-                                string contentDetail = "";
-                                foreach (var item in strDetail)
-                                {
-                                    if (contentDetail != "")
-                                    {
-                                        contentDetail += Environment.NewLine;
-                                    }
-                                    contentDetail += " - " + item.Key + ": " + item.Value;
-                                }
+            //                if (j == 11) //Detail
+            //                {
+            //                    Dictionary<string, string> strDetail = JsonConvert.DeserializeObject<Dictionary<string, string>>(statisticsModel.listRobotProcess[i].orderContent.ToString());
+            //                    string contentDetail = "";
+            //                    foreach (var item in strDetail)
+            //                    {
+            //                        if (contentDetail != "")
+            //                        {
+            //                            contentDetail += Environment.NewLine;
+            //                        }
+            //                        contentDetail += " - " + item.Key + ": " + item.Value;
+            //                    }
 
-                                worksheet.Cells[cellRowIndex, cellColumnIndex] = contentDetail;
-                                //worksheet.Range[worksheet.Cells[cellRowIndex, cellColumnIndex], worksheet.Cells[cellRowIndex, cellColumnIndex]].WrapText = false;
-                            }
-                            worksheet.Cells[cellRowIndex, cellColumnIndex].VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
-                            worksheet.Cells[cellRowIndex, cellColumnIndex].RowHeight = 30;
-                            cellColumnIndex++;
-                        }
+            //                    worksheet.Cells[cellRowIndex, cellColumnIndex] = contentDetail;
+            //                    //worksheet.Range[worksheet.Cells[cellRowIndex, cellColumnIndex], worksheet.Cells[cellRowIndex, cellColumnIndex]].WrapText = false;
+            //                }
+            //                worksheet.Cells[cellRowIndex, cellColumnIndex].VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+            //                worksheet.Cells[cellRowIndex, cellColumnIndex].RowHeight = 30;
+            //                cellColumnIndex++;
+            //            }
 
-                        cellColumnIndex = 1;
-                        cellRowIndex++;
-                    }
+            //            cellColumnIndex = 1;
+            //            cellRowIndex++;
+            //        }
 
-                    worksheet.Columns.AutoFit();
+            //        worksheet.Columns.AutoFit();
 
-                    workbook.SaveAs(saveDialog.FileName, Excel.XlFileFormat.xlWorkbookDefault, Type.Missing, Type.Missing, false, false, Excel.XlSaveAsAccessMode.xlNoChange, Excel.XlSaveConflictResolution.xlLocalSessionChanges, Type.Missing, Type.Missing);
-                    System.Windows.Forms.MessageBox.Show("Export Successful");
-                }
-            }
-            catch (System.Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                excel.Quit();
-                workbook = null;
-                excel = null;
-                this.Cursor = System.Windows.Input.Cursors.Arrow;
-            }
+            //        workbook.SaveAs(saveDialog.FileName, Excel.XlFileFormat.xlWorkbookDefault, Type.Missing, Type.Missing, false, false, Excel.XlSaveAsAccessMode.xlNoChange, Excel.XlSaveConflictResolution.xlLocalSessionChanges, Type.Missing, Type.Missing);
+            //        System.Windows.Forms.MessageBox.Show("Export Successful");
+            //    }
+            //}
+            //catch (System.Exception ex)
+            //{
+            //    System.Windows.Forms.MessageBox.Show(ex.Message);
+            //}
+            //finally
+            //{
+            //    excel.Quit();
+            //    workbook = null;
+            //    excel = null;
+            //    this.Cursor = System.Windows.Input.Cursors.Arrow;
+            //}
         }
 
         private void Test_Click(object sender, RoutedEventArgs e)
