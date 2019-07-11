@@ -15,12 +15,21 @@ namespace SeldatUnilever_Ver1._02.Management.DeviceManagement
     public class DeviceService
     {
         public DeviceService() { }
-        public String RequestDataProcedure(String dataReq, String url)
+        public String RequestDataProcedure_POST(String dataReq, String url)
         {
             //String url = Global_Object.url+"plan/getListPlanPallet";
             BridgeClientRequest clientRequest = new BridgeClientRequest();
             // String url = "http://localhost:8080";
             var data = clientRequest.PostCallAPI(url, dataReq);
+
+            return data.Result;
+        }
+        public String RequestDataProcedure_GET(String url)
+        {
+            //String url = Global_Object.url+"plan/getListPlanPallet";
+            BridgeClientRequest clientRequest = new BridgeClientRequest();
+            // String url = "http://localhost:8080";
+            var data = clientRequest.GetCallAPI(url);
 
             return data.Result;
         }
@@ -34,7 +43,7 @@ namespace SeldatUnilever_Ver1._02.Management.DeviceManagement
             product.updUsrId = Global_Object.userLogin;
             product.deviceId = order.deviceId;
             product.palletAmount = 1;
-            String response = RequestDataProcedure(product.ToString(), Global_Object.url + "plan/createPlanPallet");
+            String response = RequestDataProcedure_POST(product.ToString(), Global_Object.url + "plan/createPlanPallet");
             return response;
         }
 
@@ -49,7 +58,7 @@ namespace SeldatUnilever_Ver1._02.Management.DeviceManagement
                 product.planId = order.planId;
                 product.palletStatus = PalletStatus.F.ToString();
                 product.updUsrId = Global_Object.userLogin;
-                var data = RequestDataProcedure(product.ToString(), url);
+                var data = RequestDataProcedure_POST(product.ToString(), url);
 
             }
 
@@ -62,7 +71,7 @@ namespace SeldatUnilever_Ver1._02.Management.DeviceManagement
                 dynamic product = new JObject();
                 product.deviceId = deviceId;
                 Pose poseTemp = null;
-                String collectionData = RequestDataProcedure(product.ToString(), Global_Object.url + "/device/getListDevicePallet");
+                String collectionData = RequestDataProcedure_POST(product.ToString(), Global_Object.url + "/device/getListDevicePallet");
 
 
                 if (collectionData.Length > 0)
@@ -87,12 +96,31 @@ namespace SeldatUnilever_Ver1._02.Management.DeviceManagement
             catch { Console.WriteLine("Error in DeviceIte at GetLineMachineInfo"); }
             return null;
         }
+        protected int getDeviceId(String deviceName)
+        {
+            //http://localhost:8081/robot/rest/device/getListDevice
+            int deviceId = -1;
+            String collectionData = RequestDataProcedure_GET(Global_Object.url + "/device/getListDevice");
+            if (collectionData.Length > 0)
+            {
+                JArray results = JArray.Parse(collectionData);
+                foreach(var result in results)
+                {
+                    String dvn = (string)result["deviceName"];
+                    if(deviceName.Equals(dvn))
+                    {
+                        deviceId= (int)result["deviceId"];
+                    }
+                }
+            }
+            return deviceId;
+        }
         protected int GetPalletId(OrderItem order)
         {
             int palletId = -1;
             try
             {
-                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+                String collectionData = RequestDataProcedure_POST(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
                 if (collectionData.Length > 0)
                 {
                     try

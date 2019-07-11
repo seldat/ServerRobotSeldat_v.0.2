@@ -50,6 +50,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         public List<DeviceItem> deviceItemsList;
         public bool Alive = false;
         public bool FlagAssign = true;
+        public bool onFlagBusyGetTask = false;
         public void RegistryService(RobotManagementService robotManageService)
         {
             this.robotManageService = robotManageService;
@@ -85,62 +86,88 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         public OrderItem Gettask()
         {
             OrderItem item = null;
-            if (deviceItemsList.Count > 0)
+            if (!onFlagBusyGetTask)
             {
-                try
+                onFlagBusyGetTask = true;
+              
+                if (deviceItemsList.Count > 0)
                 {
-                    item = deviceItemsList[0].GetOrder();
-                    if (item == null)
-                        return null;
-                    if (item.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
+                    try
                     {
-                        if (CheckAvailableFrontLineBuffer(item, false) != null)
-                        {
-                            int palletId = GetPalletId(item);
-                             if (palletId > 0)
-                             {
-                                 dynamic product = new JObject();
-                                 UpdatePalletStateToHold(palletId, item);
-                                 product.timeWorkId = item.timeWorkId;
-                                 product.activeDate = item.activeDate;
-                                 product.productId = item.productId;
-                                 product.productDetailId = item.productDetailId;
-                                 // chu y sua 
-                                 product.palletStatus = PalletStatus.H.ToString(); // W
-                                 item.dataRequest = product.ToString();
-                               //  item.status = StatusOrderResponseCode.DELIVERING;
-                                 return item;
-                             }
-                            // return null;
+                        item = deviceItemsList[0].GetOrder();
+                        if (item == null)
+                            return null;
 
-                            return item;
-                        }
-                        else
-                            return null;
-                    }
-                    else if (item.typeReq == TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN)
-                    {
-                         // item.status = StatusOrderResponseCode.DELIVERING;
-                          return item;
-                    }
-                    else if (item.typeReq == TyeRequest.TYPEREQUEST_MACHINE_TO_RETURN)
-                    {
-                        if (CheckAvailableFrontLineReturn(item) != null)
+                        switch (item.typeReq)
                         {
-                            //item.status = StatusOrderResponseCode.DELIVERING;
-                            return item;
+                            case TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE:
+                                if (CheckAvailableFrontLineBuffer(item, false) != null)
+                                {
+                                    int palletId = GetPalletId(item.dataRequest);
+                                    if (palletId > 0)
+                                    {
+                                        dynamic product = new JObject();
+                                        UpdatePalletStateToHold(palletId, item);
+                                        product.timeWorkId = item.timeWorkId;
+                                        product.activeDate = item.activeDate;
+                                        product.productId = item.productId;
+                                        product.productDetailId = item.productDetailId;
+                                        // chu y sua 
+                                        product.palletStatus = PalletStatus.H.ToString(); // W
+                                        item.dataRequest = product.ToString();
+                                        return item;
+                                    }
+                                    return item;
+                                }
+                                else
+                                    return null;
+                            case TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401:
+                                if (CheckAvailableFrontLineBuffer(item, false) != null)
+                                {
+                                    int palletId = GetPalletId(item.dataRequest);
+                                    if (palletId > 0)
+                                    {
+                                        dynamic productBR = new JObject();
+                                        UpdatePalletStateToHold(palletId, item);
+                                        productBR.timeWorkId = item.timeWorkId;
+                                        productBR.activeDate = item.activeDate;
+                                        productBR.productId = item.productId;
+                                        productBR.productDetailId = item.productDetailId;
+                                        productBR.palletStatus = PalletStatus.H.ToString(); // đã giữ pallet lấy H
+                                        item.dataRequest_BufferReturn = productBR.ToString();
+                                        dynamic productB401 = new JObject();
+                                        UpdatePalletStateToHold(palletId, item);
+                                        productB401.timeWorkId = item.timeWorkId;
+                                        productB401.activeDate = item.activeDate;
+                                        productB401.productId = item.productId;
+                                        productB401.productDetailId = item.productDetailId;
+                                        productB401.palletStatus = PalletStatus.P.ToString(); // đã có pallet lấy P
+                                        item.dataRequest_Buffer401 = productB401.ToString();
+                                        return item;
+                                    }
+                                    return item;
+                                }
+                                else
+                                    return null;
+                            case TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_MACHINE_TO_BUFFERRETURN:
+                                return item;
+                            case TyeRequest.TYPEREQUEST_PALLETEMPTY_MACHINE_TO_RETURN:
+                                if (CheckAvailableFrontLineReturn(item) != null)
+                                {
+                                    return item;
+                                }
+                                else
+                                    return null;
+                            default:
+                                return item;
+                                break;
+
                         }
-                        else
-                            return null;
                     }
-                    else
-                    {
-                        //item.status = StatusOrderResponseCode.DELIVERING;
-                    }
+                    catch { }
+                    onFlagBusyGetTask = false;
                 }
-                catch { }
             }
-
             return item;
             
         }
@@ -232,10 +259,10 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             return poseTemp;
         }
 
-        public int GetPalletId(OrderItem order)
+        public int GetPalletId(String dataReq)
         {
             int palletId = -1;
-            String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+            String collectionData = RequestDataProcedure(dataReq, Global_Object.url + "plan/getListPlanPallet");
             if (collectionData.Length > 0)
             {
                 try

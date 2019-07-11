@@ -60,7 +60,7 @@ namespace SeldatMRMS
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_BUFFER_TO_RETURN;
                     procbr.Start ();
                     break;
-                case ProcedureItemSelected.PROCEDURE_MACHINE_TO_RETURN:
+                case ProcedureItemSelected.PROCEDURE_PALLETEMPTY_MACHINE_TO_RETURN:
                     ProcedureMachineToReturn procmr = new ProcedureMachineToReturn (robot, trafficService);
                     ProcedureDataItems prcomrDataItems = new ProcedureDataItems ();
                     prcomrDataItems.StartTaskTime = DateTime.Now;

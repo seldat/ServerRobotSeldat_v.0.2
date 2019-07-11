@@ -205,21 +205,21 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             {
                 procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_MACHINE, robot, orderItem);
             }
-            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_MACHINE_TO_RETURN)
+            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_PALLETEMPTY_MACHINE_TO_RETURN)
             {
-                procedureService.Register(ProcedureItemSelected.PROCEDURE_MACHINE_TO_RETURN, robot, orderItem);
+                procedureService.Register(ProcedureItemSelected.PROCEDURE_PALLETEMPTY_MACHINE_TO_RETURN, robot, orderItem);
             }
-            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_BUFFER_TO_RETURN)
+            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFER_TO_GATE)
             {
-                procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_RETURN, robot, orderItem);
+                procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_GATE, robot, orderItem);
             }
             else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_FORLIFT_TO_MACHINE)
             {
                 procedureService.Register(ProcedureItemSelected.PROCEDURE_FORLIFT_TO_MACHINE, robot, orderItem);
             }
-            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN)
+            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_MACHINE_TO_BUFFERRETURN)
             {
-                procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_RETURN, robot, orderItem);
+               // procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_RETURN, robot, orderItem);
             }
             // procedure;
         }
@@ -301,20 +301,6 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         }
                         break;
                     case ProcessAssignTaskReady.PROC_READY_ASSIGN_ANTASK:
-                    /* if (!robotatready.CheckRobotWorkinginReady() )
-                     {
-                         //  if (!trafficService.HasRobotUnityinArea("RD5") && !trafficService.HasRobotUnityinArea("OPA3") && !trafficService.HasRobotUnityinArea("READY") )
-                         if (!trafficService.HasRobotUnityinArea("ATR"))
-                         {
-                             robotatready.TurnOnSupervisorTraffic(true);
-                             Console.WriteLine(processAssignTaskReady);
-                             SelectProcedureItem(robotatready, orderItem_ready);
-                             deviceItemsList[0].RemoveFirstOrder();
-                             MoveElementToEnd(); // sort Task List
-                             orderItem_ready.status = StatusOrderResponseCode.DELIVERING;
-                             processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_ROBOT_OUTSIDEREADY;
-                         }
-                     }*/
                     if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robotatready))
                     {
                             robotatready.TurnOnSupervisorTraffic(true);
