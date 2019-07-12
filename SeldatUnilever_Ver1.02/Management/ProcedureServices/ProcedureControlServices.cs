@@ -46,6 +46,7 @@ namespace SeldatMRMS {
             PROC_CODE_BUFFER_TO_BUFFER,
             PROC_CODE_BUFFER_TO_GATE,
             PROC_CODE_MACHINE_TO_GATE,
+            PROC_CODE_MACHINE_TO_BUFFER_RETURN
         }
         public enum ErrorCode {
             RUN_OK = 0,
@@ -167,7 +168,7 @@ namespace SeldatMRMS {
             BUFTOBUF_ROBOT_WAITTING_ZONE_BUFFER_READY_B, // doi khu vuc buffer san sang de di vao
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B, // den dau line buffer, chuyen mode do line
             BUFTOBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER_B, // doi robot do line den pallet  va tha pallet
-            FBUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_B, // doi robot di den dau line buffer.
+            BUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_B, // doi robot di den dau line buffer.
             BUFTOBUF_ROBOT_DESTROY,
             BUFTOBUF_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
@@ -215,6 +216,28 @@ namespace SeldatMRMS {
             MACRET_ROBOT_WAITTING_DROPDOWN_PALLET, // quay lại vị trí đầu line
             MACRET_ROBOT_WAITTING_GOTO_FRONTLINE,
             MACRET_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
+        }
+
+        public enum MachineToBufferReturn
+        {
+            MACBUFRET_IDLE,
+            MACBUFRET_ROBOT_GOTO_FRONTLINE_MACHINE,
+            MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
+            // MACBUFRET_ROBOT_GOTO_PICKUP_PALLET_MACHINE,
+            MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE, // doi robot do line den pallet  va tha pallet
+            MACBUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE, // doi robot di den dau line buffer.
+
+            MACBUFRET_ROBOT_GOTO_CHECKIN_BUFFER_RETURN, //cho
+            MACBUFRET_ROBOT_CAME_CHECKIN_BUFFER_RETURN, // đã đến vị trí
+            MACBUFRET_ROBOT_GOTO_FRONTLINE_BUFFER_RETURN,
+
+            // MACBUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET,  // cho phép dò line vàthả pallet
+            // MACBUFRET_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET, // đang trong tiến trình dò line và thả pallet
+            // MACBUFRET_ROBOT_WAITTING_GOTO_POINT_DROP_PALLET, // hoàn thành dò line và thả pallet
+
+            MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET, // quay lại vị trí đầu line
+            MACBUFRET_ROBOT_WAITTING_GOTO_FRONTLINE,
+            MACBUFRET_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
 
         public enum ReturnToGate {

@@ -343,7 +343,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             BfToBf.UpdatePalletState(PalletStatus.W);
                             //onUpdatedPalletState = true;
-                            StateBufferToBuffer = BufferToBuffer.FBUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_B;
+                            StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_B;
                             robot.ShowText("FBUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_B");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
@@ -352,7 +352,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             CheckUserHandleError(this);
                         }
                         break;
-                    case BufferToBuffer.FBUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_B: // đợi
+                    case BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_B: // đợi
                         try
                         {
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)

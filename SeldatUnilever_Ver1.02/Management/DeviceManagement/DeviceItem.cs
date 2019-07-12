@@ -38,7 +38,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         public class StatusOrderResponse
         {
             public int status;
-            public String ErrorMessage;
+            public String content;
         }
         public enum PalletCtrl
         {
@@ -229,7 +229,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     int gate = (int)results["gate"];
                     if (Global_Object.getGateStatus(gate))
                     {
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, content = "" };
                         return statusOrderResponse;
                     }
                     OrderItem order = new OrderItem();
@@ -265,7 +265,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     }
                     else
                     {
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, ErrorMessage = "" };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, content = "" };
                         return statusOrderResponse;
                     }
                    try
@@ -287,7 +287,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     int gate = (int)results["gate"];
                     if (Global_Object.getGateStatus(gate))
                     {
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, ErrorMessage = "" };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, content = "" };
                         return statusOrderResponse;
                     }
                     Global_Object.setGateStatus(gate, true);
@@ -324,7 +324,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     }
                     else
                     {
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, ErrorMessage = "" };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, content = "" };
                         return statusOrderResponse;
                     }
                     try
@@ -365,7 +365,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     }
                     else if (cntOrderReg >= palletAmountInBuffer) // số lượng yêu cầu trước đó bằng hoặc hơn số lượng yêu cầu hiện tại. không duoc phép đưa vào thêm
                     {
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, ErrorMessage = "" };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, content = "" };
                         return statusOrderResponse;
                     }
                     else if (cntOrderReg < palletAmountInBuffer) // số lượng yêu cầu hiện tại nhỏ hơn thì phải tính lại số lượng để bổ sung vào thêm
@@ -506,7 +506,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     int deviceId= getDeviceId("RETURN_MAIN 0");
                     if (deviceId>0)
                     {
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, ErrorMessage = "" };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, content = "" };
                         return statusOrderResponse;
                     }
                     order.deviceId = deviceId;  // Buffer Return
@@ -533,7 +533,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     }
                     else
                     {
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, ErrorMessage = "" };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, content = "" };
                         return statusOrderResponse;
                     }
                 }
@@ -601,7 +601,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     catch (Exception e)
                     {
                         Console.WriteLine("control door failed");
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, ErrorMessage = e.Message };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, content = e.Message };
                         return statusOrderResponse;
                     }
                 }
@@ -617,7 +617,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     catch (Exception e)
                     {
                         Console.WriteLine("control door failed");
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, ErrorMessage = e.Message };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, content = e.Message };
                         return statusOrderResponse;
                     }
                 }
@@ -633,7 +633,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     catch (Exception e)
                     {
                         Console.WriteLine("control door failed");
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, ErrorMessage = e.Message };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, content = e.Message };
                         return statusOrderResponse;
                     }
                 }
@@ -649,16 +649,16 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     catch (Exception e)
                     {
                         Console.WriteLine("control door failed");
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, ErrorMessage = e.Message };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, content = e.Message };
                         return statusOrderResponse;
                     }
                 }
                 #endregion
-                statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_SUCCESS, ErrorMessage = "" };
+                statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_SUCCESS, content = "" };
             }
             catch (Exception e)
             {
-                statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, ErrorMessage = e.Message };
+                statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, content = e.Message };
                 return statusOrderResponse;
             }
             try

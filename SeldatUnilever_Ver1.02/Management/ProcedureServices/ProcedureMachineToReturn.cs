@@ -32,7 +32,7 @@ namespace SeldatMRMS
         {
             StateMachineToReturn = MachineToReturn.MACRET_IDLE;
             this.robot = robot;
-            this.points = new DataMachineToReturn();
+            //this.points = new DataMachineToReturn();
             this.Traffic = traffiicService;
             procedureCode = ProcedureCode.PROC_CODE_MACHINE_TO_RETURN;
         }

@@ -1,53 +1,42 @@
-﻿using System;
+﻿using SeldatMRMS;
+using System;
 using System.Diagnostics;
 using System.Threading;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
-using static SeldatMRMS.Management.RobotManagent.RobotUnity;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SeldatMRMS.Management.TrafficRobotUnity;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
-using SeldatMRMS;
-using SeldatMRMS.Management.DoorServices;
-using DoorControllerService;
-using static DoorControllerService.DoorService;
 
 namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 {
-    public class ProcedureMachineToGate : ProcedureControlServices
+    public class ProcedureMachineToBufferReturn:ProcedureControlServices
     {
-        // DataBufferToGate points;
-        MachineToGate StateMachineToGate;
-        Thread ProBufferToGate;
+        MachineToBufferReturn StateMachineToBufferReturn;
+        Thread ProMachineToBufferReturn;
         public RobotUnity robot;
-        public DoorManagementService door;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
-
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
-        public ProcedureMachineToGate(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService traffiicService) : base(robot)
+        public ProcedureMachineToBufferReturn(RobotUnity robot, TrafficManagementService traffiicService) : base(robot)
         {
-            StateMachineToGate = MachineToGate.MACGATE_IDLE;
-            resCmd = ResponseCommand.RESPONSE_NONE;
+            StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_IDLE;
             this.robot = robot;
-            base.robot = robot;
-            // this.points = new DataBufferToGate();
-            this.door = doorservice;
             this.Traffic = traffiicService;
-            errorCode = ErrorCode.RUN_OK;
-            procedureCode = ProcedureCode.PROC_CODE_MACHINE_TO_GATE;
+            procedureCode = ProcedureCode.PROC_CODE_MACHINE_TO_BUFFER_RETURN;
         }
 
-        public void Start(MachineToGate state = MachineToGate.MACGATE_ROBOT_GOTO_FRONTLINE_MACHINE)
+        public void Start(MachineToBufferReturn state = MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_MACHINE)
         {
+            robot.orderItem = null;
             errorCode = ErrorCode.RUN_OK;
             robot.robotTag = RobotStatus.WORKING;
-            robot.ProcedureAs = ProcedureControlAssign.PRO_MACHINE_TO_GATE;
-            StateMachineToGate = state;
-            ProBufferToGate = new Thread(this.Procedure);
-            ProBufferToGate.Start(this);
+            robot.ProcedureAs = ProcedureControlAssign.PRO_MACHINE_TO_BUFFER_RETURN;
+            StateMachineToBufferReturn = state;
+            ProMachineToBufferReturn = new Thread(this.Procedure);
+            ProMachineToBufferReturn.Start(this);
             ProRun = true;
             ProRunStopW = true;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
@@ -55,33 +44,34 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         public void Destroy()
         {
-            // StateMachineToGate = MachineToGate.MACGATE_ROBOT_RELEASED;
             ProRunStopW = false;
             robot.orderItem = null;
-            robot.SwitchToDetectLine(false);
             robot.robotTag = RobotStatus.IDLE;
-            robot.ReleaseWorkingZone();
+            // StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_RELEASED;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
             order.status = StatusOrderResponseCode.ROBOT_ERROR;
             selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
+            order.endTimeProcedure = DateTime.Now;
+            order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
+            SaveOrderItem(order);
+            //   this.robot.DestroyRegistrySolvedForm();
         }
         public void Procedure(object ojb)
         {
-            ProcedureMachineToGate MaToGate = (ProcedureMachineToGate)ojb;
-            RobotUnity rb = MaToGate.robot;
-            TrafficManagementService Traffic = MaToGate.Traffic;
-            DoorService ds = MaToGate.door.DoorMezzamineReturn;
+            ProcedureMachineToBufferReturn BfToBufRe = (ProcedureMachineToBufferReturn)ojb;
+            RobotUnity rb = BfToBufRe.robot;
+            TrafficManagementService Traffic = BfToBufRe.Traffic;
             rb.mcuCtrl.TurnOnLampRb();
             robot.ShowText(" Start -> " + procedureCode);
             while (ProRun)
             {
-                switch (StateMachineToGate)
+                switch (StateMachineToBufferReturn)
                 {
-                    case MachineToGate.MACGATE_IDLE:
+                    case MachineToBufferReturn.MACBUFRET_IDLE:
                         break;
-                    case MachineToGate.MACGATE_ROBOT_GOTO_FRONTLINE_MACHINE: // doi khu vuc buffer san sang de di vao
+                    case MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_MACHINE: // doi khu vuc buffer san sang de di vao
                         try
                         {
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
@@ -95,10 +85,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                         {
                                             resCmd = ResponseCommand.RESPONSE_NONE;
-                                            if (rb.SendPoseStamped(MaToGate.GetFrontLineMachine()))
+                                            if (rb.SendPoseStamped(BfToBufRe.GetFrontLineMachine()))
                                             {
-                                                StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
-                                                robot.ShowText("MACGATE_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
+                                                StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
+                                                robot.ShowText("MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
                                                 break;
                                             }
 
@@ -122,10 +112,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             }
                             else
                             {
-                                if (rb.SendPoseStamped(MaToGate.GetFrontLineMachine()))
+                                if (rb.SendPoseStamped(BfToBufRe.GetFrontLineMachine()))
                                 {
-                                    StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
-                                    robot.ShowText("MACGATE_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
+                                    StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
+                                    robot.ShowText("MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
                                 }
                             }
                         }
@@ -135,19 +125,19 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             CheckUserHandleError(this);
                         }
                         break;
-                    case MachineToGate.MACGATE_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE:
+                    case MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE:
                         try
                         {
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             //if (robot.ReachedGoal())
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                if (rb.SendCmdAreaPallet(MaToGate.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_UP)))
+                                if (rb.SendCmdAreaPallet(BfToBufRe.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_UP)))
                                 {
                                     // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
                                     //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                    StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
-                                    robot.ShowText("MACGATE_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
+                                    StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
+                                    robot.ShowText("MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
                                 }
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
@@ -162,20 +152,20 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             CheckUserHandleError(this);
                         }
                         break;
-                    // case MachineToGate.MACGATE_ROBOT_GOTO_PICKUP_PALLET_MACHINE:
-                    //     if (true == rb.CheckPointDetectLine(MaToGate.GetPointPallet(), rb))
+                    // case MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_PICKUP_PALLET_MACHINE:
+                    //     if (true == rb.CheckPointDetectLine(BfToBufRe.GetPointPallet(), rb))
                     //     {
                     //         rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_LINEDETECT_COMING_POSITION);
-                    //         StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
+                    //         StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
                     //     }
                     //     break;
-                    case MachineToGate.MACGATE_ROBOT_WAITTING_PICKUP_PALLET_MACHINE:
+                    case MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE:
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            MaToGate.UpdatePalletState(PalletStatus.F);
-                            StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE;
-                            robot.ShowText("MACGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE");
+                            BfToBufRe.UpdatePalletState(PalletStatus.F);
+                            StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE;
+                            robot.ShowText("MACBUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
@@ -183,17 +173,17 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             CheckUserHandleError(this);
                         }
                         break;
-                    case MachineToGate.MACGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE: // đợi
+                    case MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE: // đợi
                         try
                         {
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                                if (rb.SendPoseStamped(ds.config.PointCheckInGate))
+                                if (rb.SendPoseStamped(BfToBufRe.GetCheckInReturn()))
                                 {
-                                    StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
-                                    robot.ShowText("MACGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE");
+                                    StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_CHECKIN_BUFFER_RETURN;
+                                    robot.ShowText("MACBUFRET_ROBOT_GOTO_CHECKIN_RETURN");
                                 }
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
@@ -208,73 +198,98 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             CheckUserHandleError(this);
                         }
                         break;
-                    case MachineToGate.MACGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE:
+                    case MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_CHECKIN_BUFFER_RETURN: // dang di
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        //if (robot.ReachedGoal())
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                            StateMachineToGate = MachineToGate.MACGATE_ROBOT_CAME_CHECKIN_GATE;
-                            robot.ShowText("MACGATE_ROBOT_CAME_CHECKIN_GATE");
+                            rb.UpdateRiskAraParams(0, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
+                            StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_CAME_CHECKIN_BUFFER_RETURN;
+                            robot.ShowText("MACBUFRET_ROBOT_CAME_CHECKIN_RETURN");
                         }
                         break;
-                    case MachineToGate.MACGATE_ROBOT_CAME_CHECKIN_GATE: // đã đến vị trí, kiem tra va cho khu vuc cong san sang de di vao.
-                        if (false == robot.CheckInZoneBehavior(ds.config.PointFrontLine.Position))
+                    case MachineToBufferReturn.MACBUFRET_ROBOT_CAME_CHECKIN_BUFFER_RETURN: // đã đến vị trí
+                        try
                         {
-                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                            if (rb.SendPoseStamped(ds.config.PointFrontLine))
+
+                            if (false == robot.CheckInZoneBehavior(BfToBufRe.GetFrontLineBuffer().Position))
                             {
-                                StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_GOTO_GATE;
-                                robot.ShowText("MACGATE_ROBOT_WAITTING_GOTO_GATE");
+                                Global_Object.onFlagRobotComingGateBusy = true;
+                                rb.UpdateRiskAraParams(40, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
+                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                if (rb.SendPoseStamped(BfToBufRe.GetFrontLineReturn()))
+                                {
+                                    StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_BUFFER_RETURN;
+                                    robot.ShowText("MACBUFRET_ROBOT_GOTO_FRONTLINE_RETURN");
+                                }
                             }
                         }
-                        break;
-                    case MachineToGate.MACGATE_ROBOT_WAITTING_GOTO_GATE:
-                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        catch (System.Exception)
                         {
-                            resCmd = ResponseCommand.RESPONSE_NONE;
-                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                            StateMachineToGate = MachineToGate.MACGATE_ROBOT_CAME_GATE_POSITION;
-                            robot.ShowText("MACGATE_ROBOT_CAME_GATE_POSITION");
+                            errorCode = ErrorCode.CAN_NOT_GET_DATA;
+                            CheckUserHandleError(this);
                         }
                         break;
-                    case MachineToGate.MACGATE_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
-                        ds.openDoor(DoorService.DoorType.DOOR_BACK);
-                        StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_OPEN_DOOR;
-                        robot.ShowText("MACGATE_ROBOT_WAITTING_OPEN_DOOR");
-                        break;
-                    case MachineToGate.MACGATE_ROBOT_WAITTING_OPEN_DOOR: //doi mo cong
-                        RetState ret = ds.checkOpen(DoorService.DoorType.DOOR_BACK);
-                        if (ret == RetState.DOOR_CTRL_SUCCESS)
+                    case MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_BUFFER_RETURN: // dang di
+                        try
                         {
-                            if (rb.SendCmdAreaPallet(ds.config.infoPallet))
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            //if ( robot.ReachedGoal())
                             {
-                                StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN;
-                                robot.ShowText("MACGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN");
+                                resCmd = ResponseCommand.RESPONSE_NONE;
+
+                                if (rb.SendCmdAreaPallet(BfToBufRe.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_DOWN)))
+                                {
+                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                                    StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
+                                    robot.ShowText("MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET");
+                                }
+                            }
+                            else if (resCmd == ResponseCommand.RESPONSE_ERROR)
+                            {
+                                errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                CheckUserHandleError(this);
                             }
                         }
-                        else if (ret == RetState.DOOR_CTRL_ERROR)
+                        catch (System.Exception)
                         {
-                            StateMachineToGate = MachineToGate.MACGATE_ROBOT_CAME_GATE_POSITION;
+                            errorCode = ErrorCode.CAN_NOT_GET_DATA;
+                            CheckUserHandleError(this);
                         }
                         break;
-                    // case MachineToGate.MACGATE_ROBOT_OPEN_DOOR_SUCCESS: // mo cua thang cong ,gui toa do line de robot di vao
-                    //     rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETDOWN);
-                    //     StateMachineToGate = MachineToGate.MACGATE_ROBOT_GOTO_POSITION_PALLET_RETURN;
-                    //     break;
-                    // case MachineToGate.MACGATE_ROBOT_GOTO_POSITION_PALLET_RETURN:
-                    //     if (true == rb.CheckPointDetectLine(ds.config.PointOfPallet, rb))
+                    // case MachineToBufferReturn.MACBUFRET_ROBOT_CAME_CHECKIN_RETURN: // đã đến vị trí
+                    //     if (false == Traffic.HasRobotUnityinArea(BfToBufRe.GetFrontLineReturn().Position))
                     //     {
-                    //         rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_LINEDETECT_COMING_POSITION);
-                    //         StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN;
+                    //         rb.SendPoseStamped(BfToBufRe.GetFrontLineReturn());
+                    //         StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET;
                     //     }
                     //     break;
-                    case MachineToGate.MACGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN: // doi robot gap hang
+                    // case MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET:
+                    //     if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                    //     {
+                    //         resCmd = ResponseCommand.RESPONSE_NONE;
+                    //         StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET;
+                    //     }
+                    //     break;
+                    // case MachineToBufferReturn.MACBUFRET_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET:  // đang trong tiến trình dò line và thả pallet
+                    //     rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETDOWN);
+                    //     StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_GOTO_POINT_DROP_PALLET;
+                    //     break;
+                    // case MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_GOTO_POINT_DROP_PALLET:
+                    //     if (true == rb.CheckPointDetectLine(BfToRe.GetPointPallet(), rb))
+                    //     {
+                    //         rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_LINEDETECT_COMING_POSITION);
+                    //         StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
+                    //     }
+                    //     break;
+                    case MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET:
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETDOWN)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            // ReToGate.UpdatePalletState(PalletStatus.W);
-                            StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE;
-                            robot.ShowText("MACGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE");
+                            BfToBufRe.UpdatePalletState(PalletStatus.W);
+                            StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_GOTO_FRONTLINE;
+                            robot.ShowText("MACBUFRET_ROBOT_WAITTING_GOTO_FRONTLINE");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
@@ -282,13 +297,13 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             CheckUserHandleError(this);
                         }
                         break;
-                    case MachineToGate.MACGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE:
+                    case MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_GOTO_FRONTLINE:
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            ds.closeDoor(DoorService.DoorType.DOOR_BACK);
-                            StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_CLOSE_GATE;
-                            robot.ShowText("MACGATE_ROBOT_WAITTING_CLOSE_GATE");
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                            StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_RELEASED;
+                            robot.ShowText("MACBUFRET_ROBOT_RELEASED");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
@@ -296,31 +311,20 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             CheckUserHandleError(this);
                         }
                         break;
-                    case MachineToGate.MACGATE_ROBOT_WAITTING_CLOSE_GATE: // doi dong cong.
-                        //if (true == ds.WaitClose(DoorService.DoorType.DOOR_BACK, TIME_OUT_CLOSE_DOOR))
-                        //{
-                        StateMachineToGate = MachineToGate.MACGATE_ROBOT_RELEASED;
-                        //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                        robot.ShowText("MACGATE_ROBOT_WAITTING_CLOSE_GATE");
-                        //}
-                        //else
-                        //{
-                        //    errorCode = ErrorCode.CLOSE_DOOR_ERROR;
-                        //    CheckUserHandleError(this);
-                        //}
-                        break;
-
-                    case MachineToGate.MACGATE_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
-                        robot.robotTag = RobotStatus.IDLE;
-                        rb.PreProcedureAs = ProcedureControlAssign.PRO_MACHINE_TO_GATE;
+                    case MachineToBufferReturn.MACBUFRET_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        Global_Object.onFlagRobotComingGateBusy = false;
+                        robot.orderItem = null;
+                        //   robot.robotTag = RobotStatus.IDLE;
+                        rb.PreProcedureAs = ProcedureControlAssign.PRO_MACHINE_TO_BUFFER_RETURN;
                         // if (errorCode == ErrorCode.RUN_OK) {
                         ReleaseProcedureHandler(this);
                         // } else {
-                        // ErrorProcedureHandler (this);
+                        //     ErrorProcedureHandler (this);
                         // }
                         ProRun = false;
                         robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);
+                        order.status = StatusOrderResponseCode.FINISHED;
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
                         SaveOrderItem(order);
@@ -331,40 +335,14 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                 }
                 Thread.Sleep(5);
             }
-            StateMachineToGate = MachineToGate.MACGATE_IDLE;
-        }
-
-        protected override void CheckUserHandleError(object obj)
-        {
-            if (errorCode == ErrorCode.CAN_NOT_GET_DATA)
-            {
-                if (!this.Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
-                {
-                    ProRun = false;
-                    robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CAN_NOTGET_DATA);
-                    robot.TurnOnSupervisorTraffic(true);
-
-                    robot.PreProcedureAs = robot.ProcedureAs;
-                    ReleaseProcedureHandler(obj);
-                    return;
-                }
-                else
-                {
-                    ProRun = false;
-                    robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CAN_NOTGET_DATA);
-                    robot.TurnOnSupervisorTraffic(true);
-
-                    return;
-                }
-            }
-            base.CheckUserHandleError(obj);
+            StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_IDLE;
         }
         public override void FinishStatesCallBack(Int32 message)
         {
             this.resCmd = (ResponseCommand)message;
             if (this.resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
             {
-
+                robot.ReleaseWorkingZone();
             }
         }
     }

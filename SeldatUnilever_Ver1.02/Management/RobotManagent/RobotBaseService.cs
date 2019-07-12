@@ -26,6 +26,7 @@ namespace SeldatMRMS.Management.RobotManagent
             PRO_WAIT_TASK,
             PRO_BUFFER_TO_GATE,
             PRO_MACHINE_TO_GATE,
+            PRO_MACHINE_TO_BUFFER_RETURN,
         }
         public enum RobotInModeCode
         {
@@ -44,6 +45,9 @@ namespace SeldatMRMS.Management.RobotManagent
             public ProcedureRobotToCharger pRC { get; set; }
             public ProcedureRobotToReady pRR { get; set; }
             public ProcedureBufferToBuffer pBB { get; set; }
+            public ProcedureBufferToGate pBG { get; set; }
+            public ProcedureMachineToBufferReturn pMBR{get;set;}
+            public ProcedureMachineToGate pMG { get; set; }
         }
         public object ProcedureControl;
         public ProcedureRegistryInRobotUnity proRegistryInRobot=new ProcedureRegistryInRobotUnity();

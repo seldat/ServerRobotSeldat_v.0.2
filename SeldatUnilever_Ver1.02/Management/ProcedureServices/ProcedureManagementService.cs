@@ -145,7 +145,7 @@ namespace SeldatMRMS
                     // RegisterProcedureItemList.Add (itemprocbr);
                     procbb.AssignAnOrder(orderItem);
                     robot.proRegistryInRobot.pBB = procbb;
-                    robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_BUFFER_TO_RETURN;
+                    robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_BUFFER_TO_BUFFER;
                     procbb.Start();
                     break;
                 case ProcedureItemSelected.PROCEDURE_BUFER_TO_GATE:
@@ -157,10 +157,12 @@ namespace SeldatMRMS
                     procbg.ErrorProcedureHandler += ErrorApprearInProcedureItem;
                     // RegisterProcedureItemList.Add (itemprocrg);
                     procbg.AssignAnOrder(orderItem);
+                    robot.proRegistryInRobot.pBG= procbg;
+                    robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_BUFFER_TO_GATE;
                     procbg.Start();
                     break;
                 case ProcedureItemSelected.PROCEDURE_MACHINE_TO_GATE:
-                    ProcedureBufferToGate procmg = new ProcedureBufferToGate(robot, doorService, trafficService);
+                    ProcedureMachineToGate procmg = new ProcedureMachineToGate(robot, doorService, trafficService);
                     ProcedureDataItems promgDataItems = new ProcedureDataItems();
                     promgDataItems.StartTaskTime = DateTime.Now;
                     RegisterProcedureItem itemprocmg = new RegisterProcedureItem() { item = procmg, robot = robot, procedureDataItems = promgDataItems };
@@ -168,7 +170,22 @@ namespace SeldatMRMS
                     procmg.ErrorProcedureHandler += ErrorApprearInProcedureItem;
                     // RegisterProcedureItemList.Add (itemprocrg);
                     procmg.AssignAnOrder(orderItem);
+                    robot.proRegistryInRobot.pMG = procmg;
+                    robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_MACHINE_TO_GATE;
                     procmg.Start();
+                    break;
+                case ProcedureItemSelected.PROCEDURE_MACHINE_TO_BUFFER_RETURN:
+                    ProcedureMachineToBufferReturn procmbr = new ProcedureMachineToBufferReturn(robot, trafficService);
+                    ProcedureDataItems prombrDataItems = new ProcedureDataItems();
+                    prombrDataItems.StartTaskTime = DateTime.Now;
+                    RegisterProcedureItem itemprocmbr = new RegisterProcedureItem() { item = procmbr, robot = robot, procedureDataItems = prombrDataItems };
+                    procmbr.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
+                    procmbr.ErrorProcedureHandler += ErrorApprearInProcedureItem;
+                    // RegisterProcedureItemList.Add (itemprocrg);
+                    procmbr.AssignAnOrder(orderItem);
+                    robot.proRegistryInRobot.pMBR = procmbr;
+                    robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_MACHINE_TO_BUFFER_RETURN;
+                    procmbr.Start();
                     break;
             }
         }

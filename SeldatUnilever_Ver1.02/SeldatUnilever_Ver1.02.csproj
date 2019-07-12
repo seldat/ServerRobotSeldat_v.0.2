@@ -272,6 +272,7 @@
     <Compile Include="Management\ProcedureServices\ProcedureControlServices.cs" />
     <Compile Include="Management\ProcedureServices\ProcedureForkLiftToBuffer.cs" />
     <Compile Include="Management\ProcedureServices\ProcedureForkLiftToMachine.cs" />
+    <Compile Include="Management\ProcedureServices\ProcedureMachineToBufferReturn.cs" />
     <Compile Include="Management\ProcedureServices\ProcedureMachineToGate.cs" />
     <Compile Include="Management\ProcedureServices\ProcedureMachineToReturn.cs" />
     <Compile Include="Management\ProcedureServices\ProcedureManagementService.cs" />

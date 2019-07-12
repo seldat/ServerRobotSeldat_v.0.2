@@ -66,6 +66,7 @@ namespace SeldatMRMS
             PROCEDURE_BUFFER_TO_BUFFER,
             PROCEDURE_BUFER_TO_GATE,
             PROCEDURE_MACHINE_TO_GATE,
+            PROCEDURE_MACHINE_TO_BUFFER_RETURN
         }
         public void RegistryService(TrafficManagementService trafficService)
         {

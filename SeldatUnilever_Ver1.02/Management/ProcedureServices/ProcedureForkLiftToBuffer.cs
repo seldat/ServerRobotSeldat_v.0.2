@@ -314,6 +314,16 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM:
                         // kiem tra vung đăng ký tai khu vuc xac định
 
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        {
+                            // robot.setTrafficAllCircles(false, false, false, false);
+                            TrafficRountineConstants.RegIntZone_READY.Release(robot);
+                            robot.SwitchToDetectLine(true);
+                            resCmd = ResponseCommand.RESPONSE_NONE;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            StateForkLift = ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION;
+                            robot.ShowText("FORBUF_ROBOT_CAME_GATE_POSITION");
+                        }
                         break;
                     case ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
                         robot.robotRegistryToWorkingZone.onRobotwillCheckInsideGate = false;
