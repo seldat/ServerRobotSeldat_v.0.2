@@ -60,7 +60,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     door = this.doorservice.DoorMezzamineReturn;
                 }
             }
-            if (this.traffic.RobotIsInArea("VIM1", robot.properties.pose.Position)) // VIM1 khu cạnh elevator
+            if (this.traffic.RobotIsInArea("ELEVATOR", robot.properties.pose.Position)) // VIM1 khu cạnh elevator
             {
                 if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP)
                 {
@@ -75,7 +75,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     door = this.doorservice.DoorMezzamineReturn;
                 }
             }
-            if (this.traffic.RobotIsInArea("VIM2", robot.properties.pose.Position)) // VIM2 khu cạnh gate3
+            if (this.traffic.RobotIsInArea("GATE3", robot.properties.pose.Position)) // VIM2 khu cạnh gate3
             {
                 if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP)
                 {

@@ -478,7 +478,7 @@ namespace SeldatMRMS
         {
             this.robotService = robotService;
         }
-        public void Start(RobotGoToReady state = RobotGoToReady.ROBREA_ROBOT_GOTO_CHECKIN_READYSTATION)
+        public void Start(RobotGoToReady state = RobotGoToReady.ROBREA_SELECT_BEHAVIOR_ONZONE)
         {
             order = new OrderItem();
             order.typeReq = TyeRequest.TYPEREQUEST_GOTO_READY;
@@ -524,7 +524,11 @@ namespace SeldatMRMS
                         robot.ShowText("ROBREA_IDLE");
                         break;
                     case RobotGoToReady.ROBREA_SELECT_BEHAVIOR_ONZONE:
-                        if (Traffic.RobotIsInArea("VIM", robot.properties.pose.Position))
+                        if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
+                        {
+                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
+                        }
+                        else if (Traffic.RobotIsInArea("VIM", robot.properties.pose.Position))
                         {
                             // đi tới đầu line cổng theo tọa độ chỉ định. gate 1 , 2, 3
                             if (rb.SendPoseStamped(p.PointFrontLine))
@@ -532,19 +536,20 @@ namespace SeldatMRMS
                                 StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION_FROM_VIM;
                                 robot.ShowText("ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION");
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
+                                registryRobotJourney.startPoint = robot.properties.pose.Position;
                                 registryRobotJourney.endPoint = p.PointFrontLine.Position;
                             }
                         }
-                        if (Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position))
+                        else if (Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position))
                         {
                             rb.SendPoseStamped(p.PointCheckIn);
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_CHECKIN_READYSTATION;
+                            registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
+                            registryRobotJourney.startPoint = robot.properties.pose.Position;
+                            registryRobotJourney.endPoint = p.PointFrontLine.Position;
                             robot.ShowText("ROBREA_ROBOT_WAITTING_GOTO_CHECKIN_READYSTATION");
                         }
-                        if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
-                        {
-                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
-                        }
+
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_GOTO_CHECKIN_READYSTATION:
                         if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
@@ -661,7 +666,6 @@ namespace SeldatMRMS
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_RELEASED:
-
                         TrafficRountineConstants.RegIntZone_READY.Release(robot);
                         robot.robotTag = RobotStatus.IDLE;
                         robot.SetSafeYellowcircle(false);

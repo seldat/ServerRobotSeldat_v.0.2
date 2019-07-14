@@ -41,6 +41,9 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             ProRunStopW = true;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             order.startTimeProcedure = DateTime.Now;
+            registryRobotJourney = new RegistryRobotJourney();
+            registryRobotJourney.robot = robot;
+            registryRobotJourney.traffic = Traffic;
         }
         public void Destroy()
         {

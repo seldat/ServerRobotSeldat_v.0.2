@@ -300,7 +300,7 @@ namespace SelDatUnilever_Ver1
         }
         #endregion
         #region GET FRONT LINE BUFFER [ BufferReturn to Buffer401]
-        public Pose GetFrontLineBuffer_BufferReturnToB401(String dataReq)
+        public Pose GetFrontLineBuffer_BufferReturn(String dataReq)
         {
             Pose poseTemp = null;
             try

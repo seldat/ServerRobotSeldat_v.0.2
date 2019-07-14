@@ -146,7 +146,7 @@ namespace SeldatMRMS
                         {
                             // tim noi den trong VIM hay OUTER
                             Point destPos= BfToMa.GetFrontLineBuffer().Position;
-                            String destName= Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.MAIN_ZONE);
+                            String destName= Traffic.DetermineArea(destPos, TypeZone.MAIN_ZONE);
                             if(destName.Equals("OUTER"))
                             {
                                 if (rb.SendPoseStamped(BfToMa.GetCheckInBuffer()))
@@ -333,35 +333,6 @@ namespace SeldatMRMS
                             CheckUserHandleError(this);
                         }
                         break;
-                    // case BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_POINT_BRANCHING:
-                    //     if (true == rb.CheckPointDetectLine(BfToMa.GetPointDetectBranching().xy, rb))
-                    //     {
-                    //         if (BfToMa.GetPointDetectBranching().brDir == BrDirection.DIR_LEFT)
-                    //         {
-                    //             rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_TURN_LEFT);
-                    //         }
-                    //         else if (BfToMa.GetPointDetectBranching().brDir == BrDirection.DIR_RIGHT)
-                    //         {
-                    //             rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_TURN_RIGHT);
-                    //         }
-                    //         StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_POINT_BRANCHING;
-                    //     }
-                    //     break;
-                    // case BufferToMachine.BUFMAC_ROBOT_CAME_POINT_BRANCHING:  //doi bobot re
-                    //     if ((resCmd == ResponseCommand.RESPONSE_FINISH_TURN_LEFT) || (resCmd == ResponseCommand.RESPONSE_FINISH_TURN_RIGHT))
-                    //     {
-                    //         resCmd = ResponseCommand.RESPONSE_NONE;
-                    //         rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
-                    //         StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_GOTO_PICKUP_PALLET_BUFFER;
-                    //     }
-                    //     break;
-                    // case BufferToMachine.BUFMAC_ROBOT_GOTO_PICKUP_PALLET_BUFFER:
-                    //     if (true == rb.CheckPointDetectLine(BfToMa.GetPointPallet(), rb))
-                    //     {
-                    //         rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_LINEDETECT_COMING_POSITION);
-                    //         StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
-                    //     }
-                    //     break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER:
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
                         {

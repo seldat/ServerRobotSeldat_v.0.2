@@ -173,10 +173,13 @@ namespace SeldatMRMS {
         public enum BufferToBuffer
         {
             BUFTOBUF_IDLE,
+            BUFTOBUF_SELECT_BEHAVIOR_ONZONE_BUFFER_A,
             BUFTOBUF_ROBOT_GOTO_CHECKIN_BUFFER_A,
+            BUFTOBUF_ROBOT_GOTO_BACK_FRONTLINE_READY,
             BUFTOBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_A, // doi robot di den khu vuc checkin cua vung buffer
             BUFTOBUF_ROBOT_WAITTING_ZONE_BUFFER_READY_A, // doi khu vuc buffer san sang de di vao
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A, // den dau line buffer, chuyen mode do line
+            BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM, // den dau line buffer, chuyen mode do line
             BUFTOBUF_ROBOT_WAITTING_PICKUP_PALLET_BUFFER_A, // doi robot do line den pallet  va tha pallet
             BUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_A, // doi robot di den dau line buffer.
 
@@ -219,7 +222,7 @@ namespace SeldatMRMS {
             MACRET_ROBOT_GOTO_FRONTLINE_MACHINE,
             MACRET_ROBOT_GOTO_BACK_FRONTLINE_READY,
             MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
-            MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_VIM,
+            MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM,
             // MACRET_ROBOT_GOTO_PICKUP_PALLET_MACHINE,
             MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE, // doi robot do line den pallet  va tha pallet
             MACRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE, // doi robot di den dau line buffer.
@@ -289,6 +292,7 @@ namespace SeldatMRMS {
             BUFGATE_IDLE,
             BUFGATE_SELECT_BEHAVIOR_ONZONE,
             BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER, // doi robot di den khu vuc checkin cua vung buffer
+            BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_FROM_VIM,
             BUFGATE_ROBOT_GOTO_BACK_FRONTLINE_READY,
             BUFGATE_ROBOT_WAITTING_ZONE_BUFFER_READY, // doi khu vuc buffer san sang de di vao
             BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM,

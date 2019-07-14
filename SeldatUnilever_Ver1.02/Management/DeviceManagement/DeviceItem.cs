@@ -470,6 +470,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFER_TO_GATE)
                 {
                     OrderItem order = new OrderItem();
+                    order.gate = (int)DoorId.DOOR_MEZZAMINE_RETURN;
                     order.typeReq = (TyeRequest)typeReq;
                     order.userName = (String)results["userName"];
                     order.deviceId = (int)results["deviceId"];
