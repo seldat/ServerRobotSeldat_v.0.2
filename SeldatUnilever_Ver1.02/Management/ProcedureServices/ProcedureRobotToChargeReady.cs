@@ -523,6 +523,29 @@ namespace SeldatMRMS
                     case RobotGoToReady.ROBREA_IDLE:
                         robot.ShowText("ROBREA_IDLE");
                         break;
+                    case RobotGoToReady.ROBREA_SELECT_BEHAVIOR_ONZONE:
+                        if (Traffic.RobotIsInArea("VIM", robot.properties.pose.Position))
+                        {
+                            // đi tới đầu line cổng theo tọa độ chỉ định. gate 1 , 2, 3
+                            if (rb.SendPoseStamped(p.PointFrontLine))
+                            {
+                                StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION_FROM_VIM;
+                                robot.ShowText("ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION");
+                                registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
+                                registryRobotJourney.endPoint = p.PointFrontLine.Position;
+                            }
+                        }
+                        if (Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position))
+                        {
+                            rb.SendPoseStamped(p.PointCheckIn);
+                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_CHECKIN_READYSTATION;
+                            robot.ShowText("ROBREA_ROBOT_WAITTING_GOTO_CHECKIN_READYSTATION");
+                        }
+                        if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
+                        {
+                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
+                        }
+                        break;
                     case RobotGoToReady.ROBREA_ROBOT_GOTO_CHECKIN_READYSTATION:
                         if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
                         {
@@ -579,6 +602,18 @@ namespace SeldatMRMS
                                 StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION;
                                 robot.ShowText("ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION");
                             }
+                        }
+                        break;
+                    case RobotGoToReady.ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION_FROM_VIM:
+                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                        {
+                            break;
+                        }
+                        if (rb.SendPoseStamped(p.PointFrontLine))
+                        {
+                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION;
+
+                            robot.ShowText("ROBREA_ROBOT_WAITTING_GOTO_READYSTATION");
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION: // ROBOT cho tiến vào vị trí đầu line charge su dung laser

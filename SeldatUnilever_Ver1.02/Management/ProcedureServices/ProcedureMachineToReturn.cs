@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Windows;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
+using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SeldatMRMS.Management.TrafficRobotUnity;
@@ -50,6 +52,9 @@ namespace SeldatMRMS
             ProRunStopW = true;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             order.startTimeProcedure = DateTime.Now;
+            registryRobotJourney = new RegistryRobotJourney();
+            registryRobotJourney.robot = robot;
+            registryRobotJourney.traffic = Traffic;
         }
         public void Destroy()
         {
@@ -81,44 +86,40 @@ namespace SeldatMRMS
                 {
                     case MachineToReturn.MACRET_IDLE:
                         break;
+                    case MachineToReturn.MACRET_SELECT_BEHAVIOR_ONZONE:
+                        if (Traffic.RobotIsInArea("VIM", robot.properties.pose.Position))
+                        {
+                            Point endPoint = BfToRe.GetFrontLineBuffer().Position;
+                            if (rb.SendPoseStamped(BfToRe.GetFrontLineBuffer()))
+                            {
+                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_VIM;
+                                registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
+                                registryRobotJourney.endPoint = endPoint;
+                                robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                            }
+                        }
+                        if (Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position))
+                        {
+                            if (rb.SendPoseStamped(BfToRe.GetFrontLineMachine()))
+                            {
+                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
+                                robot.ShowText("MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
+                            }
+                        }
+                        if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
+                        {
+                            if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
+                            {
+                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_GOTO_BACK_FRONTLINE_READY;
+                            }
+                        }
+                        break;
                     case MachineToReturn.MACRET_ROBOT_GOTO_FRONTLINE_MACHINE: // doi khu vuc buffer san sang de di vao
                         try
                         {
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
                             {
-                                if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_RIGHT))
-                                {
-                                    Stopwatch sw = new Stopwatch();
-                                    sw.Start();
-                                    do
-                                    {
-                                        if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
-                                        {
-                                            resCmd = ResponseCommand.RESPONSE_NONE;
-                                            if (rb.SendPoseStamped(BfToRe.GetFrontLineMachine()))
-                                            {
-                                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
-                                                robot.ShowText("MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
-                                                break;
-                                            }
-                                           
-                                        }
-                                        else if (resCmd == ResponseCommand.RESPONSE_ERROR)
-                                        {
-                                            errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                            CheckUserHandleError(this);
-                                            break;
-                                        }
-                                        if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_GOTO_FRONTLINE)
-                                        {
-                                            errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                            CheckUserHandleError(this);
-                                            break;
-                                        }
-                                        Thread.Sleep(100);
-                                    } while (ProRunStopW);
-                                    sw.Stop();
-                                }
+                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_GOTO_BACK_FRONTLINE_READY;
                             }
                             else
                             {
@@ -127,6 +128,72 @@ namespace SeldatMRMS
                                     StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
                                     robot.ShowText("MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
                                 }
+                            }
+                        }
+                        catch (System.Exception)
+                        {
+                            errorCode = ErrorCode.CAN_NOT_GET_DATA;
+                            CheckUserHandleError(this);
+                        }
+                        break;
+                    case MachineToReturn.MACRET_ROBOT_GOTO_BACK_FRONTLINE_READY:
+                        if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_RIGHT))
+                        {
+                            Stopwatch sw = new Stopwatch();
+                            sw.Start();
+                            do
+                            {
+                                if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
+                                {
+                                    resCmd = ResponseCommand.RESPONSE_NONE;
+                                    if (rb.SendPoseStamped(BfToRe.GetFrontLineMachine()))
+                                    {
+                                        StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
+                                        robot.ShowText("MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
+                                        break;
+                                    }
+
+                                }
+                                else if (resCmd == ResponseCommand.RESPONSE_ERROR)
+                                {
+                                    errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                    CheckUserHandleError(this);
+                                    break;
+                                }
+                                if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_GOTO_FRONTLINE)
+                                {
+                                    errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                    CheckUserHandleError(this);
+                                    break;
+                                }
+                                Thread.Sleep(100);
+                            } while (ProRunStopW);
+                            sw.Stop();
+                        }
+                        break;
+                    case MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_VIM:
+                        try
+                        {
+                            if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                            {
+                                break;
+                            }
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            //if (robot.ReachedGoal())
+                            {
+                                resCmd = ResponseCommand.RESPONSE_NONE;
+                                if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_UP)))
+                                {
+                                    // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
+                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                                    StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
+                                    robot.ShowText("MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
+                                }
+                            }
+                            else if (resCmd == ResponseCommand.RESPONSE_ERROR)
+                            {
+                                errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                CheckUserHandleError(this);
                             }
                         }
                         catch (System.Exception)
@@ -192,7 +259,7 @@ namespace SeldatMRMS
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 if (rb.SendPoseStamped(BfToRe.GetCheckInReturn()))
                                 {
-                                    StateMachineToReturn = MachineToReturn.MACRET_ROBOT_GOTO_CHECKIN_RETURN;
+                                    StateMachineToReturn = MachineToReturn.MACRET_ROBOT_GOTO_CHECKIN_RETURN_SELECT_BEHAVIOR_ONZONE;
                                     robot.ShowText("MACRET_ROBOT_GOTO_CHECKIN_RETURN");
                                 }
                             }
@@ -206,6 +273,27 @@ namespace SeldatMRMS
                         {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
                             CheckUserHandleError(this);
+                        }
+                        break;
+                    case MachineToReturn.MACRET_ROBOT_GOTO_CHECKIN_RETURN_SELECT_BEHAVIOR_ONZONE:
+                        if (Traffic.RobotIsInArea("VIM", robot.properties.pose.Position))
+                        {
+                            Point endPoint = BfToRe.GetFrontLineBuffer().Position;
+                            if (rb.SendPoseStamped(BfToRe.GetFrontLineBuffer()))
+                            {
+                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_GOTO_FRONTLINE_RETURN_FROM_VIM;
+                                registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
+                                registryRobotJourney.endPoint = endPoint;
+                                robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                            }
+                        }
+                        if (Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position))
+                        {
+                            if (rb.SendPoseStamped(BfToRe.GetFrontLineMachine()))
+                            {
+                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_GOTO_CHECKIN_RETURN;
+                                robot.ShowText("MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
+                            }
                         }
                         break;
                     case MachineToReturn.MACRET_ROBOT_GOTO_CHECKIN_RETURN: // dang di
@@ -240,6 +328,38 @@ namespace SeldatMRMS
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
                             CheckUserHandleError(this);
                         }
+                        break;
+                    case MachineToReturn.MACRET_ROBOT_GOTO_FRONTLINE_RETURN_FROM_VIM: // dang di
+                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                        {
+                            break;
+                        }
+                        try
+                        {
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            //if ( robot.ReachedGoal())
+                            {
+                                resCmd = ResponseCommand.RESPONSE_NONE;
+
+                                if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_DOWN)))
+                                {
+                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                                    StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_DROPDOWN_PALLET;
+                                    robot.ShowText("MACRET_ROBOT_WAITTING_DROPDOWN_PALLET");
+                                }
+                            }
+                            else if (resCmd == ResponseCommand.RESPONSE_ERROR)
+                            {
+                                errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                CheckUserHandleError(this);
+                            }
+                        }
+                        catch (System.Exception)
+                        {
+                            errorCode = ErrorCode.CAN_NOT_GET_DATA;
+                            CheckUserHandleError(this);
+                        }
+                        break;
                         break;
                     case MachineToReturn.MACRET_ROBOT_GOTO_FRONTLINE_RETURN: // dang di
                         try

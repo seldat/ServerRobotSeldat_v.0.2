@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using Newtonsoft.Json;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
@@ -28,6 +29,7 @@ namespace SeldatMRMS {
         public ProcedureStatus procedureStatus;
         public const UInt32 TIME_OUT_OPEN_DOOR = 5000; /* ms */
         public const UInt32 TIME_OUT_CLOSE_DOOR = 5000; /* ms */
+        protected RegistryRobotJourney registryRobotJourney;
         public enum ProcedureStatus
         {
             PROC_ALIVE,
@@ -70,6 +72,13 @@ namespace SeldatMRMS {
             this.TrafficService = TrafficService;
 
         }
+        public struct RegistryRobotJourney
+        {
+            public String startPlaceName { get; set; }
+            public Point endPoint { get; set; }
+            public RobotUnity robot;
+            public TrafficManagementService traffic;
+        }
         public enum ForkLift {
             FORBUF_IDLE,
             FORBUF_SELECT_BEHAVIOR_ONZONE,
@@ -88,6 +97,7 @@ namespace SeldatMRMS {
             FORBUF_ROBOT_WAITTING_PICKUP_PALLET_IN, // doi robot gap hang
             FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE, //doi robot di tro lai dau line cong.
             // FORBUF_ROBOT_WAITTING_GOOUT_GATE, // doi robot di ra khoi cong
+            FORBUF_ROBOT_WAITTING_REG_GOOUT_SPECIALZONE, // doi dong cong.
             FORBUF_ROBOT_WAITTING_CLOSE_GATE, // doi dong cong.
             FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER, // doi robot di den khu vuc checkin cua vung buffer
             FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY, // doi khu vuc buffer san sang de di vao
@@ -131,9 +141,12 @@ namespace SeldatMRMS {
 
         public enum BufferToMachine {
             BUFMAC_IDLE,
+            BUFMAC_SELECT_BEHAVIOR_ONZONE,
             BUFMAC_ROBOT_GOTO_CHECKIN_BUFFER,
+            BUFMAC_ROBOT_GOTO_BACK_FRONTLINE_READY,
             BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER, // doi robot di den khu vuc checkin cua vung buffer
             BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY, // doi khu vuc buffer san sang de di vao
+            BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM,
             BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER, // den dau line buffer, chuyen mode do line
             // BUFMAC_ROBOT_WAITTING_GOTO_POINT_BRANCHING, // doi khu vuc buffer san sang de di vao
             // BUFMAC_ROBOT_CAME_POINT_BRANCHING, //den dau line pallet, gui chieu quay (trai phai), va toa do pallet (option)
@@ -199,15 +212,20 @@ namespace SeldatMRMS {
 
         public enum MachineToReturn {
             MACRET_IDLE,
+            MACRET_SELECT_BEHAVIOR_ONZONE,
             MACRET_ROBOT_GOTO_FRONTLINE_MACHINE,
+            MACRET_ROBOT_GOTO_BACK_FRONTLINE_READY,
             MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
+            MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_VIM,
             // MACRET_ROBOT_GOTO_PICKUP_PALLET_MACHINE,
             MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE, // doi robot do line den pallet  va tha pallet
             MACRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE, // doi robot di den dau line buffer.
 
+            MACRET_ROBOT_GOTO_CHECKIN_RETURN_SELECT_BEHAVIOR_ONZONE,
             MACRET_ROBOT_GOTO_CHECKIN_RETURN, //cho
             MACRET_ROBOT_CAME_CHECKIN_RETURN, // đã đến vị trí
             MACRET_ROBOT_GOTO_FRONTLINE_RETURN,
+            MACRET_ROBOT_GOTO_FRONTLINE_RETURN_FROM_VIM,
 
             // MACRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET,  // cho phép dò line vàthả pallet
             // MACRET_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET, // đang trong tiến trình dò line và thả pallet
@@ -221,6 +239,7 @@ namespace SeldatMRMS {
         public enum MachineToBufferReturn
         {
             MACBUFRET_IDLE,
+            MACBUFRET_SELECT_BEHAVIOR_ONZONE,
             MACBUFRET_ROBOT_GOTO_FRONTLINE_MACHINE,
             MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
             // MACBUFRET_ROBOT_GOTO_PICKUP_PALLET_MACHINE,
@@ -265,15 +284,21 @@ namespace SeldatMRMS {
         public enum BufferToGate
         {
             BUFGATE_IDLE,
+            BUFGATE_SELECT_BEHAVIOR_ONZONE,
             BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER, // doi robot di den khu vuc checkin cua vung buffer
+            BUFGATE_ROBOT_GOTO_BACK_FRONTLINE_READY,
             BUFGATE_ROBOT_WAITTING_ZONE_BUFFER_READY, // doi khu vuc buffer san sang de di vao
+            BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM,
             BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER, // den dau line buffer, chuyen mode do line
             BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER, // doi robot do line den pallet  va tha pallet
             BUFGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER, // doi robot di den dau line buffer.
+            BUFGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_FROM_VIM, // doi robot di den dau line buffer.
             BUFGATE_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
+            BUFGATE_SELECT_BEHAVIOR_ONZONE_TO_GATE,
             BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE,
             BUFGATE_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.
             BUFGATE_ROBOT_WAITTING_GOTO_GATE, // doi robot di den khu vuc cong
+            BUFGATE_ROBOT_WAITTING_GOTO_GATE_FROM_VIM, // doi robot di den khu vuc cong
             BUFGATE_ROBOT_CAME_GATE_POSITION, // da den khu vuc cong , gui yeu cau mo cong.
             BUFGATE_ROBOT_WAITTING_OPEN_DOOR, //doi mo cong
             BUFGATE_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER, // doi robot gap hang
@@ -321,10 +346,12 @@ namespace SeldatMRMS {
         }
         public enum RobotGoToReady {
             ROBREA_IDLE,
+            ROBREA_SELECT_BEHAVIOR_ONZONE,
             ROBREA_ROBOT_GOTO_CHECKIN_READYSTATION,
             ROBREA_ROBOT_WAITTING_GOTO_CHECKIN_READYSTATION,
             ROBREA_ROBOT_CAME_CHECKIN_READYSTATION,
             ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION, // ROBOT cho tiến vào vị trí đầu line charge su dung laser
+            ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION_FROM_VIM, // ROBOT cho tiến vào vị trí đầu line charge su dung laser
             ROBREA_ROBOT_WAITTING_GOTO_READYSTATION, // hoàn thành đến vùng check in/ kiểm tra có robot đang làm việc vùng này và lấy vị trí line và pallet
             ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION, // đang đợi dò line để đến vị trí line trong buffer
             ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION, // đến vị 

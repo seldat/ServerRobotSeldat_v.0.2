@@ -19,7 +19,7 @@ using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
 namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 {
-    public class ProcedureBufferToBuffer : ProcedureControlServices
+    public class ProcedureBufferReturnToBuffer401 : ProcedureControlServices
     {
         BufferToBuffer StateBufferToBuffer;
 
@@ -34,7 +34,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
-        public ProcedureBufferToBuffer(RobotUnity robot, TrafficManagementService trafficService) : base(robot)
+        public ProcedureBufferReturnToBuffer401(RobotUnity robot, TrafficManagementService trafficService) : base(robot)
         {
             StateBufferToBuffer = BufferToBuffer.BUFTOBUF_IDLE;
             this.robot = robot;
@@ -104,7 +104,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         public void Procedure(object ojb)
         {
-            ProcedureBufferToBuffer BfToBf = (ProcedureBufferToBuffer)ojb;
+            ProcedureBufferReturnToBuffer401 BfToBf = (ProcedureBufferReturnToBuffer401)ojb;
             RobotUnity rb = BfToBf.robot;
             TrafficManagementService Traffic = BfToBf.Traffic;
             robot.ShowText(" Start -> " + procedureCode);

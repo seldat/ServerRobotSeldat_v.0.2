@@ -44,7 +44,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public ProcedureMachineToReturn pMR { get; set; }
             public ProcedureRobotToCharger pRC { get; set; }
             public ProcedureRobotToReady pRR { get; set; }
-            public ProcedureBufferToBuffer pBB { get; set; }
+            public ProcedureBufferReturnToBuffer401 pBB { get; set; }
             public ProcedureBufferToGate pBG { get; set; }
             public ProcedureMachineToBufferReturn pMBR{get;set;}
             public ProcedureMachineToGate pMG { get; set; }

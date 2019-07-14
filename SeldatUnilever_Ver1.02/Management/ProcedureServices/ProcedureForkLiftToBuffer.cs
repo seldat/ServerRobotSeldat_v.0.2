@@ -84,7 +84,11 @@ namespace SeldatMRMS
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             robot.robotRegistryToWorkingZone.onRobotwillCheckInsideGate = true;
             order.startTimeProcedure = DateTime.Now;
- 
+            registryRobotJourney = new RegistryRobotJourney();
+            registryRobotJourney.robot = robot;
+            registryRobotJourney.traffic = Traffic;
+
+
         }
         public void Destroy()
         {
@@ -162,7 +166,10 @@ namespace SeldatMRMS
                             // đi tới đầu line cổng theo tọa độ chỉ định. gate 1 , 2, 3
                             if (rb.SendPoseStamped(ds.config.PointFrontLine))
                             {
-                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE;
+                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM;
+                                // Cap Nhat Thong Tin CHuyen Di
+                                registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
+                                registryRobotJourney.endPoint = ds.config.PointFrontLine.Position;
                                 robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_GATE");
                             }
                         }
@@ -313,7 +320,10 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM:
                         // kiem tra vung đăng ký tai khu vuc xac định
-
+                        if(TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                        {
+                            break;
+                        }
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
                             // robot.setTrafficAllCircles(false, false, false, false);
@@ -386,22 +396,26 @@ namespace SeldatMRMS
                             CheckUserHandleError(this);
                         }
                         break;
-                    case ForkLift.FORBUF_ROBOT_WAITTING_CLOSE_GATE: 
-                        try
+                    case ForkLift.FORBUF_ROBOT_WAITTING_REG_GOOUT_SPECIALZONE:
+                        //cap nhat lai diem cuoi
+                        registryRobotJourney.endPoint = FlToBuf.GetFrontLineBuffer(true).Position;
+                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
-                            //if (true == ds.Close(DoorService.DoorType.DOOR_BACK))
-                            //{
-
-                            robot.SwitchToDetectLine(false);
+                            break;
+                        }
+                        String destination = Traffic.DetermineArea(registryRobotJourney.endPoint);
+                        if (destination.Equals("OUTER"))
+                        {
                             flToMachineInfo = GetPriorityTaskForkLiftToMachine(order.productId);
                             if (flToMachineInfo == null)
                             {
-                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 try
-
                                 {
                                     if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
                                     {
+                                        // xac dinh khu vuc den
+                                        // khu vuc VIM thi dang ky va den dau line
+                                        // khu vuc Outer thi dang ky ra va den check in
 
                                         if (rb.SendPoseStamped(FlToBuf.GetCheckInBuffer(true)))
 
@@ -431,6 +445,25 @@ namespace SeldatMRMS
                                 StateForkLift = ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE;
                                 robot.ShowText("FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE");
                             }
+                        }
+                        else
+                        {
+                            // di toi Frontline
+                            if (rb.SendPoseStamped(FlToBuf.GetFrontLineBuffer(true)))
+                            {
+                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
+                                robot.ShowText("FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                            }
+                        }
+                        break;
+                    case ForkLift.FORBUF_ROBOT_WAITTING_CLOSE_GATE: 
+                        try
+                        {
+                            //if (true == ds.Close(DoorService.DoorType.DOOR_BACK))
+                            //{
+
+                            robot.SwitchToDetectLine(false);
+
                             //}
                             //else
                             //{

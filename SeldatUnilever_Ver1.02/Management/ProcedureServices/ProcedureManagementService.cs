@@ -136,7 +136,7 @@ namespace SeldatMRMS
                     procfm.Start();
                     break;
                 case ProcedureItemSelected.PROCEDURE_BUFFER_TO_BUFFER:
-                    ProcedureBufferToBuffer procbb = new ProcedureBufferToBuffer(robot, trafficService);
+                    ProcedureBufferReturnToBuffer401 procbb = new ProcedureBufferReturnToBuffer401(robot, trafficService);
                     ProcedureDataItems prcobbDataItems = new ProcedureDataItems();
                     prcobbDataItems.StartTaskTime = DateTime.Now;
                     RegisterProcedureItem itemprocbb = new RegisterProcedureItem() { item = procbb, robot = robot, procedureDataItems = prcobbDataItems };

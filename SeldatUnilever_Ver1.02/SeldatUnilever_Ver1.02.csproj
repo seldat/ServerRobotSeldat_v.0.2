@@ -265,7 +265,7 @@
     <Compile Include="Management\ProcedureServices\CollectionDataService.cs" />
     <Compile Include="Management\ProcedureServices\ControlService.cs" />
     <Compile Include="Management\ProcedureServices\DBProcedureService.cs" />
-    <Compile Include="Management\ProcedureServices\ProcedureBufferToBuffer.cs" />
+    <Compile Include="Management\ProcedureServices\ProcedureBufferReturnToBuffer401.cs" />
     <Compile Include="Management\ProcedureServices\ProcedureBufferToGate.cs" />
     <Compile Include="Management\ProcedureServices\ProcedureBufferToMachine.cs" />
     <Compile Include="Management\ProcedureServices\ProcedureBufferToReturn.cs" />

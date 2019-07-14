@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
+using static SeldatMRMS.ProcedureControlServices;
 
 namespace SeldatUnilever_Ver1._02.Management.TrafficManager
 {
@@ -461,131 +463,156 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             }
             return false;
         }
-
-        public static bool StationCheckInSpecialZone(Point startPos,Point endPos,RobotUnity robot,TrafficManagementService traffic)
+        public static bool DetetectInsideStationCheck(RegistryRobotJourney rrj)
         {
-            String startZone = traffic.DetermineArea(startPos);
-            String endZone = traffic.DetermineArea(endPos);
+            // xác định vùng đặt biệt trước khi bắt đầu frontline
+            if (rrj.traffic.HasRobotUnityinArea("zonecheck"))
+            {
+                // Robot được gửi lệnh Stop
+                if(StationCheckInSpecialZone(rrj))
+                {
+                    rrj.robot.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                    return false;
+                }
+                else
+                {
+                    rrj.robot.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                    return true;
+                }
+
+                
+            }
+            else
+            {
+                // Robot van toc bình thuong
+                rrj.robot.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                return false;
+            }
+        }
+        public static bool StationCheckInSpecialZone(RegistryRobotJourney rrj)
+        {
+            String startZone = rrj.traffic.DetermineArea(rrj.robot.properties.pose.Position);
+            String endZone = rrj.traffic.DetermineArea(rrj.endPoint);
 
             #region OUTER (C1) -> READY , GATE12, ELEVATOR, GATE3, VIM
             // OUTER->GATE3
             if (startZone.Equals("OUTER") && endZone.Equals("GATE3"))
             {
-               return Reg_checkinC1_G3(robot, traffic);
+               return Reg_checkinC1_G3(rrj.robot, rrj.traffic);
             }
             // OUTER->ELEVATOR && VIM
             if (startZone.Equals("OUTER") && endZone.Equals("ELEVATOR"))
             {
-                return Reg_checkinC1_ElevatorAndVIM(robot, traffic);
+                return Reg_checkinC1_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
             if (startZone.Equals("OUTER") && endZone.Equals("VIM"))
             {
-                return Reg_checkinC1_ElevatorAndVIM(robot, traffic);
+                return Reg_checkinC1_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
             // OUTER->GATE12
             if (startZone.Equals("OUTER") && endZone.Equals("GATE12"))
             {
-                return Reg_checkinC1_Gate12(robot, traffic);
+                return Reg_checkinC1_Gate12(rrj.robot, rrj.traffic);
             }
             // OUTER->READY
             if (startZone.Equals("OUTER") && endZone.Equals("READY"))
             {
-                return Reg_checkinC1_Gate12(robot, traffic);
+                return Reg_checkinC1_Gate12(rrj.robot, rrj.traffic);
             }
             #endregion
             #region VIM (C2) -> READY , GATE12, ELEVATOR, VIM, GATE3
             if (startZone.Equals("VIM") && endZone.Equals("GATE3"))
             {
-                return Reg_checkinC2_G3(robot, traffic);
+                return Reg_checkinC2_G3(rrj.robot, rrj.traffic);
             }
             // VIM->ELEVATOR && VIM
             if (startZone.Equals("VIM") && endZone.Equals("ELEVATOR"))
             {
-                return Reg_checkinC2_ElevatorAndVIM(robot, traffic);
+                return Reg_checkinC2_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
             if (startZone.Equals("VIM") && endZone.Equals("VIM"))
             {
-                return Reg_checkinC2_ElevatorAndVIM(robot, traffic);
+                return Reg_checkinC2_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
             // VIM->READY && OUTER
             if (startZone.Equals("VIM") && endZone.Equals("READY"))
             {
-                return Reg_checkinC2_Outer(robot, traffic);
+                return Reg_checkinC2_Outer(rrj.robot, rrj.traffic);
             }
             if (startZone.Equals("VIM") && endZone.Equals("OUTER"))
             {
-                return Reg_checkinC2_Outer(robot, traffic);
+                return Reg_checkinC2_Outer(rrj.robot, rrj.traffic);
             }
             if (startZone.Equals("VIM") && endZone.Equals("GATE3"))
             {
-                return Reg_checkinC2_G3(robot, traffic);
+                return Reg_checkinC2_G3(rrj.robot, rrj.traffic);
             }
             #endregion
             #region GATE12 (C3) -> READY, ELEVATOR, VIM , GATE3
             if (startZone.Equals("GATE12") && endZone.Equals("GATE3"))
             {
-                return Reg_checkinGate12_Gate3(robot, traffic);
+                return Reg_checkinGate12_Gate3(rrj.robot, rrj.traffic);
             }
             // GATE12->ELEVATOR && VIM
             if (startZone.Equals("GATE12") && endZone.Equals("ELEVATOR"))
             {
-                return Reg_checkinGate12_ElevatorAndVIM(robot, traffic);
+                return Reg_checkinGate12_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
             if (startZone.Equals("GATE12") && endZone.Equals("VIM"))
             {
-                return Reg_checkinGate12_ElevatorAndVIM(robot, traffic);
+                return Reg_checkinGate12_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
             // GATE12->READY && OUTER
             if (startZone.Equals("GATE12") && endZone.Equals("READY"))
             {
-                return Reg_checkinGate12_ReadyAndOuter(robot, traffic);
+                return Reg_checkinGate12_ReadyAndOuter(rrj.robot, rrj.traffic);
             }
             if (startZone.Equals("GATE12") && endZone.Equals("OUTER"))
             {
-                return Reg_checkinGate12_ReadyAndOuter(robot, traffic);
+                return Reg_checkinGate12_ReadyAndOuter(rrj.robot, rrj.traffic);
             }
             #endregion
             #region GATE3 (C4) -> READY, ELEVATOR, VIM , GATE12
             // GATE3->ELEVATOR && VIM
             if (startZone.Equals("GATE3") && endZone.Equals("ELEVATOR"))
             {
-                return Reg_checkinGate3_ElevatorAndVIM(robot, traffic);
+                return Reg_checkinGate3_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
             if (startZone.Equals("GATE3") && endZone.Equals("VIM"))
             {
-                return Reg_checkinGate3_ElevatorAndVIM(robot, traffic);
+                return Reg_checkinGate3_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
             // GATE3->READY && OUTER
             if (startZone.Equals("GATE3") && endZone.Equals("READY"))
             {
-                return Reg_checkinGate3_ReadyAndOuter(robot, traffic);
+                return Reg_checkinGate3_ReadyAndOuter(rrj.robot, rrj.traffic);
             }
             if (startZone.Equals("GATE3") && endZone.Equals("OUTER"))
             {
-                return Reg_checkinGate3_ReadyAndOuter(robot, traffic);
+                return Reg_checkinGate3_ReadyAndOuter(rrj.robot, rrj.traffic);
             }
             if (startZone.Equals("GATE3") && endZone.Equals("GATE12"))
             {
-                return Reg_checkinGate3_Gate12(robot, traffic);
+                return Reg_checkinGate3_Gate12(rrj.robot, rrj.traffic);
             }
             #endregion
             #region ELEVATOR (C5) -> READY, GATE12, GATE3
             if (startZone.Equals("ELEVATOR") && endZone.Equals("GATE12"))
             {
-                return Reg_checkinElevator_Gate12(robot, traffic);
+                return Reg_checkinElevator_Gate12(rrj.robot, rrj.traffic);
             }
             //  ELEVATOR->READY && OUTER
             if (startZone.Equals("ELEVATOR") && endZone.Equals("READY"))
             {
-                return Reg_checkinElevator_ReadyAndOuter(robot, traffic);
+                return Reg_checkinElevator_ReadyAndOuter(rrj.robot, rrj.traffic);
             }
             if (startZone.Equals("ELEVATOR") && endZone.Equals("OUTER"))
             {
-                return Reg_checkinElevator_ReadyAndOuter(robot, traffic);
+                return Reg_checkinElevator_ReadyAndOuter(rrj.robot, rrj.traffic);
             }
             if (startZone.Equals("ELEVATOR") && endZone.Equals("GATE3"))
             {
-                return Reg_checkinElevator_Gate3(robot, traffic);
+                return Reg_checkinElevator_Gate3(rrj.robot, rrj.traffic);
             }
             #endregion
 
