@@ -46,7 +46,10 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             GATE,
             GATE_CHECKOUT,
             GATE_CHECKINT,
-            TEMP
+            CHECKIN_ZONE,
+            MAIN_ZONE,
+            TEMP,
+            
 
         }
         public ListCollectionView Grouped_PropertiesTrafficZoneList { get; private set; }
@@ -353,6 +356,22 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                 {
                     zoneName = r.NameId;
                     break;
+                }
+            }
+            return zoneName;
+        }
+        public String DetermineArea(Point position,TypeZone typeZ)
+        {
+            String zoneName = "";
+            foreach (var r in ZoneRegisterList.Values) // xác định khu vực đến
+            {
+                if (r.Type == typeZ)
+                {
+                    if (ExtensionService.IsInPolygon(r.GetZone(), position))
+                    {
+                        zoneName = r.NameId;
+                        break;
+                    }
                 }
             }
             return zoneName;

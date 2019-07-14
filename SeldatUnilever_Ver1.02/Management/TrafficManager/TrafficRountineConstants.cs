@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SeldatMRMS.ProcedureControlServices;
+using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterService;
 
 namespace SeldatUnilever_Ver1._02.Management.TrafficManager
 {
@@ -24,7 +25,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         public static RegistryIntersectionZone RegIntZone_GATE12 = new RegistryIntersectionZone("GATE12");
         public static RegistryIntersectionZone RegIntZone_GATE3 = new RegistryIntersectionZone("GATE3");
         public static RegistryIntersectionZone RegIntZone_ELEVATOR = new RegistryIntersectionZone("ELEVATOR");
-        public static RegistryIntersectionZone RegIntZone_VIM = new RegistryIntersectionZone("VIM");
+        public static RegistryIntersectionZone RegIntZone_VIMBTLCAP = new RegistryIntersectionZone("VIM-BTLCAP");
         // Từ C1 -> G3 
         // Detect no Robot : Ready , G12, Elevator, G3
         // Check register G3 -> Ready ->Gate 12 -> Elevator
@@ -35,7 +36,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             bool onRegElev = false;
             bool onRegG3 = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("READY") || traffic.HasRobotUnityinArea("GATE12") || traffic.HasRobotUnityinArea("ELEVATOR") || traffic.HasRobotUnityinArea("GATE3"))
+            if (traffic.HasRobotUnityinArea("READY", robot) || traffic.HasRobotUnityinArea("GATE12", robot) || traffic.HasRobotUnityinArea("ELEVATOR", robot) || traffic.HasRobotUnityinArea("GATE3", robot))
             {
                 return false;
             }
@@ -70,7 +71,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             bool onRegG12 = false;
             bool onRegElev = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("READY") || traffic.HasRobotUnityinArea("GATE12") || traffic.HasRobotUnityinArea("ELEVATOR"))
+            if (traffic.HasRobotUnityinArea("READY", robot) || traffic.HasRobotUnityinArea("GATE12", robot) || traffic.HasRobotUnityinArea("ELEVATOR", robot))
             {
                 return false;
             }
@@ -100,7 +101,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             bool onRegReady = false;
             bool onRegG12 = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("READY") || traffic.HasRobotUnityinArea("GATE12"))
+            if (traffic.HasRobotUnityinArea("READY", robot) || traffic.HasRobotUnityinArea("GATE12", robot))
             {
                 return false;
             }
@@ -125,7 +126,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         {
             bool onRegReady = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("READY"))
+            if (traffic.HasRobotUnityinArea("READY", robot))
             {
                 return false;
             }
@@ -147,7 +148,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         {
             bool onRegG12 = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("GATE12") || traffic.HasRobotUnityinArea("ELEVATOR") || traffic.HasRobotUnityinArea("GATE3"))
+            if (traffic.HasRobotUnityinArea("GATE12", robot) || traffic.HasRobotUnityinArea("ELEVATOR", robot) || traffic.HasRobotUnityinArea("GATE3", robot))
             {
                 return false;
             }
@@ -171,7 +172,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             bool onRegG3 = false;
             Point Rloc = robot.properties.pose.Position;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("GATE12") || traffic.HasRobotUnityinArea("ELEVATOR") ||  traffic.HasRobotUnityinArea("GATE3"))
+            if (traffic.HasRobotUnityinArea("GATE12", robot) || traffic.HasRobotUnityinArea("ELEVATOR", robot) || traffic.HasRobotUnityinArea("GATE3", robot))
             {
                 return false;
             }
@@ -202,7 +203,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             bool onRegElev = false;
             Point Rloc = robot.properties.pose.Position;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("GATE12") || traffic.HasRobotUnityinArea("ELEVATOR"))
+            if (traffic.HasRobotUnityinArea("GATE12", robot) || traffic.HasRobotUnityinArea("ELEVATOR", robot))
             {
                 return false;
             }
@@ -230,7 +231,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             bool onRegReady = false;
             Point Rloc = robot.properties.pose.Position;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("READY") || traffic.HasRobotUnityinArea("GATE12"))
+            if (traffic.HasRobotUnityinArea("READY", robot) || traffic.HasRobotUnityinArea("GATE12", robot))
             {
                 return false;
             }
@@ -258,7 +259,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             bool onRegElev = false;
             Point Rloc = robot.properties.pose.Position;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("ELEVATOR"))
+            if (traffic.HasRobotUnityinArea("ELEVATOR", robot))
             {
                 return false;
             }
@@ -279,7 +280,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             bool onRegElev = false;
             bool onRegG3 = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("GATE12") || traffic.HasRobotUnityinArea("ELEVATOR"))
+            if (traffic.HasRobotUnityinArea("GATE12", robot) || traffic.HasRobotUnityinArea("ELEVATOR", robot))
             {
                 return false;
             }
@@ -304,7 +305,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         {
             bool onRegReady = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("READY"))
+            if (traffic.HasRobotUnityinArea("READY", robot))
             {
                 return false;
             }
@@ -327,7 +328,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             bool onRegG12 = false;
             bool onRegElev = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("READY") || traffic.HasRobotUnityinArea("GATE12") || traffic.HasRobotUnityinArea("ELEVATOR"))
+            if (traffic.HasRobotUnityinArea("READY", robot) || traffic.HasRobotUnityinArea("GATE12", robot) || traffic.HasRobotUnityinArea("ELEVATOR", robot))
             {
                 return false;
             }
@@ -358,7 +359,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             bool onRegElev = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("GATE12") || traffic.HasRobotUnityinArea("ELEVATOR"))
+            if (traffic.HasRobotUnityinArea("GATE12", robot) || traffic.HasRobotUnityinArea("ELEVATOR", robot))
             {
                 return false;
             }
@@ -382,7 +383,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         {
             bool onRegElev = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("ELEVATOR"))
+            if (traffic.HasRobotUnityinArea("ELEVATOR", robot))
             {
                 return false;
             }
@@ -404,7 +405,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             bool onRegReady = false;
             bool onRegG12 = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("READY") || traffic.HasRobotUnityinArea("GATE12"))
+            if (traffic.HasRobotUnityinArea("READY", robot) || traffic.HasRobotUnityinArea("GATE12", robot))
             {
                 return false;
             }
@@ -428,7 +429,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         {
             bool onRegG12 = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasRobotUnityinArea("GATE12") )
+            if (traffic.HasRobotUnityinArea("GATE12", robot))
             {
                 return false;
             }
@@ -449,7 +450,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         {
             bool onRegG3 = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if ( traffic.HasRobotUnityinArea("GATE3"))
+            if (traffic.HasRobotUnityinArea("GATE3", robot))
             {
                 return false;
             }
@@ -466,10 +467,11 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         public static bool DetetectInsideStationCheck(RegistryRobotJourney rrj)
         {
             // xác định vùng đặt biệt trước khi bắt đầu frontline
-            if (rrj.traffic.HasRobotUnityinArea("zonecheck"))
+            if (rrj.traffic.HasRobotUnityinArea("C1",rrj.robot) || rrj.traffic.HasRobotUnityinArea("C2", rrj.robot) || rrj.traffic.HasRobotUnityinArea("C3", rrj.robot) ||
+                rrj.traffic.HasRobotUnityinArea("C4", rrj.robot) || rrj.traffic.HasRobotUnityinArea("C5", rrj.robot))
             {
                 // Robot được gửi lệnh Stop
-                if(StationCheckInSpecialZone(rrj))
+                if (StationCheckInSpecialZone(rrj))
                 {
                     rrj.robot.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
                     return false;
@@ -480,7 +482,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
                     return true;
                 }
 
-                
+
             }
             else
             {
@@ -491,21 +493,21 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         }
         public static bool StationCheckInSpecialZone(RegistryRobotJourney rrj)
         {
-            String startZone = rrj.traffic.DetermineArea(rrj.robot.properties.pose.Position);
-            String endZone = rrj.traffic.DetermineArea(rrj.endPoint);
+            String startZone = rrj.traffic.DetermineArea(rrj.startPoint,TypeZone.OPZS);
+            String endZone = rrj.traffic.DetermineArea(rrj.endPoint, TypeZone.OPZS);
 
             #region OUTER (C1) -> READY , GATE12, ELEVATOR, GATE3, VIM
             // OUTER->GATE3
             if (startZone.Equals("OUTER") && endZone.Equals("GATE3"))
             {
-               return Reg_checkinC1_G3(rrj.robot, rrj.traffic);
+                return Reg_checkinC1_G3(rrj.robot, rrj.traffic);
             }
             // OUTER->ELEVATOR && VIM
             if (startZone.Equals("OUTER") && endZone.Equals("ELEVATOR"))
             {
                 return Reg_checkinC1_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
-            if (startZone.Equals("OUTER") && endZone.Equals("VIM"))
+            if (startZone.Equals("OUTER") && endZone.Equals("VIM-BTLCAP"))
             {
                 return Reg_checkinC1_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
@@ -521,29 +523,29 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             }
             #endregion
             #region VIM (C2) -> READY , GATE12, ELEVATOR, VIM, GATE3
-            if (startZone.Equals("VIM") && endZone.Equals("GATE3"))
+            if (startZone.Equals("VIM-BTLCAP") && endZone.Equals("GATE3"))
             {
                 return Reg_checkinC2_G3(rrj.robot, rrj.traffic);
             }
             // VIM->ELEVATOR && VIM
-            if (startZone.Equals("VIM") && endZone.Equals("ELEVATOR"))
+            if (startZone.Equals("VIM-BTLCAP") && endZone.Equals("ELEVATOR"))
             {
                 return Reg_checkinC2_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
-            if (startZone.Equals("VIM") && endZone.Equals("VIM"))
+            if (startZone.Equals("VIM-BTLCAP") && endZone.Equals("VIM-BTLCAP"))
             {
                 return Reg_checkinC2_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
             // VIM->READY && OUTER
-            if (startZone.Equals("VIM") && endZone.Equals("READY"))
+            if (startZone.Equals("VIM-BTLCAP") && endZone.Equals("READY"))
             {
                 return Reg_checkinC2_Outer(rrj.robot, rrj.traffic);
             }
-            if (startZone.Equals("VIM") && endZone.Equals("OUTER"))
+            if (startZone.Equals("VIM-BTLCAP") && endZone.Equals("OUTER"))
             {
                 return Reg_checkinC2_Outer(rrj.robot, rrj.traffic);
             }
-            if (startZone.Equals("VIM") && endZone.Equals("GATE3"))
+            if (startZone.Equals("VIM-BTLCAP") && endZone.Equals("GATE3"))
             {
                 return Reg_checkinC2_G3(rrj.robot, rrj.traffic);
             }
@@ -558,7 +560,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return Reg_checkinGate12_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
-            if (startZone.Equals("GATE12") && endZone.Equals("VIM"))
+            if (startZone.Equals("GATE12") && endZone.Equals("VIM-BTLCAP"))
             {
                 return Reg_checkinGate12_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
@@ -578,7 +580,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return Reg_checkinGate3_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
-            if (startZone.Equals("GATE3") && endZone.Equals("VIM"))
+            if (startZone.Equals("GATE3") && endZone.Equals("VIM-BTLCAP"))
             {
                 return Reg_checkinGate3_ElevatorAndVIM(rrj.robot, rrj.traffic);
             }
@@ -618,7 +620,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
 
             return false;
         }
-        public static void ReleaseZone(RobotUnity robot)
+        public static void ReleaseAll(RobotUnity robot)
         {
             RegIntZone_READY.Release(robot);
             RegIntZone_GATE12.Release(robot);
@@ -626,5 +628,5 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             RegIntZone_ELEVATOR.Release(robot);
         }
 
-}
+    }
 }

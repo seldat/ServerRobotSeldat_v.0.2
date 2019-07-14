@@ -76,8 +76,10 @@ namespace SeldatMRMS {
         {
             public String startPlaceName { get; set; }
             public Point endPoint { get; set; }
+            public Point startPoint { get; set; }
             public RobotUnity robot;
             public TrafficManagementService traffic;
+            public bool flagWaitReg;
         }
         public enum ForkLift {
             FORBUF_IDLE,
@@ -145,6 +147,7 @@ namespace SeldatMRMS {
             BUFMAC_ROBOT_GOTO_CHECKIN_BUFFER,
             BUFMAC_ROBOT_GOTO_BACK_FRONTLINE_READY,
             BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER, // doi robot di den khu vuc checkin cua vung buffer
+            BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_FROM_VIM,
             BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY, // doi khu vuc buffer san sang de di vao
             BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM,
             BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER, // den dau line buffer, chuyen mode do line

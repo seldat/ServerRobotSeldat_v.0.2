@@ -19,6 +19,7 @@ using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SeldatMRMS.Management.TrafficRobotUnity;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
+using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterService;
 
 namespace SeldatMRMS
 {
@@ -67,7 +68,7 @@ namespace SeldatMRMS
             procedureCode = ProcedureCode.PROC_CODE_FORKLIFT_TO_BUFFER;
 
         }
-        public void Start(ForkLift state = ForkLift.FORBUF_ROBOT_GOTO_CHECKIN_GATE)
+        public void Start(ForkLift state = ForkLift.FORBUF_SELECT_BEHAVIOR_ONZONE)
         {
 
             errorCode = ErrorCode.RUN_OK;
@@ -160,29 +161,6 @@ namespace SeldatMRMS
                         robot.ShowText("FORBUF_IDLE");
                         break;
                     case ForkLift.FORBUF_SELECT_BEHAVIOR_ONZONE:
-                        
-                        if(Traffic.RobotIsInArea("VIM",robot.properties.pose.Position))
-                        {
-                            // đi tới đầu line cổng theo tọa độ chỉ định. gate 1 , 2, 3
-                            if (rb.SendPoseStamped(ds.config.PointFrontLine))
-                            {
-                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM;
-                                // Cap Nhat Thong Tin CHuyen Di
-                                registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
-                                registryRobotJourney.endPoint = ds.config.PointFrontLine.Position;
-                                robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_GATE");
-                            }
-                        }
-                        if (Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position))
-                        {
-                            // public void Start (ForkLiftToBuffer state = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED) {
-                           
-                            if (rb.SendPoseStamped(ds.config.PointCheckInGate))
-                            {
-                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
-                                robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE");
-                            }
-                        }
                         if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
                         {
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
@@ -191,11 +169,41 @@ namespace SeldatMRMS
                                 {
 
                                     robot.ShowText("FORBUF_ROBOT_GOTO_BACK_FRONTLINE_READY");
+                                    registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
+                                    registryRobotJourney.startPoint = robot.properties.pose.Position;
+                                    registryRobotJourney.endPoint = ds.config.PointFrontLine.Position;
                                     StateForkLift = ForkLift.FORBUF_ROBOT_GOTO_BACK_FRONTLINE_READY;
 
                                 }
                             }
                         }
+                        else if (Traffic.RobotIsInArea("VIM",robot.properties.pose.Position))
+                        {
+                            // đi tới đầu line cổng theo tọa độ chỉ định. gate 1 , 2, 3
+                            if (rb.SendPoseStamped(ds.config.PointFrontLine))
+                            {
+                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM;
+                                // Cap Nhat Thong Tin CHuyen Di
+                                registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
+                                registryRobotJourney.startPoint = robot.properties.pose.Position;
+                                registryRobotJourney.endPoint = ds.config.PointFrontLine.Position;
+                                robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_GATE");
+                            }
+                        }
+                        else if (Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position))
+                        {
+                            // public void Start (ForkLiftToBuffer state = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED) {
+                           
+                            if (rb.SendPoseStamped(ds.config.PointCheckInGate))
+                            {
+                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
+                                registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
+                                registryRobotJourney.startPoint = robot.properties.pose.Position;
+                                registryRobotJourney.endPoint = ds.config.PointFrontLine.Position;
+                                robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE");
+                            }
+                        }
+
                         break;
                     case ForkLift.FORBUF_ROBOT_GOTO_CHECKIN_GATE: //gui toa do di den khu vuc checkin cong
                         if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
@@ -233,6 +241,11 @@ namespace SeldatMRMS
                         break;
 
                     case ForkLift.FORBUF_ROBOT_GOTO_BACK_FRONTLINE_READY:
+
+                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                        {
+                            break;
+                        }
 
                         if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_LEFT))
                         {
@@ -273,6 +286,10 @@ namespace SeldatMRMS
                         }
                         break;
                    case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE:
+                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                        {
+                            break;
+                        }
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
                          
@@ -397,8 +414,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_REG_GOOUT_SPECIALZONE:
-                        //cap nhat lai diem cuoi
-                        registryRobotJourney.endPoint = FlToBuf.GetFrontLineBuffer(true).Position;
+                        //cap nhat lai diem cuoi   
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
@@ -459,18 +475,11 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_WAITTING_CLOSE_GATE: 
                         try
                         {
-                            //if (true == ds.Close(DoorService.DoorType.DOOR_BACK))
-                            //{
-
+                            StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_REG_GOOUT_SPECIALZONE;
                             robot.SwitchToDetectLine(false);
-
-                            //}
-                            //else
-                            //{
-                            //   // StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE;
-                            //    // errorCode = ErrorCode.CLOSE_DOOR_ERROR;
-                            //    // CheckUserHandleError(this);
-                            //}
+                            registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
+                            registryRobotJourney.startPoint = robot.properties.pose.Position;
+                            registryRobotJourney.endPoint = FlToBuf.GetFrontLineBuffer(true).Position;
                         }
                         catch (System.Exception)
                         {
