@@ -283,4 +283,19 @@
   <data name="text1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\text1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="ERROR_FORMAT_DATA_DEVICEITEM" xml:space="preserve">
+    <value>Lỗi Dữ Liệu:</value>
+  </data>
+  <data name="ERROR_GATE" xml:space="preserve">
+    <value>Lỗi Cổng: </value>
+  </data>
+  <data name="WARNING_BM_ORDERED" xml:space="preserve">
+    <value>Bạn vừa đã gửi yêu cầu trước đó: </value>
+  </data>
+  <data name="WARNING_FB_DOOR_BUSY" xml:space="preserve">
+    <value>Hiện nay cổng đang có hàng</value>
+  </data>
+  <data name="WARNING_FB_FULL_BUFFER" xml:space="preserve">
+    <value>Xin lỗi vùng Buffer này không còn chổ trống !</value>
+  </data>
 </root>

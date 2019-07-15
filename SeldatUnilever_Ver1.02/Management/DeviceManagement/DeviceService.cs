@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SeldatMRMS;
 using SelDatUnilever_Ver1._00.Communication.HttpBridge;
 using System;
@@ -14,6 +15,24 @@ namespace SeldatUnilever_Ver1._02.Management.DeviceManagement
 {
     public class DeviceService
     {
+        public class PlanDataRequest
+        {
+            public int timeWorkId ;
+            public String activeDate;
+            public int productId;
+            public int productDetailId;
+            public int updUsrId = Global_Object.userLogin;
+            public int deviceId;
+            public int palletAmount = 1;
+            
+        }
+        public class UpdatePalletRequest
+        {
+            public int palletId;
+            public String palletStatus;
+            public int planId;
+            public int updUsrId = Global_Object.userLogin;
+        }
         public DeviceService() { }
         public String RequestDataProcedure_POST(String dataReq, String url)
         {
@@ -33,6 +52,44 @@ namespace SeldatUnilever_Ver1._02.Management.DeviceManagement
 
             return data.Result;
         }
+        public bool UpdatePalletState(UpdatePalletRequest updatePalletRequest)
+        {
+            String url = Global_Object.url + "pallet/updatePalletStatus";
+            dynamic product = new JObject();
+            product.palletId = updatePalletRequest.palletId;
+            product.planId = updatePalletRequest.planId;
+            product.palletStatus = updatePalletRequest.palletStatus;
+            product.updUsrId = Global_Object.userLogin;
+            String data = RequestDataProcedure_POST(product.ToString(), url);
+            if(Convert.ToInt32(data)>0)
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool UpdatePalletStatusReturnBufferToGate(OrderItem order)
+        {
+            try
+            {
+                    dynamic product = new JObject();
+                    UpdatePalletRequest updatePalletRequest = new UpdatePalletRequest();
+                    updatePalletRequest.palletId = order.palletId;
+                    updatePalletRequest.palletStatus = PalletStatus.R.ToString();
+                    updatePalletRequest.planId = order.planId;
+                    UpdatePalletState(updatePalletRequest);
+                    product.timeWorkId = order.timeWorkId;
+                    product.activeDate = order.activeDate;
+                    product.productId = order.productId;
+                    product.productDetailId = order.productDetailId;
+                    // chu y sua 
+                    product.palletStatus = PalletStatus.R.ToString();
+                    order.dataRequest = product.ToString();
+                    return true;
+            }
+            catch
+            { }
+                return false;
+        }
         public String CreatePlanBuffer(OrderItem order)
         {
             dynamic product = new JObject();
@@ -46,11 +103,53 @@ namespace SeldatUnilever_Ver1._02.Management.DeviceManagement
             String response = RequestDataProcedure_POST(product.ToString(), Global_Object.url + "plan/createPlanPallet");
             return response;
         }
+        public bool UpdatePalletStatusToHoldBufferReturn_BRB401(UpdatePalletRequest updatePalletRequest )
+        {
+            try
+            {
+                if(UpdatePalletState(updatePalletRequest))
+                {
+                    return true;
+                }
+            }
+            catch
+            { }
+            return false;
+        }
+        public bool CreatePlanBuffer401(PlanDataRequest plan)
+        {
+            try
+            {
+                String product = JsonConvert.SerializeObject(plan);
+                String response = RequestDataProcedure_POST(product, Global_Object.url + "plan/createPlanPallet");
+                if (Convert.ToInt32(response) > 0)
+                    return true;
+            }
+            catch { }
+            return false;
+        }
+
+        protected void FreePlanedBuffer(String dataReq,int planId)
+        {
+            String url = Global_Object.url + "pallet/updatePalletStatus";
+            int _palletId = GetPalletId(dataReq);
+            if (_palletId > 0)
+            {
+                dynamic product = new JObject();
+                product.palletId = _palletId;
+                product.planId = planId;
+                product.palletStatus = PalletStatus.F.ToString();
+                product.updUsrId = Global_Object.userLogin;
+                var data = RequestDataProcedure_POST(product.ToString(), url);
+
+            }
+
+        }
 
         protected void FreePlanedBuffer(OrderItem order)
         {
             String url = Global_Object.url + "pallet/updatePalletStatus";
-            int _palletId = GetPalletId(order);
+            int _palletId = GetPalletId(order.dataRequest,order.planId);
             if (_palletId > 0)
             {
                 dynamic product = new JObject();
@@ -115,12 +214,12 @@ namespace SeldatUnilever_Ver1._02.Management.DeviceManagement
             }
             return deviceId;
         }
-        protected int GetPalletId(OrderItem order)
+        protected int GetPalletId(String dataReq,int planId=0)
         {
             int palletId = -1;
             try
             {
-                String collectionData = RequestDataProcedure_POST(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+                String collectionData = RequestDataProcedure_POST(dataReq, Global_Object.url + "plan/getListPlanPallet");
                 if (collectionData.Length > 0)
                 {
                     try
@@ -128,9 +227,25 @@ namespace SeldatUnilever_Ver1._02.Management.DeviceManagement
                         JArray results = JArray.Parse(collectionData);
                         foreach (var result in results)
                         {
-
-                            int temp_planId = (int)result["planId"];
-                            if (temp_planId == order.planId)
+                            if (planId > 0)
+                            {
+                                int temp_planId = (int)result["planId"];
+                                if (temp_planId == planId)
+                                {
+                                    foreach (var buffer in result["buffers"])
+                                    {
+                                        //var bufferResults = result["buffers"][0];
+                                        if (buffer["pallets"].Count() > 0)
+                                        {
+                                            var bufferResults = buffer;
+                                            var palletInfo = bufferResults["pallets"][buffer["pallets"].Count() - 1];
+                                            palletId = (int)palletInfo["palletId"];
+                                            return palletId;
+                                        }
+                                    }
+                                }
+                            }
+                            else
                             {
                                 foreach (var buffer in result["buffers"])
                                 {

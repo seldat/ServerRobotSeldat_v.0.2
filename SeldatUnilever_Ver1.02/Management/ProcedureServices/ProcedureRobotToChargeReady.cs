@@ -614,6 +614,10 @@ namespace SeldatMRMS
                         {
                             break;
                         }
+                        else
+                        {
+                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                        }
                         if (rb.SendPoseStamped(p.PointFrontLine))
                         {
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION;

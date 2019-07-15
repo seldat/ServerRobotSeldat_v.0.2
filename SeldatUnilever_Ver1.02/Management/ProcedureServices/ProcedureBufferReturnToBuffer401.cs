@@ -131,7 +131,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         else if (Traffic.RobotIsInArea("VIM", robot.properties.pose.Position))
                         {
-                                Pose endPose = BfToBf.GetFrontLineBuffer_BufferReturn(order.dataRequest_BufferReturn);
+                                Pose endPose = BfToBf.GetFrontLineBufferReturn_BRB401(order.dataRequest_BufferReturn);
                                 if (rb.SendPoseStamped(endPose))
                                 {
                                     StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM;
@@ -143,7 +143,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         else if (Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position))
                         {
-                            if (rb.SendPoseStamped(BfToBf.GetCheckInBuffer_BufferReturn(order.dataRequest_BufferReturn)))
+                            if (rb.SendPoseStamped(BfToBf.GetCheckInBufferReturn_BRB401(order.dataRequest_BufferReturn)))
                             {
                                 StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_A;
                                 robot.ShowText("BUFTOBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_A");
@@ -161,7 +161,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             }
                             else
                             {
-                                if (rb.SendPoseStamped(BfToBf.GetCheckInBuffer_BufferReturn(order.dataRequest_BufferReturn)))
+                                if (rb.SendPoseStamped(BfToBf.GetCheckInBufferReturn_BRB401(order.dataRequest_BufferReturn)))
                                 {
                                     StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_A;
                                     robot.ShowText("BUFTOBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_A");
@@ -185,7 +185,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                 if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                 {
                                     resCmd = ResponseCommand.RESPONSE_NONE;
-                                    if (rb.SendPoseStamped(BfToBf.GetCheckInBuffer_BufferReturn(order.dataRequest_BufferReturn)))
+                                    if (rb.SendPoseStamped(BfToBf.GetCheckInBufferReturn_BRB401(order.dataRequest_BufferReturn)))
                                     {
                                         StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_A;
                                         robot.ShowText("BUFTOBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_A");
@@ -227,11 +227,11 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_ZONE_BUFFER_READY_A: // doi khu vuc buffer san sang de di vao
                         try
                         {
-                            if (false == robot.CheckInZoneBehavior(BfToBf.GetAnyPointInBuffer_BufferReturn(order.dataRequest).Position))
+                            if (false == robot.CheckInZoneBehavior(BfToBf.GetAnyPointInBufferReturn_BRB401(order.dataRequest).Position))
                             {
 
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                                if (rb.SendPoseStamped(BfToBf.GetFrontLineBuffer_BufferReturn(order.dataRequest_BufferReturn)))
+                                if (rb.SendPoseStamped(BfToBf.GetFrontLineBufferReturn_BRB401(order.dataRequest_BufferReturn)))
                                 {
                                     StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A;
                                     robot.ShowText("BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A");
@@ -249,6 +249,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             break;
                         }
+                        else
+                        {
+                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                        }
                         try
                         {
                             //bool onComePoint2 = robot.ReachedGoal();
@@ -261,7 +265,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                if (rb.SendCmdAreaPallet(BfToBf.GetInfoOfPalletBuffer_BufferReturn(PistonPalletCtrl.PISTON_PALLET_UP, order.dataRequest_BufferReturn)))
+                                if (rb.SendCmdAreaPallet(BfToBf.GetInfoOfPalletBufferReturn_BRB401(PistonPalletCtrl.PISTON_PALLET_UP, order.dataRequest_BufferReturn)))
                                 {
                                     StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_PICKUP_PALLET_BUFFER_A;
                                     robot.ShowText("BUFTOBUF_ROBOT_WAITTING_PICKUP_PALLET_BUFFER_A");
@@ -287,7 +291,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                if (rb.SendCmdAreaPallet(BfToBf.GetInfoOfPalletBuffer_BufferReturn(PistonPalletCtrl.PISTON_PALLET_UP,order.dataRequest_BufferReturn)))
+                                if (rb.SendCmdAreaPallet(BfToBf.GetInfoOfPalletBufferReturn_BRB401(PistonPalletCtrl.PISTON_PALLET_UP,order.dataRequest_BufferReturn)))
                                 {
                                     StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_PICKUP_PALLET_BUFFER_A;
                                     robot.ShowText("BUFTOBUF_ROBOT_WAITTING_PICKUP_PALLET_BUFFER_A");
@@ -325,7 +329,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                                if (rb.SendPoseStamped(BfToBf.GetCheckInBuffer_Buffer401(order.dataRequest_Buffer401)))
+                                if (rb.SendPoseStamped(BfToBf.GetCheckInBuffer401_BRB401(order.dataRequest_Buffer401)))
                                 {
                                     StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_B;
                                     robot.ShowText("BUFTOBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_B");
@@ -353,7 +357,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             robot.ShowText("BUFTOBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_B");
                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
                             registryRobotJourney.startPoint = robot.properties.pose.Position;
-                            registryRobotJourney.endPoint = BfToBf.GetFrontLineBuffer_BufferB401(order.dataRequest_Buffer401).Position;
+                            registryRobotJourney.endPoint = BfToBf.GetFrontLineBuffer401_BRB401(order.dataRequest_Buffer401).Position;
                         }
                         break;
                     case BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_ZONE_BUFFER_READY_B: // doi khu vuc buffer san sang de di vao
@@ -363,11 +367,15 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             {
                                 break;
                             }
-                            if (false == robot.CheckInZoneBehavior(BfToBf.GetAnyPointInBuffer_Buffer401(order.dataRequest_Buffer401).Position))
+                            else
+                            {
+                                TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                            }
+                            if (false == robot.CheckInZoneBehavior(BfToBf.GetAnyPointInBuffer401_BRB401(order.dataRequest_Buffer401).Position))
                             {
 
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                                if (rb.SendPoseStamped(BfToBf.GetFrontLineBuffer_BufferB401(order.dataRequest_Buffer401)))
+                                if (rb.SendPoseStamped(BfToBf.GetFrontLineBuffer401_BRB401(order.dataRequest_Buffer401)))
                                 {
                                     StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B;
                                     robot.ShowText("BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B");
@@ -393,7 +401,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                if (rb.SendCmdAreaPallet(BfToBf.GetInfoOfPalletBuffer_BufferB401(PistonPalletCtrl.PISTON_PALLET_DOWN,order.dataRequest_Buffer401)))
+                                if (rb.SendCmdAreaPallet(BfToBf.GetInfoOfPalletBuffer401_BRB401(PistonPalletCtrl.PISTON_PALLET_DOWN,order.dataRequest_Buffer401)))
                                 {
                                     StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER_B;
                                     robot.ShowText("BUFTOBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER_B");

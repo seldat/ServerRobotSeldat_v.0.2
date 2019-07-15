@@ -180,6 +180,10 @@ namespace SeldatMRMS
                             {
                                 break;
                             }
+                            else
+                            {
+                                TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                            }
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             //if (robot.ReachedGoal())
                             {
@@ -308,6 +312,10 @@ namespace SeldatMRMS
                             if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                             {
                                 break;
+                            }
+                            else
+                            {
+                                TrafficRountineConstants.DetectRelease(registryRobotJourney);
                             }
                             if (false == robot.CheckInZoneBehavior(BfToRe.GetFrontLineReturn().Position))
                             {

@@ -245,6 +245,10 @@ namespace SeldatMRMS
                         {
                             break;
                         }
+                        else
+                        {
+                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                        }
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -286,6 +290,10 @@ namespace SeldatMRMS
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
+                        }
+                        else
+                        {
+                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         }
                         try
                         {

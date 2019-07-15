@@ -246,7 +246,10 @@ namespace SeldatMRMS
                         {
                             break;
                         }
-
+                        else
+                        {
+                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                        }
                         if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_LEFT))
                         {
                             Stopwatch sw = new Stopwatch();
@@ -289,6 +292,10 @@ namespace SeldatMRMS
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
+                        }
+                        else
+                        {
+                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         }
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
@@ -340,6 +347,10 @@ namespace SeldatMRMS
                         if(TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
+                        }
+                        else
+                        {
+                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         }
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
@@ -418,6 +429,10 @@ namespace SeldatMRMS
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
+                        }
+                        else
+                        {
+                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         }
                         String destination = Traffic.DetermineArea(registryRobotJourney.endPoint);
                         if (destination.Equals("OUTER"))

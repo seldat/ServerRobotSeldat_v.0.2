@@ -155,13 +155,6 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             CheckUserHandleError(this);
                         }
                         break;
-                    // case MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_PICKUP_PALLET_MACHINE:
-                    //     if (true == rb.CheckPointDetectLine(BfToBufRe.GetPointPallet(), rb))
-                    //     {
-                    //         rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_LINEDETECT_COMING_POSITION);
-                    //         StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
-                    //     }
-                    //     break;
                     case MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE:
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
                         {
@@ -183,7 +176,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                                if (rb.SendPoseStamped(BfToBufRe.GetCheckInReturn()))
+                                if (rb.SendPoseStamped(BfToBufRe.GetCheckInBufferReturn_MBR(order.dataRequest)))
                                 {
                                     StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_CHECKIN_BUFFER_RETURN;
                                     robot.ShowText("MACBUFRET_ROBOT_GOTO_CHECKIN_RETURN");
@@ -203,10 +196,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         break;
                     case MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_CHECKIN_BUFFER_RETURN: // dang di
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
-                        //if (robot.ReachedGoal())
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             rb.UpdateRiskAraParams(0, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
                             StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_CAME_CHECKIN_BUFFER_RETURN;
                             robot.ShowText("MACBUFRET_ROBOT_CAME_CHECKIN_RETURN");
@@ -215,13 +206,13 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case MachineToBufferReturn.MACBUFRET_ROBOT_CAME_CHECKIN_BUFFER_RETURN: // đã đến vị trí
                         try
                         {
-
-                            if (false == robot.CheckInZoneBehavior(BfToBufRe.GetFrontLineBuffer().Position))
+                            Pose frontlinePose = BfToBufRe.GetFrontLineBufferReturn_MBR(order.dataRequest);
+                            if (false == robot.CheckInZoneBehavior(frontlinePose.Position))
                             {
                                 Global_Object.onFlagRobotComingGateBusy = true;
                                 rb.UpdateRiskAraParams(40, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                                if (rb.SendPoseStamped(BfToBufRe.GetFrontLineReturn()))
+                                if (rb.SendPoseStamped(frontlinePose))
                                 {
                                     StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_BUFFER_RETURN;
                                     robot.ShowText("MACBUFRET_ROBOT_GOTO_FRONTLINE_RETURN");
@@ -242,7 +233,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
 
-                                if (rb.SendCmdAreaPallet(BfToBufRe.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_DOWN)))
+                                if (rb.SendCmdAreaPallet(BfToBufRe.GetInfoOfPalletBufferReturn_MBR(PistonPalletCtrl.PISTON_PALLET_DOWN,order.dataRequest)))
                                 {
                                     //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                     StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
@@ -261,31 +252,6 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             CheckUserHandleError(this);
                         }
                         break;
-                    // case MachineToBufferReturn.MACBUFRET_ROBOT_CAME_CHECKIN_RETURN: // đã đến vị trí
-                    //     if (false == Traffic.HasRobotUnityinArea(BfToBufRe.GetFrontLineReturn().Position))
-                    //     {
-                    //         rb.SendPoseStamped(BfToBufRe.GetFrontLineReturn());
-                    //         StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET;
-                    //     }
-                    //     break;
-                    // case MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET:
-                    //     if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
-                    //     {
-                    //         resCmd = ResponseCommand.RESPONSE_NONE;
-                    //         StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET;
-                    //     }
-                    //     break;
-                    // case MachineToBufferReturn.MACBUFRET_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET:  // đang trong tiến trình dò line và thả pallet
-                    //     rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETDOWN);
-                    //     StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_GOTO_POINT_DROP_PALLET;
-                    //     break;
-                    // case MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_GOTO_POINT_DROP_PALLET:
-                    //     if (true == rb.CheckPointDetectLine(BfToRe.GetPointPallet(), rb))
-                    //     {
-                    //         rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_LINEDETECT_COMING_POSITION);
-                    //         StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
-                    //     }
-                    //     break;
                     case MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET:
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETDOWN)
                         {

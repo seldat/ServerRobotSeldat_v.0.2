@@ -201,9 +201,165 @@ namespace SelDatUnilever_Ver1
                 if (sw.ElapsedMilliseconds > ms) break;
             }
         }
+
+        #region [ Check In, AnyPoint, FrontLine, GetPalletInfo ] [MAchine to Buffer Return]  
+        #region GET CHECK IN BUFFERRETURN [Machine to Buffer Return]
+        public Pose GetCheckInBufferReturn_MBR(String dataReq)
+        {
+            Pose poseTemp = null;
+            try
+            {
+                String collectionData = RequestDataProcedure(dataReq, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    foreach (var result in results)
+                    {
+                        int deviceId = (int)result["deviceId"];
+                        if (deviceId == order.deviceId)
+                        {
+                            foreach (var buffer in result["buffers"])
+                            {
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        String checkinResults = (String)buffer["bufferCheckIn"];
+                                        JObject stuff = JObject.Parse(checkinResults);
+                                        double x = (double)stuff["checkin"]["x"];
+                                        double y = (double)stuff["checkin"]["y"];
+                                        double angle = (double)stuff["checkin"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                        planId = order.planId;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                            }
+                        }
+                    }
+
+
+                }
+            }
+            catch { Console.WriteLine("Error check in data collection"); }
+            return poseTemp;
+        }
+        #endregion
+        #region GET FRONT LINE BUFFER [ Machine to BufferReturn]
+        public Pose GetFrontLineBufferReturn_MBR(String dataReq)
+        {
+            Pose poseTemp = null;
+            try
+            {
+                String collectionData = RequestDataProcedure(dataReq, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    foreach (var result in results)
+                    {
+                        int deviceId = (int)result["deviceId"];
+                        if (deviceId == order.deviceId)
+                        {
+                            //var bufferResults = result["buffers"][0];
+                            foreach (var buffer in result["buffers"])
+                            {
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        //JObject stuff = JObject.Parse((String)buffer["pallets"][0]["dataPallet"]);
+                                        var palletInfo = buffer["pallets"][0];
+                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                        double x = (double)stuff["line"]["x"];
+                                        double y = (double)stuff["line"]["y"];
+                                        double angle = (double)stuff["line"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                            }
+                        }
+                    }
+                }
+                //  Console.WriteLine(""+poseTemp.Position.ToString());
+            }
+            catch
+            {
+                Console.WriteLine("Error Front Line");
+            }
+            return poseTemp;
+        }
+        #endregion
+        #region GET PALLET INFO BUFFER [ Machine to BufferReturn]
+        public String GetInfoOfPalletBufferReturn_MBR(TrafficRobotUnity.PistonPalletCtrl pisCtrl, String dataReq)
+        {
+            JInfoPallet infoPallet = new JInfoPallet();
+            try
+            {
+                String collectionData = RequestDataProcedure(dataReq, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    foreach (var result in results)
+                    {
+                        int deviceId = (int)result["deviceId"];
+                        if (deviceId == order.deviceId)
+                        {
+
+                            //var bufferResults = result["buffers"][0];
+                            foreach (var buffer in result["buffers"])
+                            {
+                                int bufferId = (int)buffer["bufferId"];
+                                if (bufferId == order.bufferId)
+                                {
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        var palletInfo = buffer["pallets"][0];
+                                        palletId = (int)palletInfo["palletId"];
+                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                        int row = (int)stuff["pallet"]["row"];
+                                        int bay = (int)stuff["pallet"]["bay"];
+                                        int directMain = (int)stuff["pallet"]["dir_main"];
+                                        int directSub = (int)stuff["pallet"]["dir_sub"];
+                                        int directOut = (int)stuff["pallet"]["dir_out"];
+                                        int line_ord = (int)stuff["pallet"]["line_ord"];
+                                        string subline = (string)stuff["pallet"]["hasSubLine"];
+
+                                        infoPallet.pallet = pisCtrl; /* dropdown */
+                                        infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
+                                        infoPallet.bay = bay;
+                                        infoPallet.hasSubLine = subline; /* yes or no */
+                                        infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
+                                        infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
+                                        infoPallet.row = row;
+                                        infoPallet.line_ord = line_ord;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Error at GetInfoOfPalletBuffer");
+                return "";
+            }
+            return JsonConvert.SerializeObject(infoPallet);
+        }
+        #endregion
+        #endregion
+
         #region [ Check In, AnyPoint, FrontLine, GetPalletInfo ] [BufferReturn to Buffer401]  
         #region GET CHECK IN BUFFERRETURN [ BufferReturn to Buffer401]
-        public Pose GetCheckInBuffer_BufferReturn(String dataReq)
+        public Pose GetCheckInBufferReturn_BRB401(String dataReq)
         {
             Pose poseTemp = null;
             try
@@ -250,7 +406,7 @@ namespace SelDatUnilever_Ver1
         }
         #endregion
         #region GET ANY POINT BUFFER [ BufferReturn to Buffer401]
-        public Pose GetAnyPointInBuffer_BufferReturn(String dataReq) // đổi 
+        public Pose GetAnyPointInBufferReturn_BRB401(String dataReq) // đổi 
         {
 
             Pose poseTemp = null;
@@ -300,7 +456,7 @@ namespace SelDatUnilever_Ver1
         }
         #endregion
         #region GET FRONT LINE BUFFER [ BufferReturn to Buffer401]
-        public Pose GetFrontLineBuffer_BufferReturn(String dataReq)
+        public Pose GetFrontLineBufferReturn_BRB401(String dataReq)
         {
             Pose poseTemp = null;
             try
@@ -350,7 +506,7 @@ namespace SelDatUnilever_Ver1
         }
         #endregion
         #region GET PALLET INFO BUFFER [ BufferReturn to Buffer401]
-        public String GetInfoOfPalletBuffer_BufferReturn(TrafficRobotUnity.PistonPalletCtrl pisCtrl,String dataReq)
+        public String GetInfoOfPalletBufferReturn_BRB401(TrafficRobotUnity.PistonPalletCtrl pisCtrl,String dataReq)
         {
             JInfoPallet infoPallet = new JInfoPallet();
             try
@@ -414,7 +570,7 @@ namespace SelDatUnilever_Ver1
         #endregion
 
         #region GET CHECK IN BUFFER401 [ BufferReturn to Buffer401]
-        public Pose GetCheckInBuffer_Buffer401(String dataReq)
+        public Pose GetCheckInBuffer401_BRB401(String dataReq)
         {
             Pose poseTemp = null;
             try
@@ -459,7 +615,7 @@ namespace SelDatUnilever_Ver1
         #endregion
 
         #region GET ANY POINT BUFFER [ BufferReturn to Buffer401]
-        public Pose GetAnyPointInBuffer_Buffer401(String dataReq) // đổi 
+        public Pose GetAnyPointInBuffer401_BRB401(String dataReq) // đổi 
         {
 
             Pose poseTemp = null;
@@ -506,7 +662,7 @@ namespace SelDatUnilever_Ver1
         #endregion
 
         #region GET FRONT LINE BUFFER [ BufferReturn to Buffer401]
-        public Pose GetFrontLineBuffer_BufferB401(String dataReq)
+        public Pose GetFrontLineBuffer401_BRB401(String dataReq)
         {
             Pose poseTemp = null;
             try
@@ -553,7 +709,7 @@ namespace SelDatUnilever_Ver1
         #endregion
 
         #region GET PALLET INFO BUFFER401 [ BufferReturn to Buffer401]
-        public String GetInfoOfPalletBuffer_BufferB401(TrafficRobotUnity.PistonPalletCtrl pisCtrl, String dataReq)
+        public String GetInfoOfPalletBuffer401_BRB401(TrafficRobotUnity.PistonPalletCtrl pisCtrl, String dataReq)
         {
             JInfoPallet infoPallet = new JInfoPallet();
             try

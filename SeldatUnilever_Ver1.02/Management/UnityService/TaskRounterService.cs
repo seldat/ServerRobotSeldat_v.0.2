@@ -149,7 +149,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 }
                                 else
                                     return null;
-                            case TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_MACHINE_TO_BUFFERRETURN:
+                            case TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN:
                                 return item;
                             case TyeRequest.TYPEREQUEST_PALLETEMPTY_MACHINE_TO_RETURN:
                                 if (CheckAvailableFrontLineReturn(item) != null)

@@ -464,6 +464,32 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             }
             return false;
         }
+        public static bool DetectRelease(RegistryRobotJourney rrj)
+        {
+            // xác định khu vực release
+            String destOP = rrj.traffic.DetermineArea(rrj.endPoint,TypeZone.MAIN_ZONE);
+            switch (destOP)
+            {
+                case "OUTER":
+                    // release khi robot vào vùng OUTER
+                    if(rrj.traffic.HasRobotUnityinArea("OUTER",rrj.robot))
+                    {
+                        ReleaseAll(rrj.robot);
+                        return true;
+                    }
+                    break;
+                case "VIM":
+                    // xác định vùng đến cuối trong VIM.
+                    String endPointName= rrj.traffic.DetermineArea(rrj.endPoint, TypeZone.OPZS);
+                    if (rrj.traffic.HasRobotUnityinArea(endPointName, rrj.robot))
+                    {
+                        ReleaseAll(rrj.robot);
+                        return true;
+                    }
+                    break;
+            }
+            return false;
+        }
         public static bool DetetectInsideStationCheck(RegistryRobotJourney rrj)
         {
             // xác định vùng đặt biệt trước khi bắt đầu frontline

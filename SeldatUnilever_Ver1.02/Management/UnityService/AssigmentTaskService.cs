@@ -217,7 +217,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             {
                 procedureService.Register(ProcedureItemSelected.PROCEDURE_FORLIFT_TO_MACHINE, robot, orderItem);
             }
-            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_MACHINE_TO_BUFFERRETURN)
+            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN)
             {
                // procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_RETURN, robot, orderItem);
             }

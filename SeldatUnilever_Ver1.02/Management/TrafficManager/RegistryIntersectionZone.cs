@@ -79,7 +79,8 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         }
         public void Release(RobotUnity robot)
         {
-            Remove(robot);
+            if(Registryrobotlist.Contains(robot))
+               Remove(robot);
         }
         public bool ProcessRegistryIntersectionZone(RobotUnity robot) // 
         {

@@ -71,14 +71,13 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             TYPEREQUEST_CLOSE_FRONTDOOR_RETURN_PALLET = 10,
             TYPEREQUEST_CLEAR_FORLIFT_TO_BUFFER = 11,
             TYPEREQUEST_FORLIFT_TO_MACHINE = 12, // forlift to machine
-            TYPEREQUEST_WMS_RETURN_PALLET_MACHINE_TO_BUFFERRETURN = 13, // machine to bufferreturn
+            TYPEREQUEST_MACHINE_TO_BUFFERRETURN = 13, // machine to bufferreturn
             TYPEREQUEST_CHARGE = 14, // santao jujeng cap bottle
             TYPEREQUEST_GOTO_READY = 15, // goto ready
             TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET_GATE_2 = 16,
             TYPEREQUEST_CLOSE_FRONTDOOR_DELIVERY_PALLET_GATE_2 = 17,
-            TYPEREQUEST_WMS_RETURN_PALLET_GATE = 18, // 
+            TYPEREQUEST_WMS_RETURN_PALLET_BUFFER_TO_GATE = 18, // 
             TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401 = 19, // 
-            TYPEREQUEST_WMS_RETURN_PALLET_BUFFER_TO_GATE = 20, // 
         }
         public enum TabletConTrol
         {
@@ -476,8 +475,11 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     order.deviceId = (int)results["deviceId"];
                     order.productDetailId = (int)results["productDetailId"];
                     order.productId = (int)results["productId"];
-                    order.timeWorkId = (int)results["timeWorkId"];
+                    order.timeWorkId =1;
                     order.activeDate = (string)results["activeDate"];
+                    order.planId = (int)results["planId"];
+                    order.palletId = (int)results["palletId"];
+                    //order.activeDate = (string)results["activeDate"];
                     // order.palletStatus = (String)results["palletStatus"];
                     dynamic product = new JObject();
                     product.timeWorkId = order.timeWorkId;
@@ -489,45 +491,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     product.palletStatus = PalletStatus.W.ToString();
                     order.dataRequest = product.ToString();
                     order.status = StatusOrderResponseCode.PENDING;
-                    PendingOrderList.Add(order);
-                    OrderedItemList.Add(order);
-                }
-                #endregion
-                #region TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN
-                else if (typeReq == (int)TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_MACHINE_TO_BUFFERRETURN)
-                {
-                    // tạo plan vùng buffer return
-                    OrderItem order = new OrderItem();
-                    order.typeReq = (TyeRequest)typeReq;
-                    order.userName = (String)results["userName"];
-                    order.productDetailId = (int)results["productDetailId"];
-                    order.productDetailName = (String)results["productDetailName"];
-                    order.productId = (int)results["productId"];
-                    // order.planId = (int)results["planId"];
-                    int deviceId= getDeviceId("RETURN_MAIN 0");
-                    if (deviceId>0)
-                    {
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, content = "" };
-                        return statusOrderResponse;
-                    }
-                    order.deviceId = deviceId;  // Buffer Return
-                    order.bufferId = (int)results["bufferId"];
-                    order.deviceIdPut = (int)results["deviceIdPut"];
-                    order.bufferIdPut = (int)results["bufferIdPut"];
-                    order.activeDate = (string)results["activeDate"];
-                    order.timeWorkId = 1;
-                    dynamic product = new JObject();
-                    product.timeWorkId = order.timeWorkId;
-                    product.activeDate = order.activeDate;
-                    order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
-                    product.productId = order.productId;
-                    product.productDetailId = order.productDetailId;
-                    // chu y sua 
-                    product.palletStatus = PalletStatus.P.ToString(); // W
-                 //   product.deviceId = order.deviceId;
-                    order.dataRequest = product.ToString();
-                    order.status = StatusOrderResponseCode.PENDING;
-                    if (Convert.ToInt32(CreatePlanBuffer(order)) > 0)
+                    if (UpdatePalletStatusReturnBufferToGate(order))
                     {
                         PendingOrderList.Add(order);
                         OrderedItemList.Add(order);
@@ -539,6 +503,57 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     }
                 }
                 #endregion
+                #region TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN)
+                {
+                    int len = (int)results["length"];
+                    for (int i = 0; i < len; i++)
+                    {
+                        // tạo plan vùng buffer return
+                        OrderItem order = new OrderItem();
+                        order.typeReq = (TyeRequest)typeReq;
+                        order.userName = (String)results["userName"];
+                        order.productDetailId = (int)results["productDetailId"];
+                        order.productDetailName = (String)results["productDetailName"];
+                        order.productId = (int)results["productId"];
+                        // order.planId = (int)results["planId"];
+                        int deviceId = getDeviceId("RETURN_MAIN 0");
+                        if (deviceId < 0)
+                        {
+                            statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, content = "" };
+                            return statusOrderResponse;
+                        }
+                        order.deviceId = deviceId;  // Buffer Return
+                        order.timeWorkId = 1;
+                        String jsonDPst = (string)results["datapallet"][i];
+                        JObject stuffPallet = JObject.Parse(jsonDPst);
+                        double xx = (double)stuffPallet["line"]["x"];
+                        double yy = (double)stuffPallet["line"]["y"];
+                        double angle = (double)stuffPallet["line"]["angle"];
+                        int row = (int)stuffPallet["pallet"]["row"];
+                        int bay = (int)stuffPallet["pallet"]["bay"];
+                        int directMain = (int)stuffPallet["pallet"]["dir_main"];
+                        int directSub = (int)stuffPallet["pallet"]["dir_sub"];
+                        int dir_out = (int)stuffPallet["pallet"]["dir_out"];
+                        int line_ord = (int)stuffPallet["pallet"]["line_ord"];
+                        order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
+                        order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub, directOut = dir_out, line_ord = line_ord };
+                        dynamic product = new JObject();
+                        product.timeWorkId = order.timeWorkId;
+                        product.activeDate = order.activeDate;
+                        order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
+                        product.productId = order.productId;
+                        product.productDetailId = order.productDetailId;
+                        // chu y sua 
+                        product.palletStatus = PalletStatus.P.ToString();
+                        order.dataRequest = product.ToString();
+                        order.status = StatusOrderResponseCode.PENDING;
+                        PendingOrderList.Add(order);
+                        OrderedItemList.Add(order);
+                    }
+                   
+                }
+                #endregion
                 #region TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401)
                 {
@@ -548,25 +563,67 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     order.productDetailId = (int)results["productDetailId"];
                     order.productDetailName = (String)results["productDetailName"];
                     order.productId = (int)results["productId"];
-                    // order.planId = (int)results["planId"];
+                    order.planId = (int)results["planId"];
                     order.deviceId = (int)results["deviceId"];
                     order.bufferId = (int)results["bufferId"];
+                    order.deviceIdPut = (int)results["deviceIdPut"];
+                    order.bufferIdPut = (int)results["bufferIdPut"];
                     order.timeWorkId = 1;
+                    order.activeDate = (string)results["activeDate"];
+                    order.palletId = (int)results["palletId"];
                     // order.activeDate = (string)DateTime.Now.ToString("yyyy-MM-dd");
                     // order.palletStatus = (String)results["palletStatus"];
-                    dynamic product = new JObject();
-                    product.timeWorkId = order.timeWorkId;
-                    product.activeDate = order.activeDate;
-                    order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
-                    product.productId = order.productId;
-                    product.productDetailId = order.productDetailId;
-                    // chu y sua 
-                    product.palletStatus = PalletStatus.W.ToString(); // W
-                    //product.deviceId = order.deviceId;
-                    order.dataRequest = product.ToString();
                     order.status = StatusOrderResponseCode.PENDING;
-                    PendingOrderList.Add(order);
-                    OrderedItemList.Add(order);
+
+                    PlanDataRequest planDataRequest_B401 = new PlanDataRequest();
+                    planDataRequest_B401.activeDate = order.activeDate;
+                    planDataRequest_B401.deviceId = order.deviceIdPut;
+                    planDataRequest_B401.productDetailId= order.productDetailId;
+                    planDataRequest_B401.productId= order.productId;
+                    
+
+                    UpdatePalletRequest updatePalletRequest_BufferReturn = new UpdatePalletRequest();
+                    updatePalletRequest_BufferReturn.planId = order.planId;
+                    updatePalletRequest_BufferReturn.palletStatus = "H";
+                    updatePalletRequest_BufferReturn.palletId = order.palletId;
+
+                    bool onUpdateBR = UpdatePalletStatusToHoldBufferReturn_BRB401(updatePalletRequest_BufferReturn);
+                    bool onPlanB401 = CreatePlanBuffer401(planDataRequest_B401);
+
+                    dynamic product_B401 = new JObject();
+                    product_B401.timeWorkId = order.timeWorkId;
+                    product_B401.activeDate = order.activeDate;
+                    order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
+                    product_B401.productId = order.productId;
+                    product_B401.productDetailId = order.productDetailId;
+                    // chu y sua 
+                    product_B401.palletStatus = PalletStatus.P.ToString();
+                    order.dataRequest_Buffer401 = product_B401.ToString();
+
+                    dynamic product_BR = new JObject();
+                    product_BR.timeWorkId = order.timeWorkId;
+                    product_BR.activeDate = order.activeDate;
+                    order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
+                    product_BR.productId = order.productId;
+                    product_BR.productDetailId = order.productDetailId;
+                    // chu y sua 
+                    product_BR.palletStatus = PalletStatus.H.ToString();
+                    order.dataRequest_BufferReturn = product_BR.ToString();
+
+                    if (onUpdateBR && onPlanB401)
+                    {
+                        PendingOrderList.Add(order);
+                        OrderedItemList.Add(order);
+                    }
+                    else
+                    {
+                        FreePlanedBuffer(order.dataRequest_Buffer401, order.planId);
+                        updatePalletRequest_BufferReturn.palletStatus = "W";
+                        UpdatePalletState(updatePalletRequest_BufferReturn);
+                    }
+
+
+
                 }
                 #endregion
                 #region TYPEREQUEST_CLEAR
