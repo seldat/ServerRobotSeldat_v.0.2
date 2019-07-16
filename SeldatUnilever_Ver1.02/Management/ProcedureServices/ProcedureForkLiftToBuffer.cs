@@ -100,7 +100,7 @@ namespace SeldatMRMS
             robot.robotTag = RobotStatus.IDLE;
             // StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
             StateForkLift = ForkLift.FORMAC_ROBOT_DESTROY;
-
+            TrafficRountineConstants.ReleaseAll(robot);
 
         }
 
@@ -179,7 +179,9 @@ namespace SeldatMRMS
                         }
                         else if (Traffic.RobotIsInArea("VIM",robot.properties.pose.Position))
                         {
-                            // đi tới đầu line cổng theo tọa độ chỉ định. gate 1 , 2, 3
+                            // Kiểm Tra Robot có đứng trong Khu Vực VIM : GATE3, ELEVATOR, VIM-BTLCAP
+                            // gửi tới vị trí đầu line tương ứng của gate
+                            robot.robotTag = RobotStatus.WORKING;
                             if (rb.SendPoseStamped(ds.config.PointFrontLine))
                             {
                                 StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM;
@@ -193,9 +195,10 @@ namespace SeldatMRMS
                         else if (Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position))
                         {
                             // public void Start (ForkLiftToBuffer state = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED) {
-                           
+                            robot.robotTag = RobotStatus.WORKING;
                             if (rb.SendPoseStamped(ds.config.PointCheckInGate))
                             {
+                                
                                 StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
@@ -205,50 +208,11 @@ namespace SeldatMRMS
                         }
 
                         break;
-                    case ForkLift.FORBUF_ROBOT_GOTO_CHECKIN_GATE: //gui toa do di den khu vuc checkin cong
-                        if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
-                        {
-                            if (false == rb.CheckInGateFromReadyZoneBehavior(ds.config.PointFrontLine.Position))
-                            {
-                              
-                                robot.ShowText("FORBUF_ROBOT_GOTO_BACK_FRONTLINE_READY");
-                                StateForkLift = ForkLift.FORBUF_ROBOT_GOTO_BACK_FRONTLINE_READY;
-
-                            }
-                        }
-                        else
-                        {
-                            robot.robotTag = RobotStatus.WORKING;
-                            if (Traffic.RobotIsInArea("OPA4", rb.properties.pose.Position))
-                            {
-                                if (rb.SendPoseStamped(ds.config.PointFrontLine))
-                                {
-                                    StateForkLift = ForkLift.FORBUF_ROBOT_CAME_CHECKIN_GATE;
-                                    robot.ShowText("FORBUF_ROBOT_CAME_CHECKIN_GATE");
-                                }
-                            }
-                            else
-                            {
-
-                                if (rb.SendPoseStamped(ds.config.PointCheckInGate))
-                                {
-                                    StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
-                                    robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE");
-                                }
-                            }
-                        }
-                 
-                        break;
-
                     case ForkLift.FORBUF_ROBOT_GOTO_BACK_FRONTLINE_READY:
 
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
-                        }
-                        else
-                        {
-                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         }
                         if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_LEFT))
                         {
@@ -260,6 +224,7 @@ namespace SeldatMRMS
 
                                 {
                                     resCmd = ResponseCommand.RESPONSE_NONE;
+                                    robot.robotTag = RobotStatus.WORKING;
                                     if (rb.SendPoseStamped(ds.config.PointFrontLine))
                                     {
                                         StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE;
@@ -289,14 +254,6 @@ namespace SeldatMRMS
                         }
                         break;
                    case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE:
-                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
-                        }
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
                          
@@ -309,6 +266,10 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_CAME_CHECKIN_GATE: // đã đến vị trí, kiem tra va cho khu vuc cong san sang de di vao.
                                                                   // robot.ShowText( "FORBUF_ROBOT_WAITTING_GOTO_GATE ===> FLAG " + Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position));
+                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                        {
+                            break;
+                        }
                         if (false == robot.CheckInZoneBehavior(ds.config.PointFrontLine.Position))
                         {
                             if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
@@ -330,8 +291,9 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE:
+                        // dò ra điểm đích đến và xóa đăng ký vùng
+                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
-                        //if ( robot.ReachedGoal())
                         {
                            // robot.setTrafficAllCircles(false, false, false, false);
                             TrafficRountineConstants.RegIntZone_READY.Release(robot);
@@ -350,6 +312,7 @@ namespace SeldatMRMS
                         }
                         else
                         {
+                            // dò ra điểm đích đến và xóa đăng ký vùng
                             TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         }
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
@@ -425,29 +388,38 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_REG_GOOUT_SPECIALZONE:
-                        //cap nhat lai diem cuoi   
-                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+
+                        String destination = "";
+                        flToMachineInfo = GetPriorityTaskForkLiftToMachine(order.productId);
+                        if (flToMachineInfo == null)
                         {
-                            break;
+                            destination=Traffic.DetermineArea(FlToBuf.GetCheckInBuffer(true).Position, TypeZone.MAIN_ZONE);
+                            registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
+                            registryRobotJourney.startPoint = robot.properties.pose.Position;
+                            registryRobotJourney.endPoint = FlToBuf.GetCheckInBuffer(true).Position;
                         }
                         else
                         {
-                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                           
+                           destination = Traffic.DetermineArea(flToMachineInfo.frontLinePose.Position, TypeZone.MAIN_ZONE);
+                           registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
+                           registryRobotJourney.startPoint = robot.properties.pose.Position;
+                           registryRobotJourney.endPoint = flToMachineInfo.frontLinePose.Position;
+                           FreePlanedBuffer();
+                           StateForkLift = ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE;
+                           robot.ShowText("FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE");
                         }
-                        String destination = Traffic.DetermineArea(registryRobotJourney.endPoint);
                         if (destination.Equals("OUTER"))
                         {
-                            flToMachineInfo = GetPriorityTaskForkLiftToMachine(order.productId);
-                            if (flToMachineInfo == null)
+                             // đăng ký đi ra vùng đặt biệt
+                            if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                             {
-                                try
+                                break;
+                            }
+                            try
                                 {
                                     if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
                                     {
-                                        // xac dinh khu vuc den
-                                        // khu vuc VIM thi dang ky va den dau line
-                                        // khu vuc Outer thi dang ky ra va den check in
-
                                         if (rb.SendPoseStamped(FlToBuf.GetCheckInBuffer(true)))
 
                                         {
@@ -468,18 +440,15 @@ namespace SeldatMRMS
                                 {
                                     Console.WriteLine("Error at rb.SendPoseStamped(FlToBuf.GetCheckInBuffer(true)); ");
                                 }
-                            }
-                            else
-                            {
-
-                                FreePlanedBuffer();
-                                StateForkLift = ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE;
-                                robot.ShowText("FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE");
-                            }
+  
                         }
-                        else
+                        else if(destination.Equals("VIM"))
                         {
-                            // di toi Frontline
+                            // đăng ký đi ra vùng đặt biệt
+                            if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                            {
+                                break;
+                            }
                             if (rb.SendPoseStamped(FlToBuf.GetFrontLineBuffer(true)))
                             {
                                 StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
@@ -502,8 +471,11 @@ namespace SeldatMRMS
                             CheckUserHandleError(this);
                         }
                         break;
-                    case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
+                    case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: 
+                        // doi robot di den khu vuc checkin cua vung buffer
                         //Global_Object.onFlagDoorBusy = false;
+                        // xóa đăng ký vùng 
+                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         if (!Traffic.HasRobotUnityinArea("GATE_CHECKOUT", robot))
                         {
                             //robot.ShowText("RELEASED ZONE");
@@ -517,9 +489,6 @@ namespace SeldatMRMS
                             }
                         }
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
-                        //if (rb.checkNewPci())
-                        //{
-                        //    if (robot.ReachedGoal(rb.getPointCheckInConfirm()))
                         {
                            
                             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -552,6 +521,8 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
+                        // xóa đăng ký vùng
+                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         try
                         {
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
@@ -622,6 +593,10 @@ namespace SeldatMRMS
 
                     ///////////////////////////////////////////////////////
                     case ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE:
+                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                        {
+                            break;
+                        }
                         try
                         {
                        
@@ -645,6 +620,8 @@ namespace SeldatMRMS
                     case ForkLift.FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE:
                         try
                         {
+                            // xóa đăng ký vùng
+                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
                            // Global_Object.onFlagDoorBusy = false;
                             if (!Traffic.HasRobotUnityinArea("GATE_CHECKOUT", robot))
                             {
@@ -708,6 +685,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORMAC_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        TrafficRountineConstants.ReleaseAll(robot);
                         robot.orderItem = null;
                        // Global_Object.onFlagDoorBusy = false;
                         robot.SwitchToDetectLine(false);

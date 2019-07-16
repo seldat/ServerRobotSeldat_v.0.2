@@ -62,7 +62,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             TYPEREQUEST_FORLIFT_TO_BUFFER = 1,
             TYPEREQUEST_BUFFER_TO_MACHINE = 2,
             TYPEREQUEST_BUFFER_TO_RETURN = 3,
-            TYPEREQUEST_PALLETEMPTY_MACHINE_TO_RETURN = 4,
+            TYPEREQUEST_PALLET_EMPTY_MACHINE_TO_RETURN = 4,
             TYPEREQUEST_RETURN_TO_GATE = 5,
             TYPEREQUEST_CLEAR = 6,
             TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET_GATE_1 = 7,
@@ -425,7 +425,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 }
                 #endregion
                 #region TYPEREQUEST_MACHINE_TO_RETURN
-                else if (typeReq == (int)TyeRequest.TYPEREQUEST_PALLETEMPTY_MACHINE_TO_RETURN)
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_PALLET_EMPTY_MACHINE_TO_RETURN)
                 {
                     int len = (int)results["length"];
 
@@ -451,11 +451,6 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
                         order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub, directOut = dir_out, line_ord = line_ord };
                         dynamic product = new JObject();
-                        //   product.timeWorkId = order.timeWorkId;
-                        //   product.activeDate = order.activeDate;
-                        //   product.productId = order.productId;
-
-                        // chu y sua 
                         product.palletStatus = PalletStatus.F.ToString();
                         order.dataRequest = product.ToString();
                         order.status = StatusOrderResponseCode.PENDING;

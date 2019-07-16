@@ -394,31 +394,6 @@ namespace SeldatMRMS
                             CheckUserHandleError(this);
                         }
                         break;
-                    // case MachineToReturn.MACRET_ROBOT_CAME_CHECKIN_RETURN: // đã đến vị trí
-                    //     if (false == Traffic.HasRobotUnityinArea(BfToRe.GetFrontLineReturn().Position))
-                    //     {
-                    //         rb.SendPoseStamped(BfToRe.GetFrontLineReturn());
-                    //         StateMachineToReturn = MachineToReturn.MACRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET;
-                    //     }
-                    //     break;
-                    // case MachineToReturn.MACRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET:
-                    //     if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
-                    //     {
-                    //         resCmd = ResponseCommand.RESPONSE_NONE;
-                    //         StateMachineToReturn = MachineToReturn.MACRET_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET;
-                    //     }
-                    //     break;
-                    // case MachineToReturn.MACRET_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET:  // đang trong tiến trình dò line và thả pallet
-                    //     rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETDOWN);
-                    //     StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_GOTO_POINT_DROP_PALLET;
-                    //     break;
-                    // case MachineToReturn.MACRET_ROBOT_WAITTING_GOTO_POINT_DROP_PALLET:
-                    //     if (true == rb.CheckPointDetectLine(BfToRe.GetPointPallet(), rb))
-                    //     {
-                    //         rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_LINEDETECT_COMING_POSITION);
-                    //         StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_DROPDOWN_PALLET;
-                    //     }
-                    //     break;
                     case MachineToReturn.MACRET_ROBOT_WAITTING_DROPDOWN_PALLET:
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETDOWN)
                         {
