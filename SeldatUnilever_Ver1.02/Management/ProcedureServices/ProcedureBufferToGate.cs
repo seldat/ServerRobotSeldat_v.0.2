@@ -17,7 +17,7 @@ using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterSer
 
 namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 {
-    public class ProcedureBufferToGate : ProcedureControlServices
+    public class ProcedureBufferToGate : TrafficProcedureService
     {
         // DataBufferToGate points;
         BufferToGate StateBufferToGate;
@@ -29,7 +29,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
-        public ProcedureBufferToGate(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService traffiicService) : base(robot)
+        public ProcedureBufferToGate(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService traffiicService) : base(robot,doorservice,traffiicService)
         {
             StateBufferToGate = BufferToGate.BUFGATE_IDLE;
             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -74,7 +74,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             ProcedureBufferToGate BuffToGate = (ProcedureBufferToGate)ojb;
             RobotUnity rb = BuffToGate.robot;
             // DataBufferToGate p = BuffToGate.points;
-            DoorService ds = BuffToGate.door.DoorMezzamineReturn;
+            DoorService ds = getDoorService();
             TrafficManagementService Traffic = BuffToGate.Traffic;
             rb.mcuCtrl.TurnOnLampRb();
             robot.ShowText(" Start -> " + procedureCode);
@@ -337,6 +337,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateBufferToGate = BufferToGate.BUFGATE_SELECT_BEHAVIOR_ONZONE_TO_GATE;
+                            // cập nhật lại điểm xuất phát
+                            registryRobotJourney.startPoint = robot.properties.pose.Position;
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {

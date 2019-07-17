@@ -63,8 +63,11 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             private Int32 _IdStr;
             public Int32 IdStr { get => _IdStr; set { _IdStr = value; RaisePropertyChanged("IdStr"); } }
             public Pose PointFrontLine;
+            public Pose PointFrontLineInv;
             private String _PointFrontLineStr;
             public String PointFrontLineStr { get => _PointFrontLineStr; set { _PointFrontLineStr = value; RaisePropertyChanged("PointFrontLineStr"); } }
+            private String _PointFrontLineStrInv;
+            public String PointFrontLineStrInv { get => _PointFrontLineStrInv; set { _PointFrontLineStrInv = value; RaisePropertyChanged("PointFrontLineStrInv"); } }
             private String _PointOfPallet;
             public String PointOfPallet{ get => _PointOfPallet; set { _PointOfPallet = value; RaisePropertyChanged("PointOfPalletStr"); } }
             public void ParsePointFrontLineValue(String value)
@@ -75,6 +78,17 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
                     double yy = double.Parse(value.Split(',')[1]);
                     double angle = double.Parse(value.Split(',')[2]);
                     PointFrontLine = new Pose(xx,yy,angle);
+                }
+                catch { }
+            }
+            public void ParsePointFrontLineValueInv(String value)
+            {
+                try
+                {
+                    double xx = double.Parse(value.Split(',')[0]);
+                    double yy = double.Parse(value.Split(',')[1]);
+                    double angle = double.Parse(value.Split(',')[2]);
+                    PointFrontLineInv = new Pose(xx, yy, angle);
                 }
                 catch { }
             }

@@ -304,6 +304,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_BUFFER_RETURN_SELECT_ZONE;
+                                // cập nhật lại điểm xuất phát
+                                registryRobotJourney.startPoint = robot.properties.pose.Position;
                                 robot.ShowText("MACBUFRET_ROBOT_GOTO_CHECKIN_RETURN");
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)

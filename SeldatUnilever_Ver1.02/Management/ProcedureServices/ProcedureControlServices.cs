@@ -99,11 +99,12 @@ namespace SeldatMRMS {
             FORBUF_ROBOT_WAITTING_PICKUP_PALLET_IN, // doi robot gap hang
             FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE, //doi robot di tro lai dau line cong.
             // FORBUF_ROBOT_WAITTING_GOOUT_GATE, // doi robot di ra khoi cong
-            FORBUF_ROBOT_WAITTING_REG_GOOUT_SPECIALZONE, // doi dong cong.
+            FORBUF_ROBOT_CHECK_GOTO_BUFFER_OR_MACHINE, // doi dong cong.
             FORBUF_ROBOT_WAITTING_CLOSE_GATE, // doi dong cong.
             FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER, // doi robot di den khu vuc checkin cua vung buffer
             FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY, // doi khu vuc buffer san sang de di vao
             FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER, // den dau line buffer, chuyen mode do line
+            FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM, // den dau line buffer, chuyen mode do line
             // FORBUF_ROBOT_WAITTING_GOTO_POINT_BRANCHING, // doi khu vuc buffer san sang de di vao
             // FORBUF_ROBOT_CAME_POINT_BRANCHING, //den dau line pallet, gui chieu quay (trai phai), va toa do pallet (option)
             // FORBUF_ROBOT_GOTO_DROPDOWN_PALLET_BUFFER,
@@ -114,6 +115,7 @@ namespace SeldatMRMS {
             FORMAC_ROBOT_WAITTING_PICKUP_PALLET_IN, // doi robot gap hang
             FORMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE, //doi robot di tro lai dau line cong.
             FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE, // doi dong cong.
+            FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE_FROM_VIM, // doi dong cong.
             FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
             FORMAC_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE, // doi robot do line den pallet  va tha pallet
             FORMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE, // doi robot di den dau line buffer.
@@ -182,12 +184,14 @@ namespace SeldatMRMS {
             BUFTOBUF_ROBOT_WAITTING_ZONE_BUFFER_READY_A, // doi khu vuc buffer san sang de di vao
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A, // den dau line buffer, chuyen mode do line
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM, // den dau line buffer, chuyen mode do line
+            BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM_READY, // den dau line buffer, chuyen mode do line
             BUFTOBUF_ROBOT_WAITTING_PICKUP_PALLET_BUFFER_A, // doi robot do line den pallet  va tha pallet
             BUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_A, // doi robot di den dau line buffer.
 
             BUFTOBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_B, // doi robot di den khu vuc checkin cua vung buffer
-            BUFTOBUF_ROBOT_WAITTING_ZONE_BUFFER_READY_B, // doi khu vuc buffer san sang de di vao
+            BUFTOBUF_ROBOT_BUFFER_B_SELECT_ZONE, // doi khu vuc buffer san sang de di vao
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B, // den dau line buffer, chuyen mode do line
+            BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B_FROM_VIM, // den dau line buffer, chuyen mode do line
             BUFTOBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER_B, // doi robot do line den pallet  va tha pallet
             BUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_B, // doi robot di den dau line buffer.
             BUFTOBUF_ROBOT_DESTROY,
@@ -225,11 +229,12 @@ namespace SeldatMRMS {
             MACRET_ROBOT_GOTO_BACK_FRONTLINE_READY,
             MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
             MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM,
+            MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM_READY,
             // MACRET_ROBOT_GOTO_PICKUP_PALLET_MACHINE,
             MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE, // doi robot do line den pallet  va tha pallet
             MACRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE, // doi robot di den dau line buffer.
 
-            MACRET_ROBOT_GOTO_CHECKIN_RETURN_SELECT_BEHAVIOR_ONZONE,
+            MACRET_ROBOT_GOTO_RETURN_SELECT_BEHAVIOR_ONZONE,
             MACRET_ROBOT_GOTO_CHECKIN_RETURN, //cho
             MACRET_ROBOT_CAME_CHECKIN_RETURN, // đã đến vị trí
             MACRET_ROBOT_GOTO_FRONTLINE_RETURN,

@@ -394,6 +394,8 @@ namespace SeldatMRMS
                                 robot.SwitchToDetectLine(false);                              
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET_SELECT_ZONE;
+                                // cập nhật lại điểm xuất phát
+                                registryRobotJourney.startPoint = robot.properties.pose.Position;
                                 robot.ShowText("BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET");
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
