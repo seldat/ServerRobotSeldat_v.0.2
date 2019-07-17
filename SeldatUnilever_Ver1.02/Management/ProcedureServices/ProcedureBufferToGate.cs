@@ -85,52 +85,59 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case BufferToGate.BUFGATE_IDLE:
                         break;
                     case BufferToGate.BUFGATE_SELECT_BEHAVIOR_ONZONE:
-                         if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
+                        if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position,TypeZone.OPZS))
                         {
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
                             {
                                 StateBufferToGate = BufferToGate.BUFGATE_ROBOT_GOTO_BACK_FRONTLINE_READY;
+                                registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
+                                registryRobotJourney.startPoint = robot.properties.pose.Position;
+                                registryRobotJourney.endPoint = BuffToGate.GetFrontLineBuffer().Position;
+                                robot.ShowText("BUFMAC_SELECT_BEHAVIOR_ONZONE : READY");
+                                robot.ShowText("CHECK - REG");
                             }
                         }
-                        else if (Traffic.RobotIsInArea("VIM", robot.properties.pose.Position))
+                        else if (Traffic.RobotIsInArea("VIM", robot.properties.pose.Position, TypeZone.MAIN_ZONE))
                         {
-                            Point destPos = BuffToGate.GetFrontLineBuffer().Position;
-                            String destName = Traffic.DetermineArea(destPos, TypeZone.MAIN_ZONE);
-                            if (destName.Equals("OUTER"))
+                            if (rb.SendPoseStamped(BuffToGate.GetFrontLineBuffer()))
                             {
-                                if (rb.SendPoseStamped(BuffToGate.GetCheckInBuffer()))
-                                {
-                                    StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_FROM_VIM;
-                                    registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
-                                    registryRobotJourney.startPoint = robot.properties.pose.Position;
-                                    registryRobotJourney.endPoint = BuffToGate.GetFrontLineBuffer().Position;
-                                    robot.ShowText("BUFGATE_ROBOT_WAITTING_ZONE_BUFFER_READY");
-                                }
-                            }
-                            else
-                            {
-                                if (rb.SendPoseStamped(BuffToGate.GetFrontLineBuffer()))
-                                {
-                                    StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM;
-                                    registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
-                                    registryRobotJourney.startPoint = robot.properties.pose.Position;
-                                    registryRobotJourney.endPoint = BuffToGate.GetFrontLineBuffer().Position;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
-                                }
-                            }
-                        }
-                        else if (Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position))
-                        {
-                            if (rb.SendPoseStamped(BuffToGate.GetCheckInBuffer()))
-                            {
-                                StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_ZONE_BUFFER_READY;
+                                StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
                                 registryRobotJourney.endPoint = BuffToGate.GetFrontLineBuffer().Position;
-                                robot.ShowText("BUFGATE_ROBOT_WAITTING_ZONE_BUFFER_READY");
+                                robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
                             }
                         }
-
+                        else if (Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position, TypeZone.MAIN_ZONE))
+                        {
+                            Point destPos1 = BuffToGate.GetFrontLineBuffer().Position;
+                            String destName1 = Traffic.DetermineArea(destPos1, TypeZone.MAIN_ZONE);
+                            if (destName1.Equals("OUTER"))
+                            {
+                                robot.ShowText("GO FRONTLINE IN OUTER");
+                                if (rb.SendPoseStamped(BuffToGate.GetFrontLineBuffer()))
+                                {
+                                    StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
+                                    registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
+                                    registryRobotJourney.startPoint = robot.properties.pose.Position;
+                                    registryRobotJourney.endPoint = destPos1;
+                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                }
+                            }
+                            else if (destName1.Equals("VIM"))
+                            {
+                                robot.ShowText("GO FRONTLINE IN VIM");
+                                if (rb.SendPoseStamped(BuffToGate.GetFrontLineBuffer()))
+                                {
+                                    StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM;
+                                    registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
+                                    registryRobotJourney.startPoint = robot.properties.pose.Position;
+                                    registryRobotJourney.endPoint = destPos1;
+                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                    robot.ShowText("CHECK - REG");
+                                }
+                            }
+                        }
                         break;
                     case BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_FROM_VIM:
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
@@ -148,29 +155,12 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             robot.ShowText("BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY");
                         }
                         break;
-                    case BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
-                        try
-                        {
-                            if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
-                            {
-                                StateBufferToGate = BufferToGate.BUFGATE_ROBOT_GOTO_BACK_FRONTLINE_READY;
-                            }
-                            else
-                            {
-                                if (rb.SendPoseStamped(BuffToGate.GetCheckInBuffer()))
-                                {
-                                    StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_ZONE_BUFFER_READY;
-                                    robot.ShowText("BUFGATE_ROBOT_WAITTING_ZONE_BUFFER_READY");
-                                }
-                            }
-                        }
-                        catch (System.Exception)
-                        {
-                            errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            CheckUserHandleError(this);
-                        }
-                        break;
                     case BufferToGate.BUFGATE_ROBOT_GOTO_BACK_FRONTLINE_READY:
+                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                        {
+                            break;
+                        }
+                        robot.ShowText("START :GOTO_BACK_FRONTLINE_READY");
                         if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_RIGHT))
                         {
                             Stopwatch sw = new Stopwatch();
@@ -180,12 +170,34 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                 if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                 {
                                     resCmd = ResponseCommand.RESPONSE_NONE;
-                                    if (rb.SendPoseStamped(BuffToGate.GetCheckInBuffer()))
+                                    Pose destPos2 = BuffToGate.GetFrontLineBuffer();
+                                    String destName2 = Traffic.DetermineArea(destPos2.Position, TypeZone.MAIN_ZONE);
+                                    if (destName2.Equals("OUTER"))
                                     {
-                                        StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_ZONE_BUFFER_READY;
-                                        robot.ShowText("BUFGATE_ROBOT_WAITTING_ZONE_BUFFER_READY");
-                                        break;
+                                        robot.ShowText("GO FRONTLINE IN OUTER");
+                                        if (rb.SendPoseStamped(BuffToGate.GetFrontLineBuffer()))
+                                        {
+                                            StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
+                                            registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
+                                            registryRobotJourney.startPoint = robot.properties.pose.Position;
+                                            registryRobotJourney.endPoint = destPos2.Position;
+                                            robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                        }
                                     }
+                                    else if (destName2.Equals("VIM"))
+                                    {
+                                        robot.ShowText("GO FRONTLINE IN VIM");
+                                        if (rb.SendPoseStamped(BuffToGate.GetFrontLineBuffer()))
+                                        {
+                                            StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM;
+                                            registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
+                                            registryRobotJourney.startPoint = robot.properties.pose.Position;
+                                            registryRobotJourney.endPoint = destPos2.Position;
+                                            robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                            robot.ShowText("CHECK - REG");
+                                        }
+                                    }
+                                    break;
                                 }
                                 else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                                 {
@@ -222,6 +234,31 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             CheckUserHandleError(this);
                         }
                         break;
+                    case BufferToGate.BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM_READY:
+                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                        try
+                        {
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            {
+                                resCmd = ResponseCommand.RESPONSE_NONE;
+                                if (rb.SendCmdAreaPallet(BuffToGate.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_UP)))
+                                {
+                                    StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
+                                    robot.ShowText("BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
+                                }
+                            }
+                            else if (resCmd == ResponseCommand.RESPONSE_ERROR)
+                            {
+                                errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                CheckUserHandleError(this);
+                            }
+                        }
+                        catch (System.Exception)
+                        {
+                            errorCode = ErrorCode.CAN_NOT_GET_DATA;
+                            CheckUserHandleError(this);
+                        }
+                    break;
                     case BufferToGate.BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM:
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
@@ -238,8 +275,6 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 if (rb.SendCmdAreaPallet(BuffToGate.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_UP)))
                                 {
-                                    // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
-                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                     StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
                                     robot.ShowText("BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
                                 }
@@ -310,29 +345,18 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         break;
                     case BufferToGate.BUFGATE_SELECT_BEHAVIOR_ONZONE_TO_GATE:
-                        if (Traffic.RobotIsInArea("VIM", robot.properties.pose.Position))
-                        {
+                        String startNamePoint = Traffic.DetermineArea(registryRobotJourney.startPoint, TypeZone.MAIN_ZONE);
+                        Pose destPos = BuffToGate.GetFrontLineMachine();
+                        String destName = Traffic.DetermineArea(destPos.Position, TypeZone.MAIN_ZONE);
                             // đi tới đầu line cổng theo tọa độ chỉ định. gate 1 , 2, 3
-                            if (rb.SendPoseStamped(ds.config.PointFrontLine))
-                            {
+                        if (rb.SendPoseStamped(ds.config.PointFrontLine))
+                        {
                                 StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_GATE_FROM_VIM;
                                 // Cap Nhat Thong Tin CHuyen Di
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
                                 registryRobotJourney.endPoint = ds.config.PointFrontLine.Position;
                                 robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_GATE");
-                            }
-                        }
-                       else if (Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position))
-                        {
-                            if (rb.SendPoseStamped(ds.config.PointCheckInGate))
-                            {
-                                StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
-                                registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
-                                registryRobotJourney.startPoint = robot.properties.pose.Position;
-                                registryRobotJourney.endPoint = ds.config.PointFrontLine.Position;
-                                robot.ShowText("BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE");
-                            }
                         }
                         break;
                     case BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE:

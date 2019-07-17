@@ -542,6 +542,25 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             }
             return ret;
         }
+        public bool RobotIsInArea(String zoneName, Point position,TypeZone tz)
+        {
+            bool ret = false;
+            foreach (var r in ZoneRegisterList.Values) // xác định khu vực đến
+            {
+                if (r.Type == tz)
+                {
+                    if (r.NameId.Equals(zoneName))
+                    {
+                        if (ExtensionService.IsInPolygon(r.GetZone(), position))
+                        {
+                            ret = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
         public void FixedPropertiesZoneRegister(String nameID)
         {
 
