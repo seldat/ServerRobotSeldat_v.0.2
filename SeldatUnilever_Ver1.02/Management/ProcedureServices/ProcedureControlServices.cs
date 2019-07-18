@@ -89,6 +89,7 @@ namespace SeldatMRMS {
             FORBUF_ROBOT_GOTO_BACK_FRONTLINE_READY,
             FORBUF_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.
             FORBUF_ROBOT_WAITTING_GOTO_GATE, // doi robot di den khu vuc cong
+            FORBUF_ROBOT_WAITTING_GOTO_GATE_READY, // doi robot di den khu vuc cong
             FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM, // doi robot di den khu vuc cong
             FORBUF_ROBOT_CAME_GATE_POSITION, // da den khu vuc cong , gui yeu cau mo cong.
             FORBUF_ROBOT_WAITTING_OPEN_DOOR, //doi mo cong
@@ -314,6 +315,7 @@ namespace SeldatMRMS {
             BUFGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER, // doi robot di den dau line buffer.
             BUFGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_FROM_VIM, // doi robot di den dau line buffer.
             BUFGATE_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
+            BUFGATE_ROBOT_DESTROY, // trả robot về robotmanagement để nhận quy trình mới
             BUFGATE_SELECT_BEHAVIOR_ONZONE_TO_GATE,
             BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE,
             BUFGATE_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.

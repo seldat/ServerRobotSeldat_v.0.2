@@ -32,8 +32,6 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST;
             Task threadprocessAssignAnTaskWait = new Task(MainProcessAssignTask_Wait);
             Task threadprocessAssignTaskReady = new Task(MainProcessAssignTask_Ready);
-
-
             threadprocessAssignAnTaskWait.Start();
             threadprocessAssignTaskReady.Start();
       
@@ -51,16 +49,13 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             while(Alive)
             {
                 AssignWaitTask();
-              //  Task.Delay(500);
             }
         }
         public void MainProcessAssignTask_Ready()
         {
             while (Alive)
             {
-           
                 AssignTaskAtReady();
-                //  Task.Delay(500);
             }
         }
         OrderItem orderItem_wait = null;
@@ -81,7 +76,6 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 robotwait = result.robot;
                                 if (result.onReristryCharge)
                                 {
-                                    // registry charge procedure
                                     procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robotwait, null);
                                     robotManageService.RemoveRobotUnityWaitTaskList(robotwait);
                                 }
@@ -117,19 +111,6 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                         break;
                                     }
                                 }
-                                else
-                                {
-                                    /*if (DetermineAmoutOfDeviceToAssignAnTask() > 0)
-                                    {
-                                        if (FindRobotUnitySameOrderItem(orderItem_wait.userName))
-                                        {
-                                            MoveElementToEnd();
-                                            cntOrderNull_wait++;
-                                            break;
-                                        }
-                                    }*/
-                                }
-
                             }
                             else
                             {
@@ -137,10 +118,6 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 break;
                             }
                         }
-                        // xác định số lượng device đang có task và chỉ phân phối duy nhất 1 task cho một robot trên cùng thời điểm, không có trường hợp nhiểu
-                        // device có task mà nhiều robot cùng nhận task đó
-
-                       
                         if (orderItem_wait != null)
                         {
                             if (!orderItem_wait.onAssiged) //kiem tra da gan task
@@ -219,7 +196,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             }
             else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN)
             {
-               // procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_RETURN, robot, orderItem);
+                procedureService.Register(ProcedureItemSelected.PROCEDURE_MACHINE_TO_BUFFER_RETURN, robot, orderItem);
             }
             // procedure;
         }
@@ -241,7 +218,6 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 robotatready = result.robot;
                                 if (result.onReristryCharge)
                                 {
-                                    // registry charge procedure
                                     procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_CHARGE, robotatready, null);
                                 }
                                 else
@@ -262,7 +238,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             if (robotatready != null)
                             {
 
-                                if (orderItem_ready.typeReq == TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER || orderItem_ready.typeReq == TyeRequest.TYPEREQUEST_FORLIFT_TO_MACHINE)
+                                if (orderItem_ready.typeReq == TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER || 
+                                    orderItem_ready.typeReq == TyeRequest.TYPEREQUEST_FORLIFT_TO_MACHINE)
                                 {
                                     if (DetermineRobotWorkInGate())
                                     {
@@ -355,17 +332,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 Global_Object.onFlagRobotComingGateBusy = true;
                 return false;
             }
-            return true;
-
-             /*   if (!Global_Object.onFlagRobotComingGateBusy )
-                {
-                   // Global_Object.onFlagDoorBusy = true;
-                    Global_Object.onFlagRobotComingGateBusy = true;
-                    return false;
-                }
-                else
-                    return true;*/
-            
+            return true;           
         }
         public int DetermineAmoutOfDeviceToAssignAnTask()
         {

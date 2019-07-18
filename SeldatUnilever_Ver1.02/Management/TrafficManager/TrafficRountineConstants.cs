@@ -21,19 +21,23 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         // G3 : Gate 3
         // Elevator : vùng thang máy
         // C2 : là điểm trong vùng VIM đi
+        public enum StateCheckOPZS
+        {
+            REACHED,
+            FORWARD,
+            CHECKIN,
+        }
         public static RegistryIntersectionZone RegIntZone_READY = new RegistryIntersectionZone("READY");
         public static RegistryIntersectionZone RegIntZone_GATE12 = new RegistryIntersectionZone("GATE12");
         public static RegistryIntersectionZone RegIntZone_GATE3 = new RegistryIntersectionZone("GATE3");
         public static RegistryIntersectionZone RegIntZone_ELEVATOR = new RegistryIntersectionZone("ELEVATOR");
         public static RegistryIntersectionZone RegIntZone_VIMBTLCAP = new RegistryIntersectionZone("VIM-BTLCAP");
 
+
         //Ready -> GATE12
         public static bool Reg_checkinReady_G12(RobotUnity robot, TrafficManagementService traffic)
         {
-            bool onRegReady = false;
             bool onRegG12 = false;
-            bool onRegElev = false;
-            bool onRegG3 = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
             if (traffic.HasRobotUnityinArea("GATE12", robot))
             {
@@ -569,12 +573,16 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             switch (destOP)
             {
                 case "OUTER":
-                    // release khi robot vào vùng OUTER
-                    if(rrj.traffic.HasRobotUnityinArea("OUTER",rrj.robot))
+                    String startplace= rrj.traffic.DetermineArea(rrj.startPoint, TypeZone.MAIN_ZONE);
+                    if (startplace.Equals("VIM"))
                     {
-                        ReleaseAll(rrj.robot);
-                        rrj.robot.ShowText("RELEASED ROBOT IN REGISTER LIST OF SEPCIAL ZONE FROM VIM -> OUTER");
-                        return true;
+                        // release khi robot vào vùng OUTER
+                        if (rrj.traffic.HasRobotUnityinArea("OUTER", rrj.robot))
+                        {
+                            ReleaseAll(rrj.robot);
+                            rrj.robot.ShowText("RELEASED ROBOT IN REGISTER LIST OF SEPCIAL ZONE FROM VIM -> OUTER");
+                            return true;
+                        }
                     }
                     break;
                 case "VIM":
@@ -619,8 +627,9 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         }
         public static bool StationCheckInSpecialZone(RegistryRobotJourney rrj)
         {
-            String startZone = rrj.traffic.DetermineArea(rrj.startPoint,TypeZone.OPZS);
-            String endZone = rrj.traffic.DetermineArea(rrj.endPoint, TypeZone.OPZS);
+            // vì "OUTER" có kiều là Main_Zone, nhưng vùng khac co kieu là OPZS
+            String startZone = rrj.traffic.DetermineArea(rrj.startPoint,TypeZone.MAIN_ZONE).Equals("OUTER")?"OUTER": rrj.traffic.DetermineArea(rrj.startPoint, TypeZone.OPZS);
+            String endZone = rrj.traffic.DetermineArea(rrj.endPoint, TypeZone.MAIN_ZONE).Equals("OUTER") ? "OUTER" : rrj.traffic.DetermineArea(rrj.endPoint, TypeZone.OPZS);
             #region READY -> GATE12, ELEVATOR, GATE3, VIM
             if (startZone.Equals("READY") && endZone.Equals("GATE12"))
             {

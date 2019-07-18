@@ -256,7 +256,7 @@ namespace SeldatMRMS
         }
         public void UpdateInformation(Object obj)
         {
-            if (obj.GetType() == typeof(ProcedureForkLiftToBuffer))
+            /*if (obj.GetType() == typeof(ProcedureForkLiftToBuffer))
             {
                 var proc = obj as ProcedureForkLiftToBuffer;
                 proc.procedureDataItemsDB.GetParams("F");
@@ -340,7 +340,7 @@ namespace SeldatMRMS
               //  proc.selectHandleError = shError;
 
 
-            }
+            }*/
         }
     }
 }

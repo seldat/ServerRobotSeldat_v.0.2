@@ -18,6 +18,7 @@ using static DoorControllerService.DoorService;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SeldatMRMS.Management.TrafficRobotUnity;
+using static SeldatUnilever_Ver1._02.Management.TrafficManager.TrafficRountineConstants;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterService;
 
@@ -26,24 +27,12 @@ namespace SeldatMRMS
 
     public class ProcedureForkLiftToBuffer : TrafficProcedureService
     {
-        public struct DataForkLiftToBuffer
-        {
-            // public Pose PointCheckInGate;
-            // public Pose PointOfGate;
-            // public Pose PointFrontLineGate;
-            // public PointDetect PointPickPalletIn;
-            // public Pose PointCheckInBuffer;
-            // public Pose PointFrontLineBuffer;
-            // public PointDetectBranching PointDetectLineBranching;
-            // public PointDetect PointDropPallet;
-        }
-        // DataForkLiftToBuffer points;
-        ForkLift StateForkLift;
-        //  Thread ProForkLift;
-        public RobotUnity robot;
+
+        private ForkLift StateForkLift;
         public DoorService door;
-        ResponseCommand resCmd;
-        TrafficManagementService Traffic;
+        private ResponseCommand resCmd;
+        public RobotUnity robot;
+        private TrafficManagementService Traffic;
         public bool onFlagResetedGate = false;
         private DeviceRegistrationService deviceService;
         private DoorManagementService doorservice;
@@ -53,17 +42,12 @@ namespace SeldatMRMS
         {
             this.deviceService = deviceService;
         }
-        // public override event Action<Object> ErrorProcedureHandler;
         public ProcedureForkLiftToBuffer(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService trafficService) : base(robot)
         {
             StateForkLift = ForkLift.FORBUF_IDLE;
             resCmd = ResponseCommand.RESPONSE_NONE;
             this.robot = robot;
-            // this.points = new DataForkLiftToBuffer();
             this.doorservice = doorservice;
-
-            // this.points.PointFrontLineGate = this.door.config.PointFrontLine;
-            // this.points.PointPickPalletIn = this.door.config.PointOfPallet;
             this.Traffic = trafficService;
             procedureCode = ProcedureCode.PROC_CODE_FORKLIFT_TO_BUFFER;
 
@@ -94,65 +78,22 @@ namespace SeldatMRMS
         public void Destroy()
         {
             Global_Object.setGateStatus(order.gate, false);
-           // Global_Object.onFlagDoorBusy = false;
             ProRunStopW = false;
             robot.orderItem = null;
             robot.robotTag = RobotStatus.IDLE;
-            // StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
             StateForkLift = ForkLift.FORMAC_ROBOT_DESTROY;
             TrafficRountineConstants.ReleaseAll(robot);
 
         }
-
-        public void RestoreOrderItem()
-        {
-
-
-            OrderItem _order = new OrderItem();
-            _order.activeDate = order.activeDate;
-            _order.bufferId = order.bufferId;
-
-            dynamic product = new JObject();
-            product.timeWorkId = order.timeWorkId;
-            product.activeDate = order.activeDate;
-            product.productId = order.productId;
-            product.productDetailId = order.productDetailId;
-            product.palletStatus = PalletStatus.P.ToString();
-            _order.dataRequest = product.ToString();
-
-            _order.dateTime = order.dateTime;
-            _order.deviceId = order.deviceId;
-            _order.palletAtMachine = order.palletAtMachine;
-            _order.palletId = order.palletId;
-            _order.palletStatus = order.palletStatus;
-            _order.planId = order.planId;
-            _order.productDetailId = order.productDetailId;
-            _order.productDetailName = order.productDetailName;
-            _order.productId = order.productId;
-            _order.robot = "";
-            _order.typeReq = order.typeReq;
-            _order.updUsrId = order.updUsrId;
-            _order.userName = order.userName;
-            _order.lengthPallet = order.lengthPallet;
-            _order.palletAmount = order.palletAmount;
-            _order.bufferId = order.bufferId;
-            _order.status = StatusOrderResponseCode.PENDING;
-
-            deviceService.FindDeviceItem(_order.userName).AddOrderCreatePlan(_order);
-        }
-
         public void Procedure(object ojb)
         {
             ProcedureForkLiftToBuffer FlToBuf = (ProcedureForkLiftToBuffer)ojb;
             RobotUnity rb = FlToBuf.robot;
             DoorService ds = getDoorService();
-            // DataForkLiftToBuffer p = FlToBuf.points;
-            //DoorService ds = FlToBuf.door;
             TrafficManagementService Traffic = FlToBuf.Traffic;
             ForkLiftToMachineInfo flToMachineInfo = new ForkLiftToMachineInfo();
             rb.mcuCtrl.TurnOnLampRb();
             robot.ShowText(" Start -> " + procedureCode);
-            //  StateForkLift = ForkLift.FORBUF_IDLE;
             while (ProRun)
             {
                 switch (StateForkLift)
@@ -165,7 +106,7 @@ namespace SeldatMRMS
                         {
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
                             {
-                                if (false == rb.CheckInGateFromReadyZoneBehavior(ds.config.PointFrontLine.Position))
+                               //if (false == rb.CheckInGateFromReadyZoneBehavior(ds.config.PointFrontLine.Position))
                                 {
                                     robot.ShowText("FORBUF_ROBOT_GOTO_BACK_FRONTLINE_READY");
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
@@ -178,8 +119,6 @@ namespace SeldatMRMS
                         }
                         else if (Traffic.RobotIsInArea("VIM",robot.properties.pose.Position))
                         {
-                            // Kiểm Tra Robot có đứng trong Khu Vực VIM : GATE3, ELEVATOR, VIM-BTLCAP
-                            // gửi tới vị trí đầu line tương ứng của gate
                             robot.robotTag = RobotStatus.WORKING;
                             if (rb.SendPoseStamped(ds.config.PointFrontLine))
                             {
@@ -207,7 +146,6 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_GOTO_BACK_FRONTLINE_READY:
-
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
@@ -224,7 +162,7 @@ namespace SeldatMRMS
                                     robot.robotTag = RobotStatus.WORKING;
                                     if (rb.SendPoseStamped(ds.config.PointFrontLine))
                                     {
-                                        StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE;
+                                        StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_READY;
                                         robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_GATE");
                                         break;
                                     }
@@ -235,8 +173,6 @@ namespace SeldatMRMS
                                     errorCode = ErrorCode.DETECT_LINE_ERROR;
                                     CheckUserHandleError(this);
                                     break;
-
-
                                 }
                                 if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_GOTO_FRONTLINE)
                                 {
@@ -247,6 +183,19 @@ namespace SeldatMRMS
                                 Thread.Sleep(100);
                             } while (ProRunStopW);
                             sw.Stop();
+                        }
+                        break;
+                    case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_READY:
+                        // dò ra điểm đích đến và xóa đăng ký vùng
+                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        {
+                            // robot.setTrafficAllCircles(false, false, false, false);
+                            TrafficRountineConstants.RegIntZone_READY.Release(robot);
+                            robot.SwitchToDetectLine(true);
+                            resCmd = ResponseCommand.RESPONSE_NONE;
+                            StateForkLift = ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION;
+                            robot.ShowText("FORBUF_ROBOT_CAME_GATE_POSITION");
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE:
@@ -288,7 +237,6 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
                         robot.robotRegistryToWorkingZone.onRobotwillCheckInsideGate = false;
                         ds.openDoor(DoorService.DoorType.DOOR_BACK);
-
                         StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_OPEN_DOOR;
                         robot.ShowText("FORBUF_ROBOT_WAITTING_OPEN_DOOR");
                         break;
@@ -375,6 +323,10 @@ namespace SeldatMRMS
                         break;
 
                     case ForkLift.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY:
+                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                        {
+                            break;
+                        }
                         Pose destPos1 = FlToBuf.GetFrontLineBuffer(true);
                         if (rb.SendPoseStamped(destPos1))
                         {
@@ -383,7 +335,6 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM:
-                        // xóa đăng ký vùng
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
@@ -395,7 +346,6 @@ namespace SeldatMRMS
                         try
                         {
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
-                            //if (robot.ReachedGoal())
                             {
                                 robot.SwitchToDetectLine(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
@@ -418,14 +368,11 @@ namespace SeldatMRMS
                         try
                         {
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
-                            //if (robot.ReachedGoal())
                             {
                                 robot.SwitchToDetectLine(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 if (rb.SendCmdAreaPallet(FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true)))
                                 {
-                                    // rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_FORWARD_DIRECTION);
-                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                     StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER;
                                     robot.ShowText("FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER");
                                 }
@@ -471,19 +418,12 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
-                        // if (errorCode == ErrorCode.RUN_OK) {
                         ReleaseProcedureHandler(this);
-                        // } else {
-                        //     ErrorProcedureHandler (this);
-                        // }
                         ProRun = false;
                         robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);
                         order.status = StatusOrderResponseCode.FINISHED;
                         break;
-
-
-                    ///////////////////////////////////////////////////////
                     case ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE_FROM_VIM:
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
@@ -498,7 +438,6 @@ namespace SeldatMRMS
                             if (rb.SendPoseStamped(flToMachineInfo.frontLinePose))
                             {
                                 Global_Object.setGateStatus(order.gate, false);
-                                // Global_Object.onFlagDoorBusy = false;
                                 StateForkLift = ForkLift.FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
                                 robot.ShowText("FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
                                 onFlagResetedGate = false;
@@ -511,18 +450,15 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE:
-                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
-                        {
-                            break;
-                        }
                         try
                         {
-                       
-                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                            if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                            {
+                                break;
+                            }
                             if (rb.SendPoseStamped(flToMachineInfo.frontLinePose))
                             {
                                 Global_Object.setGateStatus(order.gate, false);
-                                // Global_Object.onFlagDoorBusy = false;
                                 StateForkLift = ForkLift.FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
                                 robot.ShowText("FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
                                 onFlagResetedGate = false;
@@ -541,7 +477,7 @@ namespace SeldatMRMS
                             // xóa đăng ký vùng
                             TrafficRountineConstants.DetectRelease(registryRobotJourney);
                            // Global_Object.onFlagDoorBusy = false;
-                            if (!Traffic.HasRobotUnityinArea("GATE_CHECKOUT", robot))
+                           /* if (!Traffic.HasRobotUnityinArea("GATE_CHECKOUT", robot))
                             {
                                 if (!onFlagResetedGate)
                                 {
@@ -551,7 +487,7 @@ namespace SeldatMRMS
                                     Global_Object.onFlagRobotComingGateBusy = false;
                                     robot.ReleaseWorkingZone();
                                 }
-                            }
+                            }*/
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             //if (robot.ReachedGoal())
                             {
@@ -625,6 +561,7 @@ namespace SeldatMRMS
                         KillEvent();
                         break;
                     case ForkLift.FORMAC_ROBOT_DESTROY: // trả robot về robotmanagement để nhận quy trình mới
+                        TrafficRountineConstants.ReleaseAll(robot);
                         robot.SwitchToDetectLine(false);
                         robot.ReleaseWorkingZone();
                         robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.IDLE;
@@ -649,24 +586,9 @@ namespace SeldatMRMS
             }
             StateForkLift = ForkLift.FORBUF_IDLE;
         }
-        /*   protected override void CheckUserHandleError(object obj)
-           {
-               try
-               {
-                   CheckUserHandleError(this);
-               }
-               catch
-               {
-
-               }
-           }*/
         public override void FinishStatesCallBack(Int32 message)
         {
             this.resCmd = (ResponseCommand)message;
-        /*  if (this.resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
-            {
-               
-            }*/
         }
         public class ForkLiftToMachineInfo
         {

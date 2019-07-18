@@ -265,8 +265,6 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CLOSE_GATE: // doi dong cong.
                         try
                         {
-                            //if (true == ds.Close(DoorService.DoorType.DOOR_BACK))
-                            //{
                             if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
                             {
 
