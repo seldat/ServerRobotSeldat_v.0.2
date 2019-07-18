@@ -86,8 +86,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
                                 registryRobotJourney.endPoint = BfToBufRe.GetFrontLineMachine().Position;
-                                robot.ShowText("BUFMAC_SELECT_BEHAVIOR_ONZONE : READY");
-                                robot.ShowText("CHECK - REG");
+                                //robot.ShowText("BUFMAC_SELECT_BEHAVIOR_ONZONE : READY");
+                                //robot.ShowText("CHECK - REG");
                             }
                         }
                         else if (Traffic.RobotIsInArea("VIM", robot.properties.pose.Position, TypeZone.MAIN_ZONE))
@@ -99,7 +99,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
                                 registryRobotJourney.endPoint = mPose.Position;
-                                robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
+                                //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
                             }
                         }
                         else if (Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position, TypeZone.MAIN_ZONE))
@@ -108,27 +108,27 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             String destName1 = Traffic.DetermineArea(mPose.Position, TypeZone.MAIN_ZONE);
                             if (destName1.Equals("OUTER"))
                             {
-                                robot.ShowText("GO FRONTLINE IN OUTER");
+                                //robot.ShowText("GO FRONTLINE IN OUTER");
                                 if (rb.SendPoseStamped(mPose))
                                 {
                                     StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                     registryRobotJourney.startPoint = robot.properties.pose.Position;
                                     registryRobotJourney.endPoint = mPose.Position;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
+                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
                                 }
                             }
                             else if (destName1.Equals("VIM"))
                             {
-                                robot.ShowText("GO FRONTLINE IN VIM");
+                                //robot.ShowText("GO FRONTLINE IN VIM");
                                 if (rb.SendPoseStamped(mPose))
                                 {
                                     StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM;
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                     registryRobotJourney.startPoint = robot.properties.pose.Position;
                                     registryRobotJourney.endPoint = mPose.Position;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
-                                    robot.ShowText("CHECK - REG");
+                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                    //robot.ShowText("CHECK - REG");
                                 }
                             }
                         }
@@ -151,27 +151,27 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                     String destName2 = Traffic.DetermineArea(destPos.Position, TypeZone.MAIN_ZONE);
                                     if (destName2.Equals("OUTER"))
                                     {
-                                        robot.ShowText("GO FRONTLINE IN OUTER");
+                                        //robot.ShowText("GO FRONTLINE IN OUTER");
                                         if (rb.SendPoseStamped(destPos))
                                         {
                                             StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
                                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                             registryRobotJourney.startPoint = robot.properties.pose.Position;
                                             registryRobotJourney.endPoint = destPos.Position;
-                                            robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
+                                            //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
                                         }
                                     }
                                     else if (destName2.Equals("VIM"))
                                     {
-                                        robot.ShowText("GO FRONTLINE IN VIM");
+                                        //robot.ShowText("GO FRONTLINE IN VIM");
                                         if (rb.SendPoseStamped(destPos))
                                         {
                                             StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM;
                                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                             registryRobotJourney.startPoint = robot.properties.pose.Position;
                                             registryRobotJourney.endPoint = destPos.Position;
-                                            robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
-                                            robot.ShowText("CHECK - REG");
+                                            //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
+                                            //robot.ShowText("CHECK - REG");
                                         }
                                     }
                                     break;
@@ -206,7 +206,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                     // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
                                     //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                     StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
-                                    robot.ShowText("MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
+                                    //robot.ShowText("MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
                                 }
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
@@ -241,7 +241,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                     // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
                                     //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                     StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
-                                    robot.ShowText("MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
+                                    //robot.ShowText("MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
                                 }
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
@@ -268,7 +268,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                     // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
                                     //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                     StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
-                                    robot.ShowText("MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
+                                    //robot.ShowText("MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
                                 }
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
@@ -289,7 +289,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             BfToBufRe.UpdatePalletState(PalletStatus.F);
                             StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE;
-                            robot.ShowText("MACBUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE");
+                            //robot.ShowText("MACBUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
@@ -306,7 +306,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                 StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_BUFFER_RETURN_SELECT_ZONE;
                                 // cập nhật lại điểm xuất phát
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
-                                robot.ShowText("MACBUFRET_ROBOT_GOTO_CHECKIN_RETURN");
+                                //robot.ShowText("MACBUFRET_ROBOT_GOTO_CHECKIN_RETURN");
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -332,7 +332,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
                                 registryRobotJourney.endPoint = frontlinePose.Position;
-                                robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
                             }
                         }
                         else if (startNamePoint.Equals("OUTER"))
@@ -345,7 +345,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                     registryRobotJourney.startPoint = robot.properties.pose.Position;
                                     registryRobotJourney.endPoint = frontlinePose.Position;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
                                 }
                             }
                             else if (destName.Equals("VIM"))
@@ -356,7 +356,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                     registryRobotJourney.startPoint = robot.properties.pose.Position;
                                     registryRobotJourney.endPoint = frontlinePose.Position;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
                                 }
                             }
                         }
@@ -380,7 +380,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                 if (rb.SendCmdAreaPallet(BfToBufRe.GetInfoOfPalletBufferReturn_MBR(PistonPalletCtrl.PISTON_PALLET_DOWN, order.dataRequest)))
                                 {
                                     StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
-                                    robot.ShowText("MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET");
+                                    //robot.ShowText("MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET");
                                 }
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
@@ -405,7 +405,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                 if (rb.SendCmdAreaPallet(BfToBufRe.GetInfoOfPalletBufferReturn_MBR(PistonPalletCtrl.PISTON_PALLET_DOWN,order.dataRequest)))
                                 {
                                     StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
-                                    robot.ShowText("MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET");
+                                    //robot.ShowText("MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET");
                                 }
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
@@ -426,7 +426,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             BfToBufRe.UpdatePalletState(PalletStatus.W);
                             StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_GOTO_FRONTLINE;
-                            robot.ShowText("MACBUFRET_ROBOT_WAITTING_GOTO_FRONTLINE");
+                            //robot.ShowText("MACBUFRET_ROBOT_WAITTING_GOTO_FRONTLINE");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
@@ -440,7 +440,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_RELEASED;
-                            robot.ShowText("MACBUFRET_ROBOT_RELEASED");
+                            //robot.ShowText("MACBUFRET_ROBOT_RELEASED");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
@@ -461,7 +461,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         //     ErrorProcedureHandler (this);
                         // }
                         ProRun = false;
-                        robot.ShowText("RELEASED");
+                        //robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);
                         order.status = StatusOrderResponseCode.FINISHED;
                         order.endTimeProcedure = DateTime.Now;
@@ -472,6 +472,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     default:
                         break;
                 }
+                robot.ShowText("-> " + procedureCode);
                 Thread.Sleep(5);
             }
             StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_IDLE;

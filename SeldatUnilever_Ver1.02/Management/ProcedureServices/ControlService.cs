@@ -11,16 +11,8 @@ namespace SeldatMRMS
             this.robot = robot;
             if (robot != null)
             {
-               // robot.ZoneHandler += ZoneHandler;
                 robot.FinishStatesCallBack += FinishStatesCallBack;
-               // robot.AmclPoseHandler += AmclPoseHandler;
-                //if(doorService!=null)
-                //    doorService.ReceiveRounterEvent += ReceiveRounterEvent;
             }
-            //if(doorService!=null)
-            //{
-
-            //}
        }
        // robot control
        public virtual void ZoneHandler(Communication.Message message) { }

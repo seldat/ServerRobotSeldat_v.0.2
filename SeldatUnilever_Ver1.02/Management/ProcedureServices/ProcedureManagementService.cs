@@ -30,7 +30,6 @@ namespace SeldatMRMS
                     procfb.AssignAnOrder (orderItem);
                     robot.proRegistryInRobot.pFB = procfb;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
-
                     procfb.Start ();
                     break;
                 case ProcedureItemSelected.PROCEDURE_BUFFER_TO_MACHINE:

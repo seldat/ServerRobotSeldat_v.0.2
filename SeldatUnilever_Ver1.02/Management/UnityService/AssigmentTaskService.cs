@@ -176,17 +176,17 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         {
             if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
             {
-                procedureService.Register(ProcedureItemSelected.PROCEDURE_FORLIFT_TO_BUFFER, robot, orderItem);
+                procedureService.Register(ProcedureItemSelected.PROCEDURE_FORLIFT_TO_BUFFER, robot, orderItem); //yes
             }
             else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
             {
-                procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_MACHINE, robot, orderItem);
+                procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_MACHINE, robot, orderItem); // yes
             }
-            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_PALLET_EMPTY_MACHINE_TO_RETURN)
+            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_PALLET_EMPTY_MACHINE_TO_RETURN) // yes
             {
                 procedureService.Register(ProcedureItemSelected.PROCEDURE_PALLETEMPTY_MACHINE_TO_RETURN, robot, orderItem);
             }
-            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFER_TO_GATE)
+            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFER_TO_GATE)  // yes
             {
                 procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_GATE, robot, orderItem);
             }
@@ -194,9 +194,13 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             {
                 procedureService.Register(ProcedureItemSelected.PROCEDURE_FORLIFT_TO_MACHINE, robot, orderItem);
             }
-            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN)
+            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN) // yes
             {
                 procedureService.Register(ProcedureItemSelected.PROCEDURE_MACHINE_TO_BUFFER_RETURN, robot, orderItem);
+            }
+            else if(orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401) // yes
+            {
+                procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_BUFFER, robot, orderItem);
             }
             // procedure;
         }

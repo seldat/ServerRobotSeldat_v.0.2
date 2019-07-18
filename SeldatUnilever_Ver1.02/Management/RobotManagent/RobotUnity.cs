@@ -461,6 +461,10 @@ namespace SeldatMRMS.Management.RobotManagent
             robotLogOut.ShowText(this.properties.Label, text);
 
         }
+        public void ClearText()
+        {
+            robotLogOut.Clear();
+        }
         private void ReConnectMenu(object sender, RoutedEventArgs e)
         {
             if (webSocket != null)

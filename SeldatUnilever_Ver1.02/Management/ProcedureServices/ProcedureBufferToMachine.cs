@@ -130,7 +130,7 @@ namespace SeldatMRMS
                 switch (StateBufferToMachine)
                 {
                     case BufferToMachine.BUFMAC_IDLE:
-                        robot.ShowText("BUFMAC_IDLE");
+                        //robot.ShowText("BUFMAC_IDLE");
                         break;
                     case BufferToMachine.BUFMAC_SELECT_BEHAVIOR_ONZONE:
                         if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position,TypeZone.OPZS))
@@ -141,50 +141,50 @@ namespace SeldatMRMS
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                     registryRobotJourney.startPoint = robot.properties.pose.Position;
                                     registryRobotJourney.endPoint = BfToMa.GetFrontLineBuffer().Position;
-                                    robot.ShowText("BUFMAC_SELECT_BEHAVIOR_ONZONE : READY");
-                                    robot.ShowText("CHECK - REG");
+                                    //robot.ShowText("BUFMAC_SELECT_BEHAVIOR_ONZONE : READY");
+                                    //robot.ShowText("CHECK - REG");
                             }
                         }
                         else if (Traffic.RobotIsInArea("VIM", robot.properties.pose.Position,TypeZone.MAIN_ZONE))
                         {
-                                robot.ShowText("BUFMAC_SELECT_BEHAVIOR_ONZONE : VIM");
+                                //robot.ShowText("BUFMAC_SELECT_BEHAVIOR_ONZONE : VIM");
                                 if (rb.SendPoseStamped(BfToMa.GetFrontLineBuffer()))
                                 {
                                     StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM;
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                     registryRobotJourney.startPoint = robot.properties.pose.Position;
                                     registryRobotJourney.endPoint = BfToMa.GetFrontLineBuffer().Position;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
-                                    robot.ShowText("CHECK - REG");
+                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                    //robot.ShowText("CHECK - REG");
                             }
                         }
                         else if (Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position,TypeZone.MAIN_ZONE))
                         {
                             Point destPos1 = BfToMa.GetFrontLineBuffer().Position;
                             String destName1 = Traffic.DetermineArea(destPos1, TypeZone.MAIN_ZONE);
-                            robot.ShowText("BUFMAC_SELECT_BEHAVIOR_ONZONE : OUTER");
+                            //robot.ShowText("BUFMAC_SELECT_BEHAVIOR_ONZONE : OUTER");
                             if (destName1.Equals("OUTER"))
                             {
-                                robot.ShowText("COME FRONTLINE : OUTER");
+                                //robot.ShowText("COME FRONTLINE : OUTER");
                                 if (rb.SendPoseStamped(BfToMa.GetFrontLineBuffer()))
                                 {
                                     StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                     registryRobotJourney.startPoint = robot.properties.pose.Position;
                                     registryRobotJourney.endPoint = destPos1;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
                                 }
                             }
                             else if(destName1.Equals("VIM"))
                             {
-                                robot.ShowText("COME FRONTLINE : OUTER");
+                                //robot.ShowText("COME FRONTLINE : OUTER");
                                 if (rb.SendPoseStamped(BfToMa.GetFrontLineBuffer()))
                                 {
                                     StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM;
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                     registryRobotJourney.startPoint = robot.properties.pose.Position;
                                     registryRobotJourney.endPoint = destPos1;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
                                 }
                             }
                         }
@@ -195,7 +195,7 @@ namespace SeldatMRMS
                         {
                             break;
                         }
-                        robot.ShowText("START :GOTO_BACK_FRONTLINE_READY");
+                        //robot.ShowText("START :GOTO_BACK_FRONTLINE_READY");
                         if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_RIGHT))
                         {
                             Stopwatch sw = new Stopwatch();
@@ -209,27 +209,27 @@ namespace SeldatMRMS
                                     String destName2 = Traffic.DetermineArea(destPos2, TypeZone.MAIN_ZONE);
                                     if (destName2.Equals("OUTER"))
                                     {
-                                        robot.ShowText("GO FRONTLINE IN OUTER");
+                                        //robot.ShowText("GO FRONTLINE IN OUTER");
                                         if (rb.SendPoseStamped(BfToMa.GetFrontLineBuffer()))
                                         {
                                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
                                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                             registryRobotJourney.startPoint = robot.properties.pose.Position;
                                             registryRobotJourney.endPoint = destPos2;
-                                            robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                            //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
                                         }
                                     }
                                     else if (destName2.Equals("VIM"))
                                     {
-                                        robot.ShowText("GO FRONTLINE IN VIM");
+                                        //robot.ShowText("GO FRONTLINE IN VIM");
                                         if (rb.SendPoseStamped(BfToMa.GetFrontLineBuffer()))
                                         {
                                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM_FROM_READY;
                                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                             registryRobotJourney.startPoint = robot.properties.pose.Position;
                                             registryRobotJourney.endPoint = destPos2;
-                                            robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
-                                            robot.ShowText("CHECK - REG");
+                                            //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                            //robot.ShowText("CHECK - REG");
                                         }
                                     }
                                     break;
@@ -266,16 +266,15 @@ namespace SeldatMRMS
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY;
-                            robot.ShowText("BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY");
+                            //robot.ShowText("BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY");
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY;
-                            robot.ShowText("BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY");
+                            //robot.ShowText("BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY");
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
@@ -286,7 +285,7 @@ namespace SeldatMRMS
                                 if (rb.SendPoseStamped(BfToMa.GetFrontLineBuffer()))
                                 {
                                     StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
                                 }
                             }
                         }
@@ -308,7 +307,7 @@ namespace SeldatMRMS
                                 if (rb.SendCmdAreaPallet(BfToMa.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP)))
                                 {
                                     StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
+                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
                                 }
                             }
                         }
@@ -337,7 +336,7 @@ namespace SeldatMRMS
                                 if (rb.SendCmdAreaPallet(BfToMa.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP)))
                                 {
                                     StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
+                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
                                 }
                             }
                         }
@@ -360,7 +359,7 @@ namespace SeldatMRMS
                                 if (rb.SendCmdAreaPallet(BfToMa.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP)))
                                 {
                                     StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
+                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
                                 }
                             }
                         }
@@ -377,7 +376,7 @@ namespace SeldatMRMS
                             BfToMa.UpdatePalletState(PalletStatus.F);
                             onUpdatedPalletState = true;
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER;
-                            robot.ShowText("BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER");
+                            //robot.ShowText("BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
@@ -396,7 +395,7 @@ namespace SeldatMRMS
                                 StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET_SELECT_ZONE;
                                 // cập nhật lại điểm xuất phát
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
-                                robot.ShowText("BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET");
+                                //robot.ShowText("BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET");
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -422,7 +421,7 @@ namespace SeldatMRMS
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
                                 registryRobotJourney.endPoint = destPos.Position;
-                                robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
                             }
                         }
                         else if (startNamePoint.Equals("OUTER"))
@@ -435,7 +434,7 @@ namespace SeldatMRMS
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                     registryRobotJourney.startPoint = robot.properties.pose.Position;
                                     registryRobotJourney.endPoint = destPos.Position;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
                                 }
                             }
                             else if(destName.Equals("VIM"))
@@ -446,7 +445,7 @@ namespace SeldatMRMS
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                     registryRobotJourney.startPoint = robot.properties.pose.Position;
                                     registryRobotJourney.endPoint = destPos.Position;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
                                 }
                             }
                         }
@@ -470,7 +469,7 @@ namespace SeldatMRMS
                                 {
                                     //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                     StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET");
+                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET");
                                 }
                             }
                         }
@@ -491,7 +490,7 @@ namespace SeldatMRMS
                                 {
                                     //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                     StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET;
-                                    robot.ShowText("BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET");
+                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET");
                                 }
                             }
                         }
@@ -506,7 +505,7 @@ namespace SeldatMRMS
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE;
-                            robot.ShowText("BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE");
+                            //robot.ShowText("BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
@@ -521,7 +520,7 @@ namespace SeldatMRMS
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_RELEASED;
-                            robot.ShowText("BUFMAC_ROBOT_RELEASED");
+                            //robot.ShowText("BUFMAC_ROBOT_RELEASED");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
@@ -543,7 +542,7 @@ namespace SeldatMRMS
                         //     ErrorProcedureHandler (this);
                         // }
                         ProRun = false;
-                        robot.ShowText("RELEASED");
+                        //robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);
                         order.status = StatusOrderResponseCode.FINISHED;
                         order.endTimeProcedure = DateTime.Now;
@@ -575,6 +574,7 @@ namespace SeldatMRMS
                     default:
                         break;
                 }
+                robot.ShowText("-> " + procedureCode);
                 Thread.Sleep(5);
             }
             StateBufferToMachine = BufferToMachine.BUFMAC_IDLE;
