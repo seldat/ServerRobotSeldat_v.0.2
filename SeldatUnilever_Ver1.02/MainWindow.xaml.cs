@@ -57,7 +57,7 @@ namespace SeldatUnilever_Ver1._02
             canvasMatrixTransform = new MatrixTransform(1, 0, 0, -1, 0, 0);
 
             //  ImageBrush img = LoadImage("Map_aTan___Copy2");
-            ImageBrush img = LoadImage("Map_layout1");
+            ImageBrush img = LoadImage("Map_Layout2");
             map.Width = img.ImageSource.Width;
             map.Height = img.ImageSource.Height;
             map.Background = img;
