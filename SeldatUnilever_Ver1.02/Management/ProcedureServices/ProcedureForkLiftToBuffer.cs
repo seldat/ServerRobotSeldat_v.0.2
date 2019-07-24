@@ -42,7 +42,7 @@ namespace SeldatMRMS
         {
             this.deviceService = deviceService;
         }
-        public ProcedureForkLiftToBuffer(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService trafficService) : base(robot)
+        public ProcedureForkLiftToBuffer(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService trafficService) : base(robot,doorservice,trafficService)
         {
             StateForkLift = ForkLift.FORBUF_IDLE;
             resCmd = ResponseCommand.RESPONSE_NONE;
