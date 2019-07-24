@@ -492,6 +492,9 @@ namespace SeldatMRMS
             points.PointCheckIn = null;
             points.PointFrontLine = GetFrontLineChargeStation();
             points.PointOfCharger = this.charger.PropertiesCharge_List[(int)chardgeId - 1].PointOfPallet;
+            registryRobotJourney = new RegistryRobotJourney();
+            registryRobotJourney.robot = robot;
+            registryRobotJourney.traffic = Traffic;
         }
         public void Destroy()
         {

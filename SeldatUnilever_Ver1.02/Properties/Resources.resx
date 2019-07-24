@@ -298,4 +298,7 @@
   <data name="WARNING_FB_FULL_BUFFER" xml:space="preserve">
     <value>Xin lỗi vùng Buffer này không còn chổ trống !</value>
   </data>
+  <data name="Map_Layout2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map_Layout2.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

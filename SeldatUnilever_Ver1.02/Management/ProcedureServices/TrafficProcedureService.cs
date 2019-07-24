@@ -33,7 +33,9 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         protected DoorService getDoorService()
         {
             DoorService door=null;
-            if (this.traffic.RobotIsInArea("OUTER", robot.properties.pose.Position) || this.traffic.RobotIsInArea("READY", robot.properties.pose.Position))
+            door = this.doorservice.DoorMezzamineUpNew;
+        /*
+            if (this.traffic.RobotIsInArea("OUTER", robot.properties.pose.Position) || this.traffic.RobotIsInArea("READY", robot.properties.pose.Position,TypeZone.OPZS))
             {
                 if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP)
                 {
@@ -92,7 +94,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                 {
                     door = this.doorservice.DoorMezzamineReturn_InV;
                 }
-            }
+            }*/
             return door;
         }
 

@@ -514,6 +514,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             }
             return hasRobot;
         }
+
         public bool HasRobotUnityinArea(String zoneName, RobotUnity robot)
         {
             bool hasRobot = false;
