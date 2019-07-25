@@ -10,6 +10,7 @@ using SeldatMRMS.Management.DoorServices;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
 using SeldatUnilever_Ver1._02.Management.McuCom;
+using SeldatUnilever_Ver1._02.Management.ProcedureServices;
 using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
@@ -436,7 +437,7 @@ namespace SeldatMRMS
             }
         }
     }
-    public class ProcedureRobotToReady : ProcedureControlServices
+    public class ProcedureRobotToReady : TrafficProcedureService
     {
         public struct DataRobotToReady
         {
@@ -457,7 +458,7 @@ namespace SeldatMRMS
         private DeviceRegistrationService deviceService;
 
         // public override event Action<Object> ErrorProcedureHandler;
-        public ProcedureRobotToReady(RobotUnity robot, ChargerId id, TrafficManagementService trafficService, ChargerManagementService chargerService, Pose PointCheckIn) : base(robot)
+        public ProcedureRobotToReady(RobotUnity robot, ChargerId id, TrafficManagementService trafficService, ChargerManagementService chargerService, Pose PointCheckIn) : base(robot,trafficService)
         {
             StateRobotGoToReady = RobotGoToReady.ROBREA_IDLE;
             this.robot = robot;

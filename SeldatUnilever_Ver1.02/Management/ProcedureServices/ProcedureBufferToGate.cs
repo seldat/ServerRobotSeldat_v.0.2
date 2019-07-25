@@ -238,6 +238,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                     break;
                     case BufferToGate.BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM:
+                        TrafficCheckInBuffer(goalFrontLinePos, bayId);
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
@@ -272,6 +273,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case BufferToGate.BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
                         try
                         {
+                            TrafficCheckInBuffer(goalFrontLinePos, bayId);
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;

@@ -563,6 +563,11 @@ namespace SeldatMRMS.Management.RobotManagent
                     double theta = pose.AngleW;
                     data.pose.orientation.z = (float)Math.Sin(theta / 2);
                     data.pose.orientation.w = (float)Math.Cos(theta / 2);
+                    Console.WriteLine("--------------------------");
+                    Console.WriteLine(pose.AngleW);
+                    Console.WriteLine(data.pose.orientation.z);
+                    Console.WriteLine(data.pose.orientation.w);
+                    Console.WriteLine("--------------------------");
 
                     this.Publish(paramsRosSocket.publication_robotnavigation, data);
                     robotLogOut.ShowText(this.properties.Label, "Send Pose => " + JsonConvert.SerializeObject(data).ToString());

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
+using SeldatUnilever_Ver1._02.Management.ProcedureServices;
 using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
@@ -13,7 +14,7 @@ using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterSer
 
 namespace SeldatMRMS
 {
-    public class ProcedureMachineToReturn : ProcedureControlServices
+    public class ProcedureMachineToReturn : TrafficProcedureService
     {
         public struct DataMachineToReturn
         {
@@ -31,7 +32,7 @@ namespace SeldatMRMS
         TrafficManagementService Traffic;
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
-        public ProcedureMachineToReturn(RobotUnity robot, TrafficManagementService traffiicService) : base(robot)
+        public ProcedureMachineToReturn(RobotUnity robot, TrafficManagementService traffiicService) : base(robot, traffiicService)
         {
             StateMachineToReturn = MachineToReturn.MACRET_IDLE;
             this.robot = robot;
@@ -90,6 +91,9 @@ namespace SeldatMRMS
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
                             {
                                 StateMachineToReturn = MachineToReturn.MACRET_ROBOT_GOTO_BACK_FRONTLINE_READY;
+                                registryRobotJourney.startPlaceName = Traffic.DetermineArea(BfToRe.GetFrontLineMachine().Position, TypeZone.OPZS);
+                                registryRobotJourney.startPoint = robot.properties.pose.Position;
+                                registryRobotJourney.endPoint = BfToRe.GetFrontLineMachine().Position;
                             }
                         }
                         else if (Traffic.RobotIsInArea("VIM", robot.properties.pose.Position))
@@ -459,7 +463,7 @@ namespace SeldatMRMS
                     default:
                         break;
                 }
-                robot.ShowText("-> " + procedureCode);
+                //robot.ShowText("-> " + procedureCode);
                 Thread.Sleep(5);
             }
             StateMachineToReturn = MachineToReturn.MACRET_IDLE;

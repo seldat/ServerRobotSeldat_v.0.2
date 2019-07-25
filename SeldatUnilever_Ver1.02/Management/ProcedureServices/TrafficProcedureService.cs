@@ -19,21 +19,42 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         TrafficManagementService traffic;
         DoorManagementService doorservice;
         RobotUnity robot;
+
         public TrafficProcedureService(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService trafficService) :base(robot)
         {
             this.traffic = trafficService;
             this.doorservice = doorservice;
             this.robot = robot;
         }
+        public TrafficProcedureService(RobotUnity robot,TrafficManagementService trafficService) : base(robot)
+        {
+            this.traffic = trafficService;
+            this.robot = robot;
+        }
         public TrafficProcedureService(RobotUnity robot) : base(robot)
         {
-
+            this.robot = robot;
         }
-        protected void TrafficCheckInBuffer(Pose frontLinePoint)
+        protected void TrafficCheckInBuffer(Pose frontLinePoint,int bayId)
         {
-            if(ExtensionService.CalDistance(robot.properties.pose.Position,frontLinePoint.Position)< 5)
+            if (ExtensionService.CalDistance(robot.properties.pose.Position,frontLinePoint.Position)< 5)
             {
-                if()
+                if(robot.bayId<0)
+                {
+                    robot.bayId = bayId;
+                }
+                if(checkAllRobotsHasInsideBayIdNear(bayId, 2))
+                {
+                    robot.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                }
+                else
+                {
+                    robot.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                }
+            }
+            else
+            {
+                robot.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
             }
             // kiem tra khoan cach robot hen hanh den diem dau line
             // neu gan diem dau line 
@@ -43,7 +64,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         protected bool checkAllRobotsHasInsideBayIdNear(int bayId,int step)
         {
-            for (int cnt = 0; cnt < step; cnt++)
+            for (int cnt = 0; cnt <= step; cnt++)
             {
                 foreach (RobotUnity robot in robotService.RobotUnityRegistedList.Values)
                 {

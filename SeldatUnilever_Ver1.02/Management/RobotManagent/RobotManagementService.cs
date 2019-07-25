@@ -230,6 +230,7 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 try
                 {
+                    robot.KillActionLib();
                     robot.Dispose();
                 }
                 catch { }

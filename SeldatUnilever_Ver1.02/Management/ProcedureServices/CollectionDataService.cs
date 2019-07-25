@@ -41,6 +41,8 @@ namespace SelDatUnilever_Ver1
         
         protected int palletId { get; set; }
         protected int planId { get; set; }
+        protected int bayId { get; set; }
+        public Pose goalFrontLinePos;
         public CollectionDataService()
         {
            // clientRequest = new BridgeClientRequest();
@@ -273,6 +275,7 @@ namespace SelDatUnilever_Ver1
                                         double y = (double)stuff["line"]["y"];
                                         double angle = (double)stuff["line"]["angle"];
                                         poseTemp = new Pose(x, y, angle);
+                                        goalFrontLinePos = poseTemp;
                                         break;
                                     }
                                     else
@@ -485,6 +488,7 @@ namespace SelDatUnilever_Ver1
                                         double y = (double)stuff["line"]["y"];
                                         double angle = (double)stuff["line"]["angle"];
                                         poseTemp = new Pose(x, y, angle);
+                                        goalFrontLinePos = poseTemp;
                                         break;
                                     }
                                     else
@@ -955,11 +959,12 @@ namespace SelDatUnilever_Ver1
                                     {
                                         var palletInfo = buffer["pallets"][0];
                                         JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                        int bayId = (int)stuff["bayId"];
+                                        bayId = (int)stuff["bayId"];
                                         double x = (double)stuff["line"]["x"];
                                         double y = (double)stuff["line"]["y"];
                                         double angle = (double)stuff["line"]["angle"];
                                         poseTemp = new Pose(x, y, angle);
+                                        goalFrontLinePos = poseTemp;
                                         break;
                                     }
                                     else
@@ -993,6 +998,7 @@ namespace SelDatUnilever_Ver1
                                 double y = (double)stuff["line"]["y"];
                                 double angle = (double)stuff["line"]["angle"];
                                 poseTemp = new Pose(x, y, angle);
+                                goalFrontLinePos = poseTemp;
                                 break;
                             }
                             else
@@ -1230,6 +1236,7 @@ namespace SelDatUnilever_Ver1
 
         public Pose GetFrontLineMachine()
         {
+            goalFrontLinePos = order.palletAtMachine.linePos;
             return order.palletAtMachine.linePos;
         }
 
@@ -1289,6 +1296,7 @@ namespace SelDatUnilever_Ver1
                         double y = (double)stuff["line"]["y"];
                         double angle = (double)stuff["line"]["angle"];
                         poseTemp = new Pose(x, y, angle);
+                        goalFrontLinePos=poseTemp;
                         break;
                     }
                     else

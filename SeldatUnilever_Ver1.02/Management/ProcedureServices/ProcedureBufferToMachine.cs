@@ -6,6 +6,7 @@ using System.Windows;
 using Newtonsoft.Json.Linq;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
+using SeldatUnilever_Ver1._02.Management.ProcedureServices;
 using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
@@ -17,7 +18,7 @@ using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterSer
 
 namespace SeldatMRMS
 {
-    public class ProcedureBufferToMachine : ProcedureControlServices
+    public class ProcedureBufferToMachine : TrafficProcedureService
     {
         public class DataBufferToMachine
         {
@@ -42,7 +43,7 @@ namespace SeldatMRMS
         }
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
-        public ProcedureBufferToMachine(RobotUnity robot, TrafficManagementService trafficService) : base(robot)
+        public ProcedureBufferToMachine(RobotUnity robot, TrafficManagementService trafficService) : base(robot,trafficService)
         {
             StateBufferToMachine = BufferToMachine.BUFMAC_IDLE;
             this.robot = robot;
@@ -67,6 +68,7 @@ namespace SeldatMRMS
             registryRobotJourney = new RegistryRobotJourney();
             registryRobotJourney.robot = robot;
             registryRobotJourney.traffic = Traffic;
+            robot.bayId = -1;
 
         }
         public void Destroy()
@@ -76,6 +78,7 @@ namespace SeldatMRMS
             robot.orderItem = null;
             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_DESTROY;
             TrafficRountineConstants.ReleaseAll(robot);
+            robot.bayId = -1;
 
         }
 
@@ -296,6 +299,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM_FROM_READY:
+                        TrafficCheckInBuffer(goalFrontLinePos, bayId);
                         TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         try
                         {
@@ -318,6 +322,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM:
+                        TrafficCheckInBuffer(goalFrontLinePos, bayId);
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
@@ -348,6 +353,7 @@ namespace SeldatMRMS
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
                         // dò và release vùng đăng ky
+                        TrafficCheckInBuffer(goalFrontLinePos, bayId);
                         TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         try
                         {
@@ -574,7 +580,7 @@ namespace SeldatMRMS
                     default:
                         break;
                 }
-                robot.ShowText("-> " + procedureCode);
+             //   robot.ShowText("-> " + procedureCode);
                 Thread.Sleep(5);
             }
             StateBufferToMachine = BufferToMachine.BUFMAC_IDLE;

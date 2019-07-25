@@ -58,6 +58,7 @@ namespace SeldatMRMS
             errorCode = ErrorCode.RUN_OK;
             robot.robotTag = RobotStatus.WORKING;
             robot.ProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
+            robot.bayId = -1;
             robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.GOING_INSIDE_GATE;
             StateForkLift = state;
 
@@ -83,7 +84,7 @@ namespace SeldatMRMS
             robot.robotTag = RobotStatus.IDLE;
             StateForkLift = ForkLift.FORMAC_ROBOT_DESTROY;
             TrafficRountineConstants.ReleaseAll(robot);
-
+            robot.bayId = -1;
         }
         public void Procedure(object ojb)
         {
@@ -303,7 +304,8 @@ namespace SeldatMRMS
                             robot.SwitchToDetectLine(false);
                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                             registryRobotJourney.startPoint = robot.properties.pose.Position;
-                            registryRobotJourney.endPoint = FlToBuf.GetFrontLineBuffer(true).Position;
+                           registryRobotJourney.endPoint = FlToBuf.GetFrontLineBuffer(true).Position;
+                           
                         }
                         catch (System.Exception)
                         {
@@ -366,6 +368,7 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
                         // xóa đăng ký vùng
+                        TrafficCheckInBuffer(goalFrontLinePos,bayId);
                         TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         try
                         {

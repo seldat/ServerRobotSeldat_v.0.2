@@ -13,7 +13,7 @@ using SeldatUnilever_Ver1._02.Management.TrafficManager;
 
 namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 {
-    public class ProcedureMachineToBufferReturn:ProcedureControlServices
+    public class ProcedureMachineToBufferReturn: TrafficProcedureService
     {
         MachineToBufferReturn StateMachineToBufferReturn;
         Thread ProMachineToBufferReturn;
@@ -22,7 +22,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         TrafficManagementService Traffic;
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
-        public ProcedureMachineToBufferReturn(RobotUnity robot, TrafficManagementService traffiicService) : base(robot)
+        public ProcedureMachineToBufferReturn(RobotUnity robot, TrafficManagementService traffiicService) : base(robot, traffiicService)
         {
             StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_IDLE;
             this.robot = robot;
@@ -365,6 +365,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_BUFFER_RETURN_FROM_VIM: // dang di
                         try
                         {
+                            TrafficCheckInBuffer(goalFrontLinePos, bayId);
                             if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                             {
                                 break;
@@ -398,6 +399,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_BUFFER_RETURN: // dang di
                         try
                         {
+                            TrafficCheckInBuffer(goalFrontLinePos, bayId);
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
@@ -472,7 +474,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     default:
                         break;
                 }
-                robot.ShowText("-> " + procedureCode);
+                //robot.ShowText("-> " + procedureCode);
                 Thread.Sleep(5);
             }
             StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_IDLE;
