@@ -52,7 +52,7 @@ namespace SeldatMRMS.Management.RobotManagent
           //TestRobotProceure();
         }
 
-        public void TestRobotReadyProceure()
+        public void Initialize()
         {
 //#if false
             PropertiesRobotUnity prop1 = new PropertiesRobotUnity();
@@ -224,98 +224,16 @@ namespace SeldatMRMS.Management.RobotManagent
           //  r3.Start(prop3.Url);
 
         }
-        public void Initialize()
+        public void close()
         {
-            PropertiesRobotUnity prop1 = new PropertiesRobotUnity();
-            prop1.NameId = "RSD"+ RobotUnityRegistedList.Count;
-            prop1.L1 = 4;
-            prop1.L2 = 4;
-            prop1.WS = 6;
-            prop1.Label = "Robot1";
-            prop1.BatteryLevelRb = 40;
-            prop1.Url = "ws://192.168.80.181:9090";
-            prop1.ipMcuCtrl = "192.168.1.211";
-            prop1.portMcuCtrl = 8081;
-            prop1.DistInter = 4;
-            prop1.BatteryLowLevel = BAT_LOW_LEVEL;
-            prop1.RequestChargeBattery = false;
-            prop1.Width = 1.8;
-            prop1.Height = 2.5;
-            prop1.Length = 2.2;
-            prop1.ChargeID= ChargerId.CHARGER_ID_1;
-            prop1.Scale = 1;
-            RobotUnity r1 = new RobotUnity();
-            r1.Initialize(this.canvas);
-            r1.UpdateProperties(prop1);
-            r1.ConnectionStatusHandler += ConnectionStatusHandler;
-            PropertiesRobotUnity_List.Add (r1.properties);
-            RobotUnityRegistedList.Add (r1.properties.NameId, r1);
-            r1.Registry (trafficManagementService);
-            r1.Start (prop1.Url);
-            // đăng ký robot list to many robot quan trong
-            AddRobotUnityReadyList (r1);
-            r1.RegisteRobotInAvailable (RobotUnityRegistedList);
-#if false
-            PropertiesRobotUnity prop2 = new PropertiesRobotUnity ();
-            prop2.NameId = "RSD" + RobotUnityRegistedList.Count;
-            prop2.L1 = 40;
-            prop2.L2 = 40;
-            prop2.WS = 60;
-            prop2.Label = "Robot2";
-            prop2.BatteryLevelRb = 40;
-            prop2.Url = "ws://192.168.1.182:9090";
-            prop2.ipMcuCtrl = "192.168.1.212";
-            prop2.portMcuCtrl = 8081;
-            prop2.DistInter = 40;
-            prop2.BatteryLowLevel = BAT_LOW_LEVEL;
-            prop2.RequestChargeBattery = false;
-            prop2.Width = 1.8;
-            prop2.Height = 2.5;
-            prop2.Length = 2.2;
-            prop2.ChargeID = ChargerId.CHARGER_ID_2;
-            prop2.Scale = 10;
-            RobotUnity r2 = new RobotUnity();
-            r2.Initialize(this.canvas);
-            r2.UpdateProperties(prop2);
-            r2.ConnectionStatusHandler += ConnectionStatusHandler;
-            PropertiesRobotUnity_List.Add(r2.properties);
-            RobotUnityRegistedList.Add(r2.properties.NameId, r2);
-            r2.Registry(trafficManagementService);
-            r2.Start (prop2.Url);
-            AddRobotUnityReadyList (r2);
-            r2.RegisteRobotInAvailable (RobotUnityRegistedList);
-
-            PropertiesRobotUnity prop3 = new PropertiesRobotUnity();
-            prop3.NameId = "RSD" + RobotUnityRegistedList.Count;
-            prop3.L1 = 40;
-            prop3.L2 = 40;
-            prop3.WS = 60;
-            prop3.Label = "Robot3";
-            prop3.BatteryLevelRb = 40;
-            prop3.Url = "ws://192.168.1.183:9090";
-            prop3.ipMcuCtrl = "192.168.1.213";
-            prop3.portMcuCtrl = 8081;
-            prop3.DistInter = 40;
-            prop3.BatteryLowLevel = BAT_LOW_LEVEL;
-            prop3.RequestChargeBattery = false;
-            prop3.Width = 1.8;
-            prop3.Height = 2.5;
-            prop3.Length = 2.2;
-            prop3.ChargeID = ChargerId.CHARGER_ID_3;
-            prop3.Scale = 10;
-
-            RobotUnity r3 = new RobotUnity();
-            r3.Initialize(this.canvas);
-            r3.UpdateProperties(prop3);
-            r3.ConnectionStatusHandler += ConnectionStatusHandler;
-            PropertiesRobotUnity_List.Add(r2.properties);
-            RobotUnityRegistedList.Add(r3.properties.NameId, r3);
-            r3.Registry(trafficManagementService);
-            r3.Start (prop3.Url);
-            AddRobotUnityReadyList (r3);
-            r3.RegisteRobotInAvailable (RobotUnityRegistedList);
-            Grouped_PropertiesRobotUnity.Refresh ();
-#endif
+            foreach(RobotUnity robot in RobotUnityRegistedList.Values)
+            {
+                try
+                {
+                    robot.Dispose();
+                }
+                catch { }
+            }
         }
         public void Registry(TrafficManagementService trafficManagementService)
         {

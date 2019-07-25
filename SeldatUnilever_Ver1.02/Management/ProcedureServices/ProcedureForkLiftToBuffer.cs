@@ -281,6 +281,7 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE:
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
+                            Global_Object.setGateStatus(order.gate, false);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             ds.LampOff(DoorService.DoorType.DOOR_FRONT);
                             ds.closeDoor(DoorService.DoorType.DOOR_BACK);
@@ -297,6 +298,7 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_WAITTING_CLOSE_GATE:
                         try
                         {
+                            
                             StateForkLift = ForkLift.FORBUF_ROBOT_CHECK_GOTO_BUFFER_OR_MACHINE;
                             robot.SwitchToDetectLine(false);
                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);

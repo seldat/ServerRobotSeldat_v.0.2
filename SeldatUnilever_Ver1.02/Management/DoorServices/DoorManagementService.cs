@@ -42,10 +42,10 @@ namespace SeldatMRMS.Management.DoorServices
                 fistInit = true;
                 LoadConfigure();
 
-                DoorMezzamineUp = new DoorService(DoorInfoConfigList[0]);
-                DoorMezzamineUp_InV = new DoorService(DoorInfoConfigList[1]);
-                DoorMezzamineUpNew = new DoorService(DoorInfoConfigList[2]);
-                DoorMezzamineUpNew_InV = new DoorService(DoorInfoConfigList[3]);
+                DoorMezzamineUpNew = new DoorService(DoorInfoConfigList[0]);
+                DoorMezzamineUpNew_InV = new DoorService(DoorInfoConfigList[1]);
+                DoorMezzamineUp = new DoorService(DoorInfoConfigList[2]);
+                DoorMezzamineUp_InV = new DoorService(DoorInfoConfigList[3]);
                 DoorMezzamineReturn = new DoorService(DoorInfoConfigList[4]); // kiem tra lai 
                 DoorMezzamineReturn_InV = new DoorService(DoorInfoConfigList[5]); // kiem tra lai 
                 try

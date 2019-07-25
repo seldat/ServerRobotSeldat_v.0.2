@@ -86,7 +86,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         public OrderItem Gettask()
         {
             OrderItem item = null;
-            if (!onFlagBusyGetTask)
+         //   if (!onFlagBusyGetTask)
             {
                 onFlagBusyGetTask = true;
               
@@ -165,8 +165,9 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         }
                     }
                     catch { }
-                    onFlagBusyGetTask = false;
+                    
                 }
+                onFlagBusyGetTask = false;
             }
             return item;
             

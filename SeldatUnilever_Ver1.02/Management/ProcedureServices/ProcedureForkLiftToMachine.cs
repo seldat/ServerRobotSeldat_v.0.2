@@ -249,6 +249,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE:
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
+                            Global_Object.setGateStatus(order.gate, false);
                             robot.SwitchToDetectLine(false);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             ds.LampOff(DoorService.DoorType.DOOR_FRONT);

@@ -70,6 +70,7 @@ namespace SeldatUnilever_Ver1._02
 
         private void MainWindow_Closed(object sender, EventArgs e)
         {
+            unityService.robotManagementService.close();
             Environment.Exit(Environment.ExitCode);
         }
 
