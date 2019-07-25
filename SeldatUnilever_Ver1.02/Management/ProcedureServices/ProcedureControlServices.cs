@@ -30,6 +30,7 @@ namespace SeldatMRMS {
         public const UInt32 TIME_OUT_OPEN_DOOR = 5000; /* ms */
         public const UInt32 TIME_OUT_CLOSE_DOOR = 5000; /* ms */
         protected RegistryRobotJourney registryRobotJourney;
+        protected RobotManagementService robotService;
         public enum ProcedureStatus
         {
             PROC_ALIVE,
@@ -348,7 +349,10 @@ namespace SeldatMRMS {
             MACGATE_ROBOT_WAITTING_CLOSE_GATE, // doi dong cong.
             MACGATE_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
-
+        public void Registry(RobotManagementService robotService)
+        {
+            this.robotService = robotService;
+        }
         public enum RobotGoToCharge {
             ROBCHAR_IDLE,
             // ROBCHAR_CHARGER_CHECKSTATUS, //kiểm tra kết nối và trạng thái sạc

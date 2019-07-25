@@ -955,6 +955,7 @@ namespace SelDatUnilever_Ver1
                                     {
                                         var palletInfo = buffer["pallets"][0];
                                         JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                        int bayId = (int)stuff["bayId"];
                                         double x = (double)stuff["line"]["x"];
                                         double y = (double)stuff["line"]["y"];
                                         double angle = (double)stuff["line"]["angle"];
@@ -966,7 +967,6 @@ namespace SelDatUnilever_Ver1
                                         continue;
                                     }
                                 }
-
                                 break;
 
                             }

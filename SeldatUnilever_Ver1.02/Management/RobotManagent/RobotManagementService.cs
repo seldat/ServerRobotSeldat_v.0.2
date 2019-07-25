@@ -49,7 +49,7 @@ namespace SeldatMRMS.Management.RobotManagent
             Grouped_PropertiesRobotUnity = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRobotUnity_List);
             configureForm = new ConfigureRobotUnity(this, Thread.CurrentThread.CurrentCulture.ToString());
             //LoadConfigure();
-          //TestRobotProceure();
+            //TestRobotProceure();
         }
 
         public void Initialize()

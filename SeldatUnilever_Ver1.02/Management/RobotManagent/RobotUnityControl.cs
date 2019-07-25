@@ -69,6 +69,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
             public double AngleW { get; set; } // radian
             public double Angle { get; set; } // radian
+            public int bayId;
         }
         public enum RobotSpeedLevel {
             ROBOT_SPEED_NORMAL = 2,

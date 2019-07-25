@@ -29,7 +29,38 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         {
 
         }
-
+        protected void TrafficCheckInBuffer(Pose frontLinePoint)
+        {
+            if(ExtensionService.CalDistance(robot.properties.pose.Position,frontLinePoint.Position)< 5)
+            {
+                if()
+            }
+            // kiem tra khoan cach robot hen hanh den diem dau line
+            // neu gan diem dau line 
+            // check co robot nao lam viec trong vung bayId do khong. neu co ngung lai
+            // check co robot nao lam viec o line do ma co robot lam o nhung line lan can bayid co ngung lai
+            //
+        }
+        protected bool checkAllRobotsHasInsideBayIdNear(int bayId,int step)
+        {
+            for (int cnt = 0; cnt < step; cnt++)
+            {
+                foreach (RobotUnity robot in robotService.RobotUnityRegistedList.Values)
+                {
+                    if (robot != this.robot)
+                    {
+                        if (robot.bayId > 0)
+                        {
+                            if (robot.bayId == (bayId + cnt) || robot.bayId == (bayId - cnt))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
         protected DoorService getDoorService()
         {
             DoorService door=null;     

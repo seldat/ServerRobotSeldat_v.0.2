@@ -455,7 +455,7 @@ namespace SeldatMRMS
         TrafficManagementService Traffic;
         public override event Action<Object> ReleaseProcedureHandler;
         private DeviceRegistrationService deviceService;
-        RobotManagementService robotService;
+
         // public override event Action<Object> ErrorProcedureHandler;
         public ProcedureRobotToReady(RobotUnity robot, ChargerId id, TrafficManagementService trafficService, ChargerManagementService chargerService, Pose PointCheckIn) : base(robot)
         {
@@ -470,10 +470,7 @@ namespace SeldatMRMS
         {
             this.deviceService = deviceService;
         }
-        public void Registry(RobotManagementService robotService)
-        {
-            this.robotService = robotService;
-        }
+
         public void Start(RobotGoToReady state = RobotGoToReady.ROBREA_SELECT_BEHAVIOR_ONZONE)
         {
             order = new OrderItem();

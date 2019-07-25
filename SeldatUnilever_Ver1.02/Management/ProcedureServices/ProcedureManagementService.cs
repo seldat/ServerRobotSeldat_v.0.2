@@ -30,6 +30,7 @@ namespace SeldatMRMS
                     procfb.AssignAnOrder (orderItem);
                     robot.proRegistryInRobot.pFB = procfb;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
+                    procfb.Registry(robotManagementService);
                     procfb.Start ();
                     break;
                 case ProcedureItemSelected.PROCEDURE_BUFFER_TO_MACHINE:
@@ -44,6 +45,7 @@ namespace SeldatMRMS
                     procbm.AssignAnOrder (orderItem);
                     robot.proRegistryInRobot.pBM = procbm;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_BUFFER_TO_MACHINE;
+                    procbm.Registry(robotManagementService);
                     procbm.Start ();
                     break;
                 case ProcedureItemSelected.PROCEDURE_BUFFER_TO_RETURN:
@@ -57,6 +59,7 @@ namespace SeldatMRMS
                     procbr.AssignAnOrder (orderItem);
                     robot.proRegistryInRobot.pBR = procbr;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_BUFFER_TO_RETURN;
+                    procbr.Registry(robotManagementService);
                     procbr.Start ();
                     break;
                 case ProcedureItemSelected.PROCEDURE_PALLETEMPTY_MACHINE_TO_RETURN:
@@ -70,6 +73,7 @@ namespace SeldatMRMS
                     procmr.AssignAnOrder (orderItem);
                     robot.proRegistryInRobot.pMR = procmr;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_MACHINE_TO_RETURN;
+                    procmr.Registry(robotManagementService);
                     procmr.Start ();
                     break;
                 case ProcedureItemSelected.PROCEDURE_RETURN_TO_GATE:
@@ -81,6 +85,7 @@ namespace SeldatMRMS
                     procrg.ErrorProcedureHandler += ErrorApprearInProcedureItem;
                    // RegisterProcedureItemList.Add (itemprocrg);
                     procrg.AssignAnOrder (orderItem);
+                    procrg.Registry(robotManagementService);
                     procrg.Start ();
                     break;
                 case ProcedureItemSelected.PROCEDURE_ROBOT_TO_CHARGE:
@@ -119,6 +124,7 @@ namespace SeldatMRMS
                    // RegisterProcedureItemList.Add(itemprocRrr);
                     robot.proRegistryInRobot.pRR = procRrr;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_READY;
+                    procRrr.Registry(robotManagementService);
                     procRrr.Start();
                     break;
                 case ProcedureItemSelected.PROCEDURE_FORLIFT_TO_MACHINE:
@@ -132,6 +138,7 @@ namespace SeldatMRMS
                     procfm.AssignAnOrder(orderItem);
                     robot.proRegistryInRobot.pFM = procfm;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
+                    procfm.Registry(robotManagementService);
                     procfm.Start();
                     break;
                 case ProcedureItemSelected.PROCEDURE_BUFFER_TO_BUFFER:
@@ -145,6 +152,7 @@ namespace SeldatMRMS
                     procbb.AssignAnOrder(orderItem);
                     robot.proRegistryInRobot.pBB = procbb;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_BUFFER_TO_BUFFER;
+                    procbb.Registry(robotManagementService);
                     procbb.Start();
                     break;
                 case ProcedureItemSelected.PROCEDURE_BUFER_TO_GATE:
@@ -158,6 +166,7 @@ namespace SeldatMRMS
                     procbg.AssignAnOrder(orderItem);
                     robot.proRegistryInRobot.pBG= procbg;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_BUFFER_TO_GATE;
+                    procbg.Registry(robotManagementService);
                     procbg.Start();
                     break;
                 case ProcedureItemSelected.PROCEDURE_MACHINE_TO_GATE:
@@ -184,6 +193,7 @@ namespace SeldatMRMS
                     procmbr.AssignAnOrder(orderItem);
                     robot.proRegistryInRobot.pMBR = procmbr;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_MACHINE_TO_BUFFER_RETURN;
+                    procmbr.Registry(robotManagementService);
                     procmbr.Start();
                     break;
             }
