@@ -392,7 +392,7 @@ namespace SeldatMRMS
                     default:
                         break;
                 }
-                robot.ShowText("-> " + procedureCode);
+                //robot.ShowText("-> " + procedureCode);
                 Thread.Sleep(5);
             }
             StateRobotToCharge = RobotGoToCharge.ROBCHAR_IDLE;

@@ -116,7 +116,7 @@ namespace SeldatMRMS.Management.DoorServices
                 Port = 8081,
                 infoPallet = "{\"pallet\":0,\"dir_main\":1,\"dir_out\":1,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
                 PointCheckInGateStr = "2.54,-6.78,90",
-                PointFrontLineStr = "17.88,0.7,0"
+                PointFrontLineStr = "13.88,0.7,0"
             };
             doorICF_MUB_INV.ParsePointCheckInGateValue(doorICF_MUB_INV.PointCheckInGateStr);
             doorICF_MUB_INV.ParsePointFrontLineValue(doorICF_MUB_INV.PointFrontLineStr);
