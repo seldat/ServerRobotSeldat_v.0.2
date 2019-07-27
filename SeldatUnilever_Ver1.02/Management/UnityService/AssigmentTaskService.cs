@@ -108,7 +108,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                     {
                                         MoveElementToEnd();
                                         cntOrderNull_wait++;
-                                        break;
+                                        //break;
                                     }
                                 }
                             }

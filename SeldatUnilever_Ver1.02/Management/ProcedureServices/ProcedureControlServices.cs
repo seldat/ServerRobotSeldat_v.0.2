@@ -91,6 +91,7 @@ namespace SeldatMRMS {
             FORBUF_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.
             FORBUF_ROBOT_WAITTING_GOTO_GATE, // doi robot di den khu vuc cong
             FORBUF_ROBOT_WAITTING_GOTO_GATE_READY, // doi robot di den khu vuc cong
+            FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM_REG, // doi robot di den khu vuc cong
             FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM, // doi robot di den khu vuc cong
             FORBUF_ROBOT_CAME_GATE_POSITION, // da den khu vuc cong , gui yeu cau mo cong.
             FORBUF_ROBOT_WAITTING_OPEN_DOOR, //doi mo cong
@@ -106,6 +107,7 @@ namespace SeldatMRMS {
             FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER, // doi robot di den khu vuc checkin cua vung buffer
             FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY, // doi khu vuc buffer san sang de di vao
             FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER, // den dau line buffer, chuyen mode do line
+            FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM_REG, // den dau line buffer, chuyen mode do line
             FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM, // den dau line buffer, chuyen mode do line
             // FORBUF_ROBOT_WAITTING_GOTO_POINT_BRANCHING, // doi khu vuc buffer san sang de di vao
             // FORBUF_ROBOT_CAME_POINT_BRANCHING, //den dau line pallet, gui chieu quay (trai phai), va toa do pallet (option)
@@ -153,6 +155,7 @@ namespace SeldatMRMS {
             BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER, // doi robot di den khu vuc checkin cua vung buffer
             BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_VIM,
             BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY, // doi khu vuc buffer san sang de di vao
+            BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM_REG,
             BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM,
             BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM_FROM_READY,
             BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER, // den dau line buffer, chuyen mode do line
@@ -166,6 +169,7 @@ namespace SeldatMRMS {
             // BUFMAC_ROBOT_CAME_CHECKIN_MACHINE, // đã đến vị trí
             BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET_SELECT_ZONE,
             BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET,
+            BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET_IN_VIM_REG,
             BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET_IN_VIM,
             // BUFMAC_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET, 
             // BUFMAC_ROBOT_WAITTING_GOTO_POINT_DROP_PALLET, 
@@ -185,6 +189,7 @@ namespace SeldatMRMS {
             BUFTOBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_A, // doi robot di den khu vuc checkin cua vung buffer
             BUFTOBUF_ROBOT_WAITTING_ZONE_BUFFER_READY_A, // doi khu vuc buffer san sang de di vao
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A, // den dau line buffer, chuyen mode do line
+            BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM_REG,
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM, // den dau line buffer, chuyen mode do line
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM_READY, // den dau line buffer, chuyen mode do line
             BUFTOBUF_ROBOT_WAITTING_PICKUP_PALLET_BUFFER_A, // doi robot do line den pallet  va tha pallet
@@ -193,6 +198,7 @@ namespace SeldatMRMS {
             BUFTOBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_B, // doi robot di den khu vuc checkin cua vung buffer
             BUFTOBUF_ROBOT_BUFFER_B_SELECT_ZONE, // doi khu vuc buffer san sang de di vao
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B, // den dau line buffer, chuyen mode do line
+            BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B_FROM_VIM_REG,
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B_FROM_VIM, // den dau line buffer, chuyen mode do line
             BUFTOBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER_B, // doi robot do line den pallet  va tha pallet
             BUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_B, // doi robot di den dau line buffer.
@@ -309,6 +315,7 @@ namespace SeldatMRMS {
             BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER_FROM_VIM,
             BUFGATE_ROBOT_GOTO_BACK_FRONTLINE_READY,
             BUFGATE_ROBOT_WAITTING_ZONE_BUFFER_READY, // doi khu vuc buffer san sang de di vao
+            BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM_REG,
             BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM,
             BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM_READY,
             BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER, // den dau line buffer, chuyen mode do line
@@ -319,6 +326,7 @@ namespace SeldatMRMS {
             BUFGATE_ROBOT_DESTROY, // trả robot về robotmanagement để nhận quy trình mới
             BUFGATE_SELECT_BEHAVIOR_ONZONE_TO_GATE,
             BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE,
+            BUFGATE_ROBOT_CAME_CHECKIN_GATE_REG, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao
             BUFGATE_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.
             BUFGATE_ROBOT_WAITTING_GOTO_GATE, // doi robot di den khu vuc cong
             BUFGATE_ROBOT_WAITTING_GOTO_GATE_FROM_VIM, // doi robot di den khu vuc cong

@@ -353,6 +353,32 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             }
             return false;
         }
+        public static bool Reg_checkinC2_Ready(RobotUnity robot, TrafficManagementService traffic)
+        {
+            bool onRegG12 = false;
+            bool onRegReady = false;
+            Point Rloc = robot.properties.pose.Position;
+            //kiem tra có robot trong vùng này, nếu có trả về false
+            if (traffic.HasOtherRobotUnityinArea("READY", robot))
+            {
+                return false;
+            }
+            if (RegIntZone_GATE12.ProcessRegistryIntersectionZone(robot))
+            {
+                onRegG12 = true;
+            }
+
+            if (RegIntZone_READY.ProcessRegistryIntersectionZone(robot))
+            {
+                onRegReady = true;
+            }
+
+            if (onRegG12 && onRegReady)
+            {
+                return true;
+            }
+            return false;
+        }
 
         // Từ Gate12 ( C3) -> VIM and ELEVATOR
         // Detect no Robot : Elevator
@@ -649,7 +675,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             }
             if (startZone.Equals("READY") && endZone.Equals("OUTER"))
             {
-                return Reg_checkinReady_G3(rrj.robot, rrj.traffic);
+                return Reg_checkinReady_ReadyandOuter(rrj.robot, rrj.traffic);
             }
             #endregion
 
@@ -676,7 +702,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             // OUTER->READY
             if (startZone.Equals("OUTER") && endZone.Equals("READY"))
             {
-                return Reg_checkinC1_Gate12(rrj.robot, rrj.traffic);
+                return Reg_checkinC1_Ready(rrj.robot, rrj.traffic);
             }
             #endregion
             #region VIM (C2) -> READY , GATE12, ELEVATOR, VIM, GATE3
@@ -696,7 +722,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             // VIM->READY && OUTER
             if (startZone.Equals("VIM-BTLCAP") && endZone.Equals("READY"))
             {
-                return Reg_checkinC2_Outer(rrj.robot, rrj.traffic);
+                return Reg_checkinC2_Ready(rrj.robot, rrj.traffic);
             }
             if (startZone.Equals("VIM-BTLCAP") && endZone.Equals("OUTER"))
             {

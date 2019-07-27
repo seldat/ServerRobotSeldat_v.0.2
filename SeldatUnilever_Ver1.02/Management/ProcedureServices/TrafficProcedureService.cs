@@ -19,7 +19,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         TrafficManagementService traffic;
         DoorManagementService doorservice;
         RobotUnity robot;
-
+        protected int DISTANCE_CHECk_BAYID = 12;
         public TrafficProcedureService(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService trafficService) :base(robot)
         {
             this.traffic = trafficService;
@@ -37,24 +37,24 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         protected void TrafficCheckInBuffer(Pose frontLinePoint,int bayId)
         {
-            if (ExtensionService.CalDistance(robot.properties.pose.Position,frontLinePoint.Position)< 120)
+            if (ExtensionService.CalDistance(robot.properties.pose.Position,frontLinePoint.Position)< DISTANCE_CHECk_BAYID)
             {
                 if(robot.bayId<0)
                 {
                     robot.bayId = bayId;
                 }
-                if(checkAllRobotsHasInsideBayIdNear(bayId, 2))
+                if(checkAllRobotsHasInsideBayIdNear(bayId, 4))
                 {
-                    robot.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                    robot.SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP,true);
                 }
                 else
                 {
-                    robot.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                    robot.SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
                 }
             }
             else
             {
-                robot.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                robot.SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
             }
             // kiem tra khoan cach robot hen hanh den diem dau line
             // neu gan diem dau line 
@@ -64,22 +64,20 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         protected bool checkAllRobotsHasInsideBayIdNear(int bayId,int step)
         {
-            for (int cnt = 0; cnt <= step; cnt++)
-            {
+        
                 foreach (RobotUnity robot in robotService.RobotUnityRegistedList.Values)
                 {
                     if (robot != this.robot)
                     {
                         if (robot.bayId > 0)
                         {
-                            if (robot.bayId == (bayId + cnt) || robot.bayId == (bayId - cnt))
+                            if (bayId < (robot.bayId + step) || bayId >  (robot.bayId - step))
                             {
                                 return true;
                             }
                         }
                     }
                 }
-            }
             return false;
         }
         protected DoorService getDoorService()

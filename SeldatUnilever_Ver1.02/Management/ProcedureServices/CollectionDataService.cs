@@ -1295,7 +1295,7 @@ namespace SelDatUnilever_Ver1
 
             Pose poseTemp = null;
             dynamic product = new JObject();
-            product.palletStatus = PalletStatus.F.ToString();
+            product.palletStatus = PalletStatus.P.ToString();
             String collectionData = RequestDataProcedure(product.ToString(), Global_Object.url + "buffer/getListBufferReturn");
             if (collectionData.Length > 0)
             {
@@ -1345,7 +1345,7 @@ namespace SelDatUnilever_Ver1
             try
             {
 
-                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "buffer/getListBufferReturn" ); //"plan/getListPlanPallet"
                 if (collectionData.Length > 0)
                 {
                     JArray results = JArray.Parse(collectionData);
@@ -1416,7 +1416,7 @@ namespace SelDatUnilever_Ver1
             JInfoPallet infoPallet = new JInfoPallet();
 
             dynamic product = new JObject();
-            product.palletStatus = PalletStatus.F.ToString();
+            product.palletStatus = PalletStatus.P.ToString();
             String collectionData = RequestDataProcedure(product.ToString(), Global_Object.url + "buffer/getListBufferReturn");
             if (collectionData.Length > 0)
             {

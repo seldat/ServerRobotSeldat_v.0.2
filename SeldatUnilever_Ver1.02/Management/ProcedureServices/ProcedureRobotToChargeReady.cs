@@ -553,12 +553,9 @@ namespace SeldatMRMS
                         {
                             break;
                         }
-                        else
-                        {
-                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
-                        }
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
+                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION;
                             //robot.ShowText("ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION");

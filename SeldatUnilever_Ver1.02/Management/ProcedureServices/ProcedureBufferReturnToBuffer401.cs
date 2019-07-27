@@ -141,7 +141,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                 Pose endPose = BfToBf.GetFrontLineBufferReturn_BRB401(order.dataRequest_BufferReturn);
                                 if (rb.SendPoseStamped(endPose))
                                 {
-                                    StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM;
+                                    StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM_REG;
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
                                     registryRobotJourney.startPoint = robot.properties.pose.Position;
                                     registryRobotJourney.endPoint = endPose.Position;
@@ -169,7 +169,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                 //robot.ShowText("GO FRONTLINE IN VIM");
                                 if (rb.SendPoseStamped(destPos1))
                                 {
-                                    StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM;
+                                    StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM_REG;
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                     registryRobotJourney.startPoint = robot.properties.pose.Position;
                                     registryRobotJourney.endPoint = destPos1.Position;
@@ -269,7 +269,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             CheckUserHandleError(this);
                         }
                         break;
-                    case BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM:
+                    case BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM_REG:
                         TrafficCheckInBuffer(goalFrontLinePos, bayId);
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
@@ -277,8 +277,11 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         else
                         {
-                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                            StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM;
                         }
+                        break;
+                    case BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM:
+                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         try
                         {
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
@@ -373,7 +376,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             if (rb.SendPoseStamped(destPos))
                             {
-                                StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B_FROM_VIM;
+                                StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B_FROM_VIM_REG;
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
                                 registryRobotJourney.endPoint = destPos.Position;
@@ -397,7 +400,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             {
                                 if (rb.SendPoseStamped(destPos))
                                 {
-                                    StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B_FROM_VIM;
+                                    StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B_FROM_VIM_REG;
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                     registryRobotJourney.startPoint = robot.properties.pose.Position;
                                     registryRobotJourney.endPoint = destPos.Position;
@@ -407,18 +410,22 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
 
                         break;
+                    case BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B_FROM_VIM_REG:
+                        TrafficCheckInBuffer(goalFrontLinePos, bayId);
+                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B_FROM_VIM;
+
+                        }
+                        break;
                     case BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B_FROM_VIM:
                         try
                         {
-                            TrafficCheckInBuffer(goalFrontLinePos, bayId);
-                            if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                TrafficRountineConstants.DetectRelease(registryRobotJourney);
-                            }
+                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 robot.SwitchToDetectLine(true);

@@ -786,7 +786,7 @@ namespace SeldatMRMS.Management
         public void SetSafeYellowcircle(bool flagonoff)
         {
             if (flagonoff)
-                Radius_Y = 40;
+                Radius_Y = 50;
             else
                 Radius_Y = 0;
             onFlagSafeYellowcircle = flagonoff;
@@ -794,7 +794,7 @@ namespace SeldatMRMS.Management
         public void SetSafeBluecircle(bool flagonoff)
         {
             if (flagonoff)
-                Radius_B = 40;
+                Radius_B = 50;
             else
                 Radius_B = 0;
             onFlagSafeBluecircle = flagonoff;
@@ -802,7 +802,7 @@ namespace SeldatMRMS.Management
         public void SetSafeSmallcircle(bool flagonoff)
         {
             if (flagonoff)
-                Radius_S = 30;
+                Radius_S = 40;
             else
                 Radius_S = 0;
             onFlagSafeSmallcircle = flagonoff;

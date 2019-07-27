@@ -175,15 +175,21 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 return item;
                                 
                             case TyeRequest.TYPEREQUEST_PALLET_EMPTY_MACHINE_TO_RETURN:
-                                palletId = GetPalletId(item.dataRequest);
+                                palletId = GetPalletId_Return(item.dataRequest);
                                 if (palletId > 0)
+                                {
                                     item.palletId_F = palletId;
+                                    dynamic product = new JObject();
+                                    UpdatePalletStateToPlan(palletId, item);
+                                    product.palletStatus = PalletStatus.P.ToString(); // đã có pallet lấy P
+                                    item.dataRequest = product.ToString();
+                                }
                                 else
                                     return null;
                                 break;
                             default:
                                 return item;
-                                break;
+                               
 
                         }
                     }
@@ -203,6 +209,18 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             product.palletId = palletId;
             product.planId = item.planId;
             product.palletStatus = PalletStatus.H.ToString();
+            product.updUsrId = Global_Object.userLogin;
+            String collectionData = RequestDataProcedure(product.ToString(), url);
+            Console.WriteLine(collectionData);
+
+        }
+        public void UpdatePalletStateToPlan(int palletId, OrderItem item)
+        {
+            String url = Global_Object.url + "pallet/updatePalletStatus";
+            dynamic product = new JObject();
+            product.palletId = palletId;
+            product.planId = item.planId;
+            product.palletStatus = PalletStatus.P.ToString();
             product.updUsrId = Global_Object.userLogin;
             String collectionData = RequestDataProcedure(product.ToString(), url);
             Console.WriteLine(collectionData);
@@ -301,6 +319,30 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             var palletInfo = bufferResults["pallets"][0];
                             palletId = (int)palletInfo["palletId"];
                             break;
+                        }
+                    }
+                }
+                catch { }
+
+            }
+            return palletId;
+        }
+        public int GetPalletId_Return(String dataReq)
+        {
+            int palletId = -1;
+            String collectionData = RequestDataProcedure(dataReq, Global_Object.url + "buffer/getListBufferReturn");
+            if (collectionData.Length > 0)
+            {
+                try
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    foreach (var result in results)
+                    {
+                        if (result["pallets"].Count() > 0)
+                        {
+                                var palletInfo = result["pallets"][0];
+                                palletId = (int)palletInfo["palletId"];
+                                break;
                         }
                     }
                 }

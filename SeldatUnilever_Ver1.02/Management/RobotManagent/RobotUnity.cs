@@ -92,7 +92,8 @@ namespace SeldatMRMS.Management.RobotManagent
         MenuItem pauseItem = new MenuItem();
         MenuItem connectItem = new MenuItem();
         MenuItem retryconnectItem = new MenuItem();
-        MenuItem disconnectItem = new MenuItem();
+        MenuItem disposeItem = new MenuItem();
+        MenuItem disconnectedItem = new MenuItem();
         MenuItem turnOnOffItem = new MenuItem();
         MenuItem addReadyListItem = new MenuItem();
         MenuItem addWaitTaskListItem = new MenuItem();
@@ -145,9 +146,13 @@ namespace SeldatMRMS.Management.RobotManagent
             retryconnectItem.Click += ReConnectMenu;
             retryconnectItem.IsEnabled = true;
 
-            disconnectItem.Header = "Disconnect";
-            disconnectItem.Click += DisConnectMenu;
-            disconnectItem.IsEnabled = false;
+            disconnectedItem.Header = "DisConnect";
+            disconnectedItem.Click += DisConnectMenu;
+            disconnectedItem.IsEnabled = false;
+
+            disposeItem.Header = "Dispose";
+            disposeItem.Click += DisposeMenu;
+            disposeItem.IsEnabled = false;
 
             turnOnOffItem.Header = "Set On/Off Traffic";
             turnOnOffItem.Click += SetOnOffTrafficMenu;
@@ -163,7 +168,8 @@ namespace SeldatMRMS.Management.RobotManagent
 
             border.ContextMenu.Items.Add(connectItem);
             border.ContextMenu.Items.Add(retryconnectItem);
-            border.ContextMenu.Items.Add(disconnectItem);
+            border.ContextMenu.Items.Add(disconnectedItem);
+            border.ContextMenu.Items.Add(disposeItem);
             border.ContextMenu.Items.Add(turnOnOffItem);
 
             border.ContextMenu.Items.Add(addReadyListItem);
@@ -309,7 +315,7 @@ namespace SeldatMRMS.Management.RobotManagent
             orangeCircle = new SafeCircle(canvas, Colors.Orange, 1);
 
             Center_S = 0;
-            Center_B = 40;
+            Center_B = 45;//40
             Center_Y = 10;
             Center_O = -20;
             new Thread(() => {
@@ -427,7 +433,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         private void PauseMenu(object sender, RoutedEventArgs e)
         {
-            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+            SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
         }
         private void AddReadyListMenu(object sender, RoutedEventArgs e)
         {
@@ -481,10 +487,11 @@ namespace SeldatMRMS.Management.RobotManagent
                 onBinding = true;
                 Start(properties.Url);
                 connectItem.IsEnabled = false;
-                disconnectItem.IsEnabled = true;
+                disposeItem.IsEnabled = true;
+                disconnectedItem.IsEnabled = true;
                 MessageBox.Show("Để robot có thể tiếp tục hãy add Robot vào Ready Mode hoặc TaskWait Mode !");
 
-                SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
             }
             /*Radius_S = 4 * properties.Scale;
             Radius_B = 4 * properties.Scale;
@@ -492,7 +499,7 @@ namespace SeldatMRMS.Management.RobotManagent
             Radius_O = 3 * properties.Scale;*/
      
         }
-        private void DisConnectMenu(object sender, RoutedEventArgs e)
+        private void DisposeMenu(object sender, RoutedEventArgs e)
         {
 
             DisposeProcedure();
@@ -505,6 +512,21 @@ namespace SeldatMRMS.Management.RobotManagent
             Draw();
 
         }
+        private void DisConnectMenu(object sender, RoutedEventArgs e)
+        {
+
+            Dispose();
+            KillPID();
+            KillActionLib();
+            MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
+            onBinding = false;
+            connectItem.IsEnabled = true;
+           
+
+            setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
+            Draw();
+
+        }
         public void Reset()
         {
             TrafficRountineConstants.RegIntZone_READY.Release(this);
@@ -512,7 +534,7 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.pose.Angle = properties.poseRoot.Angle;
             properties.pose.AngleW = properties.poseRoot.AngleW;
             connectItem.IsEnabled = true;
-            disconnectItem.IsEnabled = false;
+            disposeItem.IsEnabled = false;
             TurnOnSupervisorTraffic(false);
             properties.IsConnected = false;
             robotService.RemoveRobotUnityReadyList(this);
@@ -563,7 +585,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         private void StartMenu(object sender, RoutedEventArgs e)
         {
-            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+            SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
         }
         public void RemoveDraw()
         {

@@ -599,9 +599,10 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         bool flagSpeedTraffic = false;
         bool flagSpeedRegZone = false;
-        public bool SetSpeed(RobotSpeedLevel robotspeed) {
+        bool flagSpeedCheckBayId = false;
+        public bool SetSpeedLowPrioprity(RobotSpeedLevel robotspeed, bool highpriority) {
 
-            if (!flagSpeedTraffic)
+            flagSpeedCheckBayId = highpriority;
             {
                 try
                 {
@@ -621,7 +622,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public bool SetSpeedTraffic(RobotSpeedLevel robotspeed,bool highpriority)
         {
-            if (!flagSpeedRegZone)
+            if (!flagSpeedRegZone )
 
             {
                 try
@@ -643,21 +644,25 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public bool SetSpeedRegZone(RobotSpeedLevel robotspeed, bool highpriority)
         {
-            flagSpeedRegZone = highpriority;
-            try
+            if (!flagSpeedCheckBayId)
             {
-                flagSpeedTraffic = highpriority;
-                properties.speedInSpecicalArea = robotspeed;
-                StandardInt32 msg = new StandardInt32();
-                msg.data = Convert.ToInt32(robotspeed);
-                this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
-                return true;
+                flagSpeedRegZone = highpriority;
+                try
+                {
+                    flagSpeedTraffic = highpriority;
+                    properties.speedInSpecicalArea = robotspeed;
+                    StandardInt32 msg = new StandardInt32();
+                    msg.data = Convert.ToInt32(robotspeed);
+                    this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                    return true;
+                }
+                catch
+                {
+                    Console.WriteLine("Robot Control Error  SetSpeed");
+                    return false;
+                }
             }
-            catch
-            {
-                Console.WriteLine("Robot Control Error  SetSpeed");
-                return false;
-            }
+            return false;
         }
 
 
