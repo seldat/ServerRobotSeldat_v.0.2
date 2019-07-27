@@ -116,17 +116,18 @@ namespace SeldatUnilever_Ver1._02.Management.DeviceManagement
             { }
             return false;
         }
-        public bool CreatePlanBuffer401(PlanDataRequest plan)
+        public int CreatePlanBuffer401(PlanDataRequest plan)
         {
+            
             try
             {
                 String product = JsonConvert.SerializeObject(plan);
                 String response = RequestDataProcedure_POST(product, Global_Object.url + "plan/createPlanPallet");
-                if (Convert.ToInt32(response) > 0)
-                    return true;
+                return Convert.ToInt32(response);
+                
             }
             catch { }
-            return false;
+            return -1;
         }
 
         protected void FreePlanedBuffer(String dataReq,int planId)

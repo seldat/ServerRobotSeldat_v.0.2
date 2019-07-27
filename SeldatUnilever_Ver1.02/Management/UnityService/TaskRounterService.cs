@@ -86,6 +86,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         public OrderItem Gettask()
         {
             OrderItem item = null;
+            int palletId = -1;
          //   if (!onFlagBusyGetTask)
             {
                 onFlagBusyGetTask = true;
@@ -101,9 +102,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         switch (item.typeReq)
                         {
                             case TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE:
-                                if (CheckAvailableFrontLineBuffer(item, false) != null)
-                                {
-                                    int palletId = GetPalletId(item.dataRequest);
+                            {
+                                    palletId = GetPalletId(item.dataRequest);
                                     if (palletId > 0)
                                     {
                                         dynamic product = new JObject();
@@ -115,16 +115,17 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                         // chu y sua 
                                         product.palletStatus = PalletStatus.H.ToString(); // W
                                         item.dataRequest = product.ToString();
+                                        item.palletId_H = palletId;
                                         return item;
                                     }
-                                    return item;
-                                }
-                                else
-                                    return null;
+                                    else
+                                    {
+                                        return null;
+                                    }
+                            }
                             case TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401:
-                                if (CheckAvailableFrontLineBuffer(item, false) != null)
                                 {
-                                    int palletId = GetPalletId(item.dataRequest);
+                                    palletId = GetPalletId(item.dataRequest);
                                     if (palletId > 0)
                                     {
                                         dynamic productBR = new JObject();
@@ -135,6 +136,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                         productBR.productDetailId = item.productDetailId;
                                         productBR.palletStatus = PalletStatus.H.ToString(); // đã giữ pallet lấy H
                                         item.dataRequest_BufferReturn = productBR.ToString();
+                                        item.palletId_H = palletId;
                                         dynamic productB401 = new JObject();
                                         UpdatePalletStateToHold(palletId, item);
                                         productB401.timeWorkId = item.timeWorkId;
@@ -145,19 +147,40 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                         item.dataRequest_Buffer401 = productB401.ToString();
                                         return item;
                                     }
-                                    return item;
+                                    else
+                                        return null;
                                 }
-                                else
-                                    return null;
-                            case TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN:
-                                return item;
-                            case TyeRequest.TYPEREQUEST_PALLET_EMPTY_MACHINE_TO_RETURN:
-                                if (CheckAvailableFrontLineReturn(item) != null)
+                            case TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFER_TO_GATE:
                                 {
-                                    return item;
+                                    palletId = GetPalletId(item.dataRequest);
+                                    if (palletId > 0)
+                                    {
+                                        dynamic product = new JObject();
+                                        UpdatePalletStateToHold(palletId, item);
+                                        product.timeWorkId = item.timeWorkId;
+                                        product.activeDate = item.activeDate;
+                                        product.productId = item.productId;
+                                        product.productDetailId = item.productDetailId;
+                                        // chu y sua 
+                                        product.palletStatus = PalletStatus.H.ToString(); // W
+                                        item.dataRequest = product.ToString();
+                                        item.palletId_H = palletId;
+                                        return item;
+                                    }
+                                    else
+                                    {
+                                        return null;
+                                    }
                                 }
+                                return item;
+                                
+                            case TyeRequest.TYPEREQUEST_PALLET_EMPTY_MACHINE_TO_RETURN:
+                                palletId = GetPalletId(item.dataRequest);
+                                if (palletId > 0)
+                                    item.palletId_F = palletId;
                                 else
                                     return null;
+                                break;
                             default:
                                 return item;
                                 break;

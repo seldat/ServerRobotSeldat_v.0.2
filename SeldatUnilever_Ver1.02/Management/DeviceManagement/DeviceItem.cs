@@ -130,6 +130,9 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public double totalTimeProcedure { get; set; }
             public bool onAssiged = false;
             public int gate { get; set; }
+            public int palletId_H;
+            public int palletId_P;
+            public int palletId_F;
 
         }
         public string userName { get; set; } // dia chi Emei
@@ -255,10 +258,12 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     order.dataRequest = product.ToString();
                     order.status = StatusOrderResponseCode.PENDING;
                     order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
-                    if (Convert.ToInt32(CreatePlanBuffer(order)) > 0)
+                    int palletId_P = Convert.ToInt32(CreatePlanBuffer(order));
+                    if (palletId_P > 0)
                     {
                         //  Global_Object.onFlagDoorBusy = true;
                         Global_Object.setGateStatus(gate, true);
+                        order.palletId_P = palletId_P;
                         PendingOrderList.Add(order);
                         OrderedItemList.Add(order);
                     }
@@ -583,7 +588,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     updatePalletRequest_BufferReturn.palletId = order.palletId;
 
                     bool onUpdateBR = UpdatePalletStatusToHoldBufferReturn_BRB401(updatePalletRequest_BufferReturn);
-                    bool onPlanB401 = CreatePlanBuffer401(planDataRequest_B401);
+                    int palletId_P = CreatePlanBuffer401(planDataRequest_B401);
 
                     dynamic product_B401 = new JObject();
                     product_B401.timeWorkId = order.timeWorkId;
@@ -605,8 +610,9 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     product_BR.palletStatus = PalletStatus.H.ToString();
                     order.dataRequest_BufferReturn = product_BR.ToString();
 
-                    if (onUpdateBR && onPlanB401)
+                    if (onUpdateBR && palletId_P>0)
                     {
+                        order.palletId_P = palletId_P;
                         PendingOrderList.Add(order);
                         OrderedItemList.Add(order);
                     }

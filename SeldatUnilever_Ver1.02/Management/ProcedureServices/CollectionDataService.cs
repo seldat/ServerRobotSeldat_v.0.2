@@ -481,15 +481,22 @@ namespace SelDatUnilever_Ver1
                                 {
                                     if (buffer["pallets"].Count() > 0)
                                     {
-                                        //JObject stuff = JObject.Parse((String)buffer["pallets"][0]["dataPallet"]);
-                                        var palletInfo = buffer["pallets"][0];
-                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                        double x = (double)stuff["line"]["x"];
-                                        double y = (double)stuff["line"]["y"];
-                                        double angle = (double)stuff["line"]["angle"];
-                                        poseTemp = new Pose(x, y, angle);
-                                        goalFrontLinePos = poseTemp;
-                                        break;
+                                        foreach (var palletInfo in buffer["pallets"])
+                                        {
+                                            int palletId = (int)palletInfo["palletId"];
+                                            if (palletId == order.palletId_H)
+                                            {
+                                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                                bayId = (int)stuff["bayId"];
+                                                double x = (double)stuff["line"]["x"];
+                                                double y = (double)stuff["line"]["y"];
+                                                double angle = (double)stuff["line"]["angle"];
+                                                poseTemp = new Pose(x, y, angle);
+                                                goalFrontLinePos = poseTemp;
+                                                break;
+                                            }
+
+                                        }
                                     }
                                     else
                                     {
@@ -685,14 +692,22 @@ namespace SelDatUnilever_Ver1
                             {
                                     if (buffer["pallets"].Count() > 0)
                                     {
-                                        //JObject stuff = JObject.Parse((String)buffer["pallets"][0]["dataPallet"]);
-                                        var palletInfo = buffer["pallets"][0];
-                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                        double x = (double)stuff["line"]["x"];
-                                        double y = (double)stuff["line"]["y"];
-                                        double angle = (double)stuff["line"]["angle"];
-                                        poseTemp = new Pose(x, y, angle);
-                                        break;
+                                        foreach (var palletInfo in buffer["pallets"])
+                                        {
+                                            int palletId = (int)palletInfo["palletId"];
+                                            if (palletId == order.palletId_P)
+                                            {
+                                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                                bayId = (int)stuff["bayId"];
+                                                double x = (double)stuff["line"]["x"];
+                                                double y = (double)stuff["line"]["y"];
+                                                double angle = (double)stuff["line"]["angle"];
+                                                poseTemp = new Pose(x, y, angle);
+                                                goalFrontLinePos = poseTemp;
+                                                break;
+                                            }
+
+                                        }
                                     }
                                     else
                                     {
@@ -955,17 +970,25 @@ namespace SelDatUnilever_Ver1
                                 //var bufferResults = result["buffers"][0];
                                 foreach (var buffer in result["buffers"])
                                 {
+
                                     if (buffer["pallets"].Count() > 0)
                                     {
-                                        var palletInfo = buffer["pallets"][0];
-                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                        bayId = (int)stuff["bayId"];
-                                        double x = (double)stuff["line"]["x"];
-                                        double y = (double)stuff["line"]["y"];
-                                        double angle = (double)stuff["line"]["angle"];
-                                        poseTemp = new Pose(x, y, angle);
-                                        goalFrontLinePos = poseTemp;
-                                        break;
+                                        foreach(var palletInfo in buffer["pallets"])
+                                        {
+                                            int palletId = (int)palletInfo["palletId"];
+                                            if(palletId==order.palletId_P)
+                                            {
+                                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                                bayId = (int)stuff["bayId"];
+                                                double x = (double)stuff["line"]["x"];
+                                                double y = (double)stuff["line"]["y"];
+                                                double angle = (double)stuff["line"]["angle"];
+                                                poseTemp = new Pose(x, y, angle);
+                                                goalFrontLinePos = poseTemp;
+                                                break;
+                                            }
+                                            
+                                        }
                                     }
                                     else
                                     {
@@ -991,35 +1014,28 @@ namespace SelDatUnilever_Ver1
                                 continue;
                             if (buffer["pallets"].Count() > 0)
                             {
-                                //JObject stuff = JObject.Parse((String)buffer["pallets"][0]["dataPallet"]);
-                                var palletInfo = buffer["pallets"][0];
-                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                double x = (double)stuff["line"]["x"];
-                                double y = (double)stuff["line"]["y"];
-                                double angle = (double)stuff["line"]["angle"];
-                                poseTemp = new Pose(x, y, angle);
-                                goalFrontLinePos = poseTemp;
-                                break;
+                                foreach (var palletInfo in buffer["pallets"])
+                                {
+                                    int palletId = (int)palletInfo["palletId"];
+                                    if (palletId == order.palletId_H)
+                                    {
+                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                        bayId = (int)stuff["bayId"];
+                                        double x = (double)stuff["line"]["x"];
+                                        double y = (double)stuff["line"]["y"];
+                                        double angle = (double)stuff["line"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                        goalFrontLinePos = poseTemp;
+                                        break;
+                                    }
+
+                                }
                             }
                             else
                             {
                                 continue;
                             }
                         }
-                        //foreach (var palletInfo in bufferResults["pallets"])
-                        //{
-                        //    // var palletInfo = bufferResults["pallets"][0];
-                        //    try
-                        //    {
-                        //        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                        //        double x = (double)stuff["line"]["x"];
-                        //        double y = (double)stuff["line"]["y"];
-                        //        double angle = (double)stuff["line"]["angle"];
-                        //        poseTemp = new Pose(x, y, angle);
-                        //        break;
-                        //    }
-                        //    catch { }
-                        //}
 
                     }
                 }
@@ -1290,14 +1306,22 @@ namespace SelDatUnilever_Ver1
                 {
                     if (buffer["pallets"].Count() > 0)
                     {
-                        var palletInfo = buffer["pallets"][0];
-                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                        double x = (double)stuff["line"]["x"];
-                        double y = (double)stuff["line"]["y"];
-                        double angle = (double)stuff["line"]["angle"];
-                        poseTemp = new Pose(x, y, angle);
-                        goalFrontLinePos=poseTemp;
-                        break;
+                        foreach (var palletInfo in buffer["pallets"])
+                        {
+                            int palletId = (int)palletInfo["palletId"];
+                            if (palletId == order.palletId_F)
+                            {
+                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                bayId = (int)stuff["bayId"];
+                                double x = (double)stuff["line"]["x"];
+                                double y = (double)stuff["line"]["y"];
+                                double angle = (double)stuff["line"]["angle"];
+                                poseTemp = new Pose(x, y, angle);
+                                goalFrontLinePos = poseTemp;
+                                break;
+                            }
+
+                        }
                     }
                     else
                     {
