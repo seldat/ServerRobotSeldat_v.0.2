@@ -173,7 +173,15 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                     }
                                 }
                                 return item;
-                                
+                            case TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN:
+                                palletId = GetPalletId(item.dataRequest);
+                                if (palletId > 0)
+                                {
+                                    item.palletId_P = palletId;
+                                    UpdatePalletStateToPlan(palletId, item);
+                                  }
+
+                                break;
                             case TyeRequest.TYPEREQUEST_PALLET_EMPTY_MACHINE_TO_RETURN:
                                 palletId = GetPalletId_Return(item.dataRequest);
                                 if (palletId > 0)

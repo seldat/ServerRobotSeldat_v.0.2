@@ -119,6 +119,7 @@ namespace SeldatMRMS {
             FORMAC_ROBOT_WAITTING_PICKUP_PALLET_IN, // doi robot gap hang
             FORMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE, //doi robot di tro lai dau line cong.
             FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE, // doi dong cong.
+            FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE_FROM_VIM_REG, // doi dong cong.
             FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE_FROM_VIM, // doi dong cong.
             FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
             FORMAC_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE, // doi robot do line den pallet  va tha pallet
@@ -236,6 +237,7 @@ namespace SeldatMRMS {
             MACRET_ROBOT_GOTO_FRONTLINE_MACHINE,
             MACRET_ROBOT_GOTO_BACK_FRONTLINE_READY,
             MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
+            MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM_REG,
             MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM,
             MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM_READY,
             // MACRET_ROBOT_GOTO_PICKUP_PALLET_MACHINE,
@@ -264,6 +266,8 @@ namespace SeldatMRMS {
             MACBUFRET_ROBOT_GOTO_FRONTLINE_MACHINE,
             MACBUFRET_ROBOT_GOTO_BACK_FRONTLINE_READY,
             MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
+            MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM_REG, // den dau line buffer, chuyen mode do line
+
             MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM, // den dau line buffer, chuyen mode do line
             MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM_READY, // den dau line buffer, chuyen mode do line
             // MACBUFRET_ROBOT_GOTO_PICKUP_PALLET_MACHINE,
@@ -274,6 +278,7 @@ namespace SeldatMRMS {
             MACBUFRET_ROBOT_CAME_CHECKIN_BUFFER_RETURN, // đã đến vị trí
             MACBUFRET_ROBOT_GOTO_FRONTLINE_BUFFER_RETURN,
             MACBUFRET_ROBOT_GOTO_FRONTLINE_BUFFER_RETURN_SELECT_ZONE,
+            MACBUFRET_ROBOT_GOTO_FRONTLINE_BUFFER_RETURN_FROM_VIM_REG,
             MACBUFRET_ROBOT_GOTO_FRONTLINE_BUFFER_RETURN_FROM_VIM,
 
             // MACBUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET,  // cho phép dò line vàthả pallet

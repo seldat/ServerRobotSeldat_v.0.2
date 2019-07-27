@@ -123,7 +123,7 @@ namespace SeldatMRMS
                             robot.robotTag = RobotStatus.WORKING;
                             if (rb.SendPoseStamped(ds.config.PointFrontLine))
                             {
-                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM;
+                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM_REG;
                                 // Cap Nhat Thong Tin CHuyen Di
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
@@ -138,7 +138,7 @@ namespace SeldatMRMS
                             if (rb.SendPoseStamped(ds.config.PointFrontLine))
                             {
                                 
-                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM;
+                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM_REG;
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
                                 registryRobotJourney.endPoint = ds.config.PointFrontLine.Position;
@@ -213,17 +213,21 @@ namespace SeldatMRMS
                             robot.ShowText("FORBUF_ROBOT_CAME_GATE_POSITION");
                         }
                         break;
-                    case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM:
+                    case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM_REG:
                         // kiem tra vung đăng ký tai khu vuc xac định
-                        if(TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
                         }
                         else
                         {
                             // dò ra điểm đích đến và xóa đăng ký vùng
-                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                            StateForkLift= ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM;
                         }
+                        break;
+                    case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM:
+                        // kiem tra vung đăng ký tai khu vuc xac định
+                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
                             // robot.setTrafficAllCircles(false, false, false, false);
@@ -322,7 +326,7 @@ namespace SeldatMRMS
                         else
                         {
                            FreePlanedBuffer();
-                           StateForkLift = ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE_FROM_VIM;
+                           StateForkLift = ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE_FROM_VIM_REG;
                         }
                         break;
 
@@ -338,15 +342,18 @@ namespace SeldatMRMS
                             robot.ShowText("FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
                         }
                         break;
-                    case ForkLift.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM:
+                    case ForkLift.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM_REG:
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
                         }
                         else
                         {
-                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                            StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM;
                         }
+                        break;
+                    case ForkLift.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM:
+                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         try
                         {
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
@@ -368,7 +375,8 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
                         // xóa đăng ký vùng
-                        TrafficCheckInBuffer(goalFrontLinePos,bayId);
+                        if (TrafficCheckInBuffer(goalFrontLinePos, bayId))
+                            break;
                         TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         try
                         {
@@ -430,15 +438,18 @@ namespace SeldatMRMS
                         UpdateInformationInProc(this, ProcessStatus.S);
                         order.status = StatusOrderResponseCode.FINISHED;
                         break;
-                    case ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE_FROM_VIM:
+                    case ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE_FROM_VIM_REG:
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
                         }
                         else
                         {
-                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                            StateForkLift = ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE_FROM_VIM;
                         }
+                        break;
+                    case ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE_FROM_VIM:
+                         TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         try
                         {
                             if (rb.SendPoseStamped(flToMachineInfo.frontLinePose))

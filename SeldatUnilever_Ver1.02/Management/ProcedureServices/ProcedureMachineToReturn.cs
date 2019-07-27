@@ -100,7 +100,7 @@ namespace SeldatMRMS
                         {
                             if (rb.SendPoseStamped(BfToRe.GetFrontLineMachine()))
                             {
-                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM;
+                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM_REG;
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(BfToRe.GetFrontLineMachine().Position, TypeZone.OPZS);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
                                 registryRobotJourney.endPoint = BfToRe.GetFrontLineMachine().Position;
@@ -128,7 +128,7 @@ namespace SeldatMRMS
                                 //robot.ShowText("GO FRONTLINE IN VIM");
                                 if (rb.SendPoseStamped(destPos1))
                                 {
-                                    StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM;
+                                    StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM_REG;
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                     registryRobotJourney.startPoint = robot.properties.pose.Position;
                                     registryRobotJourney.endPoint = destPos1.Position;
@@ -225,17 +225,21 @@ namespace SeldatMRMS
                             CheckUserHandleError(this);
                         }
                         break;
+                    case MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM_REG:
+                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM;
+                        }
+                        break;
+
                     case MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM:
                         try
                         {
-                            if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                TrafficRountineConstants.DetectRelease(registryRobotJourney);
-                            }
+                            TrafficRountineConstants.DetectRelease(registryRobotJourney);
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             //if (robot.ReachedGoal())
                             {

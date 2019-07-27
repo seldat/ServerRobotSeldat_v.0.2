@@ -35,7 +35,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         {
             this.robot = robot;
         }
-        protected void TrafficCheckInBuffer(Pose frontLinePoint,int bayId)
+        protected bool TrafficCheckInBuffer(Pose frontLinePoint,int bayId)
         {
             if (ExtensionService.CalDistance(robot.properties.pose.Position,frontLinePoint.Position)< DISTANCE_CHECk_BAYID)
             {
@@ -46,15 +46,18 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                 if(checkAllRobotsHasInsideBayIdNear(bayId, 4))
                 {
                     robot.SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP,true);
+                    return true;
                 }
                 else
                 {
                     robot.SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+                    return false;
                 }
             }
             else
             {
                 robot.SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+                return false;
             }
             // kiem tra khoan cach robot hen hanh den diem dau line
             // neu gan diem dau line 

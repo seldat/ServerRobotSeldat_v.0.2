@@ -266,22 +266,25 @@ namespace SelDatUnilever_Ver1
                             //var bufferResults = result["buffers"][0];
                             foreach (var buffer in result["buffers"])
                             {
-                                    if (buffer["pallets"].Count() > 0)
+                                if (buffer["pallets"].Count() > 0)
+                                {
+                                    foreach (var palletInfo in buffer["pallets"])
                                     {
-                                        //JObject stuff = JObject.Parse((String)buffer["pallets"][0]["dataPallet"]);
-                                        var palletInfo = buffer["pallets"][0];
-                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                        double x = (double)stuff["line"]["x"];
-                                        double y = (double)stuff["line"]["y"];
-                                        double angle = (double)stuff["line"]["angle"];
-                                        poseTemp = new Pose(x, y, angle);
-                                        goalFrontLinePos = poseTemp;
-                                        break;
+
+                                        int palletId = (int)palletInfo["palletId"];
+                                        if (palletId == order.palletId_P)
+                                        {
+                                            JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                            bayId = (int)stuff["bayId"];
+                                            double x = (double)stuff["line"]["x"];
+                                            double y = (double)stuff["line"]["y"];
+                                            double angle = (double)stuff["line"]["angle"];
+                                            poseTemp = new Pose(x, y, angle);
+                                            goalFrontLinePos = poseTemp;
+                                            break;
+                                        }
                                     }
-                                    else
-                                    {
-                                        continue;
-                                    }
+                                }
                             }
                         }
                     }

@@ -299,7 +299,8 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM_FROM_READY:
-                        TrafficCheckInBuffer(goalFrontLinePos, bayId);
+                        if (TrafficCheckInBuffer(goalFrontLinePos, bayId))
+                            break;
                         TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         try
                         {
@@ -322,7 +323,8 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM_REG:
-                        TrafficCheckInBuffer(goalFrontLinePos, bayId);
+                        if (TrafficCheckInBuffer(goalFrontLinePos, bayId))
+                            break;
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
@@ -356,7 +358,8 @@ namespace SeldatMRMS
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
                         // dò và release vùng đăng ky
-                        TrafficCheckInBuffer(goalFrontLinePos, bayId);
+                        if (TrafficCheckInBuffer(goalFrontLinePos, bayId))
+                            break;
                         TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         try
                         {
