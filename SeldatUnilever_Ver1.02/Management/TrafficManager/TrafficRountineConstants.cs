@@ -627,6 +627,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         public static bool DetetectInsideStationCheck(RegistryRobotJourney rrj)
         {
             // xác định vùng đặt biệt trước khi bắt đầu frontline
+
             if (rrj.traffic.HasRobotUnityinArea("C1", rrj.robot) || rrj.traffic.HasRobotUnityinArea("C2", rrj.robot) || rrj.traffic.HasRobotUnityinArea("C3", rrj.robot) ||
                 rrj.traffic.HasRobotUnityinArea("C4", rrj.robot) || rrj.traffic.HasRobotUnityinArea("C5", rrj.robot) || rrj.traffic.HasRobotUnityinArea("READY", rrj.robot))
             {

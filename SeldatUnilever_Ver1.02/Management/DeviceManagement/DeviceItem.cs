@@ -515,6 +515,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         order.userName = (String)results["userName"];
                         order.productDetailId = (int)results["productDetailId"];
                         order.productDetailName = (String)results["productDetailName"];
+                        order.activeDate = (string)results["activeDate"];
                         order.productId = (int)results["productId"];
                         // order.planId = (int)results["planId"];
                         int deviceId = getDeviceId("RETURN_MAIN 0");
@@ -548,8 +549,18 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         product.palletStatus = PalletStatus.P.ToString();
                         order.dataRequest = product.ToString();
                         order.status = StatusOrderResponseCode.PENDING;
-                        PendingOrderList.Add(order);
-                        OrderedItemList.Add(order);
+                        int palletId_P = Convert.ToInt32(CreatePlanBuffer(order));
+                        if (palletId_P > 0)
+                        {
+                            order.palletId_P = palletId_P;
+                            PendingOrderList.Add(order);
+                            OrderedItemList.Add(order);
+                        }
+                        else
+                        {
+                            statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, content = "" };
+                            return statusOrderResponse;
+                        }
                     }
                    
                 }

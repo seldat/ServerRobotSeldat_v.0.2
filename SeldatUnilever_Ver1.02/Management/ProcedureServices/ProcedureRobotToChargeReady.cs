@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.OleDb;
 using System.Diagnostics;
-using System.IO;
 using System.Threading;
-using DoorControllerService;
-using SeldatMRMS.Management.DoorServices;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
-using SeldatUnilever_Ver1._02.Management.McuCom;
 using SeldatUnilever_Ver1._02.Management.ProcedureServices;
 using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
@@ -37,12 +31,14 @@ namespace SeldatMRMS
         DataReceive batLevel;
         DataReceive statusCharger;
         Stopwatch sw = new Stopwatch();
+        const bool USE_MANUAL_CHARGE = true;
         const UInt32 TIME_OUT_WAIT_TURNOFF_PC = 60000 * 5;
         const UInt32 TIME_OUT_WAIT_STATE = 60000;
         const UInt32 TIME_OUT_ROBOT_RECONNECT_SERVER = 60000 * 10;
         const UInt32 TIME_COUNT_GET_BAT_LEVEL = 1000;
         const UInt32 TIME_DELAY_RELEASE_CHARGE = 60000 * 5;
         const UInt32 BATTERY_FULL_LEVEL = 99; /*Never battery full 100%*/
+        const UInt32 BATTERY_NEW_BAT = 20; /*Never battery full 100%*/
         private UInt32 timeCountGetBatLevel = 0;
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
@@ -61,25 +57,14 @@ namespace SeldatMRMS
             statusCharger = new DataReceive();
             this.robot = robot;
             chargerCtrl = charger.ChargerStationList[id];
-
-            //ChargerId id_t = id;
-            //switch (id_t)
-            //{
-            //    case ChargerId.CHARGER_ID_1:
-            //        chargerCtrl = charger.ChargerStation_1;
-            //        break;
-            //    case ChargerId.CHARGER_ID_2:
-            //        chargerCtrl = charger.ChargerStation_2;
-            //        break;
-            //    case ChargerId.CHARGER_ID_3:
-            //        chargerCtrl = charger.ChargerStation_3;
-            //        break;
-            //    default: break;
-            //}
             procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE;
         }
 
+#if USE_MANUAL_CHARGE
         public void Start(RobotGoToCharge state = RobotGoToCharge.ROBCHAR_ROBOT_GOTO_CHARGER)
+#else
+        public void Start(RobotGoToCharge state = RobotGoToCharge.ROBCHAR_WAITTING_CHARGEBATTERY)
+#endif
         {
             order = new OrderItem();
             order.typeReq = TyeRequest.TYPEREQUEST_CHARGE;
@@ -119,6 +104,7 @@ namespace SeldatMRMS
                     case RobotGoToCharge.ROBCHAR_IDLE:
                         //robot.ShowText("ROBCHAR_IDLE");
                         break;
+#if USE_MANUAL_CHARGE
                     // case RobotGoToCharge.ROBCHAR_CHARGER_CHECKSTATUS:
                     //     if(true == chargerCtrl.WaitState(ChargerState.ST_READY,TIME_OUT_WAIT_STATE)){
                     //         StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
@@ -253,11 +239,11 @@ namespace SeldatMRMS
                     //        }
                     //    }
                     //    break;
+#endif
                     case RobotGoToCharge.ROBCHAR_WAITTING_CHARGEBATTERY:
 #if false  //for test
                         StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
 #else
-#if true
                         try
                         {
                             timeCountGetBatLevel++;
@@ -268,52 +254,46 @@ namespace SeldatMRMS
                                 Console.WriteLine("=================****+++++bat level {0}+++++++++++++++++++", batLevel.data[0]);
                                 if (ErrorCodeCharger.TRUE == result)
                                 {
+                                    rb.properties.BatteryLevelRb = (float)batLevel.data[0];
+#if USE_MANUAL_CHARGE
                                     if (batLevel.data[0] >= BATTERY_FULL_LEVEL)
+#else
+                                    if (batLevel.data[0] >= BATTERY_NEW_BAT)
+#endif
                                     {
                                         //Thread.Sleep((int)TIME_DELAY_RELEASE_CHARGE);
+#if USE_MANUAL_CHARGE
                                         StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
+#else
+                                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_RECONNECTING;
+#endif
                                         //robot.ShowText("ROBCHAR_FINISHED_CHARGEBATTERY");
                                     }
                                 }
                                 else
                                 {
+#if USE_MANUAL_CHARGE
                                     if (result == ErrorCodeCharger.ERROR_CONNECT)
                                     {
                                         errorCode = ErrorCode.CONNECT_BOARD_CTRL_ROBOT_ERROR;
                                     }
                                     CheckUserHandleError(this);
+#endif
                                 }
-                                rb.properties.BatteryLevelRb = (float)batLevel.data[0];
                             }
 
                         }
-                        catch (System.Exception)
+                        catch (System.Exception e)
                         {
+                            Console.WriteLine(e);
+#if USE_MANUAL_CHARGE
                             errorCode = ErrorCode.CONNECT_BOARD_CTRL_ROBOT_ERROR;
                             CheckUserHandleError(this);
-                        }
-#else
-                        try {
-                            result = chargerCtrl.GetBatteryAndStatus (ref batLevel, ref statusCharger);
-                            if (ErrorCodeCharger.TRUE == result) {
-                                if ((batLevel.data[0] == 100) || (statusCharger.data[0] == (byte) ChargerState.ST_CHARGE_FULL)) {
-                                    StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
-                                    //robot.ShowText("ROBCHAR_FINISHED_CHARGEBATTERY"); 
-                                }
-                            } else {
-                                if (result == ErrorCodeCharger.ERROR_CONNECT) {
-                                    errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
-                                }
-                                CheckUserHandleError (this);
-                            }
-                            rb.properties.BatteryLevelRb = (float) batLevel.data[0];
-                        } catch (System.Exception) {
-                            errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
-                            CheckUserHandleError (this);
+#endif
                         }
 #endif
-#endif
-                        break; //dợi charge battery và thông tin giao tiếp server và trạm sạc
+                                    break; //dợi charge battery và thông tin giao tiếp server và trạm sạc
+#if USE_MANUAL_CHARGE
 
                     case RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY:
                         try
@@ -359,10 +339,15 @@ namespace SeldatMRMS
                             CheckUserHandleError(this);
                         }
                         break; //Hoàn Thành charge battery và thông tin giao tiếp server và trạm sạc
+#endif
                     case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_RECONNECTING:
                         if (true == CheckReconnectServer(TIME_OUT_ROBOT_RECONNECT_SERVER))
                         {
+#if USE_MANUAL_CHARGE
                             StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_GETOUT_CHARGER;
+#else
+                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
+#endif
                             //robot.ShowText("ROBCHAR_ROBOT_GETOUT_CHARGER");
                         }
                         else
@@ -371,6 +356,7 @@ namespace SeldatMRMS
                             CheckUserHandleError(this);
                         }
                         break; //Robot mở nguồng và đợi connect lại
+#if USE_MANUAL_CHARGE
                     case RobotGoToCharge.ROBCHAR_ROBOT_GETOUT_CHARGER:
                         if (rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_GETOUT_CHARGER))
                         {
@@ -390,6 +376,7 @@ namespace SeldatMRMS
                             CheckUserHandleError(this);
                         }
                         break;
+#endif
                     case RobotGoToCharge.ROBCHAR_ROBOT_RELEASED:
                         robot.robotTag = RobotStatus.IDLE;
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_READY;

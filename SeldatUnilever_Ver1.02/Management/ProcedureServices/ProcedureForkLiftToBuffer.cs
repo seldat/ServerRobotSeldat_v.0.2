@@ -191,7 +191,7 @@ namespace SeldatMRMS
                         TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
-                            // robot.setTrafficAllCircles(false, false, false, false);
+                            robot.setTrafficAllCircles(false, false, false, false);
                             TrafficRountineConstants.RegIntZone_READY.Release(robot);
                             robot.SwitchToDetectLine(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;

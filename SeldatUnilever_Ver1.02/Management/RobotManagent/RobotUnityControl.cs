@@ -29,6 +29,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public bool onFlagDetectLine = false;
         public bool onFlagReadyGo = false;
         private const float delBatterry = 0;
+        RobotSpeedLevel regRobotSpeed;
         public enum ResponseCtrl
         {
             RESPONSE_NONE = 0,
@@ -602,6 +603,9 @@ namespace SeldatMRMS.Management.RobotManagent
         bool flagSpeedCheckBayId = false;
         public bool SetSpeedLowPrioprity(RobotSpeedLevel robotspeed, bool highpriority) {
 
+            //if (regRobotSpeed == RobotSpeedLevel.ROBOT_SPEED_STOP)
+                
+
             flagSpeedCheckBayId = highpriority;
             {
                 try
@@ -631,6 +635,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     properties.speedInSpecicalArea = robotspeed;
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(robotspeed);
+                    String labe = properties.Label;
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
                     return true;
                 }
@@ -651,6 +656,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 {
                     flagSpeedTraffic = highpriority;
                     properties.speedInSpecicalArea = robotspeed;
+                    String labe = properties.Label;
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(robotspeed);
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
