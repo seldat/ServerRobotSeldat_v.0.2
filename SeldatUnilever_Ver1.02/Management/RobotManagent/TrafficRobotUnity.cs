@@ -19,6 +19,7 @@ namespace SeldatMRMS.Management
         public enum RobotBahaviorAtAnyPlace
         {
             ROBOT_PLACE_ROAD,
+            ROBOT_PLACE_ROAD_DETECTLINE,
             ROBOT_PLACE_HIGHWAY,
             ROBOT_PLACE_BUFFER,
             ROBOT_PLACE_HIGHWAY_DETECTLINE,
@@ -568,9 +569,13 @@ namespace SeldatMRMS.Management
             {
                 robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_DETECTLINE; ;
             }
-            if (_type == TypeZone.ROAD)
+            if (_type == TypeZone.ROAD && onFlagDetectLine == false)
             {
                 robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_ROAD;
+            }
+            if (_type == TypeZone.ROAD && onFlagDetectLine == true)
+            {
+                robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_ROAD_DETECTLINE;
             }
             if (_type == TypeZone.BUFFER)
             {
@@ -628,6 +633,13 @@ namespace SeldatMRMS.Management
                         STATE_SPEED = "ROBOT_PLACE_ROAD_NORMAL ";
                         SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
                     }
+                    break;
+                case RobotBahaviorAtAnyPlace.ROBOT_PLACE_ROAD_DETECTLINE:
+                    // SetSafeSmallcircle(true);
+                    SetSafeOrgancircle(true);
+                    SetSafeBluecircle(false);
+                    SetSafeYellowcircle(true);
+                    SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_DETECTLINE:
                     // SetSafeSmallcircle(true);
