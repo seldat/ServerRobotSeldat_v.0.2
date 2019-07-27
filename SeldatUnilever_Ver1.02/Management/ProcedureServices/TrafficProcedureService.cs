@@ -37,7 +37,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         protected void TrafficCheckInBuffer(Pose frontLinePoint,int bayId)
         {
-            if (ExtensionService.CalDistance(robot.properties.pose.Position,frontLinePoint.Position)< 5)
+            if (ExtensionService.CalDistance(robot.properties.pose.Position,frontLinePoint.Position)< 120)
             {
                 if(robot.bayId<0)
                 {

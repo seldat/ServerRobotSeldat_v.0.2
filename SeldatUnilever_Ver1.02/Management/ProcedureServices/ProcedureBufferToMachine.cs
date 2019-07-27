@@ -395,6 +395,7 @@ namespace SeldatMRMS
                         {
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                             {
+                                robot.bayId = -1;
                                 robot.ReleaseWorkingZone();
                                 robot.SwitchToDetectLine(false);                              
                                 resCmd = ResponseCommand.RESPONSE_NONE;
@@ -537,6 +538,7 @@ namespace SeldatMRMS
                     case BufferToMachine.BUFMAC_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
 
                         TrafficRountineConstants.ReleaseAll(robot);
+                        robot.bayId = -1;
                         robot.orderItem = null;
                         robot.SwitchToDetectLine(false);
                         // Release WorkinZone Robot

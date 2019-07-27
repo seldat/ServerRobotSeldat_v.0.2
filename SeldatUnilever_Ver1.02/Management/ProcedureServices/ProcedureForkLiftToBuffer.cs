@@ -408,6 +408,7 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER: // đợi
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
+                            robot.bayId = -1;
                             robot.ReleaseWorkingZone();
                             robot.SwitchToDetectLine(false);
                             resCmd = ResponseCommand.RESPONSE_NONE;

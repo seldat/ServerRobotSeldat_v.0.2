@@ -607,12 +607,12 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
                 // Robot được gửi lệnh Stop
                 if (StationCheckInSpecialZone(rrj))
                 {
-                    rrj.robot.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                    rrj.robot.SetSpeedRegZone(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
                     return false;
                 }
                 else
                 {
-                    rrj.robot.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                    rrj.robot.SetSpeedRegZone(RobotSpeedLevel.ROBOT_SPEED_STOP,true);
                     return true;
                 }
 
@@ -621,7 +621,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             else
             {
                 // Robot van toc bình thuong
-                rrj.robot.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                rrj.robot.SetSpeedRegZone(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
                 return false;
             }
         }

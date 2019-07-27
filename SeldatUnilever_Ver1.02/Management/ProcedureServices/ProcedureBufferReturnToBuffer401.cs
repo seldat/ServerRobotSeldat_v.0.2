@@ -48,6 +48,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 
         public void Start(BufferToBuffer state = BufferToBuffer.BUFTOBUF_SELECT_BEHAVIOR_ONZONE_BUFFER_A)
         {
+            robot.bayId = -1;
             errorCode = ErrorCode.RUN_OK;
             robot.robotTag = RobotStatus.WORKING;
             robot.ProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_BUFFER;
@@ -66,6 +67,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         public void Destroy()
         {
+            robot.bayId = -1;
             ProRunStopW = false;
             robot.robotTag = RobotStatus.IDLE;
             robot.orderItem = null;
@@ -340,6 +342,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                             {
+                                robot.bayId = -1;
                                 robot.ReleaseWorkingZone();
                                 robot.SwitchToDetectLine(false);
 
@@ -478,6 +481,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                             {
+                                robot.bayId = -1;
                                 robot.ReleaseWorkingZone();
                                 robot.SwitchToDetectLine(false);
 
@@ -500,6 +504,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         break;
 
                     case BufferToBuffer.BUFTOBUF_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        robot.bayId = -1;
                         TrafficRountineConstants.ReleaseAll(robot);
                         robot.orderItem = null;
                         robot.SwitchToDetectLine(false);
@@ -538,7 +543,6 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     default:
                         break;
                 }
-                robot.ShowText("-> " + procedureCode);
                 Thread.Sleep(5);
             }
             StateBufferToBuffer = BufferToBuffer.BUFTOBUF_IDLE;

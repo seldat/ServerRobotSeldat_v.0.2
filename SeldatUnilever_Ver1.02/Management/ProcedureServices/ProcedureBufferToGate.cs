@@ -43,6 +43,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         public void Start(BufferToGate state = BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER)
         {
+            robot.bayId = -1;
             errorCode = ErrorCode.RUN_OK;
             robot.robotTag = RobotStatus.WORKING;
             robot.ProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_GATE;
@@ -60,6 +61,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         public void Destroy()
         {
             StateBufferToGate = BufferToGate.BUFGATE_ROBOT_DESTROY;
+            robot.bayId = -1;
 
         }
         public void Procedure(object ojb)
@@ -314,6 +316,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case BufferToGate.BUFGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER: // đợi
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
+                            robot.bayId = -1;
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateBufferToGate = BufferToGate.BUFGATE_SELECT_BEHAVIOR_ONZONE_TO_GATE;
@@ -445,6 +448,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         break;
 
                     case BufferToGate.BUFGATE_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        robot.bayId = -1;
                         TrafficRountineConstants.ReleaseAll(robot);
                         robot.robotTag = RobotStatus.IDLE;
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_GATE;
@@ -469,7 +473,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     default:
                         break;
                 }
-                robot.ShowText("-> " + procedureCode);
+                //robot.ShowText("-> " + procedureCode);
                 Thread.Sleep(5);
             }
             StateBufferToGate = BufferToGate.BUFGATE_IDLE;

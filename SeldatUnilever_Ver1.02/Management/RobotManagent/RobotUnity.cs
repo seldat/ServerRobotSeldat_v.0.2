@@ -398,7 +398,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     Environment.NewLine + " Location: " + position.X.ToString("0.00") + " / " +
                     position.Y.ToString("0.00") + " / " + angle.ToString("0.00") + Environment.NewLine +
                     "Place: " + TyprPlaceStr + Environment.NewLine +
-                    "Working Zone: " + robotRegistryToWorkingZone.WorkingZone + Environment.NewLine +
+                    "Working Zone: " + robotRegistryToWorkingZone.WorkingZone+ "/ "+ trafficManagementService.DetermineArea(this.properties.pose.Position, 0, 200) + Environment.NewLine +
                     "Radius _S" + Radius_S + Environment.NewLine +
                     "Radius _Y" + Radius_Y + Environment.NewLine +
                     "Radius _B" + Radius_B + Environment.NewLine +

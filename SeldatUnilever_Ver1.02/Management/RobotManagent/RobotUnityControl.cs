@@ -597,10 +597,56 @@ namespace SeldatMRMS.Management.RobotManagent
                 return false;
             }
         }
-        public bool SetSpeed (RobotSpeedLevel robotspeed) {
+        bool flagSpeedTraffic = false;
+        bool flagSpeedRegZone = false;
+        public bool SetSpeed(RobotSpeedLevel robotspeed) {
 
+            if (!flagSpeedTraffic)
+            {
+                try
+                {
+                    properties.speedInSpecicalArea = robotspeed;
+                    StandardInt32 msg = new StandardInt32();
+                    msg.data = Convert.ToInt32(robotspeed);
+                    this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                    return true;
+                }
+                catch
+                {
+                    Console.WriteLine("Robot Control Error  SetSpeed");
+                    return false;
+                }
+            }
+            return false;
+        }
+        public bool SetSpeedTraffic(RobotSpeedLevel robotspeed,bool highpriority)
+        {
+            if (!flagSpeedRegZone)
+
+            {
+                try
+                {
+                    flagSpeedTraffic = highpriority;
+                    properties.speedInSpecicalArea = robotspeed;
+                    StandardInt32 msg = new StandardInt32();
+                    msg.data = Convert.ToInt32(robotspeed);
+                    this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                    return true;
+                }
+                catch
+                {
+                    Console.WriteLine("Robot Control Error  SetSpeed");
+                    return false;
+                }
+            }
+            return false;
+        }
+        public bool SetSpeedRegZone(RobotSpeedLevel robotspeed, bool highpriority)
+        {
+            flagSpeedRegZone = highpriority;
             try
             {
+                flagSpeedTraffic = highpriority;
                 properties.speedInSpecicalArea = robotspeed;
                 StandardInt32 msg = new StandardInt32();
                 msg.data = Convert.ToInt32(robotspeed);
@@ -613,6 +659,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 return false;
             }
         }
+
 
         public bool SendCmdLineDetectionCtrl (RequestCommandLineDetect cmd) {
 
