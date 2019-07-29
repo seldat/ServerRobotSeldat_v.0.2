@@ -21,6 +21,7 @@ using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using SeldatUnilever_Ver1._02.Management.McuCom;
 using static SeldatMRMS.Management.TrafficRobotUnity;
+using static SeldatMRMS.Management.RobotManagent.RobotUnity;
 
 namespace SeldatMRMS.Management.RobotManagent
 {
@@ -401,6 +402,7 @@ namespace SeldatMRMS.Management.RobotManagent
                             result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
                             if (robot.getBattery())
                             {
+                                robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CHARGING);
                                 RemoveRobotUnityReadyList(robot);
                             }
                             indexRd++;

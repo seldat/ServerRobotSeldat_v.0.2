@@ -152,7 +152,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 }
                             case TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFER_TO_GATE:
                                 {
-                                    palletId = GetPalletId(item.dataRequest);
+                                    palletId = item.palletId;
                                     if (palletId > 0)
                                     {
                                         dynamic product = new JObject();
@@ -246,13 +246,16 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     JArray results = JArray.Parse(collectionData);
                     foreach (var result in results)
                     {
-                        int temp_planId = (int)result["planId"];
-                      //  if (temp_planId ==order.planId)
+                        foreach (var buffer in result["buffers"])
                         {
-                            var bufferResults = result["buffers"][0];
+                            String bufferDataStr = (String)buffer["bufferData"];
+                            JObject stuffBData = JObject.Parse(bufferDataStr);
+                            bool canOpEdit = (bool)stuffBData["canOpEdit"];
+                            if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy
+                                continue;
+                            var bufferResults = buffer;
                             var palletInfo = bufferResults["pallets"][0];
-                            palletId = (int)palletInfo["palletId"];
-                            break;
+                            return palletId = (int)palletInfo["palletId"];
                         }
                     }
                 }
