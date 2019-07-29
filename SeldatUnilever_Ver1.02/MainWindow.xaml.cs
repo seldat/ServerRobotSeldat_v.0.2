@@ -70,7 +70,11 @@ namespace SeldatUnilever_Ver1._02
 
         private void MainWindow_Closed(object sender, EventArgs e)
         {
-            unityService.robotManagementService.close();
+            try
+            {
+                unityService.robotManagementService.close();
+            }
+            catch { }
             Environment.Exit(Environment.ExitCode);
         }
 
@@ -380,12 +384,6 @@ namespace SeldatUnilever_Ver1._02
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            OrderItem orderItem = (sender as Button).DataContext as OrderItem;
-            Task.Run(() => {
-
-                    DeviceItem devI = unityService.deviceRegistrationService.deviceItemList.Find(item => item.userName == orderItem.userName);
-                    devI.ReorderCallBack(orderItem);
-            });
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -404,6 +402,7 @@ namespace SeldatUnilever_Ver1._02
                 var result = MessageBox.Show(txtstr, wstr, msgb);
                 if (result == MessageBoxResult.Yes)
                 {
+                    unityService.robotManagementService.close();
                     Environment.Exit(0);
                 }
                 else if (result == MessageBoxResult.No)
@@ -419,6 +418,7 @@ namespace SeldatUnilever_Ver1._02
                 var result = MessageBox.Show(txtstr, wstr, msgb);
                 if (result == MessageBoxResult.Yes)
                 {
+                    unityService.robotManagementService.close();
                     Environment.Exit(0);
                 }
                 else if (result == MessageBoxResult.No)

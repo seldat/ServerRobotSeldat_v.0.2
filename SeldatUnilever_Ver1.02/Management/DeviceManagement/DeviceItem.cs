@@ -272,17 +272,17 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, content = "" };
                         return statusOrderResponse;
                     }
-                   try
-                      {
-                          if(gate==(int)DoorId.DOOR_MEZZAMINE_UP)
-                              Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampOn(DoorType.DOOR_FRONT);
-                          if (gate == (int)DoorId.DOOR_MEZZAMINE_UP_NEW)
-                              Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampOn(DoorType.DOOR_FRONT);
-                      }
-                      catch (Exception e)
-                      {
-                          Console.WriteLine("control lamp failed"+e);
-                      }
+                    try
+                    {
+                        if (gate == (int)DoorId.DOOR_MEZZAMINE_UP)
+                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampOn(DoorType.DOOR_FRONT);
+                        if (gate == (int)DoorId.DOOR_MEZZAMINE_UP_NEW)
+                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampOn(DoorType.DOOR_FRONT);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("control lamp failed" + e);
+                    }
                 }
                 #endregion
                 #region TYPEREQUEST_FORLIFT_TO_MACHINE
@@ -475,7 +475,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     order.deviceId = (int)results["deviceId"];
                     order.productDetailId = (int)results["productDetailId"];
                     order.productId = (int)results["productId"];
-                    order.timeWorkId =1;
+                    order.timeWorkId = 1;
                     order.activeDate = (string)results["activeDate"];
                     order.planId = (int)results["planId"];
                     order.palletId = (int)results["palletId"];
@@ -562,7 +562,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                             return statusOrderResponse;
                         }
                     }
-                   
+
                 }
                 #endregion
                 #region TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401
@@ -589,9 +589,9 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     PlanDataRequest planDataRequest_B401 = new PlanDataRequest();
                     planDataRequest_B401.activeDate = order.activeDate;
                     planDataRequest_B401.deviceId = order.deviceIdPut;
-                    planDataRequest_B401.productDetailId= order.productDetailId;
-                    planDataRequest_B401.productId= order.productId;
-                    
+                    planDataRequest_B401.productDetailId = order.productDetailId;
+                    planDataRequest_B401.productId = order.productId;
+
 
                     UpdatePalletRequest updatePalletRequest_BufferReturn = new UpdatePalletRequest();
                     updatePalletRequest_BufferReturn.planId = order.planId;
@@ -621,7 +621,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     product_BR.palletStatus = PalletStatus.H.ToString();
                     order.dataRequest_BufferReturn = product_BR.ToString();
 
-                    if (onUpdateBR && palletId_P>0)
+                    if (onUpdateBR && palletId_P > 0)
                     {
                         order.palletId_P = palletId_P;
                         PendingOrderList.Add(order);
@@ -750,13 +750,75 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 
         public void RemoveCallBack(OrderItem item)
         {
+            try
+            {
+                if (item.typeReq == TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
+                {
+                    if (item.status == StatusOrderResponseCode.PENDING)
+                    {
+                        PendingOrderList.Remove(item);
+                        OrderedItemList.Remove(item);
+                        UpdatePalletState(item.palletId_P, item.planId, PalletStatus.F);
+                    }
+                }
+                else if (item.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
+                {
+                    if (item.status == StatusOrderResponseCode.PENDING)
+                    {
+                        PendingOrderList.Remove(item);
+                        OrderedItemList.Remove(item);
+                        UpdatePalletState(item.palletId_H, item.planId, PalletStatus.W);
+                    }
+                }
+                else if (item.typeReq == TyeRequest.TYPEREQUEST_PALLET_EMPTY_MACHINE_TO_RETURN)
+                {
+                    if (item.status == StatusOrderResponseCode.PENDING)
+                    {
+                        PendingOrderList.Remove(item);
+                        OrderedItemList.Remove(item);
+                        UpdatePalletState(item.palletId_P, item.planId, PalletStatus.F);
+                    }
+                }
+                else if (item.typeReq == TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401)
+                {
+                    if (item.status == StatusOrderResponseCode.PENDING)
+                    {
+                        PendingOrderList.Remove(item);
+                        OrderedItemList.Remove(item);
+                        UpdatePalletState(item.palletId_P, item.planId, PalletStatus.F);
+                        UpdatePalletState(item.palletId_H, item.planId, PalletStatus.W);
+                    }
+                }
+                else if (item.typeReq == TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFER_TO_GATE)
+                {
+                    if (item.status == StatusOrderResponseCode.PENDING)
+                    {
+                        PendingOrderList.Remove(item);
+                        OrderedItemList.Remove(item);
+                        UpdatePalletState(item.palletId_H, item.planId, PalletStatus.W);
+                    }
+                }
+                else if (item.typeReq == TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN)
+                {
+                    if (item.status == StatusOrderResponseCode.PENDING)
+                    {
+                        PendingOrderList.Remove(item);
+                        OrderedItemList.Remove(item);
+                        UpdatePalletState(item.palletId_P, item.planId, PalletStatus.F);
+                    }
+                }
+            }
+            catch { }
+        }
+        public void RestoreCallBack(OrderItem item)
+        {
             if (item.typeReq == TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
             {
                 if (item.status == StatusOrderResponseCode.PENDING)
                 {
-                    PendingOrderList.Remove(item);
+                    PendingOrderList.Add(item);
                     OrderedItemList.Remove(item);
-                    FreePlanedBuffer(item);
+                    UpdatePalletState(item.palletId_P, item.planId, PalletStatus.P);
                 }
             }
             else if (item.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
@@ -765,27 +827,43 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 {
                     PendingOrderList.Remove(item);
                     OrderedItemList.Remove(item);
+                    UpdatePalletState(item.palletId_H, item.planId, PalletStatus.H);
                 }
             }
-        }
-        public void ReorderCallBack(OrderItem item)
-        {
-            if (item.status == StatusOrderResponseCode.ROBOT_ERROR)
+            else if (item.typeReq == TyeRequest.TYPEREQUEST_PALLET_EMPTY_MACHINE_TO_RETURN)
             {
-                if (item.typeReq == TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
+                if (item.status == StatusOrderResponseCode.PENDING)
                 {
-
-                    PendingOrderList.Add(item);
-                    OrderedItemList.Add(item);
-                    CreatePlanBuffer(item);
+                    PendingOrderList.Remove(item);
+                    OrderedItemList.Remove(item);
                 }
-                else if (item.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
+            }
+            else if (item.typeReq == TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401)
+            {
+                if (item.status == StatusOrderResponseCode.PENDING)
                 {
-                    // if (item.status == StatusOrderResponseCode.PENDING)
-                    {
-                        PendingOrderList.Add(item);
-                        OrderedItemList.Add(item);
-                    }
+                    PendingOrderList.Remove(item);
+                    OrderedItemList.Remove(item);
+                    UpdatePalletState(item.palletId_P, item.planId, PalletStatus.P);
+                    UpdatePalletState(item.palletId_H, item.planId, PalletStatus.H);
+                }
+            }
+            else if (item.typeReq == TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFER_TO_GATE)
+            {
+                if (item.status == StatusOrderResponseCode.PENDING)
+                {
+                    PendingOrderList.Remove(item);
+                    OrderedItemList.Remove(item);
+                    UpdatePalletState(item.palletId_H, item.planId, PalletStatus.H);
+                }
+            }
+            else if (item.typeReq == TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN)
+            {
+                if (item.status == StatusOrderResponseCode.PENDING)
+                {
+                    PendingOrderList.Remove(item);
+                    OrderedItemList.Remove(item);
+                    UpdatePalletState(item.palletId_P, item.planId, PalletStatus.P);
                 }
             }
         }

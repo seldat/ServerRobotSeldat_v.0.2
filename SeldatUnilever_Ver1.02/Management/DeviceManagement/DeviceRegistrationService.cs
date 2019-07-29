@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Threading;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SeldatMRMS;
 using SeldatUnilever_Ver1._02;
@@ -114,34 +115,54 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         {
             return deviceItemList;
         }
-        public void SaveDeviceOrder()
+       
+        public bool SaveDeviceOrderList()
         {
-            try
+            foreach(DeviceItem device in deviceItemList)
             {
-                String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "SavePendingOrder.txt");
-                if (!File.Exists(path))
-                {
-                    var myfile = File.Create(path);
-                }
-                if(deviceItemList.Count>0)
-                {
-                    foreach(DeviceItem dev in deviceItemList)
-                    {
-                        if(dev.OrderedItemList.Count>0)
-                        {
-                            foreach(OrderItem ord in dev.OrderedItemList)
-                            {
-                                if(ord.status == StatusOrderResponseCode.PENDING)
-                                {
-                                  //  File.AppendAllText(path, ord. Environment.NewLine);
-                                }
-                            }
-                        }
-                    }
-                }
-                
+                if (!SaveFileOrders(device.OrderedItemList))
+                    return false;
             }
-            catch { }
+            return true;
+        }
+        public bool SaveFileOrders(List<OrderItem> listOrder)
+        {
+            List<OrderItem> listCol = new List<OrderItem>();
+            foreach (OrderItem item in listOrder)
+            {
+                if(item.status==StatusOrderResponseCode.DELIVERING)
+                {
+                    return false;
+                }
+                else if(item.status == StatusOrderResponseCode.PENDING)
+                {
+                    listCol.Add(item);
+                }
+            }
+            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "OrderStore.txt");
+            using (StreamWriter fs = File.CreateText(path))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(fs, listCol);
+            }
+            return true;
+        }
+
+        public List<OrderItem> LoadFileOrders()
+        {
+            List<OrderItem> returnList = new List<OrderItem>();
+            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "OrderStore.txt");
+            using (StreamReader sr = File.OpenText(path))
+            {
+                string s = "";
+                while ((s = sr.ReadLine()) != null)
+                {
+                    Console.WriteLine(s);
+                    dynamic response = JsonConvert.DeserializeObject(s);
+                    returnList = response.ToObject<List<OrderItem>>();
+                }
+            }
+            return returnList;
         }
     }
 }

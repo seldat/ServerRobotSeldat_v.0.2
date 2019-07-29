@@ -163,7 +163,18 @@ namespace SeldatUnilever_Ver1._02.Management.DeviceManagement
             }
 
         }
+        public void UpdatePalletState(int palletId, int planId, PalletStatus palletStatus)
+        {
+            String url = Global_Object.url + "pallet/updatePalletStatus";
+            dynamic product = new JObject();
+            product.palletId = palletId;
+            product.planId = planId;
+            product.palletStatus = palletStatus.ToString();
+            product.updUsrId = Global_Object.userLogin;
+            String collectionData = RequestDataProcedure_POST(product.ToString(), url);
+            Console.WriteLine(collectionData);
 
+        }
         protected DataPallet GetLineMachineInfo(int deviceId)
         {
             try

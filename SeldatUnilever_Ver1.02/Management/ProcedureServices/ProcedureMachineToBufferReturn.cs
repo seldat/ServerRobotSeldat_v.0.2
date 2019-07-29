@@ -234,7 +234,6 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         break;
                     case MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM:
-
                         try
                         {
                             TrafficRountineConstants.DetectRelease(registryRobotJourney);
@@ -333,7 +332,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             if (rb.SendPoseStamped(frontlinePose))
                             {
-                                StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_BUFFER_RETURN_FROM_VIM;
+                                StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_BUFFER_RETURN_FROM_VIM_REG;
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
                                 registryRobotJourney.endPoint = frontlinePose.Position;

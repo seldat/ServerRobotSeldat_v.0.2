@@ -600,11 +600,11 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         bool flagSpeedTraffic = false;
         bool flagSpeedRegZone = false;
-        bool flagSpeedCheckBayId = false;
-        public bool SetSpeedLowPrioprity(RobotSpeedLevel robotspeed, bool highpriority) {
+        bool flagSetSpeedHighPrioprity = false;
+        public bool SetSpeedHighPrioprity(RobotSpeedLevel robotspeed, bool highpriority) {
 
-            flagSpeedCheckBayId = highpriority;
-            if (flagSpeedRegZone || flagSpeedTraffic || flagSpeedCheckBayId)
+            flagSetSpeedHighPrioprity = highpriority;
+            if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity)
             {
                 try
                 {
@@ -643,7 +643,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public bool SetSpeedTraffic(RobotSpeedLevel robotspeed,bool highpriority)
         {
             flagSpeedTraffic = highpriority;
-            if (flagSpeedRegZone || flagSpeedTraffic || flagSpeedCheckBayId)
+            if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity)
             {
                 try
                 {
@@ -681,7 +681,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public bool SetSpeedRegZone(RobotSpeedLevel robotspeed, bool highpriority)
         {
             flagSpeedRegZone = highpriority;
-            if (flagSpeedRegZone || flagSpeedTraffic || flagSpeedCheckBayId)
+            if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity)
             {
                 try
                 {

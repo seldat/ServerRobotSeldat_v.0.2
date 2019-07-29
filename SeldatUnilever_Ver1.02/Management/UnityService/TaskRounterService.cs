@@ -232,82 +232,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             product.updUsrId = Global_Object.userLogin;
             String collectionData = RequestDataProcedure(product.ToString(), url);
             Console.WriteLine(collectionData);
-
         }
 
-        public Pose CheckAvailableFrontLineBuffer(OrderItem order, bool onPlandId = false)
-        {
-            Pose poseTemp = null;
-            try
-            {
-                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
-                if (collectionData.Length > 0)
-                {
-                    JArray results = JArray.Parse(collectionData);
-                    if (onPlandId)
-                    {
-                        foreach (var result in results)
-                        {
-                            int temp_planId = (int)result["planId"];
-                            if (temp_planId == order.planId)
-                            {
-                                //var bufferResults = result["buffers"][0];
-                                foreach (var buffer in result["buffers"])
-                                {
-                                    if (buffer["pallets"].Count() > 0)
-                                    {
-                                        var palletInfo = buffer["pallets"][0];
-                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                        double x = (double)stuff["line"]["x"];
-                                        double y = (double)stuff["line"]["y"];
-                                        double angle = (double)stuff["line"]["angle"];
-                                        poseTemp = new Pose(x, y, angle);
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        continue;
-                                    }
-                                }
-
-                                break;
-
-                            }
-                        }
-                    }
-                    else
-                    {
-
-                        var result = results[0];
-                        //var bufferResults = result["buffers"][0];
-                        foreach (var buffer in result["buffers"])
-                        {
-                            if (buffer["pallets"].Count() > 0)
-                            {
-                                //JObject stuff = JObject.Parse((String)buffer["pallets"][0]["dataPallet"]);
-                                var palletInfo = buffer["pallets"][0];
-                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                double x = (double)stuff["line"]["x"];
-                                double y = (double)stuff["line"]["y"];
-                                double angle = (double)stuff["line"]["angle"];
-                                poseTemp = new Pose(x, y, angle);
-                                break;
-                            }
-                            else
-                            {
-                                continue;
-                            }
-                        }
-                    }
-                }
-                //  Console.WriteLine(""+poseTemp.Position.ToString());
-            }
-            catch
-            {
-                Console.WriteLine("Error Front Line");
-            }
-            return poseTemp;
-        }
 
         public int GetPalletId(String dataReq)
         {
@@ -358,63 +284,6 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
 
             }
             return palletId;
-        }
-        public Pose CheckAvailableFrontLineReturn2(OrderItem order)
-        {
-
-            Pose poseTemp = null;
-            dynamic product = new JObject();
-            product.palletStatus = order.palletStatus;
-            String collectionData = RequestDataProcedure(product.ToString(), Global_Object.url + "buffer/getListBufferReturn");
-            if (collectionData.Length > 0)
-            {
-                JArray results = JArray.Parse(collectionData);
-                var result = results[0];
-                //   var bufferResults = result["buffers"][0];
-
-                var palletInfo = result["pallets"][0];
-                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                double x = (double)stuff["line"]["x"];
-                double y = (double)stuff["line"]["y"];
-                double angle = (double)stuff["line"]["angle"];
-                poseTemp = new Pose(x, y, angle);
-
-            }
-            return poseTemp;
-        }
-        public Pose CheckAvailableFrontLineReturn(OrderItem order)
-        {
-
-            Pose poseTemp = null;
-            dynamic product = new JObject();
-            product.palletStatus = PalletStatus.F.ToString();
-            String collectionData = RequestDataProcedure(product.ToString(), Global_Object.url + "buffer/getListBufferReturn");
-            if (collectionData.Length > 0)
-            {
-                JArray results = JArray.Parse(collectionData);
-                // var result = results[0];
-                //var bufferResults = result["buffers"][0];
-                foreach (var buffer in results)
-                {
-                    if (buffer["pallets"].Count() > 0)
-                    {
-                        var palletInfo = buffer["pallets"][0];
-                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                        double x = (double)stuff["line"]["x"];
-                        double y = (double)stuff["line"]["y"];
-                        double angle = (double)stuff["line"]["angle"];
-                        poseTemp = new Pose(x, y, angle);
-                        break;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-
-
-            }
-            return poseTemp;
         }
         public String RequestDataProcedure(String dataReq, String url)
         {

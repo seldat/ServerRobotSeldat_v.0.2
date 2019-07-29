@@ -462,22 +462,22 @@ namespace SeldatMRMS.Management.RobotManagent
         public void StopAt(String nameID)
         {
             if (RobotUnityRegistedList.ContainsKey(nameID))
-                RobotUnityRegistedList[nameID].SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP,false);
+                RobotUnityRegistedList[nameID].SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP,true);
         }
         public void RunAt(String nameID)
         {
             if (RobotUnityRegistedList.ContainsKey(nameID))
-                RobotUnityRegistedList[nameID].SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+                RobotUnityRegistedList[nameID].SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
         }
         public void Stop()
         {
             foreach (RobotUnity r in RobotUnityRegistedList.Values)
-                r.SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP,true);
+                r.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP,true);
         }
         public void Run()
         {
             foreach (RobotUnity r in RobotUnityRegistedList.Values)
-                r.SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+                r.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
         }
         public void RemoveRobotUnityRegistedList(String nameID)
         {

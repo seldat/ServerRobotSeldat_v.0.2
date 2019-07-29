@@ -433,7 +433,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         private void PauseMenu(object sender, RoutedEventArgs e)
         {
-            SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+            SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
         }
         private void AddReadyListMenu(object sender, RoutedEventArgs e)
         {
@@ -491,7 +491,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 disconnectedItem.IsEnabled = true;
                 MessageBox.Show("Để robot có thể tiếp tục hãy add Robot vào Ready Mode hoặc TaskWait Mode !");
 
-                SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+                SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
             }
             /*Radius_S = 4 * properties.Scale;
             Radius_B = 4 * properties.Scale;
@@ -585,7 +585,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         private void StartMenu(object sender, RoutedEventArgs e)
         {
-            SetSpeedLowPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+            SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
         }
         public void RemoveDraw()
         {

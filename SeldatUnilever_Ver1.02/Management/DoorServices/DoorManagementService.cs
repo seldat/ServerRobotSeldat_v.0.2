@@ -178,12 +178,14 @@ namespace SeldatMRMS.Management.DoorServices
                     String data = File.ReadAllText(path);
                     if (data.Length > 0)
                     {
-                        JArray results = JArray.Parse(data);
+
+                     JArray results = JArray.Parse(data);
                         foreach (var result in results)
                         {
                             DoorInfoConfig doorICF = new DoorInfoConfig()
                             {
                                 Id = (DoorId)((int)result["Id"]),
+                                Name = (String)result["Name"],
                                 Ip = (String)result["Ip"],
                                 Port = (int)result["Port"],
                                 infoPallet =(String)result["infoPallet"],
@@ -194,7 +196,7 @@ namespace SeldatMRMS.Management.DoorServices
                             doorICF.ParsePointFrontLineValue(doorICF.PointFrontLineStr);
                             PropertiesDoor_List.Add(doorICF);
                             DoorInfoConfigList.Add(doorICF);
-                        }
+                       }
                         Grouped_PropertiesDoor.Refresh();
                         return true;
                     }
