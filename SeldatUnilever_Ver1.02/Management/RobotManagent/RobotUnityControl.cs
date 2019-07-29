@@ -20,6 +20,7 @@ namespace SeldatMRMS.Management.RobotManagent
     {
         public McuCtrl mcuCtrl;
         public event Action<int> FinishStatesCallBack;
+        public event Action<int> LineEnableCallBack;
         public event Action<LaserErrorCode> AGVLaserErrorCallBack;
         public event Action<LaserWarningCode> AGVLaserWarningCallBack;
         public event Action<Pose, Object> PoseHandler;
@@ -27,6 +28,7 @@ namespace SeldatMRMS.Management.RobotManagent
         private Timer timerCheckKeepAlive;
         public RobotLogOut robotLogOut;
         public bool onFlagDetectLine = false;
+        public bool onFlagGoBackReady = false;
         public bool onFlagReadyGo = false;
         private const float delBatterry = 0;
         RobotSpeedLevel regRobotSpeed;
@@ -166,6 +168,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public enum ResponseCommand
         {
             RESPONSE_NONE = 0,
+            RESPONSE_START_DETECT_LINE = 1000,
             RESPONSE_LASER_CAME_POINT = 2000,
             RESPONSE_LINEDETECT_PALLETUP = 3203,
             RESPONSE_LINEDETECT_PALLETDOWN = 3204,
@@ -176,7 +179,8 @@ namespace SeldatMRMS.Management.RobotManagent
             RESPONSE_FINISH_TURN_RIGHT = 3211,
             RESPONSE_FINISH_GOBACK_FRONTLINE = 3213,
             RESPONSE_ERROR = 3215,
-            RESPONSE_FINISH_DROPDOWN_PALLET = 3216 
+            RESPONSE_FINISH_DROPDOWN_PALLET = 3216,
+            
         }
 
         public virtual void updateparams () { }
@@ -317,6 +321,7 @@ namespace SeldatMRMS.Management.RobotManagent
             int subscription_AGV_LaserWarning = this.Subscribe ("/stm_warning", "std_msgs/String", AGVLaserWarningHandler);
             int subscription_Odom= this.Subscribe("/odom", "nav_msgs/Odometry", OdometryCallback, 100);
             int subscription_Navi = this.Subscribe("/cmd_vel_mux/input/navi", "geometry_msgs/Twist", NaviCallback, 100);
+            int subscription_lineEnable = this.Subscribe("/line_enable","std_msgs/Int32", LineEnableHandler);
             float subscription_RequestGotoReady = this.Subscribe("/requestGotoReady", "std_msgs/Int32", RequestGotoReadyHandler);
 
             //paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
@@ -331,6 +336,15 @@ namespace SeldatMRMS.Management.RobotManagent
             if (rqVal.data == 1) {
                 Console.WriteLine("request goto ready");       
             }
+        }
+        private void LineEnableHandler(Communication.Message message)
+        {
+            StandardInt32 data = (StandardInt32)message;
+            try
+            {
+                LineEnableCallBack(data.data);
+            }
+            catch { }
         }
 
         private void BatteryVolHandler (Communication.Message message) {
@@ -374,7 +388,11 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 StandardInt32 standard = (StandardInt32)message;
                 robotLogOut.ShowText(this.properties.Label,"Finished State [" + standard.data + "]");
-                FinishStatesCallBack(standard.data);
+                try
+                {
+                    FinishStatesCallBack(standard.data);
+                }
+                catch { }
         
                
             }

@@ -30,7 +30,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             procedureCode = ProcedureCode.PROC_CODE_MACHINE_TO_BUFFER_RETURN;
         }
 
-        public void Start(MachineToBufferReturn state = MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_MACHINE)
+        public void Start(MachineToBufferReturn state = MachineToBufferReturn.MACBUFRET_SELECT_BEHAVIOR_ONZONE)
         {
             robot.orderItem = null;
             errorCode = ErrorCode.RUN_OK;
@@ -73,6 +73,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             TrafficManagementService Traffic = BfToBufRe.Traffic;
             rb.mcuCtrl.TurnOnLampRb();
             robot.ShowText(" Start -> " + procedureCode);
+           //Console.WriteLine( BfToBufRe.GetInfoOfPalletBufferReturn_MBR(PistonPalletCtrl.PISTON_PALLET_DOWN, order.dataRequest));
+            //ProRun = false;
             while (ProRun)
             {
                 switch (StateMachineToBufferReturn)
@@ -146,8 +148,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             sw.Start();
                             do
                             {
+                                robot.onFlagGoBackReady = true;
                                 if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                 {
+                                    robot.onFlagGoBackReady = false;
                                     resCmd = ResponseCommand.RESPONSE_NONE;
                                     Pose destPos = BfToBufRe.GetFrontLineMachine();
                                     String destName2 = Traffic.DetermineArea(destPos.Position, TypeZone.MAIN_ZONE);
@@ -492,6 +496,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         public override void FinishStatesCallBack(Int32 message)
         {
             this.resCmd = (ResponseCommand)message;
+            base.FinishStatesCallBack(message);
             if (this.resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
             {
                 robot.ReleaseWorkingZone();

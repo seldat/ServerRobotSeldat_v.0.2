@@ -317,31 +317,37 @@ namespace SelDatUnilever_Ver1
                             //var bufferResults = result["buffers"][0];
                             foreach (var buffer in result["buffers"])
                             {
-                                int bufferId = (int)buffer["bufferId"];
-                                if (bufferId == order.bufferId)
+                                //int bufferId = (int)buffer["bufferId"];
+                                //if (bufferId == order.bufferId)
                                 {
                                     if (buffer["pallets"].Count() > 0)
                                     {
-                                        var palletInfo = buffer["pallets"][0];
-                                        palletId = (int)palletInfo["palletId"];
-                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                        int row = (int)stuff["pallet"]["row"];
-                                        int bay = (int)stuff["pallet"]["bay"];
-                                        int directMain = (int)stuff["pallet"]["dir_main"];
-                                        int directSub = (int)stuff["pallet"]["dir_sub"];
-                                        int directOut = (int)stuff["pallet"]["dir_out"];
-                                        int line_ord = (int)stuff["pallet"]["line_ord"];
-                                        string subline = (string)stuff["pallet"]["hasSubLine"];
+                                        foreach (var palletInfo in buffer["pallets"])
+                                        {
+                                            palletId = (int)palletInfo["palletId"];
+                                            if (palletId == order.palletId_P)
+                                            {
 
-                                        infoPallet.pallet = pisCtrl; /* dropdown */
-                                        infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
-                                        infoPallet.bay = bay;
-                                        infoPallet.hasSubLine = subline; /* yes or no */
-                                        infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
-                                        infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
-                                        infoPallet.row = row;
-                                        infoPallet.line_ord = line_ord;
-                                        break;
+                                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                                int row = (int)stuff["pallet"]["row"];
+                                                int bay = (int)stuff["pallet"]["bay"];
+                                                int directMain = (int)stuff["pallet"]["dir_main"];
+                                                int directSub = (int)stuff["pallet"]["dir_sub"];
+                                                int directOut = (int)stuff["pallet"]["dir_out"];
+                                                int line_ord = (int)stuff["pallet"]["line_ord"];
+                                                string subline = (string)stuff["pallet"]["hasSubLine"];
+
+                                                infoPallet.pallet = pisCtrl; /* dropdown */
+                                                infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
+                                                infoPallet.bay = bay;
+                                                infoPallet.hasSubLine = subline; /* yes or no */
+                                                infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
+                                                infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
+                                                infoPallet.row = row;
+                                                infoPallet.line_ord = line_ord;
+                                                break;
+                                            }
+                                        }
                                     }
                                     else
                                     {
@@ -1013,8 +1019,8 @@ namespace SelDatUnilever_Ver1
                             String bufferDataStr = (String)buffer["bufferData"];
                             JObject stuffBData = JObject.Parse(bufferDataStr);
                             bool canOpEdit = (bool)stuffBData["canOpEdit"];
-                            if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy
-                                continue;
+                            //if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy
+                                //continue;
                             if (buffer["pallets"].Count() > 0)
                             {
                                 foreach (var palletInfo in buffer["pallets"])

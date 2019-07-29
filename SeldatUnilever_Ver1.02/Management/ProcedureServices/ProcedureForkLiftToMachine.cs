@@ -390,6 +390,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         public override void FinishStatesCallBack(Int32 message)
         {
             this.resCmd = (ResponseCommand)message;
+            base.FinishStatesCallBack(message);
             /*if (this.resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
             {
                 robot.ReleaseWorkingZone();

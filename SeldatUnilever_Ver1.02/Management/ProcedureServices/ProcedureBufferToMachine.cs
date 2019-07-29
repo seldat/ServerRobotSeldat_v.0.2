@@ -205,8 +205,10 @@ namespace SeldatMRMS
                             sw.Start();
                             do
                             {
+                                robot.onFlagGoBackReady = true;
                                 if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                 {
+                                    robot.onFlagGoBackReady = false;
                                     resCmd = ResponseCommand.RESPONSE_NONE;
                                     Point destPos2 = BfToMa.GetFrontLineBuffer().Position;
                                     String destName2 = Traffic.DetermineArea(destPos2, TypeZone.MAIN_ZONE);
@@ -599,6 +601,7 @@ namespace SeldatMRMS
         public override void FinishStatesCallBack(Int32 message)
         {
             this.resCmd = (ResponseCommand)message;
+            base.FinishStatesCallBack(message);
             if (this.resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
             {
                 // reset giao thông và xóa vùng đăng ký

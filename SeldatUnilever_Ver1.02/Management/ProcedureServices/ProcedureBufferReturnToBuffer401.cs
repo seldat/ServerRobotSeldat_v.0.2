@@ -191,8 +191,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             sw.Start();
                             do
                             {
+                                robot.onFlagGoBackReady = true;
                                 if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                 {
+                                    robot.onFlagGoBackReady = false;
                                     resCmd = ResponseCommand.RESPONSE_NONE;
                                     Pose destPos2 = BfToBf.GetFrontLineBufferReturn_BRB401(order.dataRequest_BufferReturn);
                                     String destName2 = Traffic.DetermineArea(destPos2.Position, TypeZone.MAIN_ZONE);
@@ -562,6 +564,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         public override void FinishStatesCallBack(Int32 message)
         {
             this.resCmd = (ResponseCommand)message;
+            base.FinishStatesCallBack(message);
             if (this.resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
             {
                 // reset giao thông và xóa vùng đăng ký

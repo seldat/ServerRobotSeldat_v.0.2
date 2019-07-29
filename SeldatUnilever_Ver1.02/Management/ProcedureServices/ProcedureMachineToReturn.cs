@@ -149,8 +149,10 @@ namespace SeldatMRMS
                             sw.Start();
                             do
                             {
+                                robot.onFlagGoBackReady = true;
                                 if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                 {
+                                    robot.onFlagGoBackReady = false;
                                     resCmd = ResponseCommand.RESPONSE_NONE;
                                     Pose destPos1 = BfToRe.GetFrontLineMachine();
                                     String destName1 = Traffic.DetermineArea(destPos1.Position, TypeZone.MAIN_ZONE);
@@ -475,6 +477,7 @@ namespace SeldatMRMS
         public override void FinishStatesCallBack(Int32 message)
         {
             this.resCmd = (ResponseCommand)message;
+            base.FinishStatesCallBack(message);
             if (this.resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
             {
                 robot.ReleaseWorkingZone();

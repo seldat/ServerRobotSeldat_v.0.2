@@ -673,7 +673,8 @@ namespace SeldatMRMS
         public override void FinishStatesCallBack(Int32 message)
         {
             this.resCmd = (ResponseCommand)message;
-            
+            base.FinishStatesCallBack(message);
+
         }
     }
 }

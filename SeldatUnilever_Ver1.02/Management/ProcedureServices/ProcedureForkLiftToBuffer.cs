@@ -157,8 +157,10 @@ namespace SeldatMRMS
                             sw.Start();
                             do
                             {
+                                robot.onFlagGoBackReady = true;
                                 if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                 {
+                                    robot.onFlagGoBackReady = false;
                                     resCmd = ResponseCommand.RESPONSE_NONE;
                                     robot.robotTag = RobotStatus.WORKING;
                                     if (rb.SendPoseStamped(ds.config.PointFrontLine))
@@ -606,6 +608,7 @@ namespace SeldatMRMS
         public override void FinishStatesCallBack(Int32 message)
         {
             this.resCmd = (ResponseCommand)message;
+            base.FinishStatesCallBack(message);
         }
         public class ForkLiftToMachineInfo
         {
