@@ -1019,8 +1019,8 @@ namespace SelDatUnilever_Ver1
                             String bufferDataStr = (String)buffer["bufferData"];
                             JObject stuffBData = JObject.Parse(bufferDataStr);
                             bool canOpEdit = (bool)stuffBData["canOpEdit"];
-                            //if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy
-                                //continue;
+                            if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy
+                                continue;
                             if (buffer["pallets"].Count() > 0)
                             {
                                 foreach (var palletInfo in buffer["pallets"])
