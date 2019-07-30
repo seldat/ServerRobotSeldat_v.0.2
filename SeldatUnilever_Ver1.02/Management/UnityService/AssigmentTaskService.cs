@@ -30,8 +30,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             Alive = true;
             processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
             processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST;
-            Task threadprocessAssignAnTaskWait = new Task(MainProcessAssignTask_Wait);
-            Task threadprocessAssignTaskReady = new Task(MainProcessAssignTask_Ready);
+            Thread threadprocessAssignAnTaskWait = new Thread(MainProcessAssignTask_Wait);
+            Thread threadprocessAssignTaskReady = new Thread(MainProcessAssignTask_Ready);
             threadprocessAssignAnTaskWait.Start();
             threadprocessAssignTaskReady.Start();
       
@@ -55,7 +55,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         {
             while (Alive)
             {
-                AssignTaskAtReady();
+               AssignTaskAtReady();
             }
         }
         OrderItem orderItem_wait = null;
@@ -311,7 +311,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
 
                         break;
                 }
-                Thread.Sleep(200);
+                Thread.Sleep(100);
         }
         public bool FindRobotUnitySameOrderItem(String userName)
         {
