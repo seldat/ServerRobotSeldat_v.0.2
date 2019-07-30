@@ -536,6 +536,11 @@ namespace SeldatMRMS
                          }
                     break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION: // Robot dang di toi dau line ready station
+                        if(DetermineHasTaskWaitingAnRobotAvailable())
+                        {
+                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITINGREADY_FORCERELEASED;
+                            break;
+                        }
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;

@@ -100,6 +100,7 @@ namespace SeldatMRMS {
             // FORBUF_ROBOT_CAME_FRONTLINE_PALLET_IN, //robot da den dau line , chuyen mode do line
             // FORBUF_ROBOT_WAITTING_GOTO_PALLET_IN, //cho robot den toa do pallet
             FORBUF_ROBOT_WAITTING_PICKUP_PALLET_IN, // doi robot gap hang
+            FORBUF_ROBOT_FINISH_PALLET_UP, //doi robot di tro lai dau line cong.
             FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE, //doi robot di tro lai dau line cong.
             // FORBUF_ROBOT_WAITTING_GOOUT_GATE, // doi robot di ra khoi cong
             FORBUF_ROBOT_CHECK_GOTO_BUFFER_OR_MACHINE, // doi dong cong.

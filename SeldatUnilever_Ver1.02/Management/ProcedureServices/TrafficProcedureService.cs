@@ -65,6 +65,19 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             // check co robot nao lam viec o line do ma co robot lam o nhung line lan can bayid co ngung lai
             //
         }
+        protected bool checkAnyRobotAtElevator(RobotUnity robot)
+        {
+            foreach (RobotUnity ar in robotService.RobotUnityRegistedList.Values)
+            {
+                if(this.traffic.RobotIsInArea("ELEVATOR", ar.properties.pose.Position))
+                {
+                    robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+                    return true;
+                }
+            }
+            robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+            return false;
+        }
         protected bool checkAllRobotsHasInsideBayIdNear(int bayId,int step)
         {
         
