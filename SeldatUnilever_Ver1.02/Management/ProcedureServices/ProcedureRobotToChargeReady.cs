@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define USE_AUTO_CHARGE
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
@@ -31,7 +32,6 @@ namespace SeldatMRMS
         DataReceive batLevel;
         DataReceive statusCharger;
         Stopwatch sw = new Stopwatch();
-        const bool USE_MANUAL_CHARGE = true;
         const UInt32 TIME_OUT_WAIT_TURNOFF_PC = 60000 * 5;
         const UInt32 TIME_OUT_WAIT_STATE = 60000;
         const UInt32 TIME_OUT_ROBOT_RECONNECT_SERVER = 60000 * 10;
@@ -60,7 +60,7 @@ namespace SeldatMRMS
             procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE;
         }
 
-#if USE_MANUAL_CHARGE
+#if USE_AUTO_CHARGE
         public void Start(RobotGoToCharge state = RobotGoToCharge.ROBCHAR_ROBOT_GOTO_CHARGER)
 #else
         public void Start(RobotGoToCharge state = RobotGoToCharge.ROBCHAR_WAITTING_CHARGEBATTERY)
@@ -104,7 +104,7 @@ namespace SeldatMRMS
                     case RobotGoToCharge.ROBCHAR_IDLE:
                         //robot.ShowText("ROBCHAR_IDLE");
                         break;
-#if USE_MANUAL_CHARGE
+#if USE_AUTO_CHARGE
                     // case RobotGoToCharge.ROBCHAR_CHARGER_CHECKSTATUS:
                     //     if(true == chargerCtrl.WaitState(ChargerState.ST_READY,TIME_OUT_WAIT_STATE)){
                     //         StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
@@ -255,14 +255,14 @@ namespace SeldatMRMS
                                 if (ErrorCodeCharger.TRUE == result)
                                 {
                                     rb.properties.BatteryLevelRb = (float)batLevel.data[0];
-#if USE_MANUAL_CHARGE
+#if USE_AUTO_CHARGE
                                     if (batLevel.data[0] >= BATTERY_FULL_LEVEL)
 #else
                                     if (batLevel.data[0] >= BATTERY_NEW_BAT)
 #endif
                                     {
                                         //Thread.Sleep((int)TIME_DELAY_RELEASE_CHARGE);
-#if USE_MANUAL_CHARGE
+#if USE_AUTO_CHARGE
                                         StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
 #else
                                         StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_RECONNECTING;
@@ -272,7 +272,7 @@ namespace SeldatMRMS
                                 }
                                 else
                                 {
-#if USE_MANUAL_CHARGE
+#if USE_AUTO_CHARGE
                                     if (result == ErrorCodeCharger.ERROR_CONNECT)
                                     {
                                         errorCode = ErrorCode.CONNECT_BOARD_CTRL_ROBOT_ERROR;
@@ -286,14 +286,14 @@ namespace SeldatMRMS
                         catch (System.Exception e)
                         {
                             Console.WriteLine(e);
-#if USE_MANUAL_CHARGE
+#if USE_AUTO_CHARGE
                             errorCode = ErrorCode.CONNECT_BOARD_CTRL_ROBOT_ERROR;
                             CheckUserHandleError(this);
 #endif
                         }
 #endif
                                     break; //dợi charge battery và thông tin giao tiếp server và trạm sạc
-#if USE_MANUAL_CHARGE
+#if USE_AUTO_CHARGE
 
                     case RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY:
                         try
@@ -343,7 +343,7 @@ namespace SeldatMRMS
                     case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_RECONNECTING:
                         if (true == CheckReconnectServer(TIME_OUT_ROBOT_RECONNECT_SERVER))
                         {
-#if USE_MANUAL_CHARGE
+#if USE_AUTO_CHARGE
                             StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_GETOUT_CHARGER;
 #else
                             StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
@@ -356,7 +356,7 @@ namespace SeldatMRMS
                             CheckUserHandleError(this);
                         }
                         break; //Robot mở nguồng và đợi connect lại
-#if USE_MANUAL_CHARGE
+#if USE_AUTO_CHARGE
                     case RobotGoToCharge.ROBCHAR_ROBOT_GETOUT_CHARGER:
                         if (rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_GETOUT_CHARGER))
                         {
