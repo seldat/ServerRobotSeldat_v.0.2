@@ -170,7 +170,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         break;
 
                 }
-               Thread.Sleep(200);
+               Thread.Sleep(400);
         }
         public void SelectProcedureItem(RobotUnity robot, OrderItem orderItem)
         {

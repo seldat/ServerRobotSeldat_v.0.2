@@ -476,7 +476,7 @@ namespace SeldatMRMS
 
             points.PointCheckIn = null;
             points.PointFrontLine = GetFrontLineChargeStation();
-            points.PointOfCharger = this.charger.PropertiesCharge_List[(int)chardgeId - 1].PointOfPallet;
+            points.PointOfCharger = GetPointOfCharger();
             registryRobotJourney = new RegistryRobotJourney();
             registryRobotJourney.robot = robot;
             registryRobotJourney.traffic = Traffic;
@@ -495,6 +495,17 @@ namespace SeldatMRMS
             order.endTimeProcedure = DateTime.Now;
             order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
             SaveOrderItem(order);
+        }
+        protected String GetPointOfCharger()
+        {
+            if (this.Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position, TypeZone.MAIN_ZONE))
+            {
+                return this.charger.PropertiesCharge_List[(int)chardgeId - 1].PointOfPallet;
+            }
+            else
+            {
+                return this.charger.PropertiesCharge_List[(int)chardgeId - 1].PointOfPalletInv;
+            }
         }
         protected Pose GetFrontLineChargeStation()
         {

@@ -42,7 +42,7 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             pchr1.PointFrontLineStrInv = "3.23,0.75,180";
             pchr1.ParsePointFrontLineValueInv(pchr1.PointFrontLineStrInv);
             pchr1.PointOfPallet = "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":1,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}";
-            pchr1.PointOfPalletInv = "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":1,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}";
+            pchr1.PointOfPalletInv = "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":2,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}";
 
             PropertiesCharge_List.Add(pchr1);
             ChargerCtrl chargerStation1 = new ChargerCtrl(pchr1);
@@ -54,10 +54,10 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             pchr2.Port = 8081;
             pchr2.PointFrontLineStr = "9.23,0.75,180";
             pchr2.ParsePointFrontLineValue(pchr2.PointFrontLineStr);
-            pchr2.PointFrontLineStrInv = "0.25,0.69,180";
+            pchr2.PointFrontLineStrInv = "6.25,0.69,180";
             pchr2.ParsePointFrontLineValue(pchr2.PointFrontLineStrInv);
             pchr2.PointOfPallet = "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":1,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}";
-            pchr2.PointOfPalletInv = "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":1,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}";
+            pchr2.PointOfPalletInv = "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":2,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}";
 
             PropertiesCharge_List.Add(pchr2);
             ChargerCtrl chargerStation2 = new ChargerCtrl(pchr2);
@@ -69,10 +69,10 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             pchr3.Port = 8081;
             pchr3.PointFrontLineStr = "11.25,0.75,180";
             pchr3.ParsePointFrontLineValue(pchr3.PointFrontLineStr);
-            pchr3.PointFrontLineStrInv = "3.25,0.69,180";
+            pchr3.PointFrontLineStrInv = "9.25,0.69,180";
             pchr3.ParsePointFrontLineValue(pchr3.PointFrontLineStrInv);
             pchr3.PointOfPallet = "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":1,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}";
-            pchr3.PointOfPalletInv = "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":1,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}";
+            pchr3.PointOfPalletInv = "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":2,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}";
 
             PropertiesCharge_List.Add(pchr3);
             ChargerCtrl chargerStation3 = new ChargerCtrl(pchr3);
@@ -122,6 +122,7 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
                             pchr.ParsePointFrontLineValueInv(pchr.PointFrontLineStrInv);
 
                             pchr.PointOfPallet = (String)result["PointOfPallet"];
+                            pchr.PointOfPalletInv = (String)result["PointOfPalletInv"];
                             ChargerCtrl chargerStation = new ChargerCtrl(pchr);
                             ChargerStationList.Add(chargerStation.cf.Id, chargerStation);
                             PropertiesCharge_List.Add(pchr);

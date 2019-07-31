@@ -96,7 +96,9 @@ namespace DoorControllerService
             public String PointFrontLineStr { get => _PointFrontLineStr; set { _PointFrontLineStr = value; RaisePropertyChanged("PointFrontLineStr"); } }
 
             private String _infoPallet;
+            private String _infoPalletInv;
             public String infoPallet { get => _infoPallet; set { _infoPallet = value; RaisePropertyChanged("infoPallet"); } }
+            public String infoPalletInv { get => _infoPalletInv; set { _infoPalletInv = value; RaisePropertyChanged("infoPalletInv"); } }
 
             public void ParsePointCheckInGateValue(String value)
             {
