@@ -649,7 +649,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 // Robot van toc bình thuong
                 rrj.robot.SetSpeedRegZone(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
-                return false;
+                return true;
             }
         }
         public static bool StationCheckInSpecialZone(RegistryRobotJourney rrj)

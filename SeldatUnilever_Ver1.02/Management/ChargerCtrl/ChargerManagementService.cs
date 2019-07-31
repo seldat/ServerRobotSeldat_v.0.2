@@ -37,7 +37,7 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             pchr1.Id = ChargerId.CHARGER_ID_1;
             pchr1.Ip = "192.168.1.200";
             pchr1.Port = 8081;
-            pchr1.PointFrontLineStr = "7.23,0.75,180";
+            pchr1.PointFrontLineStr = "7.23,0.75,0";
             pchr1.ParsePointFrontLineValue(pchr1.PointFrontLineStr);
             pchr1.PointFrontLineStrInv = "3.23,0.75,180";
             pchr1.ParsePointFrontLineValueInv(pchr1.PointFrontLineStrInv);
@@ -52,7 +52,7 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             pchr2.Id = ChargerId.CHARGER_ID_2;
             pchr2.Ip = "192.168.1.201";
             pchr2.Port = 8081;
-            pchr2.PointFrontLineStr = "9.23,0.75,180";
+            pchr2.PointFrontLineStr = "9.23,0.75,0";
             pchr2.ParsePointFrontLineValue(pchr2.PointFrontLineStr);
             pchr2.PointFrontLineStrInv = "6.25,0.69,180";
             pchr2.ParsePointFrontLineValue(pchr2.PointFrontLineStrInv);
@@ -67,7 +67,7 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             pchr3.Id = ChargerId.CHARGER_ID_3;
             pchr3.Ip = "192.168.1.202";
             pchr3.Port = 8081;
-            pchr3.PointFrontLineStr = "11.25,0.75,180";
+            pchr3.PointFrontLineStr = "11.25,0.75,0";
             pchr3.ParsePointFrontLineValue(pchr3.PointFrontLineStr);
             pchr3.PointFrontLineStrInv = "9.25,0.69,180";
             pchr3.ParsePointFrontLineValue(pchr3.PointFrontLineStrInv);
