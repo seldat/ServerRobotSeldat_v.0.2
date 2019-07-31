@@ -40,6 +40,8 @@
 
                     <DataGridTextColumn Width="*" Header="PointOfPallet" 
                                         Binding="{Binding Path=PointOfPallet, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="PointOfPalletInv" 
+                                        Binding="{Binding Path=PointOfPalletInv, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTemplateColumn Header="Fixed" x:Name="btnFixed">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

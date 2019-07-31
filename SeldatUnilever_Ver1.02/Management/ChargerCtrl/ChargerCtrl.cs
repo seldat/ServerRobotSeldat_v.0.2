@@ -69,7 +69,9 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             private String _PointFrontLineStrInv;
             public String PointFrontLineStrInv { get => _PointFrontLineStrInv; set { _PointFrontLineStrInv = value; RaisePropertyChanged("PointFrontLineStrInv"); } }
             private String _PointOfPallet;
+            private String _PointOfPalletInv;
             public String PointOfPallet{ get => _PointOfPallet; set { _PointOfPallet = value; RaisePropertyChanged("PointOfPalletStr"); } }
+            public String PointOfPalletInv { get => _PointOfPalletInv; set { _PointOfPalletInv = value; RaisePropertyChanged("PointOfPalletInvStr"); } }
             public void ParsePointFrontLineValue(String value)
             {
                 try

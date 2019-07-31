@@ -373,10 +373,17 @@ namespace SeldatUnilever_Ver1._02
         {
             OrderItem orderItem = (sender as Button).DataContext as OrderItem;
             Task.Run(() => { 
-               
-               
-                    DeviceItem devI = unityService.deviceRegistrationService.deviceItemList.Find(item => item.userName == orderItem.userName);
-                    devI.RemoveCallBack(orderItem);
+                 foreach(DeviceItem devI in unityService.deviceRegistrationService.deviceItemList)
+                {
+                    if (devI.userName == orderItem.userName)
+                    {
+                        if (orderItem.status == StatusOrderResponseCode.PENDING)
+                            devI.RemoveCallBack(orderItem);
+                        else
+                            MessageBox.Show("Chỉ có thể xóa Pending !");
+                    }
+                }
+                
             });
 
 
@@ -402,6 +409,7 @@ namespace SeldatUnilever_Ver1._02
                 var result = MessageBox.Show(txtstr, wstr, msgb);
                 if (result == MessageBoxResult.Yes)
                 {
+                    unityService.deviceRegistrationService.SaveDeviceOrderList();
                     unityService.robotManagementService.close();
                     Environment.Exit(0);
                 }

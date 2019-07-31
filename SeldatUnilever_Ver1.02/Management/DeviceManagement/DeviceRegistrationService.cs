@@ -120,15 +120,15 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         {
             foreach(DeviceItem device in deviceItemList)
             {
-                if (!SaveFileOrders(device.OrderedItemList))
+                if (!SaveFileOrders(device))
                     return false;
             }
             return true;
         }
-        public bool SaveFileOrders(List<OrderItem> listOrder)
+        public bool SaveFileOrders(DeviceItem device)
         {
             List<OrderItem> listCol = new List<OrderItem>();
-            foreach (OrderItem item in listOrder)
+            foreach (OrderItem item in device.OrderedItemList)
             {
                 if(item.status==StatusOrderResponseCode.DELIVERING)
                 {
@@ -136,7 +136,9 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 }
                 else if(item.status == StatusOrderResponseCode.PENDING)
                 {
+                    device.RemoveCallBack(item);
                     listCol.Add(item);
+
                 }
             }
             String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "OrderStore.txt");
