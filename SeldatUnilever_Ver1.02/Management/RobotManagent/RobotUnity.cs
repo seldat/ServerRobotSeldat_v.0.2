@@ -24,7 +24,7 @@ namespace SeldatMRMS.Management.RobotManagent
 {
     public class RobotUnity : RobotBaseService
     {
-
+        public String name = "";
         Ellipse headerPoint;
         Ellipse headerPoint1;
         Ellipse headerPoint2;
