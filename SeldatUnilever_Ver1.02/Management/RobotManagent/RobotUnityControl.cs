@@ -629,6 +629,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                    delay(500);
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
                     return true;
                 }
@@ -647,6 +648,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                    delay(500);
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
                     return true;
                 }
@@ -668,6 +670,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     properties.speedInSpecicalArea = robotspeed + "_TRAFFIC";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                  
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
                     return true;
                 }
@@ -686,6 +689,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     properties.speedInSpecicalArea = robotspeed+ "_TRAFFIC";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+             
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
                     return true;
                 }
@@ -694,6 +698,15 @@ namespace SeldatMRMS.Management.RobotManagent
                     Console.WriteLine("Robot Control Error  SetSpeed");
                     return false;
                 }
+            }
+        }
+        public void delay(int ms)
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            while (true)
+            {
+                if (sw.ElapsedMilliseconds > ms) break;
             }
         }
         public bool SetSpeedRegZone(RobotSpeedLevel robotspeed, bool highpriority)
@@ -706,6 +719,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     properties.speedInSpecicalArea = robotspeed+"_REG_ZONE";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                    delay(500);
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
                     return true;
                 }
@@ -724,6 +738,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     properties.speedInSpecicalArea = robotspeed + "_REG_ZONE";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                    delay(500);
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
                     return true;
                 }

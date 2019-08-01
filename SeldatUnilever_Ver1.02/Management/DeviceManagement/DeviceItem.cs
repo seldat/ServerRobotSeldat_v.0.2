@@ -33,6 +33,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             NO_BUFFER_DATA = 304,
             CHANGED_FORKLIFT = 305,
             DESTROYED = 306,
+            GOING_AND_PICKING_UP = 307,
+            PICKED_UP = 308,
         }
 
         public class StatusOrderResponse
@@ -258,9 +260,16 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     order.dataRequest = product.ToString();
                     order.status = StatusOrderResponseCode.PENDING;
                     order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
+                
                     int palletId_P = Convert.ToInt32(CreatePlanBuffer(order));
-                    if (palletId_P > 0)
-                    {
+                
+                   if (palletId_P > 0)
+                   {
+                        /*if (GetFrontLineBuffer(order, true) == null)
+                        {
+                            statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, content = "Loai Ma Code trong Buffer" };
+                            return statusOrderResponse;
+                        }*/
                         //  Global_Object.onFlagDoorBusy = true;
                         Global_Object.setGateStatus(gate, true);
                         order.palletId_P = palletId_P;

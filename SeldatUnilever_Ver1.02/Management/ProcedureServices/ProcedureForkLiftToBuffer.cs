@@ -104,6 +104,7 @@ namespace SeldatMRMS
                         robot.ShowText("FORBUF_IDLE");
                         break;
                     case ForkLift.FORBUF_SELECT_BEHAVIOR_ONZONE:
+                        order.status = StatusOrderResponseCode.GOING_AND_PICKING_UP;
                         if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
                         {
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
@@ -271,25 +272,33 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_PICKUP_PALLET_IN: // doi robot gap hang
-                        if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
+                        try
                         {
-                            resCmd = ResponseCommand.RESPONSE_NONE;
-                            // FlToBuf.UpdatePalletState(PalletStatus.F);
-                            //   rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
-                            StateForkLift = ForkLift.FORBUF_ROBOT_FINISH_PALLET_UP;
-                            endPointBuffer = FlToBuf.GetFrontLineBuffer(true).Position;
-                            robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.GOING_OUTSIDE_GATE;
-                            robot.ShowText("FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE");
+                            if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
+                            {
+                                resCmd = ResponseCommand.RESPONSE_NONE;
+                                // FlToBuf.UpdatePalletState(PalletStatus.F);
+                                //   rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
+                                StateForkLift = ForkLift.FORBUF_ROBOT_FINISH_PALLET_UP;
+                                Console.WriteLine("pallet ID" + order.palletId);
+                                endPointBuffer = FlToBuf.GetFrontLineBuffer(true).Position;
+                                robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.GOING_OUTSIDE_GATE;
+                                robot.ShowText("FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE");
+                            }
+                            else if (resCmd == ResponseCommand.RESPONSE_ERROR)
+                            {
+                                errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                CheckUserHandleError(this);
+                            }
                         }
-                        else if (resCmd == ResponseCommand.RESPONSE_ERROR)
+                        catch
                         {
-                            errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            CheckUserHandleError(this);
+                            
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_FINISH_PALLET_UP:
 
-                        String destName = Traffic.DetermineArea(endPointBuffer, TypeZone.MAIN_ZONE);
+                       String destName = Traffic.DetermineArea(endPointBuffer, TypeZone.MAIN_ZONE);
                         if (destName.Equals("VIM"))
                         {
                             if (checkAnyRobotAtElevator(robot))
@@ -341,10 +350,14 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_CHECK_GOTO_BUFFER_OR_MACHINE:
+                        order.status = StatusOrderResponseCode.DELIVERING;
                         flToMachineInfo = GetPriorityTaskForkLiftToMachine(order.productId);
                         if (flToMachineInfo == null)
                         {
                             StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY;
+                            registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
+                            registryRobotJourney.startPoint = robot.properties.pose.Position;
+                            registryRobotJourney.endPoint = FlToBuf.GetFrontLineBuffer(true).Position;
                         }
                         else
                         {

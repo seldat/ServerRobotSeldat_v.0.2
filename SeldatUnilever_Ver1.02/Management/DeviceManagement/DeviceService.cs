@@ -226,6 +226,103 @@ namespace SeldatUnilever_Ver1._02.Management.DeviceManagement
             }
             return deviceId;
         }
+
+        public Pose GetFrontLineBuffer(OrderItem order, bool onPlandId = false)
+        {
+            Pose poseTemp = null;
+            try
+            {
+                String collectionData = RequestDataProcedure_POST(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    if (onPlandId)
+                    {
+                        foreach (var result in results)
+                        {
+                            int temp_planId = (int)result["planId"];
+                            if (temp_planId == order.planId)
+                            {
+                                //var bufferResults = result["buffers"][0];
+                                foreach (var buffer in result["buffers"])
+                                {
+
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        foreach (var palletInfo in buffer["pallets"])
+                                        {
+                                            int palletId = (int)palletInfo["palletId"];
+                                            if (palletId == order.palletId_P)
+                                            {
+                                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                              
+                                                double x = (double)stuff["line"]["x"];
+                                                double y = (double)stuff["line"]["y"];
+                                                double angle = (double)stuff["line"]["angle"];
+                                                poseTemp = new Pose(x, y, angle);
+                                             
+                                                break;
+                                            }
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
+                                break;
+
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                        var result = results[0];
+                        //var bufferResults = result["buffers"][0];
+                        foreach (var buffer in result["buffers"])
+                        {
+                            String bufferDataStr = (String)buffer["bufferData"];
+                            JObject stuffBData = JObject.Parse(bufferDataStr);
+                            bool canOpEdit = (bool)stuffBData["canOpEdit"];
+                            if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy
+                                continue;
+                            if (buffer["pallets"].Count() > 0)
+                            {
+                                foreach (var palletInfo in buffer["pallets"])
+                                {
+                                    int palletId = (int)palletInfo["palletId"];
+                                    if (palletId == order.palletId_H)
+                                    {
+                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                       
+                                        double x = (double)stuff["line"]["x"];
+                                        double y = (double)stuff["line"]["y"];
+                                        double angle = (double)stuff["line"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                       
+                                        break;
+                                    }
+
+                                }
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+
+                    }
+                }
+                //  Console.WriteLine(""+poseTemp.Position.ToString());
+            }
+            catch
+            {
+                Console.WriteLine("Error Front Line");
+            }
+            return poseTemp;
+        }
         protected int GetPalletId(String dataReq,int planId=0)
         {
             int palletId = -1;

@@ -120,19 +120,20 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         }
                         if (orderItem_wait != null)
                         {
-                            if (!orderItem_wait.onAssiged) //kiem tra da gan task
+                            //if (!orderItem_wait.onAssiged) //kiem tra da gan task
                             {
                                 orderItem_wait.onAssiged = true;
                                 processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK;
                                 orderItem_wait.robot = robotwait.properties.Label;
                                 robotwait.orderItem = orderItem_wait;
                                 cntOrderNull_wait = 0;
+                                    MoveElementToEnd();
                             }
-                            else
+                           /* else
                             {
                                 MoveElementToEnd();
                                 processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
-                            }
+                            }*/
                             break;
                         }
                         else
@@ -261,18 +262,19 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
 
                         if (orderItem_ready != null)
                         {
-                            if (!orderItem_ready.onAssiged)
+                            //if (!orderItem_ready.onAssiged)
                             {
                                 orderItem_ready.onAssiged = true;
                                 Console.WriteLine(processAssignTaskReady);
                                 orderItem_ready.robot = robotatready.properties.Label;
                                 robotatready.orderItem = orderItem_ready;
                                 processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_SET_TRAFFIC_RISKAREA_ON;
-                            }
-                            else
+                            MoveElementToEnd();
+                        }
+                            //else
                             {
-                                MoveElementToEnd();
-                                processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST;
+                               // MoveElementToEnd();
+                              //  processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST;
                             }
                         }
                         else

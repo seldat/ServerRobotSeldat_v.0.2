@@ -25,6 +25,10 @@ namespace SeldatMRMS.Management.RobotManagent
     public class RobotUnity : RobotBaseService
     {
         public String name = "";
+        public String StartPointName="";
+        public String EndPointName="";
+        public Point StartPoint=new Point();
+        public Point EndPoint=new Point();
         Ellipse headerPoint;
         Ellipse headerPoint1;
         Ellipse headerPoint2;
@@ -400,7 +404,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 TypeZone typezone = trafficManagementService.GetTypeZone(properties.pose.Position, 0, 200);
                 double angle = -properties.pose.Angle;
                 Point position = Global_Object.CoorLaser(properties.pose.Position);
-                border.ToolTip = "Name: " + properties.Label + Environment.NewLine + "Zone: " + typezone +
+                String tooltipStr = "Name: " + properties.Label + Environment.NewLine + "Zone: " + typezone +
                     Environment.NewLine + " Location: " + position.X.ToString("0.00") + " / " +
                     position.Y.ToString("0.00") + " / " + angle.ToString("0.00") + Environment.NewLine +
                     "Place: " + TyprPlaceStr + Environment.NewLine +
@@ -425,8 +429,14 @@ namespace SeldatMRMS.Management.RobotManagent
                        "Robots Registry in Gate3: " + TrafficRountineConstants.RegIntZone_GATE3.getNames() + Environment.NewLine +
                     "Gate 1: " + Global_Object.getGateStatus((int)DoorId.DOOR_MEZZAMINE_UP) + Environment.NewLine+
                     "Gate 2: " + Global_Object.getGateStatus((int)DoorId.DOOR_MEZZAMINE_UP_NEW) + Environment.NewLine+
-                    "Robot_BAYID: "+bayId;
+                    "Robot_BAYID: "+bayId + Environment.NewLine +
+                    "Start_Point_Name: " + StartPointName + Environment.NewLine +
+                    "Start_Point: " + StartPoint.ToString()+ Environment.NewLine +
+                    "End_Point_Name: " + EndPointName + Environment.NewLine +
+                    "end_Point: " +EndPoint.ToString()+ Environment.NewLine 
                     ;
+
+                border.ToolTip = tooltipStr;
             }
             catch { }
         }
