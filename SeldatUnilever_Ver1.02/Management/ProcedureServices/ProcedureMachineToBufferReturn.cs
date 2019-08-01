@@ -371,8 +371,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 
                         break;
                     case MachineToBufferReturn.MACBUFRET_ROBOT_GOTO_FRONTLINE_BUFFER_RETURN_FROM_VIM_REG: // dang di
-                        if (TrafficCheckInBuffer(goalFrontLinePos, bayId))
-                            break;
+
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
@@ -386,6 +385,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         try
                         {
                             TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                            if (TrafficCheckInBuffer(goalFrontLinePos, bayId))
+                                break;
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;

@@ -301,9 +301,9 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM_FROM_READY:
+                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         if (TrafficCheckInBuffer(goalFrontLinePos, bayId))
                             break;
-                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         try
                         {
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
@@ -325,8 +325,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM_REG:
-                        if (TrafficCheckInBuffer(goalFrontLinePos, bayId))
-                            break;
+
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
@@ -338,6 +337,8 @@ namespace SeldatMRMS
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM:
                         TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                        if (TrafficCheckInBuffer(goalFrontLinePos, bayId))
+                            break;
                         try
                         {
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)

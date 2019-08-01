@@ -244,9 +244,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         break;
                     case BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM_READY:
+                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         if (TrafficCheckInBuffer(goalFrontLinePos, bayId))
                             break;
-                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                       
                         try
                         {
                             //bool onComePoint2 = robot.ReachedGoal();
@@ -273,8 +274,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         break;
                     case BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM_REG:
-                        if (TrafficCheckInBuffer(goalFrontLinePos, bayId))
-                            break;
+
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
@@ -286,6 +286,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         break;
                     case BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM:
                         TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                        if (TrafficCheckInBuffer(goalFrontLinePos, bayId))
+                            break;
                         try
                         {
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)

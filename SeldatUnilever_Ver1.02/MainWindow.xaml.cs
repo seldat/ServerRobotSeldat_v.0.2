@@ -409,6 +409,12 @@ namespace SeldatUnilever_Ver1._02
                 var result = MessageBox.Show(txtstr, wstr, msgb);
                 if (result == MessageBoxResult.Yes)
                 {
+                    Global_Object.onFlagDoorBusy = false;
+                    Global_Object.onFlagRobotComingGateBusy = false;
+                    Global_Object.setGateStatus((int)DoorId.DOOR_MEZZAMINE_UP_NEW, false); // gate 1
+                    Global_Object.setGateStatus((int)DoorId.DOOR_MEZZAMINE_UP, false); // gate 2
+                    Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampOff(DoorType.DOOR_FRONT);
+                    Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampOff(DoorType.DOOR_FRONT);
                     unityService.deviceRegistrationService.SaveDeviceOrderList();
                     unityService.robotManagementService.close();
                     Environment.Exit(0);
@@ -426,6 +432,12 @@ namespace SeldatUnilever_Ver1._02
                 var result = MessageBox.Show(txtstr, wstr, msgb);
                 if (result == MessageBoxResult.Yes)
                 {
+                    Global_Object.onFlagDoorBusy = false;
+                    Global_Object.onFlagRobotComingGateBusy = false;
+                    Global_Object.setGateStatus((int)DoorId.DOOR_MEZZAMINE_UP_NEW, false); // gate 1
+                    Global_Object.setGateStatus((int)DoorId.DOOR_MEZZAMINE_UP, false); // gate 2
+                    Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampOff(DoorType.DOOR_FRONT);
+                    Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampOff(DoorType.DOOR_FRONT);
                     unityService.robotManagementService.close();
                     Environment.Exit(0);
                 }

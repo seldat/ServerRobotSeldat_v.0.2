@@ -398,9 +398,10 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
                         // xóa đăng ký vùng
+                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         if (TrafficCheckInBuffer(goalFrontLinePos, bayId))
                             break;
-                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                       
                         try
                         {
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
