@@ -132,7 +132,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public String ipMcuCtrl{ get => _ipMcuCtrl; set { _ipMcuCtrl = value; RaisePropertyChanged("IpMCU"); } }
             private int _portMcuCtrl;
             public int portMcuCtrl{ get => _portMcuCtrl; set {_portMcuCtrl = value; RaisePropertyChanged("PortMCU"); } }
-            public RobotSpeedLevel speedInSpecicalArea = RobotSpeedLevel.ROBOT_SPEED_NORMAL;
+            public String speedInSpecicalArea = "ROBOT_SPEED_NORMAL";
             public double errorVx=0.0001;
             public double errorVy=0.0001;
 		    public double errorW=0.0001;
@@ -626,7 +626,7 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 try
                 {
-                    properties.speedInSpecicalArea = robotspeed;
+                    properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
@@ -644,7 +644,7 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 try
                 {
-                    properties.speedInSpecicalArea = robotspeed;
+                    properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
@@ -665,7 +665,7 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 try
                 {
-                    properties.speedInSpecicalArea = robotspeed;
+                    properties.speedInSpecicalArea = robotspeed + "_TRAFFIC";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
@@ -683,7 +683,7 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 try
                 {
-                    properties.speedInSpecicalArea = robotspeed;
+                    properties.speedInSpecicalArea = robotspeed+ "_TRAFFIC";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
@@ -703,7 +703,7 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 try
                 {
-                    properties.speedInSpecicalArea = robotspeed;
+                    properties.speedInSpecicalArea = robotspeed+"_REG_ZONE";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
@@ -721,7 +721,7 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 try
                 {
-                    properties.speedInSpecicalArea = robotspeed;
+                    properties.speedInSpecicalArea = robotspeed + "_REG_ZONE";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
