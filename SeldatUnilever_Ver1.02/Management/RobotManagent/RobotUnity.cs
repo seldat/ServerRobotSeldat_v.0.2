@@ -420,6 +420,9 @@ namespace SeldatMRMS.Management.RobotManagent
                     "Order: " + OrderStr + Environment.NewLine +
                     "Battery Level: " + properties.BatteryLevelRb + Environment.NewLine +
                     "Robots Registry in Ready: " + TrafficRountineConstants.RegIntZone_READY.getNames()+ Environment.NewLine+
+                     "Robots Registry in GATE 12: " + TrafficRountineConstants.RegIntZone_GATE12.getNames() + Environment.NewLine +
+                     "Robots Registry in Elevator: " + TrafficRountineConstants.RegIntZone_ELEVATOR.getNames() + Environment.NewLine +
+                       "Robots Registry in Gate3: " + TrafficRountineConstants.RegIntZone_GATE3.getNames() + Environment.NewLine +
                     "Gate 1: " + Global_Object.getGateStatus((int)DoorId.DOOR_MEZZAMINE_UP) + Environment.NewLine+
                     "Gate 2: " + Global_Object.getGateStatus((int)DoorId.DOOR_MEZZAMINE_UP_NEW) + Environment.NewLine
                     ;
