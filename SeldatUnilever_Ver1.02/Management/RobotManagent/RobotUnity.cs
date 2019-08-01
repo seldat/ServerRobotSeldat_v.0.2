@@ -424,7 +424,8 @@ namespace SeldatMRMS.Management.RobotManagent
                      "Robots Registry in Elevator: " + TrafficRountineConstants.RegIntZone_ELEVATOR.getNames() + Environment.NewLine +
                        "Robots Registry in Gate3: " + TrafficRountineConstants.RegIntZone_GATE3.getNames() + Environment.NewLine +
                     "Gate 1: " + Global_Object.getGateStatus((int)DoorId.DOOR_MEZZAMINE_UP) + Environment.NewLine+
-                    "Gate 2: " + Global_Object.getGateStatus((int)DoorId.DOOR_MEZZAMINE_UP_NEW) + Environment.NewLine
+                    "Gate 2: " + Global_Object.getGateStatus((int)DoorId.DOOR_MEZZAMINE_UP_NEW) + Environment.NewLine+
+                    "Robot_BAYID: "+bayId;
                     ;
             }
             catch { }
