@@ -130,9 +130,9 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public double totalTimeProcedure { get; set; }
             public bool onAssiged = false;
             public int gate { get; set; }
-            public int palletId_H;
-            public int palletId_P;
-            public int palletId_F;
+            public int palletId_H { get; set; }
+            public int palletId_P { get; set; }
+            public int palletId_F { get; set; }
 
         }
         public string userName { get; set; } // dia chi Emei
@@ -234,55 +234,59 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_DOOR_BUSY, content = "" };
                         return statusOrderResponse;
                     }
-                    OrderItem order = new OrderItem();
-                    order.typeReq = (TyeRequest)typeReq;
-                    order.userName = (String)results["userName"];
-                    order.productDetailId = (int)results["productDetailId"];
-                    order.productDetailName = (String)results["productDetailName"];
-                    order.productId = (int)results["productId"];
-                    order.planId = (int)results["planId"];
-                    order.deviceId = (int)results["deviceId"];
-                    order.timeWorkId = (int)results["timeWorkId"];
-                    order.activeDate = (string)results["activeDate"];
-
-                    order.gate = (int)results["gate"];
-                    // order.palletStatus = (String)results["palletStatus"];
-                    dynamic product = new JObject();
-                    product.timeWorkId = order.timeWorkId;
-                    product.activeDate = order.activeDate;
-                    product.productId = order.productId;
-                    product.productDetailId = order.productDetailId;
-
-                    // chu y sua 
-                    product.palletStatus = PalletStatus.P.ToString();
-                    order.dataRequest = product.ToString();
-                    order.status = StatusOrderResponseCode.PENDING;
-                    order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
-                    int palletId_P = Convert.ToInt32(CreatePlanBuffer(order));
-                    if (palletId_P > 0)
-                    {
-                        //  Global_Object.onFlagDoorBusy = true;
-                        Global_Object.setGateStatus(gate, true);
-                        order.palletId_P = palletId_P;
-                        PendingOrderList.Add(order);
-                        OrderedItemList.Add(order);
-                    }
                     else
                     {
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, content = "" };
-                        return statusOrderResponse;
+                        Global_Object.setGateStatus(gate, true);
+                        OrderItem order = new OrderItem();
+                        order.typeReq = (TyeRequest)typeReq;
+                        order.userName = (String)results["userName"];
+                        order.productDetailId = (int)results["productDetailId"];
+                        order.productDetailName = (String)results["productDetailName"];
+                        order.productId = (int)results["productId"];
+                        order.planId = (int)results["planId"];
+                        order.deviceId = (int)results["deviceId"];
+                        order.timeWorkId = (int)results["timeWorkId"];
+                        order.activeDate = (string)results["activeDate"];
+
+                        order.gate = (int)results["gate"];
+                        // order.palletStatus = (String)results["palletStatus"];
+                        dynamic product = new JObject();
+                        product.timeWorkId = order.timeWorkId;
+                        product.activeDate = order.activeDate;
+                        product.productId = order.productId;
+                        product.productDetailId = order.productDetailId;
+
+                        // chu y sua 
+                        product.palletStatus = PalletStatus.P.ToString();
+                        order.dataRequest = product.ToString();
+                        order.status = StatusOrderResponseCode.PENDING;
+                        order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
+                        int palletId_P = Convert.ToInt32(CreatePlanBuffer(order));
+                        if (palletId_P > 0)
+                        {
+                            //  Global_Object.onFlagDoorBusy = true;
+                            order.palletId_P = palletId_P;
+                            PendingOrderList.Add(order);
+                            OrderedItemList.Add(order);
+                            try
+                            {
+                                if (gate == (int)DoorId.DOOR_MEZZAMINE_UP)
+                                    Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampOn(DoorType.DOOR_FRONT);
+                                if (gate == (int)DoorId.DOOR_MEZZAMINE_UP_NEW)
+                                    Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampOn(DoorType.DOOR_FRONT);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("control lamp failed" + e);
+                            }
+                        }
+                        else
+                        {
+                            statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, content = "" };
+                            return statusOrderResponse;
+                        }
                     }
-                    try
-                    {
-                        if (gate == (int)DoorId.DOOR_MEZZAMINE_UP)
-                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampOn(DoorType.DOOR_FRONT);
-                        if (gate == (int)DoorId.DOOR_MEZZAMINE_UP_NEW)
-                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampOn(DoorType.DOOR_FRONT);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("control lamp failed" + e);
-                    }
+                   
                 }
                 #endregion
                 #region TYPEREQUEST_FORLIFT_TO_MACHINE

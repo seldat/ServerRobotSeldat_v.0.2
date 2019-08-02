@@ -202,20 +202,6 @@ namespace SeldatMRMS
                             robot.ShowText("FORBUF_ROBOT_CAME_GATE_POSITION");
                         }
                         break;
-                    case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE:
-                        // dò ra điểm đích đến và xóa đăng ký vùng
-                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
-                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
-                        {
-                           // robot.setTrafficAllCircles(false, false, false, false);
-                            TrafficRountineConstants.RegIntZone_READY.Release(robot);
-                            robot.SwitchToDetectLine(true);
-                            resCmd = ResponseCommand.RESPONSE_NONE;
-                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                            StateForkLift = ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION;
-                            robot.ShowText("FORBUF_ROBOT_CAME_GATE_POSITION");
-                        }
-                        break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM_REG:
                         // kiem tra vung đăng ký tai khu vuc xac định
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
@@ -478,8 +464,7 @@ namespace SeldatMRMS
                         {
                             if (rb.SendPoseStamped(flToMachineInfo.frontLinePose))
                             {
-                                Global_Object.setGateStatus(order.gate, false);
-                                StateForkLift = ForkLift.FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
+                                   StateForkLift = ForkLift.FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
                                 robot.ShowText("FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
                                 onFlagResetedGate = false;
                             }
@@ -499,7 +484,6 @@ namespace SeldatMRMS
                             }
                             if (rb.SendPoseStamped(flToMachineInfo.frontLinePose))
                             {
-                                Global_Object.setGateStatus(order.gate, false);
                                 StateForkLift = ForkLift.FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
                                 robot.ShowText("FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
                                 onFlagResetedGate = false;
