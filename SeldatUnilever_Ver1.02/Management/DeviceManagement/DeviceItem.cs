@@ -35,6 +35,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             DESTROYED = 306,
             GOING_AND_PICKING_UP = 307,
             PICKED_UP = 308,
+            ERROR_GET_FRONTLINE = 309,
         }
 
         public class StatusOrderResponse

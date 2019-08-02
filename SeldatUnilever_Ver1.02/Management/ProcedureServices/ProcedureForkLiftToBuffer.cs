@@ -37,7 +37,7 @@ namespace SeldatMRMS
         private DeviceRegistrationService deviceService;
         private DoorManagementService doorservice;
         public override event Action<Object> ReleaseProcedureHandler;
-        public Point endPointBuffer;
+        public Pose endPointBuffer;
 
         public void Registry(DeviceRegistrationService deviceService)
         {
@@ -96,6 +96,13 @@ namespace SeldatMRMS
             ForkLiftToMachineInfo flToMachineInfo = new ForkLiftToMachineInfo();
             rb.mcuCtrl.TurnOnLampRb();
             robot.ShowText(" Start -> " + procedureCode);
+            endPointBuffer = FlToBuf.GetFrontLineBuffer(true);
+            if(endPointBuffer==null)
+            {
+                Console.WriteLine("Error Data Request"+order.dataRequest);
+                order.status = StatusOrderResponseCode.ERROR_GET_FRONTLINE;
+                Destroy();
+            }
             while (ProRun)
             {
                 switch (StateForkLift)
@@ -267,7 +274,7 @@ namespace SeldatMRMS
                                 //   rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                                 StateForkLift = ForkLift.FORBUF_ROBOT_FINISH_PALLET_UP;
                                 Console.WriteLine("pallet ID" + order.palletId);
-                                endPointBuffer = FlToBuf.GetFrontLineBuffer(true).Position;
+
                                 robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.GOING_OUTSIDE_GATE;
                                 robot.ShowText("FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE");
                             }
@@ -284,7 +291,7 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_FINISH_PALLET_UP:
 
-                       String destName = Traffic.DetermineArea(endPointBuffer, TypeZone.MAIN_ZONE);
+                       String destName = Traffic.DetermineArea(endPointBuffer.Position, TypeZone.MAIN_ZONE);
                         if (destName.Equals("VIM"))
                         {
                             if (checkAnyRobotAtElevator(robot))
@@ -326,7 +333,7 @@ namespace SeldatMRMS
                             robot.SwitchToDetectLine(false);
                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                             registryRobotJourney.startPoint = robot.properties.pose.Position;
-                            registryRobotJourney.endPoint = FlToBuf.GetFrontLineBuffer(true).Position;
+                            registryRobotJourney.endPoint = endPointBuffer.Position ;
                            
                         }
                         catch (System.Exception)
@@ -343,7 +350,7 @@ namespace SeldatMRMS
                             StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY;
                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                             registryRobotJourney.startPoint = robot.properties.pose.Position;
-                            registryRobotJourney.endPoint = FlToBuf.GetFrontLineBuffer(true).Position;
+                            registryRobotJourney.endPoint = endPointBuffer.Position;
                         }
                         else
                         {
@@ -357,7 +364,7 @@ namespace SeldatMRMS
                         {
                             break;
                         }
-                        Pose destPos1 = FlToBuf.GetFrontLineBuffer(true);
+                        Pose destPos1 = endPointBuffer;
                         if (rb.SendPoseStamped(destPos1))
                         {
                             StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
