@@ -657,6 +657,8 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             // vì "OUTER" có kiều là Main_Zone, nhưng vùng khac co kieu là OPZS
             String startZone = rrj.traffic.DetermineArea(rrj.startPoint, TypeZone.MAIN_ZONE).Equals("OUTER") ? "OUTER" : rrj.traffic.DetermineArea(rrj.startPoint, TypeZone.OPZS);
             String endZone = rrj.traffic.DetermineArea(rrj.endPoint, TypeZone.MAIN_ZONE).Equals("OUTER") ? "OUTER" : rrj.traffic.DetermineArea(rrj.endPoint, TypeZone.OPZS);
+            rrj.robot.StartPointName = startZone;
+            rrj.robot.EndPointName = endZone ;
             #region READY -> GATE12, ELEVATOR, GATE3, VIM
             if (startZone.Equals("READY") && endZone.Equals("GATE12"))
             {
