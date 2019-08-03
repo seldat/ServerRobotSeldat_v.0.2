@@ -284,7 +284,7 @@ namespace SeldatMRMS.Management
                             bool onTouch2 = r.FindHeaderInsideCircleArea(mdCV2, r.Radius_S);
                             bool onTouch3 = r.FindHeaderInsideCircleArea(mdCV3, r.Radius_S);
 
-                            if (onTouch3)
+                            if ( onTouch1 )
                             {
                                 //  robotLogOut.ShowTextTraffic(r.properties.Label+" => CheckIntersection");   
                                 if (r.onFlagSafeSmallcircle || r.onFlagSafeYellowcircle || r.onFlagSafeOrgancircle)

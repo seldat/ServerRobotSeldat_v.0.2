@@ -19,7 +19,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         TrafficManagementService traffic;
         DoorManagementService doorservice;
         RobotUnity robot;
-        protected int DISTANCE_CHECk_BAYID = 12;
+        protected int DISTANCE_CHECk_BAYID = 8;
         public TrafficProcedureService(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService trafficService) :base(robot)
         {
             this.traffic = trafficService;
@@ -37,20 +37,22 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         protected bool TrafficCheckInBuffer(Pose frontLinePoint,int bayId)
         {
-            if (ExtensionService.CalDistance(robot.properties.pose.Position,frontLinePoint.Position)< DISTANCE_CHECk_BAYID)
+
+            if (ExtensionService.CalDistance(robot.properties.pose.Position, frontLinePoint.Position) < DISTANCE_CHECk_BAYID)
             {
-                if(robot.bayId<0)
-                {// cap nhat bayid for robot
-                    robot.bayId = bayId;
-                }
-                if(checkAllRobotsHasInsideBayIdNear(bayId, 4))
+
+                if (checkAllRobotsHasInsideBayIdNear(bayId, 2))
                 {
-                    robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP,true);
+                    robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
                     return true;
                 }
                 else
                 {
-                    robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+                    if (robot.bayId < 0)
+                    {// cap nhat bayid for robot
+                        robot.bayId = bayId;
+                    }
+                    robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
                     return false;
                 }
             }
@@ -59,11 +61,6 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                 robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
                 return false;
             }
-            // kiem tra khoan cach robot hen hanh den diem dau line
-            // neu gan diem dau line 
-            // check co robot nao lam viec trong vung bayId do khong. neu co ngung lai
-            // check co robot nao lam viec o line do ma co robot lam o nhung line lan can bayid co ngung lai
-            //
         }
         protected bool checkAnyRobotAtElevator(RobotUnity robot)
         {
@@ -87,7 +84,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     {
                         if (robot.bayId > 0)
                         {
-                            if (bayId < (robot.bayId + step) || bayId >  (robot.bayId - step))
+                            if (Math.Abs(robot.bayId-bayId)<=1)
                             {
                                 return true;
                             }

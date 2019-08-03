@@ -101,7 +101,25 @@ namespace SeldatMRMS
             {
                 Console.WriteLine("Error Data Request"+order.dataRequest);
                 order.status = StatusOrderResponseCode.ERROR_GET_FRONTLINE;
-                Destroy();
+                TrafficRountineConstants.ReleaseAll(robot);
+                robot.orderItem = null;
+                // Global_Object.onFlagDoorBusy = false;
+                robot.SwitchToDetectLine(false);
+                // robot.robotTag = RobotStatus.IDLE;
+                robot.ReleaseWorkingZone();
+                rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
+                // if (errorCode == ErrorCode.RUN_OK) {
+                ReleaseProcedureHandler(this);
+                // } else {
+                //     ErrorProcedureHandler (this);
+                // }
+                ProRun = false;
+                robot.ShowText("RELEASED");
+                UpdateInformationInProc(this, ProcessStatus.S);
+                order.endTimeProcedure = DateTime.Now;
+                order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
+                SaveOrderItem(order);
+                KillEvent();
             }
             while (ProRun)
             {
@@ -354,7 +372,7 @@ namespace SeldatMRMS
                         }
                         else
                         {
-                           FreePlanedBuffer();
+                           FreePlanedBuffer(order.palletId_P);
                            StateForkLift = ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE_FROM_VIM_REG;
                         }
                         break;
@@ -617,7 +635,7 @@ namespace SeldatMRMS
                         selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
                         procedureStatus = ProcedureStatus.PROC_KILLED;
                         // RestoreOrderItem();
-                        FreePlanedBuffer();
+                        FreePlanedBuffer(order.palletId_P);
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
                         SaveOrderItem(order);

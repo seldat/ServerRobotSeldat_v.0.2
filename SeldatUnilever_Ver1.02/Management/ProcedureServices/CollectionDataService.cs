@@ -73,14 +73,13 @@ namespace SelDatUnilever_Ver1
             return response;
         }
 
-        public void FreePlanedBuffer()
+        public void FreePlanedBuffer(int palletId)
         {
                 String url = Global_Object.url + "pallet/updatePalletStatus";
-                int _palletId =  GetPalletId_planed(order);
-                if (_palletId > 0)
+                if (palletId > 0)
                 {
                     dynamic product = new JObject();
-                    product.palletId = _palletId;
+                    product.palletId = palletId;
                     product.planId = order.planId;
                     product.palletStatus = PalletStatus.F.ToString();
                     product.updUsrId = Global_Object.userLogin;
@@ -90,14 +89,13 @@ namespace SelDatUnilever_Ver1
             
         }
 
-        public void FreeHoldBuffer()
+        public void FreeHoldBuffer(int palletId)
         {
             String url = Global_Object.url + "pallet/updatePalletStatus";
-            int _palletId = GetPalletId_Hold(order.planId,false);
-            if (_palletId > 0)
+            if (palletId > 0)
             {
                 dynamic product = new JObject();
-                product.palletId = _palletId;
+                product.palletId = palletId;
                 product.planId = order.planId;
                 product.palletStatus = PalletStatus.W.ToString();
                 product.updUsrId = Global_Object.userLogin;
@@ -974,7 +972,7 @@ namespace SelDatUnilever_Ver1
                         foreach (var result in results)
                         {
                             int temp_planId = (int)result["planId"];
-                            if (temp_planId == order.planId)
+                          //  if (temp_planId == order.planId)
                             {
                                 //var bufferResults = result["buffers"][0];
                                 foreach (var buffer in result["buffers"])

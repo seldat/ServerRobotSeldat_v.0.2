@@ -551,7 +551,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             UpdatePalletState(PalletStatus.W);
                         selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
                         procedureStatus = ProcedureStatus.PROC_KILLED;
-                        FreeHoldBuffer();
+                        FreeHoldBuffer(order.palletId_H);
                         KillEvent();
 
                         //this.robot.DestroyRegistrySolvedForm();

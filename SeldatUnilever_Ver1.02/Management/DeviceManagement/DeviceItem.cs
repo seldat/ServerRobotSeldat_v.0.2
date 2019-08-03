@@ -108,6 +108,10 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public int deviceIdPut;
             public String productDetailName { get; set; }
             public int productId { get; set; }
+            public int gate { get; set; }
+            public int palletId_H { get; set; }
+            public int palletId_P { get; set; }
+            public int palletId_F { get; set; }
             public int productDetailId { get; set; }
 
 
@@ -132,10 +136,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public DateTime endTimeProcedure = new DateTime();
             public double totalTimeProcedure { get; set; }
             public bool onAssiged = false;
-            public int gate { get; set; }
-            public int palletId_H;
-            public int palletId_P;
-            public int palletId_F;
+
 
         }
         public string userName { get; set; } // dia chi Emei

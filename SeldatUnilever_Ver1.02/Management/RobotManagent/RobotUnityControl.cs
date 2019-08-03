@@ -629,8 +629,8 @@ namespace SeldatMRMS.Management.RobotManagent
                     properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                    delay(500);
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                    delay(700);
                     return true;
                 }
                 catch
@@ -648,8 +648,8 @@ namespace SeldatMRMS.Management.RobotManagent
                     properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
-                    delay(500);
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                    delay(700);
                     return true;
                 }
                 catch
@@ -670,8 +670,8 @@ namespace SeldatMRMS.Management.RobotManagent
                     properties.speedInSpecicalArea = robotspeed + "_TRAFFIC";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                  
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                    delay(700);
                     return true;
                 }
                 catch
@@ -689,8 +689,8 @@ namespace SeldatMRMS.Management.RobotManagent
                     properties.speedInSpecicalArea = robotspeed+ "_TRAFFIC";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
-             
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                    delay(700);
                     return true;
                 }
                 catch
@@ -719,8 +719,9 @@ namespace SeldatMRMS.Management.RobotManagent
                     properties.speedInSpecicalArea = robotspeed+"_REG_ZONE";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                    delay(500);
+
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                    delay(700);
                     return true;
                 }
                 catch
@@ -738,8 +739,9 @@ namespace SeldatMRMS.Management.RobotManagent
                     properties.speedInSpecicalArea = robotspeed + "_REG_ZONE";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
-                    delay(500);
+
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                    delay(700);
                     return true;
                 }
                 catch

@@ -99,41 +99,14 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         orderItem_wait = Gettask();
                         if (orderItem_wait != null)
                         {
-                            if (robotwait != null)
-                            {
-                                if (orderItem_wait.typeReq == TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER || orderItem_wait.typeReq == TyeRequest.TYPEREQUEST_FORLIFT_TO_MACHINE)
-                                {
-
-                                    if (DetermineRobotWorkInGate())
-                                    {
-                                        MoveElementToEnd();
-                                        cntOrderNull_wait++;
-                                        //break;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
-                                break;
-                            }
-                        }
-                        if (orderItem_wait != null)
-                        {
-                            //if (!orderItem_wait.onAssiged) //kiem tra da gan task
                             {
                                 orderItem_wait.onAssiged = true;
                                 processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK;
                                 orderItem_wait.robot = robotwait.properties.Label;
                                 robotwait.orderItem = orderItem_wait;
                                 cntOrderNull_wait = 0;
-                                    MoveElementToEnd();
-                            }
-                           /* else
-                            {
                                 MoveElementToEnd();
-                                processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
-                            }*/
+                            }
                             break;
                         }
                         else
@@ -147,10 +120,6 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_CHECK_ROBOT_GOTO_READY; // mở lại 
                             cntOrderNull_wait = 0;
                         }
-                        else
-                        {
-                            processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
-                        }
                         break;
                     case ProcessAssignAnTaskWait.PROC_ANY_CHECK_ROBOT_GOTO_READY:
                         robotwait.TurnOnSupervisorTraffic(true);
@@ -163,7 +132,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         SelectProcedureItem(robotwait, orderItem_wait);
                         // xoa order đầu tiên trong danh sach devicelist[0] sau khi gán task
                         deviceItemsList[0].RemoveFirstOrder();
-                        MoveElementToEnd(); // sort Task List
+                  //      MoveElementToEnd(); // sort Task List
                         // xoa khoi list cho
                         robotManageService.RemoveRobotUnityWaitTaskList(robotwait);
                         processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
@@ -262,19 +231,13 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
 
                         if (orderItem_ready != null)
                         {
-                            //if (!orderItem_ready.onAssiged)
                             {
                                 orderItem_ready.onAssiged = true;
                                 Console.WriteLine(processAssignTaskReady);
                                 orderItem_ready.robot = robotatready.properties.Label;
                                 robotatready.orderItem = orderItem_ready;
                                 processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_SET_TRAFFIC_RISKAREA_ON;
-                            MoveElementToEnd();
-                        }
-                            //else
-                            {
-                               // MoveElementToEnd();
-                              //  processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST;
+                                MoveElementToEnd();
                             }
                         }
                         else
