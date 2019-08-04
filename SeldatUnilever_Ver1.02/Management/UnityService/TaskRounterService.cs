@@ -87,10 +87,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         {
             OrderItem item = null;
             int palletId = -1;
-         //   if (!onFlagBusyGetTask)
             {
-                onFlagBusyGetTask = true;
-              
+                onFlagBusyGetTask = true;             
                 if (deviceItemsList.Count > 0)
                 {
                     try
@@ -172,8 +170,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                         return null;
                                     }
                                 }
-                                return item;
-                            case TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN:
+                              case TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN:
                                 palletId = GetPalletId(item.dataRequest);
                                 if (palletId > 0)
                                 {
