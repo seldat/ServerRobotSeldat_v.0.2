@@ -48,6 +48,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             {
                 OrderItem order = Gettask();
                 AssignWaitTask(order);
+                order = Gettask();
                 AssignTaskAtReady(order);
                 Thread.Sleep(200);
             }
