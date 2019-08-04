@@ -173,7 +173,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            MaToGate.UpdatePalletState(PalletStatus.F);
+                          //  MaToGate.UpdatePalletState(PalletStatus.F);
                             StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE;
                             robot.ShowText("MACGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE");
                         }

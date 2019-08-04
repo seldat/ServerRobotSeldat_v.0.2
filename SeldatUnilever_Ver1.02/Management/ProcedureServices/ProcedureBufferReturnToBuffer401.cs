@@ -336,7 +336,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            BfToBf.UpdatePalletState(PalletStatus.F);
+                            BfToBf.UpdatePalletState(PalletStatus.F,order.palletId_H,order.planId);
                             onUpdatedPalletState = true;
                             StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_A;
                             //robot.ShowText("BUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_A");
@@ -481,7 +481,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            BfToBf.UpdatePalletState(PalletStatus.W);
+                            BfToBf.UpdatePalletState(PalletStatus.W,order.palletId_P,order.planId);
                             //onUpdatedPalletState = true;
                             StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_B;
                             //robot.ShowText("FBUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_B");
@@ -548,7 +548,9 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         order.status = StatusOrderResponseCode.ROBOT_ERROR;
                         //reset status pallet Faile H->Ws
                         if (!onUpdatedPalletState)
-                            UpdatePalletState(PalletStatus.W);
+                        {
+                            BfToBf.UpdatePalletState(PalletStatus.F, order.palletId_P, order.planId);
+                        }
                         selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
                         procedureStatus = ProcedureStatus.PROC_KILLED;
                         FreeHoldBuffer(order.palletId_H);
