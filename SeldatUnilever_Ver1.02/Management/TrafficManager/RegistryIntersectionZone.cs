@@ -87,12 +87,12 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             if(!Contains(robot))
             {
                 Registry(robot);
-                return false ;
+              ///  return false ;
             }
-            else
-            {
+          //  else
+           // {
                 return CheckPermission(robot);
-            }
+           // }
         }
     }
 }
