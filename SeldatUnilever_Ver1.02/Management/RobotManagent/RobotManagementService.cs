@@ -403,6 +403,7 @@ namespace SeldatMRMS.Management.RobotManagent
                             indexRd = 0;
                         }
                         RobotUnity robot = RobotUnityReadyList[indexRd];
+                        indexRd++;
                         if (robot.properties.IsConnected)
                         {
                             result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
@@ -411,7 +412,6 @@ namespace SeldatMRMS.Management.RobotManagent
                                 robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CHARGING);
                                 RemoveRobotUnityReadyList(robot);
                             }
-                            indexRd++;
                             break;
                         }
                     }
