@@ -280,7 +280,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     }
                     else
                     {
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, content = "" };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, content = "Buffer Đầy ,Vui Lòng Kiểm Tra Lai !" };
                         return statusOrderResponse;
                     }
                     try

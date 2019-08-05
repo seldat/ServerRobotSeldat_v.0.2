@@ -64,31 +64,34 @@ class SelfDriving():
 		self.amoutOfRefreshLineDetection=10; # 3 times errors
 		self.flagReachedGoal=False;
 		self.pub=rospy.Publisher('chatter', String, queue_size=10)
-		self.pub_cancelgoal=rospy.Publisher('move_base/cancel',actionlib_msgs/GoalID, queue_size=10)
 		self.pub_navigation_setgoal=rospy.Publisher('/move_base_simple/goal',PoseStamped,queue_size=100);
 		self.pub_FinishedStates=rospy.Publisher('finishedStates', Int32, queue_size=100);
+		self.pub_flagLineDetectecCallBack=False;
+		self.pub_LineDetectecValue=0;
 
 		rospy.Subscriber('/robot_navigation',PoseStamped,self.moveBaseSimple_goal,queue_size=100);
 		#rospy.Subscriber('battery_vol',UInt32,self.batterysub_callback,queue_size=100);
-		rospy.Subscriber('linedetectioncallback',Int32,self.LineDetection_callback,queue_size=1);
+		rospy.Subscriber('linedetectioncallback',Int32,self.LineDetection_callback,queue_size=100);
 		rospy.Subscriber('amcl_pose',PoseWithCovarianceStamped,self.navigationAmclPose_callback,queue_size=100);
 		rospy.Subscriber('odom',Odometry,self.odometry_callback,queue_size=100);
 		rospy.Subscriber('move_base/status',GoalStatusArray,self.reachedGoal_Callback,queue_size=100);
-		rospy.Subscriber('goalConfirm',Vector3,self.goalConfirmCallBack,queue_size=10)
-		rospy.Subscriber('cancelGoal',String,self.CancelGoalCallback,queue_size=10)
+		rospy.Subscriber('goalConfirm',Vector3,self.goalConfirmCallBack,queue_size=100)
 
 		self.pub_respCtrl=rospy.Publisher('respCtrl', Int32, queue_size=100);
-		rospy.Subscriber('linedetectionctrl_servercallback',Int32,self.Linedetectionctrl_Servercallback,queue_size=1);
+		rospy.Subscriber('linedetectionctrl_servercallback',Int32,self.Linedetectionctrl_Servercallback,queue_size=100);
 		rospy.Subscriber('pospallet_servercallback',Int32,self.Pospallet_Servercallback,queue_size=1);
-		rospy.Subscriber('cmdAreaPallet_servercallback',String,self.CmdAreaPallet_Servercallback,queue_size=1);
+		rospy.Subscriber('finishStatesCallBack',Int32,self.finishStatesCallBack,queue_size=100);
+		rospy.Subscriber('cmdAreaPallet_servercallback',String,self.CmdAreaPallet_Servercallback,queue_size=100);
 		
-		self.pub_linedetectionctrl=rospy.Publisher('linedetectionctrl', Int32, queue_size=10)
-		self.pub_pospallet=rospy.Publisher('pospallet', Int32, queue_size=10)
-		self.pub_cmdAreaPallet=rospy.Publisher('cmdAreaPallet', String, queue_size=10)
+		self.pub_linedetectionctrl=rospy.Publisher('linedetectionctrl', Int32, queue_size=100)
+		self.pub_pospallet=rospy.Publisher('pospallet', Int32, queue_size=100)
+		self.pub_cmdAreaPallet=rospy.Publisher('cmdAreaPallet', String, queue_size=100)
 	
 	def spin(self):
 	        self.r = rospy.Rate(self.rate)
 		while not rospy.is_shutdown():
+			if self.pub_flagLineDetectecCallBack==True:
+				self.pubFinishedStates(self.pub_LineDetectecValue);
 			self.r.sleep()
 	def counterTimeOutRequest(self,second):
 		if self.cntTimeOutRequest>=second:
@@ -143,17 +146,21 @@ class SelfDriving():
 		self.pub_respCtrl.publish(value);
 	def Pospallet_Servercallback(self,msg):
 		self.pub_pospallet.publish(msg);
-                value=ResponseStatus.RESPONSE_POS_PALLET.value
+        value=ResponseStatus.RESPONSE_POS_PALLET.value
 #		print(value)
-		self.pub_respCtrl.publish(value);
+	def finishStatesCallBack(self,msg):
+		self.pub_flagLineDetectecCallBack=False;
+		self.pub_LineDetectecValue=0;
+
 	def CmdAreaPallet_Servercallback(self,msg):
 		self.pub_cmdAreaPallet.publish(msg);
-                value=ResponseStatus.RESPONSE_AREA_PALLET.value
+        	value=ResponseStatus.RESPONSE_AREA_PALLET.value
 		self.pub_respCtrl.publish(ResponseStatus.RESPONSE_AREA_PALLET.value);
-	def CancelGoalCallback(self,msg):
-		self.pub_cancelgoal.publish(msg.data);
+		
 
 	def LineDetection_callback(self,msg):
+		self.pub_flagLineDetectecCallBack=True;
+		self.pub_LineDetectecValue=msg.data;
 		self.pubFinishedStates(msg.data);
 	def reachedGoal_Callback(self,msg):
 		if len(msg.status_list):

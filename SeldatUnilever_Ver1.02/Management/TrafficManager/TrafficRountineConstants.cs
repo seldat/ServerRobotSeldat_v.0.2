@@ -52,6 +52,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_GATE12.Release(robot);
             return false;
         }
 
@@ -82,6 +83,10 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_GATE12.Release(robot);
+            RegIntZone_ELEVATOR.Release(robot);
+            RegIntZone_GATE3.Release(robot);
+
             return false;
         }
         // Ready -> ELevator, VIM (C5)
@@ -106,6 +111,8 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_GATE12.Release(robot);
+            RegIntZone_ELEVATOR.Release(robot);
             return false;
         }
         // Ready -> OUTER
@@ -125,6 +132,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_READY.Release(robot);
             return false;
         }
 
@@ -162,6 +170,10 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_READY.Release(robot);
+            RegIntZone_GATE12.Release(robot);
+            RegIntZone_ELEVATOR.Release(robot);
+            RegIntZone_GATE3.Release(robot);
             return false;
         }
         // Từ C1 -> Elevator,VIM
@@ -193,6 +205,10 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_READY.Release(robot);
+            RegIntZone_GATE12.Release(robot);
+            RegIntZone_ELEVATOR.Release(robot);
+
             return false;
         }
         // Từ C1 -> Gate12
@@ -219,6 +235,8 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_READY.Release(robot);
+            RegIntZone_GATE12.Release(robot);
             return false;
         }
         // Từ C1 -> Ready
@@ -240,6 +258,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_READY.Release(robot);
             return false;
         }
 
@@ -262,6 +281,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_GATE12.Release(robot);
             return false;
         }
         // Từ C2 -> Gate 3
@@ -294,6 +314,9 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_GATE12.Release(robot);
+            RegIntZone_ELEVATOR.Release(robot);
+            RegIntZone_GATE3.Release(robot);
             return false;
         }
         // Từ C2 -> Elevator,VIM
@@ -321,6 +344,8 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_GATE12.Release(robot);
+            RegIntZone_ELEVATOR.Release(robot);
             return false;
         }
 
@@ -351,6 +376,8 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_GATE12.Release(robot);
+            RegIntZone_READY.Release(robot);
             return false;
         }
         public static bool Reg_checkinC2_Ready(RobotUnity robot, TrafficManagementService traffic)
@@ -377,6 +404,8 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_GATE12.Release(robot);
+            RegIntZone_READY.Release(robot);
             return false;
         }
 
@@ -399,6 +428,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_ELEVATOR.Release(robot);
             return false;
         }
         // Từ Gate12(C3) -> ELEVATOR-> G3
@@ -424,6 +454,8 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_ELEVATOR.Release(robot);
+            RegIntZone_GATE3.Release(robot);
             return false;
         }
 
@@ -445,6 +477,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_READY.Release(robot);
             return false;
         }
 
@@ -476,6 +509,9 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_READY.Release(robot);
+            RegIntZone_GATE12.Release(robot);
+            RegIntZone_ELEVATOR.Release(robot);
             return false;
         }
 
@@ -503,6 +539,8 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_GATE12.Release(robot);
+            RegIntZone_ELEVATOR.Release(robot);
             return false;
         }
         // Từ Gate3(C4) -> Elevator And VIM
@@ -523,6 +561,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_ELEVATOR.Release(robot);
             return false;
         }
 
@@ -549,6 +588,8 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_READY.Release(robot);
+            RegIntZone_GATE12.Release(robot);
             return false;
         }
         // Từ Elevator(C5) -> Gate12
@@ -569,6 +610,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_GATE12.Release(robot);
             return false;
         }
 
@@ -590,6 +632,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 return true;
             }
+            RegIntZone_GATE3.Release(robot);
             return false;
         }
         public static bool DetectRelease(RegistryRobotJourney rrj)
