@@ -196,7 +196,7 @@ namespace SeldatMRMS
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            ReToGate.UpdatePalletState(PalletStatus.F);
+                            ReToGate.UpdatePalletState(PalletStatus.F,order.palletId_H,order.planId);
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_RETURN;
                             robot.ShowText("RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_RETURN");
                         }

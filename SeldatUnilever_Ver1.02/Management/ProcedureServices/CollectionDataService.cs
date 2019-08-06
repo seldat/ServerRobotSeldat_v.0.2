@@ -1056,7 +1056,92 @@ namespace SelDatUnilever_Ver1
         }
         #endregion
         #region GET PALLET INFO BUFFER
-        public String GetInfoOfPalletBuffer(TrafficRobotUnity.PistonPalletCtrl pisCtrl, bool onPlandId = false)
+
+        // Get pallet info status W buffer with same bay
+        public JPallet GetInfoOfPalletBuffer_Compare_W_H(TrafficRobotUnity.PistonPalletCtrl pisCtrl, JInfoPallet jInfoPallet_H)
+        {
+            JPallet JPResult = new JPallet();
+            JPResult.jInfoPallet = jInfoPallet_H;
+            List<JPallet> jPalletList = new List<JPallet>();
+            try
+            {
+                dynamic product = new JObject();
+                product.timeWorkId = order.timeWorkId;
+                product.activeDate = order.activeDate;
+                product.productId = order.productId;
+                product.productDetailId = order.productDetailId;
+                product.palletStatus = PalletStatus.W.ToString(); // W
+                String collectionData = RequestDataProcedure(product.ToString(), Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    var result = results[0];
+
+                    //var bufferResults = result["buffers"][0];
+                    foreach (var buffer in result["buffers"])
+                    {
+                        String bufferDataStr = (String)buffer["bufferData"];
+                        JObject stuffBData = JObject.Parse(bufferDataStr);
+                        bool canOpEdit = (bool)stuffBData["canOpEdit"];
+                        if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy, áp dụng trong quy trình Buffer -> Machine
+                            continue;
+                        if (buffer["pallets"].Count() > 0)
+                        {
+                            foreach (var palletInfo in buffer["pallets"])
+                            {
+                                int bay = (int)palletInfo["bay"];
+                                int _palletId = (int)palletInfo["palletId"];
+                                if (bay == jInfoPallet_H.bay)
+                                {
+                                    JPallet jPallet = new JPallet();
+                                    JInfoPallet infoPallet = new JInfoPallet();
+                                    JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                    int _row = (int)stuff["pallet"]["row"];
+                                    int _bay = (int)stuff["pallet"]["bay"];
+                                    int directMain = (int)stuff["pallet"]["dir_main"];
+                                    int directSub = (int)stuff["pallet"]["dir_sub"];
+                                    int directOut = (int)stuff["pallet"]["dir_out"];
+                                    int line_ord = (int)stuff["pallet"]["line_ord"];
+                                    string subline = (string)stuff["pallet"]["hasSubLine"];
+
+                                    infoPallet.pallet = pisCtrl; /* dropdown */
+                                    infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
+                                    infoPallet.bay = _bay;
+                                    infoPallet.hasSubLine = subline; /* yes or no */
+                                    infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
+                                    infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
+                                    infoPallet.row = _row;
+                                    infoPallet.line_ord = line_ord;
+                                    jPallet.jInfoPallet = infoPallet;
+                                    jPallet.palletId = _palletId;
+
+                                    jPalletList.Add(jPallet);
+                                }
+                            }
+
+                        }
+                    }
+                   
+                    int rowMin = JPResult.jInfoPallet.row;
+                    foreach (JPallet jp  in jPalletList)
+                    {
+                        if (rowMin > jp.jInfoPallet.row)
+                        {
+                            rowMin = jp.jInfoPallet.row;
+                            JPResult.jInfoPallet = jp.jInfoPallet;
+                        }
+                    }
+                }
+
+            }
+            catch
+            {
+                Console.WriteLine("Error at GetInfoOfPalletBuffer");
+                return null;
+            }
+            return JPResult;
+        }
+        public JInfoPallet GetInfoOfPalletBuffer(TrafficRobotUnity.PistonPalletCtrl pisCtrl, bool onPlandId = false)
         {
             JInfoPallet infoPallet = new JInfoPallet();
             try
@@ -1157,9 +1242,9 @@ namespace SelDatUnilever_Ver1
             catch
             {
                 Console.WriteLine("Error at GetInfoOfPalletBuffer");
-                return "";
+                return null;
             }
-            return JsonConvert.SerializeObject(infoPallet);
+            return infoPallet;
         }
         #endregion
         #endregion
@@ -1465,7 +1550,7 @@ namespace SelDatUnilever_Ver1
             return JsonConvert.SerializeObject(infoPallet);
         }
 
-        public void UpdatePalletState(PalletStatus palletStatus)
+    /*    public void UpdatePalletState(PalletStatus palletStatus)
         {
             String url = Global_Object.url + "pallet/updatePalletStatus";
             dynamic product = new JObject();
@@ -1474,6 +1559,17 @@ namespace SelDatUnilever_Ver1
             product.palletStatus = palletStatus.ToString();
             product.updUsrId = Global_Object.userLogin;
             var data = RequestDataProcedure( product.ToString(),url);
+
+        }*/
+        public void UpdatePalletState(PalletStatus palletStatus,int _palletId,int _planId)
+        {
+            String url = Global_Object.url + "pallet/updatePalletStatus";
+            dynamic product = new JObject();
+            product.palletId = _palletId;
+            product.planId = _planId;
+            product.palletStatus = palletStatus.ToString();
+            product.updUsrId = Global_Object.userLogin;
+            var data = RequestDataProcedure(product.ToString(), url);
 
         }
 

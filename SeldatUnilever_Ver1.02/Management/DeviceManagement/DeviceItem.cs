@@ -476,7 +476,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     }
                 }
                 #endregion
-                #region TYPEREQUEST_BUFFER_TO_RETURN
+                #region TYPEREQUEST_BUFFER_TO_GATE
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFER_TO_GATE)
                 {
                     OrderItem order = new OrderItem();

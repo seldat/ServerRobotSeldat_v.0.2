@@ -227,7 +227,7 @@ namespace SeldatMRMS
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            BfToRe.UpdatePalletState(PalletStatus.F);
+                            BfToRe.UpdatePalletState(PalletStatus.F,order.palletId_H,order.planId);
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER;
                             robot.ShowText("BUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER");
                         }
@@ -333,7 +333,7 @@ namespace SeldatMRMS
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETDOWN)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            BfToRe.UpdatePalletState(PalletStatus.W);
+                            BfToRe.UpdatePalletState(PalletStatus.W,order.palletId_H,order.planId);
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_FRONTLINE;
                             robot.ShowText("BUFRET_ROBOT_WAITTING_GOTO_FRONTLINE");
                         }

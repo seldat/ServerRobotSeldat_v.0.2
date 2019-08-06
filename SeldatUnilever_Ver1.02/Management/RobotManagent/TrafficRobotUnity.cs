@@ -131,8 +131,14 @@ namespace SeldatMRMS.Management
             public BrDirection dir_out;
             public int line_ord;
             public Int32 row;
-            // public Int32 palletId;
+            public int palletId;
         }
+        public class JPallet
+        {
+            public JInfoPallet jInfoPallet;
+            public int palletId;
+        }
+
         private List<RobotUnity> RobotUnitylist;
         public bool onFlagSupervisorTraffic;
         public bool onFlagSelfTraffic;
@@ -783,35 +789,35 @@ namespace SeldatMRMS.Management
             }
             return onstop;
         }
-        public void SetSafeYellowcircle(bool flagonoff)
+        public void SetSafeYellowcircle(bool flagonoff,double radius = 50)
         {
             if (flagonoff)
-                Radius_Y = 50;
+                Radius_Y = radius;
             else
                 Radius_Y = 0;
             onFlagSafeYellowcircle = flagonoff;
         }
-        public void SetSafeBluecircle(bool flagonoff)
+        public void SetSafeBluecircle(bool flagonoff, double radius = 50)
         {
             if (flagonoff)
-                Radius_B = 50;
+                Radius_B = radius;
             else
                 Radius_B = 0;
             onFlagSafeBluecircle = flagonoff;
         }
-        public void SetSafeSmallcircle(bool flagonoff)
+        public void SetSafeSmallcircle(bool flagonoff,double radius=40)
         {
             if (flagonoff)
-                Radius_S = 40;
+                Radius_S = radius;
             else
                 Radius_S = 0;
             onFlagSafeSmallcircle = flagonoff;
         }
 
-        public void SetSafeOrgancircle(bool flagonoff)
+        public void SetSafeOrgancircle(bool flagonoff, double radius = 25)
         {
             if (flagonoff)
-                Radius_O = 25;
+                Radius_O = radius;
             else
                 Radius_O = 0;
             onFlagSafeOrgancircle = flagonoff;
