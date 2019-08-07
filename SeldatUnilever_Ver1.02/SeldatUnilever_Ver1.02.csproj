@@ -704,6 +704,7 @@
     <Content Include="highgui210.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Management\Store\SelfDriving_test.py" />
     <Content Include="ml210.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
