@@ -735,6 +735,39 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     }
                 }
                 #endregion
+                #region TYPEREQUEST_OPEN_FRONTDOOR_RETURN_PALLET
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_OPEN_FRONTDOOR_RETURN_PALLET)
+                {
+                    // same deviceID forklift
+                    try
+                    {
+                        Global_Object.doorManagementServiceCtrl.DoorMezzamineReturn.openDoor(DoorType.DOOR_FRONT);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("control door failed");
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, content = e.Message };
+                        return statusOrderResponse;
+                    }
+                }
+                #endregion
+                #region TYPEREQUEST_CLOSE_FRONTDOOR_RETURN_PALLET
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLOSE_FRONTDOOR_RETURN_PALLET)
+                {
+                    // same deviceID forklift
+                    try
+                    {
+                        Global_Object.doorManagementServiceCtrl.DoorMezzamineReturn.closeDoor(DoorType.DOOR_FRONT);
+                        Global_Object.doorManagementServiceCtrl.DoorMezzamineReturn.LampOff(DoorType.DOOR_BACK);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("control door failed");
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, content = e.Message };
+                        return statusOrderResponse;
+                    }
+                }
+                #endregion
                 statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_SUCCESS, content = "" };
             }
             catch (Exception e)
