@@ -637,7 +637,7 @@ namespace SeldatMRMS
                         selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
                         procedureStatus = ProcedureStatus.PROC_KILLED;
                         // RestoreOrderItem();
-                        FreePlanedBuffer(order.palletId_P);
+                        //FreePlanedBuffer(order.palletId_P);
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
                         SaveOrderItem(order);

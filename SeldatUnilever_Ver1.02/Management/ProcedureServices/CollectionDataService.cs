@@ -1141,7 +1141,7 @@ namespace SelDatUnilever_Ver1
             catch
             {
                 Console.WriteLine("Error at GetInfoOfPalletBuffer");
-                return null;
+                return JPResult;
             }
             return JPResult;
         }

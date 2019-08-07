@@ -119,7 +119,7 @@ namespace SeldatUnilever_Ver1._02
                 unityService.Initialize();
                 ctrR = new CtrlRobot(unityService.robotManagementService);
                 stationtimer = new System.Timers.Timer();
-                stationtimer.Interval = 5000;
+                stationtimer.Interval = 20000;
                 stationtimer.Elapsed += OnTimedOrderListEvent;
                 stationtimer.AutoReset = true;
                 stationtimer.Enabled = true;

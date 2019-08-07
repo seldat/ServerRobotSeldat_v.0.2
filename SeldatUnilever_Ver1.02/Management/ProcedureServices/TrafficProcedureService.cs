@@ -84,7 +84,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     {
                         if (robot.bayId > 0)
                         {
-                            if (Math.Abs(robot.bayId-bayId)<=1)
+                            if (Math.Abs(robot.bayId-bayId)<=3)
                             {
                                 return true;
                             }

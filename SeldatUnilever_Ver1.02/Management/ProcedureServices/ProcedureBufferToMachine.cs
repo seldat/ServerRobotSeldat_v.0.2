@@ -317,7 +317,9 @@ namespace SeldatMRMS
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                 JInfoPallet jInfoPallet_H = BfToMa.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP);
                                 jPResult = BfToMa.GetInfoOfPalletBuffer_Compare_W_H(PistonPalletCtrl.PISTON_PALLET_UP, jInfoPallet_H);
+
                                 String data = JsonConvert.SerializeObject(jPResult.jInfoPallet);
+
                                 if (rb.SendCmdAreaPallet(data))
                                 {
                                     StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
@@ -606,7 +608,7 @@ namespace SeldatMRMS
                         }
                         selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
                         procedureStatus = ProcedureStatus.PROC_KILLED;
-                        FreeHoldBuffer(order.palletId_H);
+                        //FreeHoldBuffer(order.palletId_H);
                         KillEvent();
 
                         //this.robot.DestroyRegistrySolvedForm();
