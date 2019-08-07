@@ -4,6 +4,7 @@ using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -693,6 +694,15 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
                 // Robot van toc bình thuong
                 rrj.robot.SetSpeedRegZone(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
                 return true;
+            }
+        }
+        public static void delay(int ms)
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            while (true)
+            {
+                if (sw.ElapsedMilliseconds > ms) break;
             }
         }
         public static bool StationCheckInSpecialZone(RegistryRobotJourney rrj)

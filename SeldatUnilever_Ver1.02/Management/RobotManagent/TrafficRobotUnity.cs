@@ -131,7 +131,7 @@ namespace SeldatMRMS.Management
             public BrDirection dir_out;
             public int line_ord;
             public Int32 row;
-            public int palletId;
+            //public int palletId;
         }
         public class JPallet
         {

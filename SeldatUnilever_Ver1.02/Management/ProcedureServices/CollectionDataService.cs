@@ -1062,6 +1062,7 @@ namespace SelDatUnilever_Ver1
         {
             JPallet JPResult = new JPallet();
             JPResult.jInfoPallet = jInfoPallet_H;
+            JPResult.palletId = order.palletId_H;
             List<JPallet> jPalletList = new List<JPallet>();
             try
             {
@@ -1129,6 +1130,9 @@ namespace SelDatUnilever_Ver1
                         {
                             rowMin = jp.jInfoPallet.row;
                             JPResult.jInfoPallet = jp.jInfoPallet;
+                            JPResult.palletId = jp.palletId;
+
+
                         }
                     }
                 }
@@ -1572,7 +1576,17 @@ namespace SelDatUnilever_Ver1
             var data = RequestDataProcedure(product.ToString(), url);
 
         }
+        public void UpdatePalletState(PalletStatus palletStatus)
+        {
+            String url = Global_Object.url + "pallet/updatePalletStatus";
+            dynamic product = new JObject();
+            product.palletId = palletId;
+            product.planId = order.planId;
+            product.palletStatus = palletStatus.ToString();
+            product.updUsrId = Global_Object.userLogin;
+            var data = RequestDataProcedure(product.ToString(), url);
 
+        }
         protected virtual void ReceiveResponseHandler(String msg) { }
         protected virtual void ErrorHandler(ProcedureMessages.ProcMessage procMessage) { }
     }

@@ -440,7 +440,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETDOWN)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            BfToBufRe.UpdatePalletState(PalletStatus.W,order.palletId_P,order.planId);
+                            BfToBufRe.UpdatePalletState(PalletStatus.W);
                             StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_GOTO_FRONTLINE;
                             //robot.ShowText("MACBUFRET_ROBOT_WAITTING_GOTO_FRONTLINE");
                         }

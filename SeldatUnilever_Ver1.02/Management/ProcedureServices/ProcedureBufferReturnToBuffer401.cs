@@ -481,7 +481,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            BfToBf.UpdatePalletState(PalletStatus.W,order.palletId_P,order.planId);
+                            BfToBf.UpdatePalletState(PalletStatus.W);
                             //onUpdatedPalletState = true;
                             StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_B;
                             //robot.ShowText("FBUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_B");

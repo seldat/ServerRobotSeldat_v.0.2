@@ -54,11 +54,13 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     if (AssignWaitTask(order))
                     {
                         MoveElementToEnd();
+                        Thread.Sleep(500);
                         continue;
                     }
                     if (AssignTaskAtReady(order))
                     {
                         MoveElementToEnd();
+                        Thread.Sleep(500);
                         continue;
                     }
                 }
@@ -67,11 +69,12 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     if(cntWaitTask++>=deviceItemsList.Count)
                     {
                         AssignWaitTask(order);
+                        Thread.Sleep(500);
                         cntWaitTask = 0;
                     }
                 }
                 MoveElementToEnd();
-                Thread.Sleep(200);
+                Thread.Sleep(500);
             }
         }
 
