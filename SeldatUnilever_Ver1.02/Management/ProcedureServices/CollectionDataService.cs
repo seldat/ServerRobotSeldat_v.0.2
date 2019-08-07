@@ -1076,50 +1076,65 @@ namespace SelDatUnilever_Ver1
                 if (collectionData.Length > 0)
                 {
                     JArray results = JArray.Parse(collectionData);
-                    var result = results[0];
-
-                    //var bufferResults = result["buffers"][0];
-                    foreach (var buffer in result["buffers"])
+                    foreach(var result in results)
                     {
-                        String bufferDataStr = (String)buffer["bufferData"];
-                        JObject stuffBData = JObject.Parse(bufferDataStr);
-                        bool canOpEdit = (bool)stuffBData["canOpEdit"];
-                        if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy, áp dụng trong quy trình Buffer -> Machine
-                            continue;
-                        if (buffer["pallets"].Count() > 0)
+
+                        //var bufferResults = result["buffers"][0];
+                        foreach (var buffer in result["buffers"])
                         {
-                            foreach (var palletInfo in buffer["pallets"])
+                            String bufferDataStr = (String)buffer["bufferData"];
+                            JObject stuffBData = JObject.Parse(bufferDataStr);
+                            bool canOpEdit = (bool)stuffBData["canOpEdit"];
+                            if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy, áp dụng trong quy trình Buffer -> Machine
+                                continue;
+                            if (buffer["pallets"].Count() > 0)
                             {
-                                int bay = (int)palletInfo["bay"];
-                                int _palletId = (int)palletInfo["palletId"];
-                                if (bay == jInfoPallet_H.bay)
+                                bool hasPalletId = false;
+                                foreach (var palletInfo in buffer["pallets"])
                                 {
-                                    JPallet jPallet = new JPallet();
-                                    JInfoPallet infoPallet = new JInfoPallet();
-                                    JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                    int _row = (int)stuff["pallet"]["row"];
-                                    int _bay = (int)stuff["pallet"]["bay"];
-                                    int directMain = (int)stuff["pallet"]["dir_main"];
-                                    int directSub = (int)stuff["pallet"]["dir_sub"];
-                                    int directOut = (int)stuff["pallet"]["dir_out"];
-                                    int line_ord = (int)stuff["pallet"]["line_ord"];
-                                    string subline = (string)stuff["pallet"]["hasSubLine"];
-
-                                    infoPallet.pallet = pisCtrl; /* dropdown */
-                                    infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
-                                    infoPallet.bay = _bay;
-                                    infoPallet.hasSubLine = subline; /* yes or no */
-                                    infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
-                                    infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
-                                    infoPallet.row = _row;
-                                    infoPallet.line_ord = line_ord;
-                                    jPallet.jInfoPallet = infoPallet;
-                                    jPallet.palletId = _palletId;
-
-                                    jPalletList.Add(jPallet);
+                                    int _palletId = (int)palletInfo["palletId"];
+                                    if(_palletId== JPResult.palletId)
+                                    {
+                                        hasPalletId = true;
+                                        break;
+                                    }
                                 }
-                            }
+                                if (hasPalletId)
+                                {
+                                    foreach (var palletInfo in buffer["pallets"])
+                                    {
+                                        int bay = (int)palletInfo["bay"];
+                                        int _palletId = (int)palletInfo["palletId"];
+                                        if (bay == jInfoPallet_H.bay)
+                                        {
+                                            JPallet jPallet = new JPallet();
+                                            JInfoPallet infoPallet = new JInfoPallet();
+                                            JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                            int _row = (int)stuff["pallet"]["row"];
+                                            int _bay = (int)stuff["pallet"]["bay"];
+                                            int directMain = (int)stuff["pallet"]["dir_main"];
+                                            int directSub = (int)stuff["pallet"]["dir_sub"];
+                                            int directOut = (int)stuff["pallet"]["dir_out"];
+                                            int line_ord = (int)stuff["pallet"]["line_ord"];
+                                            string subline = (string)stuff["pallet"]["hasSubLine"];
 
+                                            infoPallet.pallet = pisCtrl; /* dropdown */
+                                            infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
+                                            infoPallet.bay = _bay;
+                                            infoPallet.hasSubLine = subline; /* yes or no */
+                                            infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
+                                            infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
+                                            infoPallet.row = _row;
+                                            infoPallet.line_ord = line_ord;
+                                            jPallet.jInfoPallet = infoPallet;
+                                            jPallet.palletId = _palletId;
+
+                                            jPalletList.Add(jPallet);
+                                        }
+                                    }
+                                }
+
+                            }
                         }
                     }
                    
