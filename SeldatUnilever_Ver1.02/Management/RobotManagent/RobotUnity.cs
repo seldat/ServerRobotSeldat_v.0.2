@@ -517,26 +517,23 @@ namespace SeldatMRMS.Management.RobotManagent
         {
 
             DisposeProcedure();
-            Dispose();
             KillPID();
             KillActionLib();
             MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
             onBinding = false;
-            Reset();
             Draw();
 
         }
         private void DisConnectMenu(object sender, RoutedEventArgs e)
         {
-
+            DisposeProcedure();
             Dispose();
             KillPID();
             KillActionLib();
             MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
             onBinding = false;
             connectItem.IsEnabled = true;
-           
-
+            Reset();
             setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
             Draw();
 
