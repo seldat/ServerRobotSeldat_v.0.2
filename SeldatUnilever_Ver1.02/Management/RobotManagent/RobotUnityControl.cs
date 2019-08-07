@@ -200,6 +200,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public int publication_linedetectionctrl;
             public int publication_checkAliveTimeOut;
             public int publication_postPallet;
+            public int publication_finishStatesCallBack;
             public int publication_cmdAreaPallet;
 
             /*of chau test*/
@@ -311,6 +312,8 @@ namespace SeldatMRMS.Management.RobotManagent
             int subscription_respCtrlCallBack = this.Subscribe("/respCtrl", "std_msgs/Int32", ResponseCtrlHandler, 100);
             paramsRosSocket.publication_linedetectionctrl = this.Advertise("/linedetectionctrl_servercallback", "std_msgs/Int32");
             paramsRosSocket.publication_postPallet = this.Advertise ("/pospallet_servercallback", "std_msgs/Int32");
+            paramsRosSocket.publication_finishStatesCallBack = this.Advertise("/finishStatesCallBack", "std_msgs/Int32");
+
             paramsRosSocket.publication_cmdAreaPallet = this.Advertise ("/cmdAreaPallet_servercallback", "std_msgs/String");
             paramsRosSocket.publication_robotnavigation = this.Advertise("/robot_navigation", "geometry_msgs/PoseStamped");
 
@@ -388,13 +391,16 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 StandardInt32 standard = (StandardInt32)message;
                 robotLogOut.ShowText(this.properties.Label,"Finished State [" + standard.data + "]");
+                StandardInt32 cmd = new StandardInt32();
+                cmd.data = 0;
+                this.Publish(paramsRosSocket.publication_finishStatesCallBack, cmd);
                 try
                 {
-                    FinishStatesCallBack(standard.data);
+                   FinishStatesCallBack(standard.data);
                 }
                 catch { }
-        
-               
+
+
             }
             catch {
                 Console.WriteLine(" Error FinishedStatesHandler");
