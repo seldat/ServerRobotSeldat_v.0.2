@@ -741,7 +741,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     // same deviceID forklift
                     try
                     {
-                        Global_Object.doorManagementServiceCtrl.DoorMezzamineReturn.closeDoor(DoorType.DOOR_FRONT);
+                        Global_Object.doorManagementServiceCtrl.DoorMezzamineReturn.openDoor(DoorType.DOOR_FRONT);
                     }
                     catch (Exception e)
                     {
