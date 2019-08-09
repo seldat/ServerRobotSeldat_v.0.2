@@ -59,7 +59,7 @@ namespace SeldatUnilever_Ver1._02.Management.DeviceManagement
             product.palletId = updatePalletRequest.palletId;
             product.planId = updatePalletRequest.planId;
             product.palletStatus = updatePalletRequest.palletStatus;
-            product.updUsrId = Global_Object.userLogin;
+          //  product.updUsrId = Global_Object.userLogin;
             String data = RequestDataProcedure_POST(product.ToString(), url);
             if(Convert.ToInt32(data)>0)
             {
