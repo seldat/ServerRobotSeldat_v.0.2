@@ -444,7 +444,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             ds.closeDoor(DoorService.DoorType.DOOR_BACK);
-                            ds.LampOn(DoorType.DOOR_BACK);
+                            ds.LampSetStateOn(DoorType.DOOR_BACK);
                             StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_CLOSE_GATE;
                             ////robot.ShowText("BUFGATE_ROBOT_WAITTING_CLOSE_GATE");
                         }

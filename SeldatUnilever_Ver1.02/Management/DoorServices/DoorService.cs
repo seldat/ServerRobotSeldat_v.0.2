@@ -197,52 +197,47 @@ namespace DoorControllerService
 
         private void lampFrontProcess()
         {
-            while (true)
+            switch (stateCtrlLampFront)
             {
-                switch (stateCtrlLampFront)
-                {
-                    case stateCtrlLampDoor.LAMP_DOOR_IDLE:
-                        break;
-                    case stateCtrlLampDoor.LAMP_DOOR_ON:
-                        if (true == this.LampOn(DoorType.DOOR_FRONT)) {
-                            this.stateCtrlLampFront = stateCtrlLampDoor.LAMP_DOOR_IDLE;
-                        }
-                        break;
-                    case stateCtrlLampDoor.LAMP_DOOR_OFF:
-                        if (true == this.LampOff(DoorType.DOOR_BACK))
-                        {
-                            this.stateCtrlLampFront = stateCtrlLampDoor.LAMP_DOOR_IDLE;
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                case stateCtrlLampDoor.LAMP_DOOR_IDLE:
+                    break;
+                case stateCtrlLampDoor.LAMP_DOOR_ON:
+                    if (true == this.LampOn(DoorType.DOOR_FRONT)) {
+                        this.stateCtrlLampFront = stateCtrlLampDoor.LAMP_DOOR_IDLE;
+                    }
+                    break;
+                case stateCtrlLampDoor.LAMP_DOOR_OFF:
+                    if (true == this.LampOff(DoorType.DOOR_BACK))
+                    {
+                        this.stateCtrlLampFront = stateCtrlLampDoor.LAMP_DOOR_IDLE;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
         private void lampBackProcess()
         {
-            while (true)
+
+            switch (stateCtrlLampBack)
             {
-                switch (stateCtrlLampBack)
-                {
-                    case stateCtrlLampDoor.LAMP_DOOR_IDLE:
-                        break;
-                    case stateCtrlLampDoor.LAMP_DOOR_ON:
-                        if (true == this.LampOn(DoorType.DOOR_BACK))
-                        {
-                            this.stateCtrlLampBack = stateCtrlLampDoor.LAMP_DOOR_IDLE;
-                        }
-                        break;
-                    case stateCtrlLampDoor.LAMP_DOOR_OFF:
-                        if (true == this.LampOff(DoorType.DOOR_BACK))
-                        {
-                            this.stateCtrlLampBack = stateCtrlLampDoor.LAMP_DOOR_IDLE;
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                case stateCtrlLampDoor.LAMP_DOOR_IDLE:
+                    break;
+                case stateCtrlLampDoor.LAMP_DOOR_ON:
+                    if (true == this.LampOn(DoorType.DOOR_BACK))
+                    {
+                        this.stateCtrlLampBack = stateCtrlLampDoor.LAMP_DOOR_IDLE;
+                    }
+                    break;
+                case stateCtrlLampDoor.LAMP_DOOR_OFF:
+                    if (true == this.LampOff(DoorType.DOOR_BACK))
+                    {
+                        this.stateCtrlLampBack = stateCtrlLampDoor.LAMP_DOOR_IDLE;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -684,8 +679,9 @@ namespace DoorControllerService
                                         }
                                     }
                                 }
-                                catch
+                                catch(Exception e)
                                 {
+                                    Console.WriteLine(e);
                                 }
                             }
                             this.socketBusy = false;
