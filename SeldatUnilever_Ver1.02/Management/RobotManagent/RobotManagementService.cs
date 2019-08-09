@@ -312,9 +312,6 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 RobotUnityWaitTaskList.Add(robot);
             }
-
-            new Thread(() => { robot.mcuCtrl.TurnOnLampRb(); }).Start();
-
         }
         public void RemoveRobotUnityWaitTaskList(RobotUnity robot)
         {
@@ -416,7 +413,7 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 RobotUnityReadyList.Add(robot);
             }
-            new Thread(() => { robot.mcuCtrl.TurnOffLampRb(); }).Start();
+            robot.mcuCtrl.lampRbOff();
         }
         
         public ResultRobotReady GetRobotUnityReadyItem0()

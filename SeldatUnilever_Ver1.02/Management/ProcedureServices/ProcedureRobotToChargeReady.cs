@@ -595,7 +595,7 @@ namespace SeldatMRMS
                         robot.SetSafeBluecircle(false);
                         robot.SetSafeSmallcircle(false);
                         robot.TurnOnSupervisorTraffic(false);
-                        rb.mcuCtrl.TurnOffLampRb();
+                        rb.mcuCtrl.lampRbOff();
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_READY;
                         // if (errorCode == ErrorCode.RUN_OK) {
                         ReleaseProcedureHandler(this);

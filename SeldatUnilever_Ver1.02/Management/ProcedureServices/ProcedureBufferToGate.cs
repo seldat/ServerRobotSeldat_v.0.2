@@ -71,7 +71,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             // DataBufferToGate p = BuffToGate.points;
             DoorService ds = getDoorService();
             TrafficManagementService Traffic = BuffToGate.Traffic;
-            rb.mcuCtrl.TurnOnLampRb();
+            rb.mcuCtrl.lampRbOn();
             
             robot.ShowText(" Start -> " + procedureCode);
             while (ProRun)

@@ -90,7 +90,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             RobotUnity rb = FlToMach.robot;
             DoorService ds = FlToMach.door;
             TrafficManagementService Traffic = FlToMach.Traffic;
-            rb.mcuCtrl.TurnOnLampRb();
+            rb.mcuCtrl.lampRbOn();
             robot.ShowText(" Start -> " + procedureCode);
             while (ProRun)
             {
@@ -252,7 +252,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             Global_Object.setGateStatus(order.gate, false);
                             robot.SwitchToDetectLine(false);
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            ds.LampOff(DoorService.DoorType.DOOR_FRONT);
+                            ds.LampSetStateOff(DoorService.DoorType.DOOR_FRONT);
                             ds.closeDoor(DoorService.DoorType.DOOR_BACK);
                             StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CLOSE_GATE;
                             robot.ShowText("FORMACH_ROBOT_WAITTING_CLOSE_GATE");

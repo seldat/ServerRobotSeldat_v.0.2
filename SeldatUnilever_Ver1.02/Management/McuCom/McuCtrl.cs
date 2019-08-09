@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatUnilever_Ver1._02.DTO;
@@ -24,8 +25,56 @@ namespace SeldatUnilever_Ver1._02.Management.McuCom {
             LAMP_ON
         }
 
-        public McuCtrl (RobotUnity rb) : base (rb.properties.ipMcuCtrl, rb.properties.portMcuCtrl) {
+        public enum stateCtrlLamp
+        {
+            LAMP_MCU_IDLE = 0,
+            LAMP_MCU_ON,
+            LAMP_MCU_OFF
+        }
 
+        private Thread ctrlLampOnRbThread;
+        private stateCtrlLamp stateCtrlLampRb;
+
+        public McuCtrl (RobotUnity rb) : base (rb.properties.ipMcuCtrl, rb.properties.portMcuCtrl) {
+            this.stateCtrlLampRb = stateCtrlLamp.LAMP_MCU_IDLE;
+            ctrlLampOnRbThread = new Thread(this.lampOnRbCtrlProcess);
+            ctrlLampOnRbThread.Start(this);
+        }
+
+        public void lampRbOn() {
+            this.stateCtrlLampRb = stateCtrlLamp.LAMP_MCU_ON;
+        }
+
+        public void lampRbOff()
+        {
+            this.stateCtrlLampRb = stateCtrlLamp.LAMP_MCU_OFF;
+        }
+
+        private void lampOnRbCtrlProcess(object ojb)
+        {
+            while (true)
+            {
+                switch (stateCtrlLampRb)
+                {
+                    case stateCtrlLamp.LAMP_MCU_IDLE:
+                        break;
+                    case stateCtrlLamp.LAMP_MCU_ON:
+                        if (true == this.TurnOnLampRb())
+                        {
+                            stateCtrlLampRb = stateCtrlLamp.LAMP_MCU_IDLE;
+                        }
+                        break;
+                    case stateCtrlLamp.LAMP_MCU_OFF:
+                        if (true == this.TurnOffLampRb())
+                        {
+                            stateCtrlLampRb = stateCtrlLamp.LAMP_MCU_IDLE;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                Thread.Sleep(50);
+            }
         }
 
         public bool TurnOnPcRobot () {
@@ -60,7 +109,7 @@ namespace SeldatUnilever_Ver1._02.Management.McuCom {
             return ret;
         }
 
-        public bool TurnOnLampRb () {
+        private bool TurnOnLampRb () {
             bool ret = false;
             byte[] dataSend = new byte[7];
 
@@ -75,7 +124,7 @@ namespace SeldatUnilever_Ver1._02.Management.McuCom {
             return ret;
         }
 
-        public bool TurnOffLampRb () {
+        private bool TurnOffLampRb () {
             bool ret = false;
             byte[] dataSend = new byte[7];
 

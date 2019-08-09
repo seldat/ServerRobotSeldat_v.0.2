@@ -71,7 +71,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             ProcedureMachineToBufferReturn BfToBufRe = (ProcedureMachineToBufferReturn)ojb;
             RobotUnity rb = BfToBufRe.robot;
             TrafficManagementService Traffic = BfToBufRe.Traffic;
-            rb.mcuCtrl.TurnOnLampRb();
+            rb.mcuCtrl.lampRbOn();
             robot.ShowText(" Start -> " + procedureCode);
            //Console.WriteLine( BfToBufRe.GetInfoOfPalletBufferReturn_MBR(PistonPalletCtrl.PISTON_PALLET_DOWN, order.dataRequest));
             //ProRun = false;
