@@ -519,6 +519,8 @@ namespace SeldatMRMS.Management.RobotManagent
             DisposeProcedure();
             KillPID();
             KillActionLib();
+            robotService.RemoveRobotUnityReadyList(this);
+            robotService.RemoveRobotUnityWaitTaskList(this);
             MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
             onBinding = false;
             Draw();

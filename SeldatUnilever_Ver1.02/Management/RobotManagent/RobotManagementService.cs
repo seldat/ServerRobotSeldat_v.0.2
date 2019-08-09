@@ -357,7 +357,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 {
                     try
                     {
-                        if (indexWt >= RobotUnityReadyList.Count)
+                        if (indexWt >= RobotUnityWaitTaskList.Count)
                         {
                             indexWt = 0;
                         }

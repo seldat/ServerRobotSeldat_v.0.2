@@ -1058,6 +1058,53 @@ namespace SelDatUnilever_Ver1
         #region GET PALLET INFO BUFFER
 
         // Get pallet info status W buffer with same bay
+        public int  GetBufferId_from_PalletId(String datareq, int samePalletId)
+        {
+            int bufferId = -1;
+            try
+            {
+                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    var result = results[0];
+                    //var bufferResults = result["buffers"][0];
+                    foreach (var buffer in result["buffers"])
+                    {
+                       int _bufferId= (int)buffer["bufferId"];
+                        String bufferDataStr = (String)buffer["bufferData"];
+                        JObject stuffBData = JObject.Parse(bufferDataStr);
+                        bool canOpEdit = (bool)stuffBData["canOpEdit"];
+                        if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy, áp dụng trong quy trình Buffer -> Machine
+                            continue;
+                        if (buffer["pallets"].Count() > 0)
+                        {
+                            foreach (var palletInfo in buffer["pallets"])
+                            {
+                                int _palletId = (int)palletInfo["palletId"];
+                                if (_palletId == samePalletId)
+                                {
+                                    bufferId = _bufferId;
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Error at GetInfoOfPalletBuffer");
+                return bufferId;
+            }
+            return bufferId;
+        }
         public JPallet GetInfoOfPalletBuffer_Compare_W_H(TrafficRobotUnity.PistonPalletCtrl pisCtrl, JInfoPallet jInfoPallet_H)
         {
             JPallet JPResult = new JPallet();
@@ -1066,20 +1113,20 @@ namespace SelDatUnilever_Ver1
             List<JPallet> jPalletList = new List<JPallet>();
             try
             {
-                dynamic product = new JObject();
-                product.timeWorkId = order.timeWorkId;
-                product.activeDate = order.activeDate;
-                product.productId = order.productId;
-                product.productDetailId = order.productDetailId;
-                product.palletStatus = PalletStatus.W.ToString(); // W
-                String collectionData = RequestDataProcedure(product.ToString(), Global_Object.url + "plan/getListPlanPallet");
-                if (collectionData.Length > 0)
+                dynamic product_W = new JObject();
+                product_W.timeWorkId = order.timeWorkId;
+                product_W.activeDate = order.activeDate;
+                product_W.productId = order.productId;
+                product_W.productDetailId = order.productDetailId;
+                product_W.palletStatus = PalletStatus.W.ToString(); // W
+                int bufferId = GetBufferId_from_PalletId(order.dataRequest, JPResult.palletId);
+                String collectionData_W= RequestDataProcedure(product_W.ToString(), Global_Object.url + "plan/getListPlanPallet");
+                String collectionData_H = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData_W.Length > 0)
                 {
-                    JArray results = JArray.Parse(collectionData);
+                    JArray results = JArray.Parse(collectionData_W);
                     foreach(var result in results)
                     {
-
-                        //var bufferResults = result["buffers"][0];
                         foreach (var buffer in result["buffers"])
                         {
                             String bufferDataStr = (String)buffer["bufferData"];
