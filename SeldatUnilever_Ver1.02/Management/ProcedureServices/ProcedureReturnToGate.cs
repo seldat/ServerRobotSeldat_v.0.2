@@ -79,7 +79,7 @@ namespace SeldatMRMS
             // DataReturnToGate p = ReToGate.points;
             DoorService ds = ReToGate.door.DoorMezzamineReturn;
             TrafficManagementService Traffic = ReToGate.Traffic;
-            rb.mcuCtrl.TurnOnLampRb();
+            rb.mcuCtrl.lampRbOn();
             robot.ShowText(" Start -> " + procedureCode);
             while (ProRun)
             {

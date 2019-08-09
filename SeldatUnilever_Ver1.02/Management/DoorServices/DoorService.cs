@@ -71,13 +71,20 @@ namespace DoorControllerService
             DOOR_ST_ERROR
         }
 
+
+        public enum stateCtrlLampDoor
+        {
+            LAMP_DOOR_IDLE = 0,
+            LAMP_DOOR_ON,
+            LAMP_DOOR_OFF
+        }
+
         public enum RetState
         {
             DOOR_CTRL_SUCCESS = 0,
             DOOR_CTRL_WAITTING,
             DOOR_CTRL_ERROR
         }
-
         public class DoorInfoConfig : NotifyUIBase
         {
             private String _Name;
@@ -129,6 +136,8 @@ namespace DoorControllerService
         private Thread doorBackServiceThread;
         private StateCtrl stateCtrlDoorFront;
         private StateCtrl stateCtrlDoorBack;
+        private stateCtrlLampDoor stateCtrlLampFront;
+        private stateCtrlLampDoor stateCtrlLampBack;
         //public Stopwatch elapsedTimeFront_;
         //public Stopwatch elapsedTimeBack_;
         private const UInt32 TIME_OUT_WAIT_DOOR_FRONT = 11000;
@@ -148,11 +157,88 @@ namespace DoorControllerService
             doorBackServiceThread.Start(this);
             stateCtrlDoorFront = StateCtrl.DOOR_ST_IDLE;
             stateCtrlDoorBack = StateCtrl.DOOR_ST_IDLE;
+            stateCtrlLampFront = stateCtrlLampDoor.LAMP_DOOR_IDLE;
+            stateCtrlLampBack = stateCtrlLampDoor.LAMP_DOOR_IDLE;
             //elapsedTimeFront_ = new Stopwatch();
             //elapsedTimeBack_ = new Stopwatch();
             this.numTryClose = 0;
             this.numTryOpen = 0;
             //SetId(cf.id);
+        }
+
+        public void LampSetStateOn(DoorType dt) {
+            switch (dt)
+            {
+                case DoorType.DOOR_FRONT:
+                    this.stateCtrlLampFront = stateCtrlLampDoor.LAMP_DOOR_ON;
+                    break;
+                case DoorType.DOOR_BACK:
+                    this.stateCtrlLampBack = stateCtrlLampDoor.LAMP_DOOR_ON;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void LampSetStateOff(DoorType dt)
+        {
+            switch (dt)
+            {
+                case DoorType.DOOR_FRONT:
+                    this.stateCtrlLampFront = stateCtrlLampDoor.LAMP_DOOR_OFF;
+                    break;
+                case DoorType.DOOR_BACK:
+                    this.stateCtrlLampBack = stateCtrlLampDoor.LAMP_DOOR_OFF;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void lampFrontProcess()
+        {
+            switch (stateCtrlLampFront)
+            {
+                case stateCtrlLampDoor.LAMP_DOOR_IDLE:
+                    break;
+                case stateCtrlLampDoor.LAMP_DOOR_ON:
+                    if (true == this.LampOn(DoorType.DOOR_FRONT)) {
+                        this.stateCtrlLampFront = stateCtrlLampDoor.LAMP_DOOR_IDLE;
+                    }
+                    break;
+                case stateCtrlLampDoor.LAMP_DOOR_OFF:
+                    if (true == this.LampOff(DoorType.DOOR_BACK))
+                    {
+                        this.stateCtrlLampFront = stateCtrlLampDoor.LAMP_DOOR_IDLE;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void lampBackProcess()
+        {
+
+            switch (stateCtrlLampBack)
+            {
+                case stateCtrlLampDoor.LAMP_DOOR_IDLE:
+                    break;
+                case stateCtrlLampDoor.LAMP_DOOR_ON:
+                    if (true == this.LampOn(DoorType.DOOR_BACK))
+                    {
+                        this.stateCtrlLampBack = stateCtrlLampDoor.LAMP_DOOR_IDLE;
+                    }
+                    break;
+                case stateCtrlLampDoor.LAMP_DOOR_OFF:
+                    if (true == this.LampOff(DoorType.DOOR_BACK))
+                    {
+                        this.stateCtrlLampBack = stateCtrlLampDoor.LAMP_DOOR_IDLE;
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
         //public void setStateCtrlFront(StateCtrl state)
@@ -285,7 +371,7 @@ namespace DoorControllerService
                 switch (this.stateCtrlDoorFront)
                 {
                     case StateCtrl.DOOR_ST_IDLE:
-
+                        this.lampFrontProcess();
                         break;
                     case StateCtrl.DOOR_ST_OPEN_FRONT:
                         if (this.socketBusy == false)
@@ -359,7 +445,7 @@ namespace DoorControllerService
                         Thread.Sleep(50);
                         break;
                     case StateCtrl.DOOR_ST_OPEN_FRONT_SUCCESS:
-
+                        this.lampFrontProcess();
                         break;
                     case StateCtrl.DOOR_ST_CLOSE_DOOR_FRONT:
                         if (this.socketBusy == false)
@@ -432,10 +518,10 @@ namespace DoorControllerService
                         Thread.Sleep(50);
                         break;
                     case StateCtrl.DOOR_ST_CLOSE_DOOR_FRONT_SUCCESS:
-
+                        this.lampFrontProcess();
                         break;
                     case StateCtrl.DOOR_ST_ERROR:
-
+                        this.lampFrontProcess();
                         break;
                     default:
                         break;
@@ -454,7 +540,7 @@ namespace DoorControllerService
                 switch (this.stateCtrlDoorBack)
                 {
                     case StateCtrl.DOOR_ST_IDLE:
-
+                        this.lampBackProcess();
                         break;
                     case StateCtrl.DOOR_ST_OPEN_DOOR_BACK:
                         if (this.socketBusy == false)
@@ -528,7 +614,7 @@ namespace DoorControllerService
                         Thread.Sleep(50);
                         break;
                     case StateCtrl.DOOR_ST_OPEN_DOOR_BACK_SUCCESS:
-
+                        this.lampBackProcess();
                         break;
                     case StateCtrl.DOOR_ST_CLOSE_DOOR_BACK:
                         if (this.socketBusy == false)
@@ -593,8 +679,9 @@ namespace DoorControllerService
                                         }
                                     }
                                 }
-                                catch
+                                catch(Exception e)
                                 {
+                                    Console.WriteLine(e);
                                 }
                             }
                             this.socketBusy = false;
@@ -602,10 +689,10 @@ namespace DoorControllerService
                         Thread.Sleep(50);
                         break;
                     case StateCtrl.DOOR_ST_CLOSE_DOOR_BACK_SUCCESS:
-
+                        this.lampBackProcess();
                         break;
                     case StateCtrl.DOOR_ST_ERROR:
-
+                        this.lampBackProcess();
                         break;
                     default:
                         break;
@@ -783,7 +870,7 @@ namespace DoorControllerService
         //            return result;
         //        }
 
-        public bool LampOn(DoorType id)
+        private bool LampOn(DoorType id)
         {
             bool ret = false;
             byte[] dataSend = new byte[7];
@@ -795,11 +882,13 @@ namespace DoorControllerService
             dataSend[4] = 0x00;
             dataSend[5] = (byte)id;
             dataSend[6] = CalChecksum(dataSend, 4);
+            this.socketBusy = true;
             ret = this.Tranfer(dataSend);
+            this.socketBusy = false;
             return ret;
         }
 
-        public bool LampOff(DoorType id)
+        private bool LampOff(DoorType id)
         {
             bool ret = false;
             byte[] dataSend = new byte[7];
@@ -811,7 +900,9 @@ namespace DoorControllerService
             dataSend[4] = 0x00;
             dataSend[5] = (byte)id;
             dataSend[6] = CalChecksum(dataSend, 4);
+            this.socketBusy = true;
             ret = this.Tranfer(dataSend);
+            this.socketBusy = false;
             return ret;
         }
     }

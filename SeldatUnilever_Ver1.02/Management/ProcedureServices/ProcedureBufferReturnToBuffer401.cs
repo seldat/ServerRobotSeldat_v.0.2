@@ -116,7 +116,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             RobotUnity rb = BfToBf.robot;
             TrafficManagementService Traffic = BfToBf.Traffic;
             robot.ShowText(" Start -> " + procedureCode);
-            rb.mcuCtrl.TurnOnLampRb();
+            rb.mcuCtrl.lampRbOn();
             while (ProRun)
             {
                 switch (StateBufferToBuffer)

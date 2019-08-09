@@ -130,7 +130,7 @@ namespace SeldatMRMS
             robot.ShowText(" Start -> " + procedureCode);
             //GetFrontLineBuffer(false);
             //  ProRun = false;
-            rb.mcuCtrl.TurnOnLampRb();
+            rb.mcuCtrl.lampRbOn();
             frontLinePose = BfToMa.GetFrontLineBuffer();
             while (ProRun)
             {

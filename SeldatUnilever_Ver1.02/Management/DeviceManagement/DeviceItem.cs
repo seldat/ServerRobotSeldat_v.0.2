@@ -286,9 +286,9 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     try
                     {
                         if (gate == (int)DoorId.DOOR_MEZZAMINE_UP)
-                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampOn(DoorType.DOOR_FRONT);
+                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampSetStateOn(DoorType.DOOR_FRONT);
                         if (gate == (int)DoorId.DOOR_MEZZAMINE_UP_NEW)
-                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampOn(DoorType.DOOR_FRONT);
+                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampSetStateOn(DoorType.DOOR_FRONT);
                     }
                     catch (Exception e)
                     {
@@ -345,9 +345,9 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     try
                     {
                         if (gate == (int)DoorId.DOOR_MEZZAMINE_UP)
-                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampOn(DoorType.DOOR_FRONT);
+                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampSetStateOn(DoorType.DOOR_FRONT);
                         if (gate == (int)DoorId.DOOR_MEZZAMINE_UP_NEW)
-                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampOn(DoorType.DOOR_FRONT);
+                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampSetStateOn(DoorType.DOOR_FRONT);
                     }
                     catch (Exception e)
                     {
@@ -758,7 +758,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     try
                     {
                         Global_Object.doorManagementServiceCtrl.DoorMezzamineReturn.closeDoor(DoorType.DOOR_FRONT);
-                        Global_Object.doorManagementServiceCtrl.DoorMezzamineReturn.LampOff(DoorType.DOOR_BACK);
+                        Global_Object.doorManagementServiceCtrl.DoorMezzamineReturn.LampSetStateOff(DoorType.DOOR_BACK);
                     }
                     catch (Exception e)
                     {

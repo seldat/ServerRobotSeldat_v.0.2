@@ -94,7 +94,7 @@ namespace SeldatMRMS
             DoorService ds = getDoorService();
             TrafficManagementService Traffic = FlToBuf.Traffic;
             ForkLiftToMachineInfo flToMachineInfo = new ForkLiftToMachineInfo();
-            rb.mcuCtrl.TurnOnLampRb();
+            rb.mcuCtrl.lampRbOn();
             robot.ShowText(" Start -> " + procedureCode);
             endPointBuffer = FlToBuf.GetFrontLineBuffer(true);
             if(endPointBuffer==null)
@@ -331,7 +331,7 @@ namespace SeldatMRMS
                         {
                             Global_Object.setGateStatus(order.gate, false);
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            ds.LampOff(DoorService.DoorType.DOOR_FRONT);
+                            ds.LampSetStateOff(DoorService.DoorType.DOOR_FRONT);
                             ds.closeDoor(DoorService.DoorType.DOOR_BACK);
 
                             StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_CLOSE_GATE;

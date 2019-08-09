@@ -73,7 +73,7 @@ namespace SeldatMRMS
             ProcedureBufferToReturn BfToRe = (ProcedureBufferToReturn)ojb;
             RobotUnity rb = BfToRe.robot;
             TrafficManagementService Traffic = BfToRe.Traffic;
-            rb.mcuCtrl.TurnOnLampRb();
+            rb.mcuCtrl.lampRbOn();
             robot.ShowText(" Start -> " + procedureCode);
             while (ProRun)
             {
