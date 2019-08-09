@@ -29,7 +29,7 @@ namespace SeldatMRMS.Management.RobotManagent
     {
         public const Int32 AmountofRobotUnity = 3;
         private const Int32 BAT_LOW_LEVEL = 15;
-        public static int indexRd = 0;
+        public static int indexRd = 0, indexWt = 0;
         public class ResultRobotReady
         {
             public RobotUnity robot;
@@ -352,29 +352,59 @@ namespace SeldatMRMS.Management.RobotManagent
         public ResultRobotReady GetRobotUnityWaitTaskItem0()
         {
            
-                ResultRobotReady result = null;
-                
-                if (RobotUnityWaitTaskList.Count > 0)
+            ResultRobotReady result = null;
+#if true
+            if (RobotUnityWaitTaskList.Count > 0)
+            {
+                do
                 {
-
-                    int index = 0;
-                    do
+                    try
                     {
-                        RobotUnity robot = RobotUnityWaitTaskList[index];
+                        if (indexWt >= RobotUnityReadyList.Count)
+                        {
+                            indexWt = 0;
+                        }
+                        RobotUnity robot = RobotUnityWaitTaskList[indexWt];
+                        indexWt++;
                         if (robot.properties.IsConnected)
                         {
-                                result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
-                                if (robot.getBattery())
-                                {
-                                        RemoveRobotUnityWaitTaskList(robot);
-                                }
-                                break;
-                         }
-                        index++;
-                    } while (RobotUnityWaitTaskList.Count < index && RobotUnityWaitTaskList.Count > 0);
-                }
-      
-                return result;
+                            result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
+                            if (robot.getBattery())
+                            {
+                                RemoveRobotUnityWaitTaskList(robot);
+                            }
+                            break;
+                        }
+                    }
+                    catch (Exception e) {
+                        indexRd = 0;
+                        Console.WriteLine("Error WaitTask in  RobotManagement Service Remove Robot");
+                        Console.WriteLine(e);
+                    }
+                } while (RobotUnityWaitTaskList.Count < indexWt && RobotUnityWaitTaskList.Count > 0);
+            }
+#else
+            if (RobotUnityWaitTaskList.Count > 0)
+            {
+
+                int index = 0;
+                do
+                {
+                    RobotUnity robot = RobotUnityWaitTaskList[index];
+                    if (robot.properties.IsConnected)
+                    {
+                        result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
+                        if (robot.getBattery())
+                        {
+                            RemoveRobotUnityWaitTaskList(robot);
+                        }
+                        break;
+                    }
+                    index++;
+                } while (RobotUnityWaitTaskList.Count < index && RobotUnityWaitTaskList.Count > 0);
+            }
+#endif
+            return result;
         }
         public void MoveRobotWaitTask()
         {
@@ -415,10 +445,11 @@ namespace SeldatMRMS.Management.RobotManagent
                             break;
                         }
                     }
-                    catch
+                    catch(Exception e)
                     {
                         indexRd = 0;
                         Console.WriteLine("Error ReadyTask in  RobotManagement Service Remove Robot");
+                        Console.WriteLine(e);
                     }
                 }while (RobotUnityReadyList.Count < indexRd && RobotUnityReadyList.Count > 0) ;
             }
