@@ -459,6 +459,7 @@ namespace SeldatMRMS
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
+                            Console.WriteLine("Loi Update :ForkLift.FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER");
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError(this);
                         }
@@ -476,6 +477,7 @@ namespace SeldatMRMS
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
+                            Console.WriteLine("Loi Update :ForkLift.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER");
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError(this);
                         }
@@ -647,7 +649,7 @@ namespace SeldatMRMS
                     default:
                         break;
                 }
-                Thread.Sleep(5);
+                Thread.Sleep(500);
             }
             StateForkLift = ForkLift.FORBUF_IDLE;
         }

@@ -425,7 +425,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub, directOut = directOut, line_ord = line_ord };
                         dynamic product = new JObject();
                         product.timeWorkId = order.timeWorkId;
-                        product.activeDate = order.activeDate;
+                        product.activeDate = "";
                         order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
                         product.productId = order.productId;
                         product.productDetailId = order.productDetailId;

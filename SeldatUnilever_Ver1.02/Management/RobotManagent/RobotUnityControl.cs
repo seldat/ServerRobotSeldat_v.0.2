@@ -391,9 +391,9 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 StandardInt32 standard = (StandardInt32)message;
                 robotLogOut.ShowText(this.properties.Label,"Finished State [" + standard.data + "]");
-                StandardInt32 cmd = new StandardInt32();
-                cmd.data = 0;
-                this.Publish(paramsRosSocket.publication_finishStatesCallBack, cmd);
+                //StandardInt32 cmd = new StandardInt32();
+                //cmd.data = 0;
+                //this.Publish(paramsRosSocket.publication_finishStatesCallBack, cmd);
                 try
                 {
                    FinishStatesCallBack(standard.data);
