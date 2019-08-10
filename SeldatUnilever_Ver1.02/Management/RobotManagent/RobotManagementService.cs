@@ -357,7 +357,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 {
                     try
                     {
-                        if (indexWt >= RobotUnityReadyList.Count)
+                        if (indexWt >= RobotUnityWaitTaskList.Count)
                         {
                             indexWt = 0;
                         }
@@ -374,7 +374,7 @@ namespace SeldatMRMS.Management.RobotManagent
                         }
                     }
                     catch (Exception e) {
-                        indexRd = 0;
+                        indexWt = 0;
                         Console.WriteLine("Error WaitTask in  RobotManagement Service Remove Robot");
                         Console.WriteLine(e);
                     }

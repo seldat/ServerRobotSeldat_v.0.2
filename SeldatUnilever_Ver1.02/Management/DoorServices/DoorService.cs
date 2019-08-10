@@ -207,7 +207,7 @@ namespace DoorControllerService
                     }
                     break;
                 case stateCtrlLampDoor.LAMP_DOOR_OFF:
-                    if (true == this.LampOff(DoorType.DOOR_BACK))
+                    if (true == this.LampOff(DoorType.DOOR_FRONT))
                     {
                         this.stateCtrlLampFront = stateCtrlLampDoor.LAMP_DOOR_IDLE;
                     }
@@ -371,7 +371,7 @@ namespace DoorControllerService
                 switch (this.stateCtrlDoorFront)
                 {
                     case StateCtrl.DOOR_ST_IDLE:
-                        this.lampFrontProcess();
+                        //this.lampFrontProcess();
                         break;
                     case StateCtrl.DOOR_ST_OPEN_FRONT:
                         if (this.socketBusy == false)
@@ -445,7 +445,7 @@ namespace DoorControllerService
                         Thread.Sleep(50);
                         break;
                     case StateCtrl.DOOR_ST_OPEN_FRONT_SUCCESS:
-                        this.lampFrontProcess();
+                        //this.lampFrontProcess();
                         break;
                     case StateCtrl.DOOR_ST_CLOSE_DOOR_FRONT:
                         if (this.socketBusy == false)
@@ -518,14 +518,15 @@ namespace DoorControllerService
                         Thread.Sleep(50);
                         break;
                     case StateCtrl.DOOR_ST_CLOSE_DOOR_FRONT_SUCCESS:
-                        this.lampFrontProcess();
+                        //this.lampFrontProcess();
                         break;
                     case StateCtrl.DOOR_ST_ERROR:
-                        this.lampFrontProcess();
+                        //this.lampFrontProcess();
                         break;
                     default:
                         break;
                 }
+                this.lampFrontProcess();
                 Thread.Sleep(50);
             }
         }
@@ -540,7 +541,7 @@ namespace DoorControllerService
                 switch (this.stateCtrlDoorBack)
                 {
                     case StateCtrl.DOOR_ST_IDLE:
-                        this.lampBackProcess();
+                        //this.lampBackProcess();
                         break;
                     case StateCtrl.DOOR_ST_OPEN_DOOR_BACK:
                         if (this.socketBusy == false)
@@ -614,7 +615,7 @@ namespace DoorControllerService
                         Thread.Sleep(50);
                         break;
                     case StateCtrl.DOOR_ST_OPEN_DOOR_BACK_SUCCESS:
-                        this.lampBackProcess();
+                        //this.lampBackProcess();
                         break;
                     case StateCtrl.DOOR_ST_CLOSE_DOOR_BACK:
                         if (this.socketBusy == false)
@@ -689,14 +690,15 @@ namespace DoorControllerService
                         Thread.Sleep(50);
                         break;
                     case StateCtrl.DOOR_ST_CLOSE_DOOR_BACK_SUCCESS:
-                        this.lampBackProcess();
+                        //this.lampBackProcess();
                         break;
                     case StateCtrl.DOOR_ST_ERROR:
-                        this.lampBackProcess();
+                        //this.lampBackProcess();
                         break;
                     default:
                         break;
                 }
+                this.lampBackProcess();
                 Thread.Sleep(50);
             }
         }
@@ -870,7 +872,7 @@ namespace DoorControllerService
         //            return result;
         //        }
 
-        private bool LampOn(DoorType id)
+        public bool LampOn(DoorType id)
         {
             bool ret = false;
             byte[] dataSend = new byte[7];
@@ -882,13 +884,17 @@ namespace DoorControllerService
             dataSend[4] = 0x00;
             dataSend[5] = (byte)id;
             dataSend[6] = CalChecksum(dataSend, 4);
+            if (this.socketBusy == true)
+            {
+                return false;
+            }
             this.socketBusy = true;
             ret = this.Tranfer(dataSend);
             this.socketBusy = false;
             return ret;
         }
 
-        private bool LampOff(DoorType id)
+        public bool LampOff(DoorType id)
         {
             bool ret = false;
             byte[] dataSend = new byte[7];
@@ -900,6 +906,10 @@ namespace DoorControllerService
             dataSend[4] = 0x00;
             dataSend[5] = (byte)id;
             dataSend[6] = CalChecksum(dataSend, 4);
+            if (this.socketBusy == true)
+            {
+                return false;
+            }
             this.socketBusy = true;
             ret = this.Tranfer(dataSend);
             this.socketBusy = false;

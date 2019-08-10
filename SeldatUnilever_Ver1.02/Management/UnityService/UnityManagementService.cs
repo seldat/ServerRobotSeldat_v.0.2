@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using static DoorControllerService.DoorService;
@@ -41,12 +42,26 @@ namespace SeldatMRMS.Management.UnityService
             doorManagementService = new DoorManagementService();
 
             // Test door
-         /*   doorManagementService.DoorMezzamineUpNew.LampOn(DoorType.DOOR_FRONT);
-            doorManagementService.DoorMezzamineUpNew.LampOff(DoorType.DOOR_FRONT);
-            doorManagementService.DoorMezzamineUpNew.Open(DoorType.DOOR_FRONT);
-            doorManagementService.DoorMezzamineUpNew.Close(DoorType.DOOR_FRONT);
-            doorManagementService.DoorMezzamineUpNew.Open(DoorType.DOOR_BACK);
-            doorManagementService.DoorMezzamineUpNew.Close(DoorType.DOOR_BACK);*/
+            ///   doorManagementService.DoorMezzamineUpNew.LampSetStateOn(DoorType.DOOR_FRONT);
+            //while (true)
+            //{
+            //    doorManagementService.DoorMezzamineUpNew.LampSetStateOn(DoorType.DOOR_FRONT);
+            //    Thread.Sleep(2000);
+            //    doorManagementService.DoorMezzamineUpNew.LampSetStateOff(DoorType.DOOR_FRONT);
+            //    Thread.Sleep(2000);
+
+            //    doorManagementService.DoorMezzamineUp.LampSetStateOn(DoorType.DOOR_FRONT);
+            //    Thread.Sleep(2000);
+            //    doorManagementService.DoorMezzamineUp.LampSetStateOff(DoorType.DOOR_FRONT);
+            //    Thread.Sleep(2000);
+            //}
+
+            //doorManagementService.DoorMezzamineUpNew.LampOn(DoorType.DOOR_FRONT);
+            //doorManagementService.DoorMezzamineUpNew.LampOff(DoorType.DOOR_FRONT);
+            //doorManagementService.DoorMezzamineUpNew.Open(DoorType.DOOR_FRONT);
+            //doorManagementService.DoorMezzamineUpNew.Close(DoorType.DOOR_FRONT);
+            //doorManagementService.DoorMezzamineUpNew.Open(DoorType.DOOR_BACK);
+            //doorManagementService.DoorMezzamineUpNew.Close(DoorType.DOOR_BACK);
             // End
 
             procedureManagementService = new ProcedureManagementService();
