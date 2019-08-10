@@ -539,19 +539,30 @@ namespace SeldatMRMS
                         }
                          if (rb.SendPoseStamped(p.PointFrontLine))
                          {
-                                StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION;
+                                StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION_REG;
                                 //robot.ShowText("ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION");
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
                                 registryRobotJourney.endPoint = p.PointFrontLine.Position;
                          }
                     break;
-                    case RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION: // Robot dang di toi dau line ready station
-                      /*  if(DetermineHasTaskWaitingAnRobotAvailable())
+                    case RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION_REG: // Robot dang di toi dau line ready station
+                        if(DetermineHasTaskWaitingAnRobotAvailable())
                         {
-                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITINGREADY_FORCERELEASED;
+                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITINGREADY_FORCERELEASED;
+                             break;
+                        }
+                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                        {
                             break;
-                        }*/
+                        }
+                        else
+                        {
+                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION;
+                        }
+                        break;
+                    case RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION: // Robot dang di toi dau line ready station
+          
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;

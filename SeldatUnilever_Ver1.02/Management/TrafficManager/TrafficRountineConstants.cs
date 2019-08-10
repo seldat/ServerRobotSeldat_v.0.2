@@ -650,6 +650,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
                         if (rrj.traffic.HasRobotUnityinArea("OUTER", rrj.robot))
                         {
                             ReleaseAll(rrj.robot);
+                    
                             // rrj.robot.ShowText("RELEASED ROBOT IN REGISTER LIST OF SEPCIAL ZONE FROM VIM -> OUTER");
                             return true;
                         }

@@ -392,6 +392,7 @@ namespace SeldatMRMS {
             ROBREA_ROBOT_CAME_CHECKIN_READYSTATION,
             ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION, // ROBOT cho tiến vào vị trí đầu line charge su dung laser
             ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION_FROM_VIM, // ROBOT cho tiến vào vị trí đầu line charge su dung laser
+            ROBREA_ROBOT_WAITTING_GOTO_READYSTATION_REG,
             ROBREA_ROBOT_WAITTING_GOTO_READYSTATION, // hoàn thành đến vùng check in/ kiểm tra có robot đang làm việc vùng này và lấy vị trí line và pallet
             ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION, // đang đợi dò line để đến vị trí line trong buffer
             ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION, // đến vị 

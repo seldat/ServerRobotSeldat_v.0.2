@@ -50,9 +50,10 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 OrderItem order = Gettask();
                 if(order!=null)
                 {
-                    cntWaitTask = 0;
+                //    cntWaitTask = 0;
                     if (AssignWaitTask(order))
                     {
+                        
                         MoveElementToEnd();
                         Thread.Sleep(500);
                         continue;
@@ -68,7 +69,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 {
                     if(cntWaitTask++>=deviceItemsList.Count)
                     {
-                        AssignWaitTask(order);
+                        AssignWaitTask(null);
                         Thread.Sleep(500);
                         cntWaitTask = 0;
                     }

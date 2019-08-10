@@ -53,6 +53,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         robot.bayId = bayId;
                     }
                     robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
+                    //Thread.Sleep(200);
                     return false;
                 }
             }
