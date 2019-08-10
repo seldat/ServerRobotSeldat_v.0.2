@@ -256,6 +256,7 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
                         robot.robotRegistryToWorkingZone.onRobotwillCheckInsideGate = false;
+                        ds.setDoorBusy(true);
                         ds.openDoor(DoorService.DoorType.DOOR_BACK);
                         StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_OPEN_DOOR;
                         robot.ShowText("FORBUF_ROBOT_WAITTING_OPEN_DOOR");
@@ -333,7 +334,7 @@ namespace SeldatMRMS
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             ds.LampSetStateOff(DoorService.DoorType.DOOR_FRONT);
                             ds.closeDoor(DoorService.DoorType.DOOR_BACK);
-
+                            ds.setDoorBusy(false);
                             StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_CLOSE_GATE;
                             robot.ShowText("FORBUF_ROBOT_WAITTING_CLOSE_GATE");
                         }

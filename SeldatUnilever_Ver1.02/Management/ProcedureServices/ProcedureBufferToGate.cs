@@ -406,6 +406,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         break;
                     case BufferToGate.BUFGATE_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
+                        ds.setDoorBusy(true);
                         ds.openDoor(DoorService.DoorType.DOOR_BACK);
                         StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_OPEN_DOOR;
                         ////robot.ShowText("BUFGATE_ROBOT_WAITTING_OPEN_DOOR");
@@ -444,6 +445,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             ds.closeDoor(DoorService.DoorType.DOOR_BACK);
+                            ds.setDoorBusy(false);
                             ds.LampSetStateOn(DoorType.DOOR_BACK);
                             StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_CLOSE_GATE;
                             ////robot.ShowText("BUFGATE_ROBOT_WAITTING_CLOSE_GATE");

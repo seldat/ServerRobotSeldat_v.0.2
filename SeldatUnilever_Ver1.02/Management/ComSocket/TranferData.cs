@@ -66,7 +66,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                         return false;
                     }
                     numResent++;
-                    Console.WriteLine("Try resent {0}", numResent);
+                    //Console.WriteLine("Try resent {0}", numResent);
                 }
                 else
                 {
@@ -75,12 +75,12 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                     result = false;
                     flagGetRespone = false;
                 }
-                Console.WriteLine("Waitting response");
+                //Console.WriteLine("Waitting response");
                 if (this.WaitForReadyRead(TIME_OUT_WAIT_RESPONSE))
                 {
                     try
                     {
-                        Console.WriteLine("have data receive");
+                        //Console.WriteLine("have data receive");
                         DataReceive dataRx = GetDataRec();
                         byte[] data = new byte[dataRx.length];
                         Buffer.BlockCopy(dataRx.data, 0, data, 0, dataRx.length);
@@ -94,10 +94,10 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                         Buffer.BlockCopy(data, 6, resPaket.data, 0, len);
                         if (resPaket.header == 0x55FA)
                         {
-                            Console.WriteLine("check header ok");
+                            //Console.WriteLine("check header ok");
                             if (resPaket.data[len - 1] == CalChecksum(data, (UInt32)(data.Length - 3)))
                             {
-                                Console.WriteLine("calChecksum ok");
+                                //Console.WriteLine("calChecksum ok");
                                 if (resPaket.ack == ACK)
                                 {
                                     if (resPaket.command == (byte)(dataSend[2] + 1))
@@ -110,7 +110,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                                         }
                                         result = true;
                                         flagGetRespone = false;
-                                        Console.WriteLine("Send data success");
+                                        //Console.WriteLine("Send data success");
                                         numResent = 0;
                                         this.Close();
                                         return true;

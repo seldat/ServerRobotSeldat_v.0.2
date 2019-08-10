@@ -147,6 +147,16 @@ namespace DoorControllerService
         private UInt32 numTryOpen = 0;
         private UInt32 numTryClose = 0;
         private bool socketBusy = false;
+        private bool doorBusy;
+
+        public bool getDoorBusy()
+        {
+            return doorBusy;
+        }
+        public void setDoorBusy(bool bs)
+        {
+            this.doorBusy = bs;
+        }
 
         public DoorService(DoorInfoConfig cf) : base(cf.Ip, cf.Port)
         {
@@ -163,6 +173,7 @@ namespace DoorControllerService
             //elapsedTimeBack_ = new Stopwatch();
             this.numTryClose = 0;
             this.numTryOpen = 0;
+            this.doorBusy = false;
             //SetId(cf.id);
         }
 
@@ -872,7 +883,7 @@ namespace DoorControllerService
         //            return result;
         //        }
 
-        public bool LampOn(DoorType id)
+        private bool LampOn(DoorType id)
         {
             bool ret = false;
             byte[] dataSend = new byte[7];
@@ -894,7 +905,7 @@ namespace DoorControllerService
             return ret;
         }
 
-        public bool LampOff(DoorType id)
+        private bool LampOff(DoorType id)
         {
             bool ret = false;
             byte[] dataSend = new byte[7];

@@ -677,7 +677,9 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     // same deviceID forklift
                     try
                     {
-                        Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.openDoor(DoorType.DOOR_FRONT);
+                        if (false == Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.getDoorBusy()) {
+                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.openDoor(DoorType.DOOR_FRONT);
+                        }
                     }
                     catch (Exception e)
                     {
@@ -692,8 +694,11 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 {
                     // same deviceID forklift
                     try
-                    {
-                        Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.openDoor(DoorType.DOOR_FRONT);
+                    {   
+                        if(false == Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.getDoorBusy())
+                        {
+                            Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.openDoor(DoorType.DOOR_FRONT);
+                        }
                     }
                     catch (Exception e)
                     {
@@ -741,7 +746,10 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     // same deviceID forklift
                     try
                     {
-                        Global_Object.doorManagementServiceCtrl.DoorMezzamineReturn.openDoor(DoorType.DOOR_FRONT);
+                        if(false == Global_Object.doorManagementServiceCtrl.DoorMezzamineReturn.getDoorBusy())
+                        {
+                            Global_Object.doorManagementServiceCtrl.DoorMezzamineReturn.openDoor(DoorType.DOOR_FRONT);
+                        }
                     }
                     catch (Exception e)
                     {

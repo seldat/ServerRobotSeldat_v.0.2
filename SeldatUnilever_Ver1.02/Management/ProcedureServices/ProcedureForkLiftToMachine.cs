@@ -207,6 +207,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         break;
                     case ForkLiftToMachine.FORMACH_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
                         robot.robotRegistryToWorkingZone.onRobotwillCheckInsideGate = false;
+                        ds.setDoorBusy(true);
                         ds.openDoor(DoorService.DoorType.DOOR_BACK);
                         StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_OPEN_DOOR;
                         robot.ShowText("FORMACH_ROBOT_WAITTING_OPEN_DOOR");
@@ -254,6 +255,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             ds.LampSetStateOff(DoorService.DoorType.DOOR_FRONT);
                             ds.closeDoor(DoorService.DoorType.DOOR_BACK);
+                            ds.setDoorBusy(false);
                             StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CLOSE_GATE;
                             robot.ShowText("FORMACH_ROBOT_WAITTING_CLOSE_GATE");
                         }
