@@ -685,6 +685,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
                 else
                 {
                     rrj.robot.SetSpeedRegZone(RobotSpeedLevel.ROBOT_SPEED_STOP,true);
+                    ReleaseAll(rrj.robot);
                     return true;
                 }
 

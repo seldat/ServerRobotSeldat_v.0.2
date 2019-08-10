@@ -131,7 +131,7 @@ namespace SeldatMRMS.Management.DoorServices
                 Id = DoorId.DOOR_MEZZAMINE_RETURN,
                 Ip = "192.168.1.241",
                 Port = 8081,
-                infoPallet = "{\"pallet\":0,\"dir_main\":1,\"dir_out\":0,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
+                infoPallet = "{\"pallet\":1\"dir_main\":1,\"dir_out\":0,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
                 PointCheckInGateStr   = "2.54,-6.78,90",
                 PointFrontLineStr = "39,0.7,0"
             };
@@ -146,7 +146,7 @@ namespace SeldatMRMS.Management.DoorServices
                 Id = DoorId.DOOR_MEZZAMINE_RETURN,
                 Ip = "192.168.1.241",
                 Port = 8081,
-                infoPallet = "{\"pallet\":0,\"dir_main\":2,\"dir_out\":0,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
+                infoPallet = "{\"pallet\":1\"dir_main\":2,\"dir_out\":0,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
                 PointCheckInGateStr = "2.54,-6.78,90",
                 PointFrontLineStr = "36,0.7,0"
             };

@@ -154,13 +154,13 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                     if (palletId > 0)
                                     {
                                         dynamic product = new JObject();
-                                        UpdatePalletStateToHold(palletId, item);
+                                      //  UpdatePalletStateToReturn(palletId, item);
                                         product.timeWorkId = item.timeWorkId;
                                         product.activeDate = item.activeDate;
                                         product.productId = item.productId;
                                         product.productDetailId = item.productDetailId;
                                         // chu y sua 
-                                        product.palletStatus = PalletStatus.H.ToString(); // W
+                                        product.palletStatus = PalletStatus.R.ToString(); // W
                                         item.dataRequest = product.ToString();
                                         item.palletId_H = palletId;
                                         return item;
@@ -214,6 +214,18 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             product.palletId = palletId;
             product.planId = item.planId;
             product.palletStatus = PalletStatus.H.ToString();
+            product.updUsrId = Global_Object.userLogin;
+            String collectionData = RequestDataProcedure(product.ToString(), url);
+            Console.WriteLine(collectionData);
+
+        }
+        public void UpdatePalletStateToReturn(int palletId, OrderItem item)
+        {
+            String url = Global_Object.url + "pallet/updatePalletStatus";
+            dynamic product = new JObject();
+            product.palletId = palletId;
+            product.planId = item.planId;
+            product.palletStatus = PalletStatus.R.ToString();
             product.updUsrId = Global_Object.userLogin;
             String collectionData = RequestDataProcedure(product.ToString(), url);
             Console.WriteLine(collectionData);

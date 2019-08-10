@@ -335,6 +335,7 @@ namespace SeldatMRMS {
             BUFGATE_ROBOT_CAME_CHECKIN_GATE_REG, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao
             BUFGATE_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.
             BUFGATE_ROBOT_WAITTING_GOTO_GATE, // doi robot di den khu vuc cong
+            BUFGATE_ROBOT_WAITTING_GOTO_GATE_FROM_VIM_REG,
             BUFGATE_ROBOT_WAITTING_GOTO_GATE_FROM_VIM, // doi robot di den khu vuc cong
             BUFGATE_ROBOT_CAME_GATE_POSITION, // da den khu vuc cong , gui yeu cau mo cong.
             BUFGATE_ROBOT_WAITTING_OPEN_DOOR, //doi mo cong

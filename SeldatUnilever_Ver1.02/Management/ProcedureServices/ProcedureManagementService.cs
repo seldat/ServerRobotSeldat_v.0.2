@@ -155,7 +155,7 @@ namespace SeldatMRMS
                     procbb.Registry(robotManagementService);
                     procbb.Start();
                     break;
-                case ProcedureItemSelected.PROCEDURE_BUFER_TO_GATE:
+                case ProcedureItemSelected.PROCEDURE_BUFFER_TO_GATE:
                     ProcedureBufferToGate procbg = new ProcedureBufferToGate(robot, doorService, trafficService);
                     ProcedureDataItems probgDataItems = new ProcedureDataItems();
                     probgDataItems.StartTaskTime = DateTime.Now;

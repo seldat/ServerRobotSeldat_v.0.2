@@ -14,6 +14,7 @@ using static SeldatMRMS.Management.TrafficRobotUnity;
 using System.Windows;
 using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterService;
+using Newtonsoft.Json;
 
 namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 {
@@ -41,7 +42,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             errorCode = ErrorCode.RUN_OK;
             procedureCode = ProcedureCode.PROC_CODE_BUFFER_TO_GATE;
         }
-        public void Start(BufferToGate state = BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER)
+        public void Start(BufferToGate state = BufferToGate.BUFGATE_SELECT_BEHAVIOR_ONZONE)
         {
             robot.bayId = -1;
             errorCode = ErrorCode.RUN_OK;
@@ -223,7 +224,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                if (rb.SendCmdAreaPallet(BuffToGate.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_UP)))
+                                String palletInfo = JsonConvert.SerializeObject(BuffToGate.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP));
+                                if (rb.SendCmdAreaPallet(palletInfo))
                                 {
                                     StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
                                     ////robot.ShowText("BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
@@ -261,7 +263,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                if (rb.SendCmdAreaPallet(BuffToGate.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_UP)))
+                                String palletInfo = JsonConvert.SerializeObject(BuffToGate.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP));
+                                if (rb.SendCmdAreaPallet(palletInfo))
                                 {
                                     StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
                                     ////robot.ShowText("BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
@@ -287,7 +290,9 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                if (rb.SendCmdAreaPallet(BuffToGate.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_UP)))
+                                String palletInfo = JsonConvert.SerializeObject(BuffToGate.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP));
+
+                                if (rb.SendCmdAreaPallet(palletInfo))
                                 {
                                     // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
                                     //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -339,12 +344,12 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         break;
                     case BufferToGate.BUFGATE_SELECT_BEHAVIOR_ONZONE_TO_GATE:
                         String startNamePoint = Traffic.DetermineArea(registryRobotJourney.startPoint, TypeZone.MAIN_ZONE);
-                        Pose destPos = BuffToGate.GetFrontLineMachine();
+                        Pose destPos = ds.config.PointFrontLine;
                         String destName = Traffic.DetermineArea(destPos.Position, TypeZone.MAIN_ZONE);
                             // đi tới đầu line cổng theo tọa độ chỉ định. gate 1 , 2, 3
                         if (rb.SendPoseStamped(ds.config.PointFrontLine))
                         {
-                                StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_GATE_FROM_VIM;
+                                StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_GATE_FROM_VIM_REG;
                                 // Cap Nhat Thong Tin CHuyen Di
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
@@ -352,42 +357,19 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                 ////robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_GATE");
                         }
                         break;
-                    case BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE:
-                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
-                        {
-                            resCmd = ResponseCommand.RESPONSE_NONE;
-                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                            StateBufferToGate = BufferToGate.BUFGATE_ROBOT_CAME_CHECKIN_GATE_REG;
-                            ////robot.ShowText("BUFGATE_ROBOT_CAME_CHECKIN_GATE");
-                        }
-                        break;
-                    case BufferToGate.BUFGATE_ROBOT_CAME_CHECKIN_GATE_REG:
+                    case BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_GATE_FROM_VIM_REG:
                         if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
                         {
                             break;
                         }
                         else
                         {
-                            StateBufferToGate = BufferToGate.BUFGATE_ROBOT_CAME_CHECKIN_GATE;
+                            StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_GATE_FROM_VIM;
                         }
                         break;
-                    case BufferToGate.BUFGATE_ROBOT_CAME_CHECKIN_GATE: // đã đến vị trí, kiem tra va cho khu vuc cong san sang de di vao.
-                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
-                        if (false == robot.CheckInZoneBehavior(ds.config.PointFrontLine.Position))
-                        {
-                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                            if (rb.SendPoseStamped(ds.config.PointFrontLine))
-                            {
-                                StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_GATE;
-                                ////robot.ShowText("BUFGATE_ROBOT_WAITTING_GOTO_GATE");
-                            }
-                        }
-                        break;
+
                     case BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_GATE_FROM_VIM:
-                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
-                        {
-                            break;
-                        }
+                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -488,7 +470,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         break;
                 }
                 //robot.ShowText("-> " + procedureCode);
-                Thread.Sleep(5);
+                Thread.Sleep(500);
             }
             StateBufferToGate = BufferToGate.BUFGATE_IDLE;
         }
