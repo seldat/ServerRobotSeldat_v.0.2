@@ -220,7 +220,8 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             bool onRegReady = false;
             bool onRegG12 = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasOtherRobotUnityinArea("READY", robot) || traffic.HasOtherRobotUnityinArea("GATE12", robot))
+            //if (traffic.HasOtherRobotUnityinArea("READY", robot) || traffic.HasOtherRobotUnityinArea("GATE12", robot))
+            if (traffic.HasOtherRobotUnityinArea("READY-GATE", robot))
             {
                 return false;
             }
