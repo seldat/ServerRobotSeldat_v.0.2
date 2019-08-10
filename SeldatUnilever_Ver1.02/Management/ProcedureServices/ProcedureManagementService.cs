@@ -224,6 +224,9 @@ namespace SeldatMRMS
             Task.Run (() => {
                 ProcedureControlServices procItem = item as ProcedureControlServices;
                 RobotUnity robot = procItem.GetRobotUnity ();
+                Console.WriteLine("Procedure :" + procItem.procedureCode);
+                Console.WriteLine("Robot Rleased :" + robot.properties.Label);
+                Console.WriteLine(">>>>>>>>>");
                 robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
                     new Action (delegate () {
                         robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_OK);
@@ -238,6 +241,11 @@ namespace SeldatMRMS
                 } else {
 
                     robotManagementService.AddRobotUnityWaitTaskList (robot);
+                    try
+                    {
+                        procItem.ReleaseProcedureHandler -= ReleaseProcedureItemHandler;
+                    }
+                    catch { }
                 }
 
             /*    var element = RegisterProcedureItemList.Find (e => e.item.procedureCode == procItem.procedureCode);

@@ -519,6 +519,7 @@ namespace SeldatMRMS.Management.RobotManagent
             DisposeProcedure();
             KillPID();
             KillActionLib();
+            TurnOnSupervisorTraffic(true);
             robotService.RemoveRobotUnityReadyList(this);
             robotService.RemoveRobotUnityWaitTaskList(this);
             MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
@@ -587,8 +588,6 @@ namespace SeldatMRMS.Management.RobotManagent
                     KillActionLib();
                     TurnOnSupervisorTraffic(true);
                     this.PreProcedureAs = ProcedureControlAssign.PRO_IDLE;
-                    robotService.RemoveRobotUnityReadyList(this);
-                    robotService.RemoveRobotUnityWaitTaskList(this);
                     robotService.AddRobotUnityWaitTaskList(this);
                     Draw();
                     break;

@@ -362,7 +362,8 @@ namespace SeldatMRMS.Management.RobotManagent
                             indexWt = 0;
                         }
                         RobotUnity robot = RobotUnityWaitTaskList[indexWt];
-                        indexWt++;
+                        Console.WriteLine("Number Robot Wait Task "+ RobotUnityWaitTaskList.Count);
+                        Console.WriteLine("Robot Thu " + indexWt + "  "+ robot.properties.Label);
                         if (robot.properties.IsConnected)
                         {
                             result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
@@ -372,9 +373,10 @@ namespace SeldatMRMS.Management.RobotManagent
                             }
                             break;
                         }
+                        indexWt++;
                     }
                     catch (Exception e) {
-                        indexRd = 0;
+                        indexWt = 0;
                         Console.WriteLine("Error WaitTask in  RobotManagement Service Remove Robot");
                         Console.WriteLine(e);
                     }
