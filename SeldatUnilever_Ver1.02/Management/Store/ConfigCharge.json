@@ -1,6 +1,7 @@
 [
   {
     "PointFrontLine": {
+      "bayId": 0,
       "Position": "7.23,0.75",
       "VFbx": 0.0,
       "VFby": 0.0,
@@ -11,16 +12,31 @@
       "AngleW": 0.0,
       "Angle": 0.0
     },
+    "PointFrontLineInv": {
+      "bayId": 0,
+      "Position": "5.6,0.75",
+      "VFbx": 0.0,
+      "VFby": 0.0,
+      "VFbw": 0.0,
+      "VCtrlx": 0.0,
+      "VCtrly": 0.0,
+      "VCtrlw": 0.0,
+      "AngleW": 3.1415926535897931,
+      "Angle": 180.0
+    },
     "Ip": "192.168.1.200",
     "Port": 8081,
     "Id": 1,
     "IdStr": 0,
     "PointFrontLineStr": "7.23,0.75,0",
-    "PointOfPallet": "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":1,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}"
+    "PointFrontLineStrInv": "5.6,0.75,180",
+    "PointOfPallet": "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":1,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}",
+    "PointOfPalletInv": "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":2,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}"
   },
   {
     "PointFrontLine": {
-      "Position": "10.23,0.75",
+      "bayId": 0,
+      "Position": "9.23,0.75",
       "VFbx": 0.0,
       "VFby": 0.0,
       "VFbw": 0.0,
@@ -30,16 +46,43 @@
       "AngleW": 0.0,
       "Angle": 0.0
     },
+    "PointFrontLineInv": {
+      "bayId": 0,
+      "Position": "7.25,0.69",
+      "VFbx": 0.0,
+      "VFby": 0.0,
+      "VFbw": 0.0,
+      "VCtrlx": 0.0,
+      "VCtrly": 0.0,
+      "VCtrlw": 0.0,
+      "AngleW": 3.1415926535897931,
+      "Angle": 180.0
+    },
     "Ip": "192.168.1.201",
     "Port": 8081,
     "Id": 2,
     "IdStr": 0,
     "PointFrontLineStr": "9.23,0.75,0",
-    "PointOfPallet": "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":1,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}"
+    "PointFrontLineStrInv": "7.25,0.69,180",
+    "PointOfPallet": "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":1,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}",
+    "PointOfPalletInv": "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":2,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}"
   },
   {
     "PointFrontLine": {
-      "Position": "13.25,0.69",
+      "bayId": 0,
+      "Position": "10.5,0.75",
+      "VFbx": 0.0,
+      "VFby": 0.0,
+      "VFbw": 0.0,
+      "VCtrlx": 0.0,
+      "VCtrly": 0.0,
+      "VCtrlw": 0.0,
+      "AngleW": 0.0,
+      "Angle": 0.0
+    },
+    "PointFrontLineInv": {
+      "bayId": 0,
+      "Position": "9.25,0.69",
       "VFbx": 0.0,
       "VFby": 0.0,
       "VFbw": 0.0,
@@ -53,7 +96,9 @@
     "Port": 8081,
     "Id": 3,
     "IdStr": 0,
-    "PointFrontLineStr": "11.25,0.69,0",
-    "PointOfPallet": "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":1,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}"
+    "PointFrontLineStr": "11,0.75,0",
+    "PointFrontLineStrInv": "9.25,0.69,180",
+    "PointOfPallet": "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":1,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}",
+    "PointOfPalletInv": "{\"pallet\":2,\"bay\":1,\"dir_sub\":0,\"dir_main\":2,\"dir_out\":1,\"line_ord\":0,\"hasSubLine\":\"no\",\"row\":0}"
   }
 ]
