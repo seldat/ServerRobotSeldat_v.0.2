@@ -140,10 +140,10 @@ namespace DoorControllerService
         private stateCtrlLampDoor stateCtrlLampBack;
         //public Stopwatch elapsedTimeFront_;
         //public Stopwatch elapsedTimeBack_;
-        private const UInt32 TIME_OUT_WAIT_DOOR_FRONT = 11000;
-        private const UInt32 TIME_OUT_WAIT_DOOR_BACK = 11000;
-        private const UInt32 NUM_TRY_OPEN_DOOR = 10;
-        private const UInt32 NUM_TRY_CLOSE_DOOR = 10;
+        private const UInt32 TIME_OUT_WAIT_DOOR_FRONT = 14000;
+        private const UInt32 TIME_OUT_WAIT_DOOR_BACK = 14000;
+        private const UInt32 NUM_TRY_OPEN_DOOR = 100;
+        private const UInt32 NUM_TRY_CLOSE_DOOR = 100;
         private UInt32 numTryOpen = 0;
         private UInt32 numTryClose = 0;
         private bool socketBusy = false;
@@ -538,7 +538,7 @@ namespace DoorControllerService
                         break;
                 }
                 this.lampFrontProcess();
-                Thread.Sleep(25);
+                Thread.Sleep(50);
             }
         }
 
@@ -710,7 +710,7 @@ namespace DoorControllerService
                         break;
                 }
                 this.lampBackProcess();
-                Thread.Sleep(25);
+                Thread.Sleep(50);
             }
         }
 
@@ -756,6 +756,7 @@ namespace DoorControllerService
 #if false
             bool ret = true;
 #else
+            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "GetStatus Door");
             bool ret = false;
             byte[] dataSend = new byte[7];
 
@@ -775,6 +776,7 @@ namespace DoorControllerService
 #if false
             bool ret = true;
 #else
+            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "Open Door");
             bool ret = false;
             byte[] dataSend = new byte[7];
 

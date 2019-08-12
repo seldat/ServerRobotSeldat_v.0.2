@@ -620,7 +620,7 @@ namespace SeldatMRMS
                         robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_OK);
                         procedureCode = ProcedureControlServices.ProcedureCode.PROC_CODE_ROBOT_WAITINGTO_READY;
                         ProRun = false;
-                        //robot.ShowText("RELEASED WHEN WAITTING TO READY, HAS AN NEW TASK");
+                        robot.ShowText("RELEASED WHEN WAITTING TO READY, HAS AN NEW TASK");
                         UpdateInformationInProc(this, ProcessStatus.S);
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
@@ -666,18 +666,18 @@ namespace SeldatMRMS
                             cntAmoutOrderItem++;
                         }
                     }
-                    if (cntAmoutOrderItem >1) //
+                    if (cntAmoutOrderItem >=1) //
                     {
                         if (robotService.RobotUnityWaitTaskList.Count > 0 || robotService.RobotUnityReadyList.Count > 0)
+                        {
                             return false;
+                        }
                         else
                         {
+                            Console.WriteLine("Break goto ready and assign task _____(-_-)____");
                             return true;
-                        }
-
-                          
+                        }  
                     }
-
                 }
             }
             catch { }

@@ -53,7 +53,6 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     cntWaitTask = 0;
                     if (AssignWaitTask(order))
                     {
-                        
                         MoveElementToEnd();
                         Thread.Sleep(500);
                         continue;
@@ -69,8 +68,9 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 {
                     if(cntWaitTask++>=deviceItemsList.Count)
                     {
-                        Console.WriteLine("Assign RB goto ready_____________(-_-)______________");
-                        AssignWaitTask(order);
+                        if (AssignWaitTask(order)) {
+                            Console.WriteLine("Assign RB goto ready_____________(-_-)______________");
+                        }
                         MoveElementToEnd();
                         //Thread.Sleep(500);
                         //cntWaitTask = 0;

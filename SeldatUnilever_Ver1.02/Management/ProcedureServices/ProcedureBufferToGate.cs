@@ -373,6 +373,16 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 
                     case BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_GATE_FROM_VIM:
                         TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                        if (Traffic.RobotIsInArea("C5", rb.properties.pose.Position))
+                        {
+                            ds.setDoorBusy(true);
+                            ds.openDoor(DoorService.DoorType.DOOR_BACK);
+                            StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_GATE_FROM_VIM_OPEN_DOOR;
+                        }
+
+                        break;
+                    case BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_GATE_FROM_VIM_OPEN_DOOR:
+                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -391,8 +401,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         break;
                     case BufferToGate.BUFGATE_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
-                        ds.setDoorBusy(true);
-                        ds.openDoor(DoorService.DoorType.DOOR_BACK);
+                      //  ds.setDoorBusy(true);
+                     //   ds.openDoor(DoorService.DoorType.DOOR_BACK);
                         StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_OPEN_DOOR;
                         ////robot.ShowText("BUFGATE_ROBOT_WAITTING_OPEN_DOOR");
                         break;
@@ -408,7 +418,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         else if (ret == RetState.DOOR_CTRL_ERROR)
                         {
-                            StateBufferToGate = BufferToGate.BUFGATE_ROBOT_CAME_GATE_POSITION;
+                            Thread.Sleep(50);
+                            ds.setDoorBusy(true);
+                            ds.openDoor(DoorService.DoorType.DOOR_BACK);
+                         //   StateBufferToGate = BufferToGate.BUFGATE_ROBOT_CAME_GATE_POSITION;
                         }
                         break;
                     case BufferToGate.BUFGATE_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER: // doi robot gap hang

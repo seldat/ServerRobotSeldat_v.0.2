@@ -296,7 +296,16 @@ namespace SeldatMRMS.Management.RobotManagent
             bool foundById = subscribers.TryGetValue(publication.GetServiceId(), out subscriber);
 
             if (!foundById)
-                subscriber = subscribers.Values.FirstOrDefault(x => x.topic.Equals(publication.GetTopic()));
+            {
+                try
+                {
+                    subscriber = subscribers.Values.FirstOrDefault(x => x.topic.Equals(publication.GetTopic()));
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e);
+                }
+            }
+
 
             subscriber.messageHandler?.Invoke((Message)publication.GetMessage().ToObject(subscriber.messageType));
         }
