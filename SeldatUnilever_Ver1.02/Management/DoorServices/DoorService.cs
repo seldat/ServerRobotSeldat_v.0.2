@@ -453,7 +453,7 @@ namespace DoorControllerService
                             }
                             this.socketBusy = false;
                         }
-                        Thread.Sleep(50);
+                        //Thread.Sleep(50);
                         break;
                     case StateCtrl.DOOR_ST_OPEN_FRONT_SUCCESS:
                         //this.lampFrontProcess();
@@ -526,7 +526,7 @@ namespace DoorControllerService
                             }
                             this.socketBusy = false;
                         }
-                        Thread.Sleep(50);
+                       // Thread.Sleep(50);
                         break;
                     case StateCtrl.DOOR_ST_CLOSE_DOOR_FRONT_SUCCESS:
                         //this.lampFrontProcess();
@@ -538,7 +538,7 @@ namespace DoorControllerService
                         break;
                 }
                 this.lampFrontProcess();
-                Thread.Sleep(50);
+                Thread.Sleep(25);
             }
         }
 
@@ -623,7 +623,7 @@ namespace DoorControllerService
                             }
                             this.socketBusy = false;
                         }
-                        Thread.Sleep(50);
+                        //Thread.Sleep(50);
                         break;
                     case StateCtrl.DOOR_ST_OPEN_DOOR_BACK_SUCCESS:
                         //this.lampBackProcess();
@@ -698,7 +698,7 @@ namespace DoorControllerService
                             }
                             this.socketBusy = false;
                         }
-                        Thread.Sleep(50);
+                        //Thread.Sleep(50);
                         break;
                     case StateCtrl.DOOR_ST_CLOSE_DOOR_BACK_SUCCESS:
                         //this.lampBackProcess();
@@ -710,7 +710,7 @@ namespace DoorControllerService
                         break;
                 }
                 this.lampBackProcess();
-                Thread.Sleep(50);
+                Thread.Sleep(25);
             }
         }
 
