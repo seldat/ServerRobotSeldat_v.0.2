@@ -25,6 +25,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
         private DoorManagementService doorservice;
+        private DoorService ds;
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
         public ProcedureForkLiftToMachine(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService traffiicService) : base(robot)
@@ -65,6 +66,9 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         {
             // Global_Object.onFlagDoorBusy = false;
             robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.IDLE;
+            if (ds != null) {
+                ds.setDoorBusy(false);
+            }
             Global_Object.setGateStatus(order.gate, false);
             ProRunStopW = false;
             robot.orderItem = null;
@@ -88,7 +92,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         {
             ProcedureForkLiftToMachine FlToMach = (ProcedureForkLiftToMachine)ojb;
             RobotUnity rb = FlToMach.robot;
-            DoorService ds = FlToMach.door;
+            ds = FlToMach.door;
             TrafficManagementService Traffic = FlToMach.Traffic;
             rb.mcuCtrl.lampRbOn();
             robot.ShowText(" Start -> " + procedureCode);

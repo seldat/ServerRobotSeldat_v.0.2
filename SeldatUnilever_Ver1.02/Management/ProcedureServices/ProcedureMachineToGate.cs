@@ -24,6 +24,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         public DoorManagementService door;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
+        private DoorService ds;
 
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
@@ -56,6 +57,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         public void Destroy()
         {
             // StateMachineToGate = MachineToGate.MACGATE_ROBOT_RELEASED;
+            if (ds != null)
+            {
+                ds.setDoorBusy(false);
+            }
             ProRunStopW = false;
             robot.orderItem = null;
             robot.SwitchToDetectLine(false);
@@ -72,7 +77,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             ProcedureMachineToGate MaToGate = (ProcedureMachineToGate)ojb;
             RobotUnity rb = MaToGate.robot;
             TrafficManagementService Traffic = MaToGate.Traffic;
-            DoorService ds = MaToGate.door.DoorMezzamineReturn;
+            ds = MaToGate.door.DoorMezzamineReturn;
             rb.mcuCtrl.lampRbOn();
             robot.ShowText(" Start -> " + procedureCode);
             while (ProRun)

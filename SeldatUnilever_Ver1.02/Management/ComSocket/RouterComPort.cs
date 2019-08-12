@@ -84,8 +84,8 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                 // Complete the connection.  
                 client.EndConnect(ar);
 
-                Console.WriteLine("Socket connected to {0}",
-                    client.RemoteEndPoint.ToString());
+                //Console.WriteLine("Socket connected to {0}",
+                //    client.RemoteEndPoint.ToString());
 
                 // Signal that the connection has been made.  
                 //connectDone.Set();
@@ -240,7 +240,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = client.EndSend(ar);
-                Console.WriteLine("Sent {0} bytes to server.", bytesSent);
+                //Console.WriteLine("Sent {0} bytes to server.", bytesSent);
 
                 // Signal that all bytes have been sent.  
                 sendDone.Set();

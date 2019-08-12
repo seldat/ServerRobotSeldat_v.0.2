@@ -32,7 +32,7 @@ namespace SeldatMRMS
         public DoorManagementService door;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
-
+        private DoorService ds;
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
         public ProcedureReturnToGate(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService traffiicService) : base(robot)
@@ -63,6 +63,9 @@ namespace SeldatMRMS
         public void Destroy()
         {
             // StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+            if (ds != null) {
+                ds.setDoorBusy(false);
+            }
             ProRunStopW = false;
             robot.robotTag = RobotStatus.IDLE;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
@@ -77,7 +80,7 @@ namespace SeldatMRMS
             ProcedureReturnToGate ReToGate = (ProcedureReturnToGate)ojb;
             RobotUnity rb = ReToGate.robot;
             // DataReturnToGate p = ReToGate.points;
-            DoorService ds = ReToGate.door.DoorMezzamineReturn;
+            ds = ReToGate.door.DoorMezzamineReturn;
             TrafficManagementService Traffic = ReToGate.Traffic;
             rb.mcuCtrl.lampRbOn();
             robot.ShowText(" Start -> " + procedureCode);
