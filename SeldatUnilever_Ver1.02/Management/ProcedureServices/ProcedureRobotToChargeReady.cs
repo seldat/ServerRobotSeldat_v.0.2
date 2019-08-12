@@ -547,36 +547,27 @@ namespace SeldatMRMS
                          }
                     break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION_REG: // Robot dang di toi dau line ready station
-                        if(DetermineHasTaskWaitingAnRobotAvailable())
-                        {
-                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITINGREADY_FORCERELEASED;
-                             break;
-                        }
-                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
-                        {
+                            if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                            {
+                                if (DetermineHasTaskWaitingAnRobotAvailable())
+                                {
+                                    StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITINGREADY_FORCERELEASED;
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION;
+                            }
                             break;
-                        }
-                        else
-                        {
-                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION;
-                        }
-                        break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION: // Robot dang di toi dau line ready station
           
-                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
-                        {
-                            break;
-                        }
-                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                       if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
                             TrafficRountineConstants.DetectRelease(registryRobotJourney);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION;
                             //robot.ShowText("ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION");
-                        }
-                        else if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
-                        {
-                            // robot.TurnOnSupervisorTraffic(false);
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION: // đang đợi dò line để đến vị trí line trong buffer
@@ -675,17 +666,13 @@ namespace SeldatMRMS
                             cntAmoutOrderItem++;
                         }
                     }
-                    if (cntAmoutOrderItem > 0) //
+                    if (cntAmoutOrderItem >1) //
                     {
                         if (robotService.RobotUnityWaitTaskList.Count > 0 || robotService.RobotUnityReadyList.Count > 0)
                             return false;
                         else
                         {
-                            //GATE_CHECKIN
-                            if (!Traffic.HasRobotUnityinArea("READY", robot) || !Traffic.HasRobotUnityinArea("GATE_CHECKIN", robot))
-                            {
-                                return true;
-                            }
+                            return true;
                         }
 
                           

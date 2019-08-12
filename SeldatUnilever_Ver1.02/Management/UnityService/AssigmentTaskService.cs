@@ -67,7 +67,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 }
                 else
                 {
-                    if(cntWaitTask++>=deviceItemsList.Count)
+                   // if(cntWaitTask++>=deviceItemsList.Count)
                     {
                         AssignWaitTask(null);
                         Thread.Sleep(500);

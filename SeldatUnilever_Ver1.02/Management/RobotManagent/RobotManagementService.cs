@@ -29,7 +29,7 @@ namespace SeldatMRMS.Management.RobotManagent
     {
         public const Int32 AmountofRobotUnity = 3;
         private const Int32 BAT_LOW_LEVEL = 15;
-        public static int indexRd = 0, indexWt = 0;
+        public static int indexRd = 0;
         public class ResultRobotReady
         {
             public RobotUnity robot;
@@ -308,10 +308,8 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void AddRobotUnityWaitTaskList(RobotUnity robot)
         {
-            if (!RobotUnityWaitTaskList.Contains(robot))
-            {
-                RobotUnityWaitTaskList.Add(robot);
-            }
+            RemoveRobotUnityWaitTaskList(robot);
+            RobotUnityWaitTaskList.Add(robot);
         }
         public void RemoveRobotUnityWaitTaskList(RobotUnity robot)
         {
@@ -350,59 +348,27 @@ namespace SeldatMRMS.Management.RobotManagent
         {
            
             ResultRobotReady result = null;
-#if true
-            if (RobotUnityWaitTaskList.Count > 0)
-            {
-                do
+
+                int index = 0;
+                while (RobotUnityWaitTaskList.Count > 0)
                 {
                     try
                     {
-                        if (indexWt >= RobotUnityWaitTaskList.Count)
-                        {
-                            indexWt = 0;
-                        }
-                        RobotUnity robot = RobotUnityWaitTaskList[indexWt];
-                        Console.WriteLine("Number Robot Wait Task "+ RobotUnityWaitTaskList.Count);
-                        Console.WriteLine("Robot Thu " + indexWt + "  "+ robot.properties.Label);
+                        RobotUnity robot = RobotUnityWaitTaskList[index];
                         if (robot.properties.IsConnected)
                         {
                             result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
-                            if (robot.getBattery())
-                            {
-                                RemoveRobotUnityWaitTaskList(robot);
-                            }
                             break;
                         }
-                        indexWt++;
-                    }
-                    catch (Exception e) {
-                        indexWt = 0;
-                        Console.WriteLine("Error WaitTask in  RobotManagement Service Remove Robot");
-                        Console.WriteLine(e);
-                    }
-                } while (RobotUnityWaitTaskList.Count < indexWt && RobotUnityWaitTaskList.Count > 0);
-            }
-#else
-            if (RobotUnityWaitTaskList.Count > 0)
-            {
-
-                int index = 0;
-                do
-                {
-                    RobotUnity robot = RobotUnityWaitTaskList[index];
-                    if (robot.properties.IsConnected)
-                    {
-                        result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
-                        if (robot.getBattery())
-                        {
-                            RemoveRobotUnityWaitTaskList(robot);
-                        }
+                    if (index++ >= RobotUnityWaitTaskList.Count)
                         break;
                     }
-                    index++;
-                } while (RobotUnityWaitTaskList.Count < index && RobotUnityWaitTaskList.Count > 0);
-            }
-#endif
+                    catch
+                    {
+                        break;
+                    }
+                } 
+
             return result;
         }
         public void MoveRobotWaitTask()
@@ -422,36 +388,34 @@ namespace SeldatMRMS.Management.RobotManagent
         {
 #if true
             ResultRobotReady result = null;
-            if (RobotUnityReadyList.Count > 0)
-            { 
-                do
-                {                       
-                    try
-                    {
-                        if(indexRd >= RobotUnityReadyList.Count){
-                            indexRd = 0;
-                        }
-                        RobotUnity robot = RobotUnityReadyList[indexRd];
-                        indexRd++;
-                        if (robot.properties.IsConnected)
-                        {
-                            result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
-                            if (robot.getBattery())
-                            {
-                                robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CHARGING);
-                                RemoveRobotUnityReadyList(robot);
-                            }
-                            break;
-                        }
-                    }
-                    catch(Exception e)
-                    {
+            while (RobotUnityReadyList.Count > 0)
+            {
+                try
+                {
+                    if (indexRd >= RobotUnityReadyList.Count) {
                         indexRd = 0;
-                        Console.WriteLine("Error ReadyTask in  RobotManagement Service Remove Robot");
-                        Console.WriteLine(e);
                     }
-                }while (RobotUnityReadyList.Count < indexRd && RobotUnityReadyList.Count > 0) ;
+                    RobotUnity robot = RobotUnityReadyList[indexRd];
+                    indexRd++;
+                    if (robot.properties.IsConnected)
+                    {
+                        result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
+                        if (robot.getBattery())
+                        {
+                            robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CHARGING);
+                            RemoveRobotUnityReadyList(robot);
+                        }
+                        break;
+                    }
+                }
+                catch (Exception e)
+                {
+                    indexRd = 0;
+                    Console.WriteLine("Error ReadyTask in  RobotManagement Service Remove Robot");
+                    Console.WriteLine(e);
+                }
             }
+            
             return result;
 #else
             ResultRobotReady result = null;

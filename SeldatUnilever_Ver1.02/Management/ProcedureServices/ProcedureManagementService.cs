@@ -224,9 +224,9 @@ namespace SeldatMRMS
             Task.Run (() => {
                 ProcedureControlServices procItem = item as ProcedureControlServices;
                 RobotUnity robot = procItem.GetRobotUnity ();
-                Console.WriteLine("Procedure :" + procItem.procedureCode);
-                Console.WriteLine("Robot Rleased :" + robot.properties.Label);
-                Console.WriteLine(">>>>>>>>>");
+                robot.ShowText("Procedure :" + procItem.procedureCode);
+                robot.ShowText("Robot Rleased :" + robot.properties.Label);
+                robot.ShowText(">>>>>>>>>");
                 robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
                     new Action (delegate () {
                         robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_OK);
@@ -240,6 +240,8 @@ namespace SeldatMRMS
                     robotManagementService.AddRobotUnityReadyList (robot);
                 } else {
 
+                    robot.ShowText("Add Wait Task" + robot.properties.Label);
+                    robot.ShowText("----------------");
                     robotManagementService.AddRobotUnityWaitTaskList (robot);
                     try
                     {

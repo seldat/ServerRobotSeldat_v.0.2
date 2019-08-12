@@ -613,7 +613,7 @@ namespace SeldatMRMS
                         robot.SwitchToDetectLine(false);
                        // robot.robotTag = RobotStatus.IDLE;
                         robot.ReleaseWorkingZone();
-                        rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
+                        rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
                         // if (errorCode == ErrorCode.RUN_OK) {
                         ReleaseProcedureHandler(this);
                         // } else {
