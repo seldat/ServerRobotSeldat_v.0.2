@@ -355,11 +355,15 @@ namespace SeldatMRMS.Management.RobotManagent
                     try
                     {
                         RobotUnity robot = RobotUnityWaitTaskList[index];
+                    if (robot != null)
+                    {
                         if (robot.properties.IsConnected)
                         {
                             result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
                             break;
                         }
+                    }
+
                     if (index++ >= RobotUnityWaitTaskList.Count)
                         break;
                     }
@@ -397,16 +401,20 @@ namespace SeldatMRMS.Management.RobotManagent
                     }
                     RobotUnity robot = RobotUnityReadyList[indexRd];
                     indexRd++;
-                    if (robot.properties.IsConnected)
+                    if(robot!= null)
                     {
-                        result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
-                        if (robot.getBattery())
+                        if (robot.properties.IsConnected)
                         {
-                            robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CHARGING);
-                            RemoveRobotUnityReadyList(robot);
+                            result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
+                            if (robot.getBattery())
+                            {
+                                robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CHARGING);
+                                RemoveRobotUnityReadyList(robot);
+                            }
+                            break;
                         }
-                        break;
                     }
+
                 }
                 catch (Exception e)
                 {

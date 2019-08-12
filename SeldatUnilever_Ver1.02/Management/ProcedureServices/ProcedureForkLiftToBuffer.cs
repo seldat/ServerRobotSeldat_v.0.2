@@ -650,7 +650,7 @@ namespace SeldatMRMS
                     default:
                         break;
                 }
-                Thread.Sleep(500);
+                Thread.Sleep(50);
             }
             StateForkLift = ForkLift.FORBUF_IDLE;
         }

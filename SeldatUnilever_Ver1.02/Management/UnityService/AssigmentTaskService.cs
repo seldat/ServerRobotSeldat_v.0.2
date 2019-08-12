@@ -50,7 +50,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 OrderItem order = Gettask();
                 if(order!=null)
                 {
-                //    cntWaitTask = 0;
+                    cntWaitTask = 0;
                     if (AssignWaitTask(order))
                     {
                         
@@ -65,7 +65,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         continue;
                     }
                 }
-                else
+ /*               else
                 {
                    // if(cntWaitTask++>=deviceItemsList.Count)
                     {
@@ -73,7 +73,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         Thread.Sleep(500);
                         cntWaitTask = 0;
                     }
-                }
+                }*/
                 MoveElementToEnd();
                 Thread.Sleep(500);
             }
