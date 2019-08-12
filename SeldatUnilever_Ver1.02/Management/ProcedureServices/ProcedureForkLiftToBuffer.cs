@@ -38,6 +38,7 @@ namespace SeldatMRMS
         private DoorManagementService doorservice;
         public override event Action<Object> ReleaseProcedureHandler;
         public Pose endPointBuffer;
+        private DoorService ds;
 
         public void Registry(DeviceRegistrationService deviceService)
         {
@@ -80,6 +81,10 @@ namespace SeldatMRMS
         public void Destroy()
         {
             Global_Object.setGateStatus(order.gate, false);
+            if (ds != null) {
+                ds.setDoorBusy(false);
+            }
+
             ProRunStopW = false;
             robot.orderItem = null;
             robot.robotTag = RobotStatus.IDLE;
@@ -91,7 +96,7 @@ namespace SeldatMRMS
         {
             ProcedureForkLiftToBuffer FlToBuf = (ProcedureForkLiftToBuffer)ojb;
             RobotUnity rb = FlToBuf.robot;
-            DoorService ds = getDoorService();
+            ds = getDoorService();
             TrafficManagementService Traffic = FlToBuf.Traffic;
             ForkLiftToMachineInfo flToMachineInfo = new ForkLiftToMachineInfo();
             rb.mcuCtrl.lampRbOn();

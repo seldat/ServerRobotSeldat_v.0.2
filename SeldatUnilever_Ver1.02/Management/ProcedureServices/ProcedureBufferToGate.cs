@@ -27,6 +27,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         public DoorManagementService door;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
+        private DoorService ds;
 
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
@@ -63,14 +64,16 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         {
             StateBufferToGate = BufferToGate.BUFGATE_ROBOT_DESTROY;
             robot.bayId = -1;
-
+            if (ds != null) {
+                ds.setDoorBusy(false);
+            }
         }
         public void Procedure(object ojb)
         {
             ProcedureBufferToGate BuffToGate = (ProcedureBufferToGate)ojb;
             RobotUnity rb = BuffToGate.robot;
             // DataBufferToGate p = BuffToGate.points;
-            DoorService ds = getDoorService();
+            ds = getDoorService();
             TrafficManagementService Traffic = BuffToGate.Traffic;
             rb.mcuCtrl.lampRbOn();
             

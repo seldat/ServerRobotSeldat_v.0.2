@@ -66,7 +66,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                         return false;
                     }
                     numResent++;
-                    //Console.WriteLine("Try resent {0}", numResent);
+                    Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt")+"Try resent {0}", numResent);
                 }
                 else
                 {
@@ -110,7 +110,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                                         }
                                         result = true;
                                         flagGetRespone = false;
-                                        //Console.WriteLine("Send data success");
+                                        Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt")+"Send data success");
                                         numResent = 0;
                                         this.Close();
                                         return true;
