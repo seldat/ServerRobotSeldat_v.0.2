@@ -223,6 +223,16 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_READY:
                         // dò ra điểm đích đến và xóa đăng ký vùng
                         TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                        if (Traffic.RobotIsInArea("C3", rb.properties.pose.Position))
+                        {
+                            ds.setDoorBusy(true);
+                            ds.openDoor(DoorService.DoorType.DOOR_BACK);
+                            StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_READY_OPEN_DOOR;
+                        }
+                        break;
+                    case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_READY_OPEN_DOOR:
+                        // dò ra điểm đích đến và xóa đăng ký vùng
+                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
                             robot.setTrafficAllCircles(false, false, false, false);
@@ -248,6 +258,16 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM:
                         // kiem tra vung đăng ký tai khu vuc xac định
                         TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                        if (Traffic.RobotIsInArea("C3", rb.properties.pose.Position))
+                        {
+                            ds.setDoorBusy(true);
+                            ds.openDoor(DoorService.DoorType.DOOR_BACK);
+                            StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM_OPEN_DOOR;
+                        }
+                        break;
+                    case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM_OPEN_DOOR:
+                        // kiem tra vung đăng ký tai khu vuc xac định
+                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
                             // robot.setTrafficAllCircles(false, false, false, false);
@@ -261,8 +281,8 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
                         robot.robotRegistryToWorkingZone.onRobotwillCheckInsideGate = false;
-                        ds.setDoorBusy(true);
-                        ds.openDoor(DoorService.DoorType.DOOR_BACK);
+                        //ds.setDoorBusy(true);
+                        //ds.openDoor(DoorService.DoorType.DOOR_BACK);
                         StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_OPEN_DOOR;
                         robot.ShowText("FORBUF_ROBOT_WAITTING_OPEN_DOOR");
                         break;
@@ -276,8 +296,10 @@ namespace SeldatMRMS
                         else if (RetState.DOOR_CTRL_ERROR == ret)
                         {
                             robot.ShowText("FORBUF_ROBOT_OPEN_DOOR_ERROR");
-                            StateForkLift = ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION;
+                            //StateForkLift = ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION;
                             Thread.Sleep(50);
+                            ds.setDoorBusy(true);
+                            ds.openDoor(DoorService.DoorType.DOOR_BACK);
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_OPEN_DOOR_SUCCESS: // mo cua thang cong ,gui toa do line de robot di vao gap hang
