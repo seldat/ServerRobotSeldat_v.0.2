@@ -533,8 +533,10 @@ namespace SeldatMRMS
                         //robot.ShowText("ROBREA_IDLE");
                         break;
                     case RobotGoToReady.ROBREA_SELECT_BEHAVIOR_ONZONE:
+                        rb.ShowText("RobotGoToReady ROBREA_SELECT_BEHAVIOR_ONZONE");
                         if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position, TypeZone.OPZS))
                         {
+                            rb.ShowText("RobotGoToReady ROBREA_ROBOT_RELEASED");
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
                         }
                         if (rb.SendPoseStamped(p.PointFrontLine))
@@ -591,6 +593,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_RELEASED:
+                        robot.ShowText("ROBREA_ROBOT_RELEASED");
                         TrafficRountineConstants.RegIntZone_READY.Release(robot);
                         robot.robotTag = RobotStatus.IDLE;
                         robot.SetSafeYellowcircle(false);
