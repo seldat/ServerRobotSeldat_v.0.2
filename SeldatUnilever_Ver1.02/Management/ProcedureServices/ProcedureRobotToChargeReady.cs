@@ -452,6 +452,7 @@ namespace SeldatMRMS
             this.Traffic = trafficService;
             this.charger = chargerService;
             this.chardgeId = id;
+            this.robot.ShowText("this.chardgeId" + this.chardgeId);
             procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_READY;
         }
         public void Registry(DeviceRegistrationService deviceService)
@@ -484,9 +485,9 @@ namespace SeldatMRMS
         public void Destroy()
         {
             // StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
-            robot.SetSafeYellowcircle(false);
-            robot.SetSafeBluecircle(false);
-            robot.SetSafeSmallcircle(false);
+            //robot.SetSafeYellowcircle(false);
+            //robot.SetSafeBluecircle(false);
+            //robot.SetSafeSmallcircle(false);
             robot.robotTag = RobotStatus.IDLE;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
@@ -498,24 +499,25 @@ namespace SeldatMRMS
         }
         protected String GetPointOfCharger()
         {
+            ChargerInfoConfig chrInfo = this.charger.PropertiesCharge_List[(int)this.robot.properties.ChargeID - 1];
             if (this.Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position, TypeZone.MAIN_ZONE))
             {
-                return this.charger.PropertiesCharge_List[(int)chardgeId - 1].PointOfPallet;
+                return this.charger.PropertiesCharge_List[(int)this.robot.properties.ChargeID - 1].PointOfPallet;
             }
             else
             {
-                return this.charger.PropertiesCharge_List[(int)chardgeId - 1].PointOfPalletInv;
+                return this.charger.PropertiesCharge_List[(int)this.robot.properties.ChargeID - 1].PointOfPalletInv;
             }
         }
         protected Pose GetFrontLineChargeStation()
         {
             if (this.Traffic.RobotIsInArea("OUTER", robot.properties.pose.Position, TypeZone.MAIN_ZONE))
             {
-                return this.charger.PropertiesCharge_List[(int)chardgeId - 1].PointFrontLine;
+                return this.charger.PropertiesCharge_List[(int)this.robot.properties.ChargeID - 1].PointFrontLine;
             }
             else
             {
-                return this.charger.PropertiesCharge_List[(int)chardgeId - 1].PointFrontLineInv;
+                return this.charger.PropertiesCharge_List[(int)this.robot.properties.ChargeID - 1].PointFrontLineInv;
             }
         }
         public void Procedure(object ojb)
@@ -533,8 +535,10 @@ namespace SeldatMRMS
                         //robot.ShowText("ROBREA_IDLE");
                         break;
                     case RobotGoToReady.ROBREA_SELECT_BEHAVIOR_ONZONE:
+                        robot.ShowText("ROBREA_SELECT_BEHAVIOR_ONZONE");
                         if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position, TypeZone.OPZS))
                         {
+                            robot.ShowText("ROBREA_ROBOT_RELEASED");
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
                         }
                         if (rb.SendPoseStamped(p.PointFrontLine))
@@ -552,6 +556,7 @@ namespace SeldatMRMS
                             if (DetermineHasTaskWaitingAnRobotAvailable())
                             {
                                 StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITINGREADY_FORCERELEASED;
+                                robot.ShowText("ROBREA_ROBOT_WAITINGREADY_FORCERELEASED");
                                 break;
                             }
                         }
