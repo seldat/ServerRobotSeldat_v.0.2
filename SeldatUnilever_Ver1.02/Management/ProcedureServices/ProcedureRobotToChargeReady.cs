@@ -292,7 +292,7 @@ namespace SeldatMRMS
 #endif
                         }
 #endif
-                                    break; //dợi charge battery và thông tin giao tiếp server và trạm sạc
+                        break; //dợi charge battery và thông tin giao tiếp server và trạm sạc
 #if USE_AUTO_CHARGE
 
                     case RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY:
@@ -445,7 +445,7 @@ namespace SeldatMRMS
         private DeviceRegistrationService deviceService;
 
         // public override event Action<Object> ErrorProcedureHandler;
-        public ProcedureRobotToReady(RobotUnity robot, ChargerId id, TrafficManagementService trafficService, ChargerManagementService chargerService, Pose PointCheckIn) : base(robot,trafficService)
+        public ProcedureRobotToReady(RobotUnity robot, ChargerId id, TrafficManagementService trafficService, ChargerManagementService chargerService, Pose PointCheckIn) : base(robot, trafficService)
         {
             StateRobotGoToReady = RobotGoToReady.ROBREA_IDLE;
             this.robot = robot;
@@ -524,7 +524,7 @@ namespace SeldatMRMS
             RobotUnity rb = RbToRd.robot;
             DataRobotToReady p = RbToRd.points;
             TrafficManagementService Traffic = RbToRd.Traffic;
-            //robot.ShowText(" Start -> " + procedureCode);
+            robot.ShowText(" start -> " + procedureCode +"_________________0000000000000000000_____________________");
             while (ProRun)
             {
                 switch (StateRobotGoToReady)
@@ -533,48 +533,48 @@ namespace SeldatMRMS
                         //robot.ShowText("ROBREA_IDLE");
                         break;
                     case RobotGoToReady.ROBREA_SELECT_BEHAVIOR_ONZONE:
-                        if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position,TypeZone.OPZS))
+                        if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position, TypeZone.OPZS))
                         {
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
                         }
-                         if (rb.SendPoseStamped(p.PointFrontLine))
-                         {
-                                StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION_REG;
-                                //robot.ShowText("ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION");
-                                registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
-                                registryRobotJourney.startPoint = robot.properties.pose.Position;
-                                registryRobotJourney.endPoint = p.PointFrontLine.Position;
-                         }
-                    break;
+                        if (rb.SendPoseStamped(p.PointFrontLine))
+                        {
+                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION_REG;
+                            robot.ShowText("ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION");
+                            registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
+                            registryRobotJourney.startPoint = robot.properties.pose.Position;
+                            registryRobotJourney.endPoint = p.PointFrontLine.Position;
+                        }
+                        break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION_REG: // Robot dang di toi dau line ready station
-                            if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                        if (TrafficRountineConstants.DetetectInsideStationCheck(registryRobotJourney))
+                        {
+                            if (DetermineHasTaskWaitingAnRobotAvailable())
                             {
-                                if (DetermineHasTaskWaitingAnRobotAvailable())
-                                {
-                                    StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITINGREADY_FORCERELEASED;
-                                    break;
-                                }
+                                StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITINGREADY_FORCERELEASED;
+                                break;
                             }
-                            else
-                            {
-                                StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION;
-                            }
-                            break;
+                        }
+                        else
+                        {
+                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION;
+                        }
+                        break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION: // Robot dang di toi dau line ready station
-          
-                       if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
                             TrafficRountineConstants.DetectRelease(registryRobotJourney);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION;
-                            //robot.ShowText("ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION");
+                            robot.ShowText("ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION");
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION: // đang đợi dò line để đến vị trí line trong buffer
                         if (rb.SendCmdAreaPallet(RbToRd.points.PointOfCharger))
                         {
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION;
-                            //robot.ShowText("ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION");
+                            robot.ShowText("ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION");
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION: // đến vị trả robot về robotmanagement để nhận quy trình mới
@@ -582,7 +582,7 @@ namespace SeldatMRMS
                         {
                             //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
-                            //robot.ShowText("ROBREA_ROBOT_RELEASED");
+                            robot.ShowText("ROBREA_ROBOT_RELEASED");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
@@ -639,7 +639,7 @@ namespace SeldatMRMS
         {
             if (robot.properties.Label.Equals("Robot3"))
             {
-                if(TrafficRountineConstants.RegIntZone_READY.GetIndex(robot)==0)
+                if (TrafficRountineConstants.RegIntZone_READY.GetIndex(robot) == 0)
                 {
                     return false;
                 }
@@ -648,7 +648,7 @@ namespace SeldatMRMS
                     return true;
                 }
             }
-           return false;
+            return false;
         }
         // xác định còn task trong order
         public bool DetermineHasTaskWaitingAnRobotAvailable()
@@ -666,7 +666,7 @@ namespace SeldatMRMS
                             cntAmoutOrderItem++;
                         }
                     }
-                    if (cntAmoutOrderItem >=1) //
+                    if (cntAmoutOrderItem >= 1) //
                     {
                         if (robotService.RobotUnityWaitTaskList.Count > 0 || robotService.RobotUnityReadyList.Count > 0)
                         {
@@ -674,19 +674,19 @@ namespace SeldatMRMS
                         }
                         else
                         {
-                            if (!Traffic.HasRobotUnityinArea("C1", robot)|| !Traffic.HasRobotUnityinArea("READY", robot))
+                            if (!Traffic.HasRobotUnityinArea("C1", robot) || !Traffic.HasRobotUnityinArea("READY", robot))
                             {
-                                Console.WriteLine("Break goto ready and assign task _____(-_-)____");
+                                robot.ShowText("Break goto ready and assign task _____(-_ -)____");
                                 return true;
                             }
-                        }  
+                        }
                     }
                 }
             }
             catch { }
             return false;
         }
-      //  !Traffic.HasRobotUnityinArea("GATE_CHECKOUT", robot)
+        //  !Traffic.HasRobotUnityinArea("GATE_CHECKOUT", robot)
         public override void FinishStatesCallBack(Int32 message)
         {
             this.resCmd = (ResponseCommand)message;

@@ -101,6 +101,7 @@ namespace SeldatMRMS
                     procrc.Start ();
                     break;
                 case ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY:
+                    robot.ShowText(robot.properties.Label + "Add PROCEDURE_ROBOT_TO_READY ----------(--___--)---------------");
                     ProcedureRobotToReady procrr = new ProcedureRobotToReady (robot, robot.properties.ChargeID, trafficService,chargerService, doorService.DoorMezzamineUp.config.PointCheckInGate);
                     ProcedureDataItems procrrDataItems = new ProcedureDataItems ();
                     procrrDataItems.StartTaskTime = DateTime.Now;

@@ -38,13 +38,14 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public ListCollectionView Grouped_PropertiesRobotUnity { get; private set; }
         public List<PropertiesRobotUnity> PropertiesRobotUnity_List;
-        public Dictionary<String,RobotUnity>  RobotUnityRegistedList = new Dictionary<string, RobotUnity>();
+        public Dictionary<String, RobotUnity> RobotUnityRegistedList = new Dictionary<string, RobotUnity>();
         public List<RobotUnity> RobotUnityWaitTaskList = new List<RobotUnity>();
         public List<RobotUnity> RobotUnityReadyList = new List<RobotUnity>();
         public ConfigureRobotUnity configureForm;
         private TrafficManagementService trafficManagementService;
         private Canvas canvas;
-        public RobotManagementService(Canvas canvas) {
+        public RobotManagementService(Canvas canvas)
+        {
             this.canvas = canvas;
             PropertiesRobotUnity_List = new List<PropertiesRobotUnity>();
             Grouped_PropertiesRobotUnity = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRobotUnity_List);
@@ -55,7 +56,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
         public void Initialize()
         {
-//#if false
+            //#if false
             PropertiesRobotUnity prop1 = new PropertiesRobotUnity();
             prop1.NameId = "RSD" + RobotUnityRegistedList.Count;
             prop1.L1 = 2.5;
@@ -87,9 +88,9 @@ namespace SeldatMRMS.Management.RobotManagent
             RobotUnityRegistedList.Add(r1.properties.NameId, r1);
 
 
-          //  r1.Radius_S = 40;
-           // r1.Radius_B = 40;
-           // r1.Radius_Y = 40;
+            //  r1.Radius_S = 40;
+            // r1.Radius_B = 40;
+            // r1.Radius_Y = 40;
             // đăng ký robot list to many robot quan trong
             // AddRobotUnityReadyList(r1);
             //   AddRobotUnityReadyList(r1);
@@ -126,16 +127,16 @@ namespace SeldatMRMS.Management.RobotManagent
             r2.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r2.properties);
             RobotUnityRegistedList.Add(r2.properties.NameId, r2);
-          //  r2.Start(prop2.Url);
+            //  r2.Start(prop2.Url);
             // đăng ký robot list to many robot quan trong
-        //    AddRobotUnityReadyList(r2);
+            //    AddRobotUnityReadyList(r2);
             r2.RegistryRobotService(this);
 
             r2.TurnOnSupervisorTraffic(false);
 
-           // r2.Radius_S = 40;
-          //  r2.Radius_B = 40;
-          //  r2.Radius_Y = 40;
+            // r2.Radius_S = 40;
+            //  r2.Radius_B = 40;
+            //  r2.Radius_Y = 40;
 
             //#endif
 
@@ -165,15 +166,15 @@ namespace SeldatMRMS.Management.RobotManagent
             r3.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r3.properties);
             RobotUnityRegistedList.Add(r3.properties.NameId, r3);
-         //   r3.Start(prop3.Url);
+            //   r3.Start(prop3.Url);
             // đăng ký robot list to many robot quan trong
             // AddRobotUnityReadyList(r1);
             //AddRobotUnityReadyList(r3);
             r3.RegistryRobotService(this);
 
-         //   r3.Radius_S = 40;
-         //   r3.Radius_B = 40;
-          //  r3.Radius_Y = 40;
+            //   r3.Radius_S = 40;
+            //   r3.Radius_B = 40;
+            //  r3.Radius_Y = 40;
 
             r3.TurnOnSupervisorTraffic(false);
 
@@ -223,15 +224,15 @@ namespace SeldatMRMS.Management.RobotManagent
             // add robot trong traffic quản lý
             trafficManagementService.RegistryRobotList(RobotUnityRegistedList);
 
-           //
-          //  r1.Start(prop1.Url);
-         //   r2.Start(prop2.Url);
-          //  r3.Start(prop3.Url);
+            //
+            //  r1.Start(prop1.Url);
+            //   r2.Start(prop2.Url);
+            //  r3.Start(prop3.Url);
 
         }
         public void close()
         {
-            foreach(RobotUnity robot in RobotUnityRegistedList.Values)
+            foreach (RobotUnity robot in RobotUnityRegistedList.Values)
             {
                 try
                 {
@@ -244,7 +245,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public void Registry(TrafficManagementService trafficManagementService)
         {
             this.trafficManagementService = trafficManagementService;
-            foreach(RobotUnity robot in RobotUnityRegistedList.Values)
+            foreach (RobotUnity robot in RobotUnityRegistedList.Values)
             {
                 robot.Registry(this.trafficManagementService);
             }
@@ -252,25 +253,25 @@ namespace SeldatMRMS.Management.RobotManagent
         public void ConnectionStatusHandler(Object obj, RosSocket.ConnectionStatus status)
         {
             RobotUnity robot = obj as RobotUnity;
-            if (status==RosSocket.ConnectionStatus.CON_OK)
+            if (status == RosSocket.ConnectionStatus.CON_OK)
             {
-              //  RobotUnityReadyList.Add(robot.properties.NameID,robot);
+                //  RobotUnityReadyList.Add(robot.properties.NameID,robot);
             }
         }
         public void AddRobotUnity()
         {
-                PropertiesRobotUnity_List.Add(new RobotUnity().properties);
-                Grouped_PropertiesRobotUnity.Refresh();
+            PropertiesRobotUnity_List.Add(new RobotUnity().properties);
+            Grouped_PropertiesRobotUnity.Refresh();
         }
         public void SaveConfig(String data)
         {
-                String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigRobot.json");
-                System.IO.File.WriteAllText(path, data);   
+            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigRobot.json");
+            System.IO.File.WriteAllText(path, data);
         }
         public bool LoadConfigure()
         {
-            String path= Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigRobot.json");
-            if(!File.Exists(path))
+            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigRobot.json");
+            if (!File.Exists(path))
             {
                 Initialize();
                 SaveConfig(JsonConvert.SerializeObject(PropertiesRobotUnity_List, Formatting.Indented).ToString());
@@ -284,23 +285,23 @@ namespace SeldatMRMS.Management.RobotManagent
                     if (data.Length > 0)
                     {
                         List<PropertiesRobotUnity> tempPropertiestRobotList = JsonConvert.DeserializeObject<List<PropertiesRobotUnity>>(data);
-                        foreach(var e in tempPropertiestRobotList)
+                        foreach (var e in tempPropertiestRobotList)
                         {
                             PropertiesRobotUnity_List.Add(e);
                             RobotUnity robot = new RobotUnity();
-                           
+
                             robot.Initialize(this.canvas);
                             robot.UpdateProperties(e);
                             //robot.Registry(trafficManagementService);
-                            RobotUnityRegistedList.Add(e.NameId,robot);
+                            RobotUnityRegistedList.Add(e.NameId, robot);
                             robot.Start(robot.properties.Url);
                             AddRobotUnityReadyList(robot);
                             robot.RegisteRobotInAvailable(RobotUnityRegistedList);
-                         
+
                         }
                         Grouped_PropertiesRobotUnity.Refresh();
                         return true;
-                    }                   
+                    }
                 }
                 catch { }
             }
@@ -308,8 +309,19 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void AddRobotUnityWaitTaskList(RobotUnity robot)
         {
-            RemoveRobotUnityWaitTaskList(robot);
-            RobotUnityWaitTaskList.Add(robot);
+            //RemoveRobotUnityWaitTaskList(robot);
+            try
+            {
+                if (!RobotUnityWaitTaskList.Contains(robot))
+                {
+                    robot.ShowText(robot.properties.Label + "Add wait tasklist");
+                    RobotUnityWaitTaskList.Add(robot);
+                }
+            }
+            catch {
+                Console.WriteLine("Add waittask List Không Thành Công !");
+            }
+
         }
         public void RemoveRobotUnityWaitTaskList(RobotUnity robot)
         {
@@ -317,8 +329,8 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 if (RobotUnityWaitTaskList.Contains(robot))
                 {
+                    robot.ShowText(robot.properties.Label + "Remove wait tasklist");
                     RobotUnityWaitTaskList.Remove(robot);
-
                 }
             }
             catch
@@ -336,25 +348,25 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void DestroyRobotUnity(String nameID)
         {
-            if(RobotUnityRegistedList.ContainsKey(nameID))
+            if (RobotUnityRegistedList.ContainsKey(nameID))
             {
                 RobotUnity robot = RobotUnityRegistedList[nameID];
                 robot.Dispose();
                 RobotUnityRegistedList.Remove(nameID);
             }
-   
+
         }
         public ResultRobotReady GetRobotUnityWaitTaskItem0()
         {
-           
+
             ResultRobotReady result = null;
 
-                int index = 0;
-                while (RobotUnityWaitTaskList.Count > 0)
+            int index = 0;
+            while (RobotUnityWaitTaskList.Count > 0)
+            {
+                try
                 {
-                    try
-                    {
-                        RobotUnity robot = RobotUnityWaitTaskList[index];
+                    RobotUnity robot = RobotUnityWaitTaskList[index];
                     if (robot != null)
                     {
                         if (robot.properties.IsConnected)
@@ -366,12 +378,12 @@ namespace SeldatMRMS.Management.RobotManagent
 
                     if (index++ >= RobotUnityWaitTaskList.Count)
                         break;
-                    }
-                    catch
-                    {
-                        break;
-                    }
-                } 
+                }
+                catch
+                {
+                    break;
+                }
+            }
 
             return result;
         }
@@ -387,7 +399,7 @@ namespace SeldatMRMS.Management.RobotManagent
             }
             robot.mcuCtrl.lampRbOff();
         }
-        
+
         public ResultRobotReady GetRobotUnityReadyItem0()
         {
 #if true
@@ -396,12 +408,13 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 try
                 {
-                    if (indexRd >= RobotUnityReadyList.Count) {
+                    if (indexRd >= RobotUnityReadyList.Count)
+                    {
                         indexRd = 0;
                     }
                     RobotUnity robot = RobotUnityReadyList[indexRd];
                     indexRd++;
-                    if(robot!= null)
+                    if (robot != null)
                     {
                         if (robot.properties.IsConnected)
                         {
@@ -423,7 +436,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     Console.WriteLine(e);
                 }
             }
-            
+
             return result;
 #else
             ResultRobotReady result = null;
@@ -456,7 +469,7 @@ namespace SeldatMRMS.Management.RobotManagent
             return result;
 #endif
         }
-        public void MoveElementToEnd(Dictionary<String,RobotUnity> dic,int newPos, int oldPos)
+        public void MoveElementToEnd(Dictionary<String, RobotUnity> dic, int newPos, int oldPos)
         {
 
         }
@@ -472,22 +485,22 @@ namespace SeldatMRMS.Management.RobotManagent
         public void StopAt(String nameID)
         {
             if (RobotUnityRegistedList.ContainsKey(nameID))
-                RobotUnityRegistedList[nameID].SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP,true);
+                RobotUnityRegistedList[nameID].SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
         }
         public void RunAt(String nameID)
         {
             if (RobotUnityRegistedList.ContainsKey(nameID))
-                RobotUnityRegistedList[nameID].SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+                RobotUnityRegistedList[nameID].SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
         }
         public void Stop()
         {
             foreach (RobotUnity r in RobotUnityRegistedList.Values)
-                r.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP,true);
+                r.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
         }
         public void Run()
         {
             foreach (RobotUnity r in RobotUnityRegistedList.Values)
-                r.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+                r.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
         }
         public void RemoveRobotUnityRegistedList(String nameID)
         {
@@ -497,9 +510,9 @@ namespace SeldatMRMS.Management.RobotManagent
         public bool CheckAnyRobotWorking()
         {
             bool hasrobotworking = false;
-            foreach(RobotUnity robot in RobotUnityRegistedList.Values)
+            foreach (RobotUnity robot in RobotUnityRegistedList.Values)
             {
-                if(robot.robotTag != RobotStatus.IDLE)
+                if (robot.robotTag != RobotStatus.IDLE)
                 {
                     hasrobotworking = true;
                     break;
@@ -507,7 +520,7 @@ namespace SeldatMRMS.Management.RobotManagent
             }
             return hasrobotworking;
         }
-        public void FixedPropertiesRobotUnity(String nameID,PropertiesRobotUnity properties)
+        public void FixedPropertiesRobotUnity(String nameID, PropertiesRobotUnity properties)
         {
             /* DialogResult result = System.Windows.Forms.MessageBox.Show("Bạn chắc chắn Robot đang nằm ở vùng Charge/Ready?", "Confirmation", MessageBoxButtons.YesNo);
              if (result == DialogResult.Yes)

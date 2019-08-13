@@ -68,12 +68,10 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 {
                     if (cntWaitTask++ > deviceItemsList.Count)
                     {
-                        cntWaitTask = 0;
+                        //cntWaitTask = 0;
                         AssignWaitTask(order);
                         Console.WriteLine("Assign RB goto ready_____________(-_-)______________");
                     }
-                   
-                
                 }
                 MoveElementToEnd();
                 Thread.Sleep(500);
