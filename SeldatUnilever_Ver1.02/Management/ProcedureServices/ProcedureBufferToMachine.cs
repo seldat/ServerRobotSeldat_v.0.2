@@ -315,8 +315,8 @@ namespace SeldatMRMS
                                 robot.SwitchToDetectLine(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                JInfoPallet jInfoPallet_H = BfToMa.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP);
-                                jPResult = BfToMa.GetInfoOfPalletBuffer_Compare_W_H(PistonPalletCtrl.PISTON_PALLET_UP, jInfoPallet_H);
+                                JPallet jInfoPallet_H = BfToMa.GetInfoPallet_H_InBuffer(PistonPalletCtrl.PISTON_PALLET_UP);
+                                jPResult = BfToMa.GetInfoOfPalletBuffer_Compare_W_H(PistonPalletCtrl.PISTON_PALLET_UP, jInfoPallet_H.jInfoPallet);
 
                                 String data = JsonConvert.SerializeObject(jPResult.jInfoPallet);
 
@@ -355,8 +355,8 @@ namespace SeldatMRMS
                                 robot.SwitchToDetectLine(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                JInfoPallet jInfoPallet_H = BfToMa.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP);
-                                jPResult = BfToMa.GetInfoOfPalletBuffer_Compare_W_H(PistonPalletCtrl.PISTON_PALLET_UP, jInfoPallet_H);
+                                JPallet jInfoPallet_H = BfToMa.GetInfoPallet_H_InBuffer(PistonPalletCtrl.PISTON_PALLET_UP);
+                                jPResult = BfToMa.GetInfoOfPalletBuffer_Compare_W_H(PistonPalletCtrl.PISTON_PALLET_UP, jInfoPallet_H.jInfoPallet);
                                 String data = JsonConvert.SerializeObject(jPResult.jInfoPallet);
                                 if (rb.SendCmdAreaPallet(data))
                                 {
@@ -383,8 +383,8 @@ namespace SeldatMRMS
                                 robot.SwitchToDetectLine(true);                       
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                JInfoPallet jInfoPallet_H = BfToMa.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP);
-                                jPResult = BfToMa.GetInfoOfPalletBuffer_Compare_W_H(PistonPalletCtrl.PISTON_PALLET_UP, jInfoPallet_H);
+                                JPallet jInfoPallet_H = BfToMa.GetInfoPallet_H_InBuffer(PistonPalletCtrl.PISTON_PALLET_UP);
+                                jPResult = BfToMa.GetInfoOfPalletBuffer_Compare_W_H(PistonPalletCtrl.PISTON_PALLET_UP, jInfoPallet_H.jInfoPallet);
                                 String data = JsonConvert.SerializeObject(jPResult.jInfoPallet);
                                 if (rb.SendCmdAreaPallet(data))
                                 {
@@ -403,12 +403,8 @@ namespace SeldatMRMS
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-
-                            if(jPResult.palletId==order.palletId_H)
-                                 BfToMa.UpdatePalletState(PalletStatus.F,order.palletId_H,order.planId);
-                            else
-                                BfToMa.UpdatePalletState(PalletStatus.F, jPResult.palletId, order.planId);
-
+                 
+                            BfToMa.UpdatePalletState(PalletStatus.F, jPResult.palletId, order.planId);
                             onUpdatedPalletState = true;
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER;
                             //robot.ShowText("BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER");
@@ -602,10 +598,6 @@ namespace SeldatMRMS
                         UpdateInformationInProc(this, ProcessStatus.F);
                         order.status = StatusOrderResponseCode.ROBOT_ERROR;
                         //reset status pallet Faile H->Ws
-                        if (!onUpdatedPalletState)
-                        {
-                            UpdatePalletState(PalletStatus.W, order.palletId_H,order.palletId);
-                        }
                         selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
                         procedureStatus = ProcedureStatus.PROC_KILLED;
                         //FreeHoldBuffer(order.palletId_H);

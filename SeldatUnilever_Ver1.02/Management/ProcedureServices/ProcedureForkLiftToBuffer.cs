@@ -39,7 +39,7 @@ namespace SeldatMRMS
         public override event Action<Object> ReleaseProcedureHandler;
         public Pose endPointBuffer;
         private DoorService ds;
-
+        public JPallet JResult;
         public void Registry(DeviceRegistrationService deviceService)
         {
             this.deviceService = deviceService;
@@ -128,6 +128,7 @@ namespace SeldatMRMS
             }
             while (ProRun)
             {
+               // JPallet aa= GetInfoPallet_P_InBuffer(TrafficRobotUnity.PistonPalletCtrl.PISTON_PALLET_DOWN);
                 switch (StateForkLift)
                 {
                     case ForkLift.FORBUF_IDLE:
@@ -435,7 +436,11 @@ namespace SeldatMRMS
                             {
                                 robot.SwitchToDetectLine(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                String data = JsonConvert.SerializeObject( FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true));
+                                JResult = FlToBuf.GetInfoPallet_P_InBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN);
+                                //  String data = JsonConvert.SerializeObject(FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true));
+                                String data = JsonConvert.SerializeObject(JResult.jInfoPallet);
+
+                               // String data = JsonConvert.SerializeObject( FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true));
                                 if (rb.SendCmdAreaPallet(data))
                                 {
                                     StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER;
@@ -461,7 +466,10 @@ namespace SeldatMRMS
                             {
                                 robot.SwitchToDetectLine(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                String data = JsonConvert.SerializeObject(FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true));
+                               JResult= FlToBuf.GetInfoPallet_P_InBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN);
+                                //  String data = JsonConvert.SerializeObject(FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true));
+                                String data = JsonConvert.SerializeObject(JResult.jInfoPallet);
+
                                 if (rb.SendCmdAreaPallet(data))
                                 {
                                     StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER;
@@ -480,7 +488,7 @@ namespace SeldatMRMS
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETDOWN)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            FlToBuf.UpdatePalletState(PalletStatus.W);
+                            FlToBuf.UpdatePalletState(PalletStatus.W,JResult.palletId,order.planId);
                             //   rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER;
                             robot.ShowText("FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER");

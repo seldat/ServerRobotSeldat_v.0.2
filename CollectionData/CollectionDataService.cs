@@ -26,8 +26,8 @@ namespace SelDatUnilever_Ver1
             F = 200, // Free pallet
             W = 201, // Have Pallet
             P = 202,
-            H = 203,
-            R = 204
+            H =203,
+            R =204
 
         }
         //public int planID { get; set; }
@@ -38,22 +38,22 @@ namespace SelDatUnilever_Ver1
         //public String activeDate;
         // public int timeWorkID;
         public List<Pose> checkInBuffer = new List<Pose>();
-
+        
         protected int palletId { get; set; }
         protected int planId { get; set; }
         protected int bayId { get; set; }
         public Pose goalFrontLinePos;
         public CollectionDataService()
         {
-            // clientRequest = new BridgeClientRequest();
-            // clientRequest.ReceiveResponseHandler += ReceiveResponseHandler;
+           // clientRequest = new BridgeClientRequest();
+           // clientRequest.ReceiveResponseHandler += ReceiveResponseHandler;
             planId = -1;
         }
         public CollectionDataService(OrderItem order)
         {
             this.order = order;
             //clientRequest = new BridgeClientRequest();
-            // clientRequest.ReceiveResponseHandler += ReceiveResponseHandler;
+           // clientRequest.ReceiveResponseHandler += ReceiveResponseHandler;
 
         }
         public virtual void AssignAnOrder(OrderItem order)
@@ -63,30 +63,30 @@ namespace SelDatUnilever_Ver1
         public String createPlanBuffer()
         {
             dynamic product = new JObject();
-            product.timeWorkId = 1;
-            product.activeDate = order.activeDate;
-            product.productId = order.productId;
-            product.productDetailId = order.productDetailId;
+            product.timeWorkId= 1;
+            product.activeDate =order.activeDate;
+            product.productId =order.productId;
+            product.productDetailId=order.productDetailId;
             product.updUsrId = Global_Object.userLogin;
-            product.palletAmount = 1;
+            product.palletAmount=1;
             String response = RequestDataProcedure(product.ToString(), Global_Object.url + "plan/createPlanPallet");
             return response;
         }
 
         public void FreePlanedBuffer(int palletId)
         {
-            String url = Global_Object.url + "pallet/updatePalletStatus";
-            if (palletId > 0)
-            {
-                dynamic product = new JObject();
-                product.palletId = palletId;
-                product.planId = order.planId;
-                product.palletStatus = PalletStatus.F.ToString();
-                product.updUsrId = Global_Object.userLogin;
-                var data = RequestDataProcedure(product.ToString(), url);
+                String url = Global_Object.url + "pallet/updatePalletStatus";
+                if (palletId > 0)
+                {
+                    dynamic product = new JObject();
+                    product.palletId = palletId;
+                    product.planId = order.planId;
+                    product.palletStatus = PalletStatus.F.ToString();
+                    product.updUsrId = Global_Object.userLogin;
+                    var data = RequestDataProcedure(product.ToString(), url);
 
-            }
-
+                }
+            
         }
 
         public void FreeHoldBuffer(int palletId)
@@ -147,7 +147,7 @@ namespace SelDatUnilever_Ver1
             }
             return palletId;
         }
-        public int GetPalletId_Hold(int planId, bool onPlanId)
+        public int GetPalletId_Hold(int planId,bool onPlanId)
         {
             int palletId = -1;
             try
@@ -159,15 +159,15 @@ namespace SelDatUnilever_Ver1
                     {
                         JArray results = JArray.Parse(collectionData);
                         var result = results[0];
-                        foreach (var buffer in result["buffers"])
-                        {
-                            if (buffer["pallets"].Count() > 0)
+                            foreach (var buffer in result["buffers"])
                             {
-                                var palletInfo = buffer["pallets"][0];
-                                palletId = (int)palletInfo["palletId"];
-                                return palletId;
+                                if (buffer["pallets"].Count() > 0)
+                                {
+                                    var palletInfo = buffer["pallets"][0];
+                                    palletId = (int)palletInfo["palletId"];
+                                    return palletId;
+                                }
                             }
-                        }
                     }
                     catch { }
 
@@ -179,16 +179,16 @@ namespace SelDatUnilever_Ver1
             }
             return palletId;
         }
-
+       
         public String RequestDataProcedure(String dataReq, String url)
         {
             //String url = Global_Object.url+"plan/getListPlanPallet";
             // String url = "http://localhost:8080";
-            BridgeClientRequest clientRequest = new BridgeClientRequest();
+            BridgeClientRequest clientRequest=new BridgeClientRequest();
             var data = clientRequest.PostCallAPI(url, dataReq);
             return data.Result;
-
-
+        
+                
         }
         public void delay(int ms)
         {
@@ -220,21 +220,21 @@ namespace SelDatUnilever_Ver1
                         {
                             foreach (var buffer in result["buffers"])
                             {
-                                if (buffer["pallets"].Count() > 0)
-                                {
-                                    String checkinResults = (String)buffer["bufferCheckIn"];
-                                    JObject stuff = JObject.Parse(checkinResults);
-                                    double x = (double)stuff["checkin"]["x"];
-                                    double y = (double)stuff["checkin"]["y"];
-                                    double angle = (double)stuff["checkin"]["angle"];
-                                    poseTemp = new Pose(x, y, angle);
-                                    planId = order.planId;
-                                    break;
-                                }
-                                else
-                                {
-                                    continue;
-                                }
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        String checkinResults = (String)buffer["bufferCheckIn"];
+                                        JObject stuff = JObject.Parse(checkinResults);
+                                        double x = (double)stuff["checkin"]["x"];
+                                        double y = (double)stuff["checkin"]["y"];
+                                        double angle = (double)stuff["checkin"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                        planId = order.planId;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
                             }
                         }
                     }
@@ -408,7 +408,7 @@ namespace SelDatUnilever_Ver1
                         }
                     }
 
-
+                    
                 }
             }
             catch { Console.WriteLine("Error check in data collection"); }
@@ -524,7 +524,7 @@ namespace SelDatUnilever_Ver1
         }
         #endregion
         #region GET PALLET INFO BUFFER [ BufferReturn to Buffer401]
-        public String GetInfoOfPalletBufferReturn_BRB401(TrafficRobotUnity.PistonPalletCtrl pisCtrl, String dataReq)
+        public String GetInfoOfPalletBufferReturn_BRB401(TrafficRobotUnity.PistonPalletCtrl pisCtrl,String dataReq)
         {
             JInfoPallet infoPallet = new JInfoPallet();
             try
@@ -604,21 +604,21 @@ namespace SelDatUnilever_Ver1
                         {
                             foreach (var buffer in result["buffers"])
                             {
-                                if (buffer["pallets"].Count() > 0)
-                                {
-                                    String checkinResults = (String)buffer["bufferCheckIn"];
-                                    JObject stuff = JObject.Parse(checkinResults);
-                                    double x = (double)stuff["checkin"]["x"];
-                                    double y = (double)stuff["checkin"]["y"];
-                                    double angle = (double)stuff["checkin"]["angle"];
-                                    poseTemp = new Pose(x, y, angle);
-                                    planId = order.planId;
-                                    break;
-                                }
-                                else
-                                {
-                                    continue;
-                                }
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        String checkinResults = (String)buffer["bufferCheckIn"];
+                                        JObject stuff = JObject.Parse(checkinResults);
+                                        double x = (double)stuff["checkin"]["x"];
+                                        double y = (double)stuff["checkin"]["y"];
+                                        double angle = (double)stuff["checkin"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                        planId = order.planId;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
 
                             }
                         }
@@ -651,21 +651,21 @@ namespace SelDatUnilever_Ver1
                         {
                             foreach (var buffer in result["buffers"])
                             {
-                                if (buffer["pallets"].Count() > 0)
-                                {
-                                    //var bufferResults = result["buffers"][0];
-                                    String checkinResults = (String)buffer["bufferCheckIn"];
-                                    JObject stuff = JObject.Parse(checkinResults);
-                                    double x = (double)stuff["headpoint"]["x"];
-                                    double y = (double)stuff["headpoint"]["y"];
-                                    double angle = (double)stuff["headpoint"]["angle"];
-                                    poseTemp = new Pose(x, y, angle);
-                                    break;
-                                }
-                                else
-                                {
-                                    continue;
-                                }
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        //var bufferResults = result["buffers"][0];
+                                        String checkinResults = (String)buffer["bufferCheckIn"];
+                                        JObject stuff = JObject.Parse(checkinResults);
+                                        double x = (double)stuff["headpoint"]["x"];
+                                        double y = (double)stuff["headpoint"]["y"];
+                                        double angle = (double)stuff["headpoint"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
                             }
                         }
                     }
@@ -697,29 +697,29 @@ namespace SelDatUnilever_Ver1
                             //var bufferResults = result["buffers"][0];
                             foreach (var buffer in result["buffers"])
                             {
-                                if (buffer["pallets"].Count() > 0)
-                                {
-                                    foreach (var palletInfo in buffer["pallets"])
+                                    if (buffer["pallets"].Count() > 0)
                                     {
-                                        int palletId = (int)palletInfo["palletId"];
-                                        if (palletId == order.palletId_P)
+                                        foreach (var palletInfo in buffer["pallets"])
                                         {
-                                            JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                            bayId = (int)stuff["bayId"];
-                                            double x = (double)stuff["line"]["x"];
-                                            double y = (double)stuff["line"]["y"];
-                                            double angle = (double)stuff["line"]["angle"];
-                                            poseTemp = new Pose(x, y, angle);
-                                            goalFrontLinePos = poseTemp;
-                                            break;
-                                        }
+                                            int palletId = (int)palletInfo["palletId"];
+                                            if (palletId == order.palletId_P)
+                                            {
+                                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                                bayId = (int)stuff["bayId"];
+                                                double x = (double)stuff["line"]["x"];
+                                                double y = (double)stuff["line"]["y"];
+                                                double angle = (double)stuff["line"]["angle"];
+                                                poseTemp = new Pose(x, y, angle);
+                                                goalFrontLinePos = poseTemp;
+                                                break;
+                                            }
 
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    continue;
-                                }
+                                    else
+                                    {
+                                        continue;
+                                    }
                             }
                         }
                     }
@@ -796,12 +796,12 @@ namespace SelDatUnilever_Ver1
         #endregion
         #region [ Check In, AnyPoint, FrontLine, GetPalletInfo ] [ FF-> BF / BF -> MACH] 
         #region GET CHECK IN BUFFER
-        public Pose GetCheckInBuffer(bool onPlandId = false)
+        public Pose GetCheckInBuffer(bool onPlandId=false)
         {
             Pose poseTemp = null;
             try
             {
-
+                
                 String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
                 if (collectionData.Length > 0)
                 {
@@ -972,7 +972,7 @@ namespace SelDatUnilever_Ver1
                         foreach (var result in results)
                         {
                             int temp_planId = (int)result["planId"];
-                            //  if (temp_planId == order.planId)
+                          //  if (temp_planId == order.planId)
                             {
                                 //var bufferResults = result["buffers"][0];
                                 foreach (var buffer in result["buffers"])
@@ -980,10 +980,10 @@ namespace SelDatUnilever_Ver1
 
                                     if (buffer["pallets"].Count() > 0)
                                     {
-                                        foreach (var palletInfo in buffer["pallets"])
+                                        foreach(var palletInfo in buffer["pallets"])
                                         {
                                             int palletId = (int)palletInfo["palletId"];
-                                            if (palletId == order.palletId_P)
+                                            if(palletId==order.palletId_P)
                                             {
                                                 JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
                                                 bayId = (int)stuff["bayId"];
@@ -994,7 +994,7 @@ namespace SelDatUnilever_Ver1
                                                 goalFrontLinePos = poseTemp;
                                                 break;
                                             }
-
+                                            
                                         }
                                     }
                                     else
@@ -1058,7 +1058,7 @@ namespace SelDatUnilever_Ver1
         #region GET PALLET INFO BUFFER
 
         // Get pallet info status W buffer with same bay
-        public int GetBufferId_from_PalletId(String datareq, int samePalletId)
+        public int  GetBufferId_from_PalletId(String datareq, int samePalletId)
         {
             int bufferId = -1;
             try
@@ -1071,7 +1071,7 @@ namespace SelDatUnilever_Ver1
                     //var bufferResults = result["buffers"][0];
                     foreach (var buffer in result["buffers"])
                     {
-                        int _bufferId = (int)buffer["bufferId"];
+                       int _bufferId= (int)buffer["bufferId"];
                         String bufferDataStr = (String)buffer["bufferData"];
                         JObject stuffBData = JObject.Parse(bufferDataStr);
                         bool canOpEdit = (bool)stuffBData["canOpEdit"];
@@ -1120,14 +1120,14 @@ namespace SelDatUnilever_Ver1
                 product_W.productDetailId = order.productDetailId;
                 product_W.palletStatus = PalletStatus.W.ToString(); // W
                 int bufferId = GetBufferId_from_PalletId(order.dataRequest, JPResult.palletId);
-                String collectionData_W = RequestDataProcedure(product_W.ToString(), Global_Object.url + "plan/getListPlanPallet");
+                String collectionData_W= RequestDataProcedure(product_W.ToString(), Global_Object.url + "plan/getListPlanPallet");
                 String collectionData_H = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
                 if (collectionData_W.Length > 0)
                 {
                     JArray results = JArray.Parse(collectionData_W);
-                    foreach (var plan in results) //loop plan
+                    foreach(var result in results)
                     {
-                        foreach (var buffer in plan["buffers"]) //loop buffer
+                        foreach (var buffer in result["buffers"])
                         {
                             String bufferDataStr = (String)buffer["bufferData"];
                             JObject stuffBData = JObject.Parse(bufferDataStr);
@@ -1136,43 +1136,57 @@ namespace SelDatUnilever_Ver1
                                 continue;
                             if (buffer["pallets"].Count() > 0)
                             {
+                                bool hasPalletId = false;
                                 foreach (var palletInfo in buffer["pallets"])
                                 {
-                                    int bay = (int)palletInfo["bay"];
                                     int _palletId = (int)palletInfo["palletId"];
-                                    if (bay == jInfoPallet_H.bay)
+                                    if(_palletId== JPResult.palletId)
                                     {
-                                        JPallet jPallet = new JPallet();
-                                        JInfoPallet infoPallet = new JInfoPallet();
-                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                        int _row = (int)stuff["pallet"]["row"];
-                                        int _bay = (int)stuff["pallet"]["bay"];
-                                        int directMain = (int)stuff["pallet"]["dir_main"];
-                                        int directSub = (int)stuff["pallet"]["dir_sub"];
-                                        int directOut = (int)stuff["pallet"]["dir_out"];
-                                        int line_ord = (int)stuff["pallet"]["line_ord"];
-                                        string subline = (string)stuff["pallet"]["hasSubLine"];
-
-                                        infoPallet.pallet = pisCtrl; /* dropdown */
-                                        infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
-                                        infoPallet.bay = _bay;
-                                        infoPallet.hasSubLine = subline; /* yes or no */
-                                        infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
-                                        infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
-                                        infoPallet.row = _row;
-                                        infoPallet.line_ord = line_ord;
-                                        jPallet.jInfoPallet = infoPallet;
-                                        jPallet.palletId = _palletId;
-
-                                        jPalletList.Add(jPallet);
+                                        hasPalletId = true;
+                                        break;
                                     }
                                 }
+                                if (hasPalletId)
+                                {
+                                    foreach (var palletInfo in buffer["pallets"])
+                                    {
+                                        int bay = (int)palletInfo["bay"];
+                                        int _palletId = (int)palletInfo["palletId"];
+                                        if (bay == jInfoPallet_H.bay)
+                                        {
+                                            JPallet jPallet = new JPallet();
+                                            JInfoPallet infoPallet = new JInfoPallet();
+                                            JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                            int _row = (int)stuff["pallet"]["row"];
+                                            int _bay = (int)stuff["pallet"]["bay"];
+                                            int directMain = (int)stuff["pallet"]["dir_main"];
+                                            int directSub = (int)stuff["pallet"]["dir_sub"];
+                                            int directOut = (int)stuff["pallet"]["dir_out"];
+                                            int line_ord = (int)stuff["pallet"]["line_ord"];
+                                            string subline = (string)stuff["pallet"]["hasSubLine"];
+
+                                            infoPallet.pallet = pisCtrl; /* dropdown */
+                                            infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
+                                            infoPallet.bay = _bay;
+                                            infoPallet.hasSubLine = subline; /* yes or no */
+                                            infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
+                                            infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
+                                            infoPallet.row = _row;
+                                            infoPallet.line_ord = line_ord;
+                                            jPallet.jInfoPallet = infoPallet;
+                                            jPallet.palletId = _palletId;
+
+                                            jPalletList.Add(jPallet);
+                                        }
+                                    }
+                                }
+
                             }
                         }
                     }
-
+                   
                     int rowMin = JPResult.jInfoPallet.row;
-                    foreach (JPallet jp in jPalletList)
+                    foreach (JPallet jp  in jPalletList)
                     {
                         if (rowMin > jp.jInfoPallet.row)
                         {
@@ -1192,200 +1206,6 @@ namespace SelDatUnilever_Ver1
                 return JPResult;
             }
             return JPResult;
-        }
-        public JPallet GetInfoPallet_P_InBuffer(TrafficRobotUnity.PistonPalletCtrl pisCtrl)
-        {
-            JPallet infoPallet = new JPallet();
-            infoPallet.jInfoPallet = new JInfoPallet();
-            try
-            {
-                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
-                if (collectionData.Length > 0)
-                {
-                    JArray results = JArray.Parse(collectionData);
-                    //var result = results[0];
-                    bool gotLastPalletInBay = false;
-                    foreach (var plan in results)
-                    {
-                        if (!gotLastPalletInBay)
-                        {
-                            int temp_planId = (int)plan["planId"];
-                            if (temp_planId == order.planId)
-                            {
-                                //var bufferResults = result["buffers"][0];
-                                foreach (var buffer in plan["buffers"])
-                                {
-                                    if (!gotLastPalletInBay)
-                                    {
-                                        String bufferDataStr = (String)buffer["bufferData"];
-                                        JObject stuffBData = JObject.Parse(bufferDataStr);
-                                        bool canOpEdit = (bool)stuffBData["canOpEdit"];
-                                        //if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy, áp dụng trong quy trình Buffer -> Machine
-                                        //    continue;
-                                        if (buffer["pallets"].Count() > 0)
-                                        {
-                                            int bayToGo = -1;
-                                            bool lastPallet = true;
-                                            foreach (var palletInfo in buffer["pallets"])
-                                            {
-                                                //palletInfo = buffer["pallets"][0];
-                                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                                int row = (int)stuff["pallet"]["row"];
-                                                int bay = (int)stuff["pallet"]["bay"];
-                                                int directMain = (int)stuff["pallet"]["dir_main"];
-                                                int directSub = (int)stuff["pallet"]["dir_sub"];
-                                                int directOut = (int)stuff["pallet"]["dir_out"];
-                                                int line_ord = (int)stuff["pallet"]["line_ord"];
-                                                string subline = (string)stuff["pallet"]["hasSubLine"];
-
-
-
-                                                if (bay != bayToGo)
-                                                {
-                                                    bayToGo = bay;
-                                                    lastPallet = true;
-                                                }
-                                                else
-                                                {
-                                                    lastPallet = false;
-                                                }
-
-                                                palletId = (int)palletInfo["palletId"];
-
-                                                //Keep first Pallet in each bay
-                                                if (lastPallet)
-                                                {
-                                                    infoPallet.jInfoPallet.pallet = pisCtrl; /* dropdown */
-                                                    infoPallet.jInfoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
-                                                    infoPallet.jInfoPallet.bay = bay;
-                                                    infoPallet.jInfoPallet.hasSubLine = subline; /* yes or no */
-                                                    infoPallet.jInfoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
-                                                    infoPallet.jInfoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
-                                                    infoPallet.jInfoPallet.row = row;
-                                                    infoPallet.jInfoPallet.line_ord = line_ord;
-                                                    infoPallet.palletId = palletId;
-                                                }
-
-
-                                                //Compare if pallet H is in this bay
-                                                if (palletId == order.palletId_P)
-                                                {
-                                                    gotLastPalletInBay = true;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            continue;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                Console.WriteLine("Error at GetInfoOfPalletBuffer");
-                return null;
-            }
-            return infoPallet;
-        }
-        public JPallet GetInfoPallet_H_InBuffer(TrafficRobotUnity.PistonPalletCtrl pisCtrl)
-        {
-            JPallet infoPallet = new JPallet();
-            infoPallet.jInfoPallet = new JInfoPallet();
-            try
-            {
-                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
-                if (collectionData.Length > 0)
-                {
-                    JArray results = JArray.Parse(collectionData);
-                    //var result = results[0];
-                    bool gotFirstPalletInBay = false;
-                    foreach (var plan in results)
-                    {
-                        if (!gotFirstPalletInBay)
-                        {
-                            //var bufferResults = result["buffers"][0];
-                            foreach (var buffer in plan["buffers"])
-                            {
-                                if (!gotFirstPalletInBay)
-                                {
-                                    String bufferDataStr = (String)buffer["bufferData"];
-                                    JObject stuffBData = JObject.Parse(bufferDataStr);
-                                    bool canOpEdit = (bool)stuffBData["canOpEdit"];
-                                    if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy, áp dụng trong quy trình Buffer -> Machine
-                                        continue;
-                                    if (buffer["pallets"].Count() > 0)
-                                    {
-                                        int bayToGo = -1;
-                                        bool firstPallet = true;
-                                        foreach (var palletInfo in buffer["pallets"])
-                                        {
-                                            //palletInfo = buffer["pallets"][0];
-                                            JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                            int row = (int)stuff["pallet"]["row"];
-                                            int bay = (int)stuff["pallet"]["bay"];
-                                            int directMain = (int)stuff["pallet"]["dir_main"];
-                                            int directSub = (int)stuff["pallet"]["dir_sub"];
-                                            int directOut = (int)stuff["pallet"]["dir_out"];
-                                            int line_ord = (int)stuff["pallet"]["line_ord"];
-                                            string subline = (string)stuff["pallet"]["hasSubLine"];
-
-                                            if (bay != bayToGo)
-                                            {
-                                                bayToGo = bay;
-                                                firstPallet = true;
-                                            }
-                                            else
-                                            {
-                                                firstPallet = false;
-                                            }
-
-                                            palletId = (int)palletInfo["palletId"];
-
-                                            //Keep first Pallet in each bay
-                                            if (firstPallet)
-                                            {
-                                                infoPallet.jInfoPallet.pallet = pisCtrl; /* dropdown */
-                                                infoPallet.jInfoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
-                                                infoPallet.jInfoPallet.bay = bay;
-                                                infoPallet.jInfoPallet.hasSubLine = subline; /* yes or no */
-                                                infoPallet.jInfoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
-                                                infoPallet.jInfoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
-                                                infoPallet.jInfoPallet.row = row;
-                                                infoPallet.jInfoPallet.line_ord = line_ord;
-                                                infoPallet.palletId = palletId;
-                                            }
-
-
-                                            //Compare if pallet H is in this bay
-                                            if (palletId == order.palletId_H)
-                                            {
-                                                gotFirstPalletInBay = true;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        continue;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                Console.WriteLine("Error at GetInfoOfPalletBuffer");
-                return null;
-            }
-            return infoPallet;
         }
         public JInfoPallet GetInfoOfPalletBuffer(TrafficRobotUnity.PistonPalletCtrl pisCtrl, bool onPlandId = false)
         {
@@ -1504,44 +1324,44 @@ namespace SelDatUnilever_Ver1
                 if (collectionData.Length > 0)
                 {
                     JArray results = JArray.Parse(collectionData);
-                    var result = results[0];
-
-                    foreach (var buffer in result["buffers"])
-                    {
-                        if ((int)buffer["bufferId"] == bufferId)
+                        var result = results[0];
+                        
+                        foreach (var buffer in result["buffers"])
                         {
-                            if (buffer["pallets"].Count() > 0)
+                            if ((int)buffer["bufferId"] == bufferId)
                             {
-                                String checkinResults = (String)buffer["bufferCheckIn"];
-                                JObject stuff = JObject.Parse(checkinResults);
-                                double x = (double)stuff["checkin"]["x"];
-                                double y = (double)stuff["checkin"]["y"];
-                                double angle = (double)stuff["checkin"]["angle"];
-                                poseTemp = new Pose(x, y, angle);
-                                planId = order.planId;
-                                break;
-                            }
-                            else
-                            {
-                                continue;
+                                if (buffer["pallets"].Count() > 0)
+                                {
+                                    String checkinResults = (String)buffer["bufferCheckIn"];
+                                    JObject stuff = JObject.Parse(checkinResults);
+                                    double x = (double)stuff["checkin"]["x"];
+                                    double y = (double)stuff["checkin"]["y"];
+                                    double angle = (double)stuff["checkin"]["angle"];
+                                    poseTemp = new Pose(x, y, angle);
+                                    planId = order.planId;
+                                    break;
+                                }
+                                else
+                                {
+                                    continue;
+                                }
                             }
                         }
-                    }
-                    //var bufferResults = result["buffers"][0];
-                    //String checkinResults = (String)bufferResults["bufferCheckIn"];
-                    //JObject stuff = JObject.Parse(checkinResults);
-                    //double x = (double)stuff["checkin"]["x"];
-                    //double y = (double)stuff["checkin"]["y"];
-                    //double angle = (double)stuff["checkin"]["angle"];
-                    //poseTemp = new Pose(x, y, angle);
-                    //planId = order.planId;
-
+                        //var bufferResults = result["buffers"][0];
+                        //String checkinResults = (String)bufferResults["bufferCheckIn"];
+                        //JObject stuff = JObject.Parse(checkinResults);
+                        //double x = (double)stuff["checkin"]["x"];
+                        //double y = (double)stuff["checkin"]["y"];
+                        //double angle = (double)stuff["checkin"]["angle"];
+                        //poseTemp = new Pose(x, y, angle);
+                        //planId = order.planId;
+              
                 }
             }
             catch { Console.WriteLine("Error check in data collection"); }
             return poseTemp;
         }
-
+        
 
         public Pose GetAnyPointInBuffer_Return(int bufferId) // đổi 
         {
@@ -1553,29 +1373,29 @@ namespace SelDatUnilever_Ver1
                 if (collectionData.Length > 0)
                 {
                     JArray results = JArray.Parse(collectionData);
-                    var result = results[0];
-                    foreach (var buffer in result["buffers"])
-                    {
-                        if (bufferId == (int)buffer["bufferId"])
+                       var result = results[0];
+                        foreach (var buffer in result["buffers"])
                         {
-                            if (buffer["pallets"].Count() > 0)
+                            if (bufferId == (int)buffer["bufferId"])
                             {
-                                //var bufferResults = result["buffers"][0];
-                                String checkinResults = (String)buffer["bufferCheckIn"];
-                                JObject stuff = JObject.Parse(checkinResults);
-                                double x = (double)stuff["headpoint"]["x"];
-                                double y = (double)stuff["headpoint"]["y"];
-                                double angle = (double)stuff["headpoint"]["angle"];
-                                poseTemp = new Pose(x, y, angle);
-                                break;
-                            }
-                            else
-                            {
-                                continue;
+                                if (buffer["pallets"].Count() > 0)
+                                {
+                                    //var bufferResults = result["buffers"][0];
+                                    String checkinResults = (String)buffer["bufferCheckIn"];
+                                    JObject stuff = JObject.Parse(checkinResults);
+                                    double x = (double)stuff["headpoint"]["x"];
+                                    double y = (double)stuff["headpoint"]["y"];
+                                    double angle = (double)stuff["headpoint"]["angle"];
+                                    poseTemp = new Pose(x, y, angle);
+                                    break;
+                                }
+                                else
+                                {
+                                    continue;
+                                }
                             }
                         }
-                    }
-
+                
                 }
             }
             catch
@@ -1586,7 +1406,7 @@ namespace SelDatUnilever_Ver1
         }
 
 
-
+       
 
         public Pose GetFrontLineMachine()
         {
@@ -1604,7 +1424,7 @@ namespace SelDatUnilever_Ver1
             if (collectionData.Length > 0)
             {
                 JArray results = JArray.Parse(collectionData);
-                // var result = results[0];
+               // var result = results[0];
                 foreach (var buffer in results)
                 {
                     if (buffer["pallets"].Count() > 0)
@@ -1622,7 +1442,7 @@ namespace SelDatUnilever_Ver1
                         continue;
                     }
                 }
-
+                
 
             }
             return poseTemp;
@@ -1638,7 +1458,7 @@ namespace SelDatUnilever_Ver1
             if (collectionData.Length > 0)
             {
                 JArray results = JArray.Parse(collectionData);
-                // var result = results[0];
+               // var result = results[0];
                 //var bufferResults = result["buffers"][0];
                 foreach (var buffer in results)
                 {
@@ -1666,7 +1486,7 @@ namespace SelDatUnilever_Ver1
                         continue;
                     }
                 }
-
+                
 
             }
             return poseTemp;
@@ -1675,54 +1495,54 @@ namespace SelDatUnilever_Ver1
 
         /*
          */
+        
 
-
-        public String GetInfoOfPalletBuffer_Return(TrafficRobotUnity.PistonPalletCtrl pisCtrl, int bufferId)
+        public String GetInfoOfPalletBuffer_Return(TrafficRobotUnity.PistonPalletCtrl pisCtrl,int bufferId)
         {
             JInfoPallet infoPallet = new JInfoPallet();
             try
             {
 
-                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "buffer/getListBufferReturn"); //"plan/getListPlanPallet"
+                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "buffer/getListBufferReturn" ); //"plan/getListPlanPallet"
                 if (collectionData.Length > 0)
                 {
                     JArray results = JArray.Parse(collectionData);
                     var result = results[0];
 
-                    //var bufferResults = result["buffers"][0];
-                    foreach (var buffer in result["buffers"])
-                    {
-                        if (bufferId == (int)buffer["bufferId"])
+                        //var bufferResults = result["buffers"][0];
+                        foreach (var buffer in result["buffers"])
                         {
-                            if (buffer["pallets"].Count() > 0)
+                            if (bufferId == (int)buffer["bufferId"])
                             {
-                                var palletInfo = buffer["pallets"][0];
-                                palletId = (int)palletInfo["palletId"];
-                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                int row = (int)stuff["pallet"]["row"];
-                                int bay = (int)stuff["pallet"]["bay"];
-                                int directMain = (int)stuff["pallet"]["dir_main"];
-                                int directSub = (int)stuff["pallet"]["dir_sub"];
-                                int directOut = (int)stuff["pallet"]["dir_out"];
-                                int line_ord = (int)stuff["pallet"]["line_ord"];
-                                string subline = (string)stuff["pallet"]["hasSubLine"];
+                                if (buffer["pallets"].Count() > 0)
+                                {
+                                    var palletInfo = buffer["pallets"][0];
+                                    palletId = (int)palletInfo["palletId"];
+                                    JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                    int row = (int)stuff["pallet"]["row"];
+                                    int bay = (int)stuff["pallet"]["bay"];
+                                    int directMain = (int)stuff["pallet"]["dir_main"];
+                                    int directSub = (int)stuff["pallet"]["dir_sub"];
+                                    int directOut = (int)stuff["pallet"]["dir_out"];
+                                    int line_ord = (int)stuff["pallet"]["line_ord"];
+                                    string subline = (string)stuff["pallet"]["hasSubLine"];
 
-                                infoPallet.pallet = pisCtrl; /* dropdown */
-                                infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
-                                infoPallet.bay = bay;
-                                infoPallet.hasSubLine = subline; /* yes or no */
-                                infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
-                                infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
-                                infoPallet.row = row;
-                                infoPallet.line_ord = line_ord;
-                                break;
-                            }
-                            else
-                            {
-                                continue;
+                                    infoPallet.pallet = pisCtrl; /* dropdown */
+                                    infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
+                                    infoPallet.bay = bay;
+                                    infoPallet.hasSubLine = subline; /* yes or no */
+                                    infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
+                                    infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
+                                    infoPallet.row = row;
+                                    infoPallet.line_ord = line_ord;
+                                    break;
+                                }
+                                else
+                                {
+                                    continue;
+                                }
                             }
                         }
-                    }
                 }
             }
             catch
@@ -1742,7 +1562,7 @@ namespace SelDatUnilever_Ver1
             infoPallet.hasSubLine = "no"; /* no */
             infoPallet.dir_main = (TrafficRobotUnity.BrDirection)order.palletAtMachine.directMain;
             infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)order.palletAtMachine.directSub;
-            infoPallet.dir_out = (TrafficRobotUnity.BrDirection)order.palletAtMachine.directOut;
+            infoPallet.dir_out= (TrafficRobotUnity.BrDirection)order.palletAtMachine.directOut;
             infoPallet.line_ord = order.palletAtMachine.line_ord;
             infoPallet.row = order.palletAtMachine.row;
 
@@ -1759,7 +1579,7 @@ namespace SelDatUnilever_Ver1
             if (collectionData.Length > 0)
             {
                 JArray results = JArray.Parse(collectionData);
-                //  var result = results[0];
+              //  var result = results[0];
                 foreach (var buffer in results)
                 {
                     if (buffer["pallets"].Count() > 0)
@@ -1789,25 +1609,25 @@ namespace SelDatUnilever_Ver1
                         continue;
                     }
                 }
-
-
+                
+                
 
             }
             return JsonConvert.SerializeObject(infoPallet);
         }
 
-        /*    public void UpdatePalletState(PalletStatus palletStatus)
-            {
-                String url = Global_Object.url + "pallet/updatePalletStatus";
-                dynamic product = new JObject();
-                product.palletId = palletId;
-                product.planId = planId;
-                product.palletStatus = palletStatus.ToString();
-                product.updUsrId = Global_Object.userLogin;
-                var data = RequestDataProcedure( product.ToString(),url);
+    /*    public void UpdatePalletState(PalletStatus palletStatus)
+        {
+            String url = Global_Object.url + "pallet/updatePalletStatus";
+            dynamic product = new JObject();
+            product.palletId = palletId;
+            product.planId = planId;
+            product.palletStatus = palletStatus.ToString();
+            product.updUsrId = Global_Object.userLogin;
+            var data = RequestDataProcedure( product.ToString(),url);
 
-            }*/
-        public void UpdatePalletState(PalletStatus palletStatus, int _palletId, int _planId)
+        }*/
+        public void UpdatePalletState(PalletStatus palletStatus,int _palletId,int _planId)
         {
             String url = Global_Object.url + "pallet/updatePalletStatus";
             dynamic product = new JObject();

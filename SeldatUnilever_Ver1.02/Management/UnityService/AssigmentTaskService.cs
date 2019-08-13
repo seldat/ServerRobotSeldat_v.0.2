@@ -48,7 +48,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             while(Alive)
             {
                 OrderItem order = Gettask();
-                if(order!=null)
+                if (order != null)
                 {
                     cntWaitTask = 0;
                     if (AssignWaitTask(order))
@@ -66,16 +66,16 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 }
                 else
                 {
-                    if(cntWaitTask++>=deviceItemsList.Count)
+                    if (cntWaitTask++ > deviceItemsList.Count)
                     {
-                        if (AssignWaitTask(order)) {
-                            Console.WriteLine("Assign RB goto ready_____________(-_-)______________");
-                        }
-                        MoveElementToEnd();
-                        //Thread.Sleep(500);
-                        //cntWaitTask = 0;
+                        cntWaitTask = 0;
+                        AssignWaitTask(order);
+                        Console.WriteLine("Assign RB goto ready_____________(-_-)______________");
                     }
+                   
+                
                 }
+                MoveElementToEnd();
                 Thread.Sleep(500);
             }
         }
@@ -228,8 +228,15 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                             }
                                             else
                                             {
-                                                processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_HAS_ANTASK;
-                                                break;
+                                                if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robotatready))
+                                                {
+                                                    processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_HAS_ANTASK;
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    TrafficRountineConstants.RegIntZone_READY.Release(robotatready);
+                                                }
                                             }
                                         }
                                     }

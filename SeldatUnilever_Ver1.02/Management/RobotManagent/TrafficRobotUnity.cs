@@ -564,7 +564,7 @@ namespace SeldatMRMS.Management
             //onFlagDetectLine = true;
             if (_type == TypeZone.READY)
             {
-                robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY;
+                robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_READY;
                 //SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
             }
             if (_type == TypeZone.HIGHWAY && onFlagDetectLine == false)
@@ -669,6 +669,12 @@ namespace SeldatMRMS.Management
                     // tắt vòng tròn nhỏ
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_GATE:
+                    SetSafeOrgancircle(false);
+                    SetSafeSmallcircle(false);
+                    SetSafeBluecircle(false);
+                    SetSafeYellowcircle(false);
+                    break;
+                case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_READY:
                     SetSafeOrgancircle(false);
                     SetSafeSmallcircle(false);
                     SetSafeBluecircle(false);

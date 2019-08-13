@@ -674,8 +674,11 @@ namespace SeldatMRMS
                         }
                         else
                         {
-                            Console.WriteLine("Break goto ready and assign task _____(-_-)____");
-                            return true;
+                            if (!Traffic.HasRobotUnityinArea("C1", robot)|| !Traffic.HasRobotUnityinArea("READY", robot))
+                            {
+                                Console.WriteLine("Break goto ready and assign task _____(-_-)____");
+                                return true;
+                            }
                         }  
                     }
                 }
