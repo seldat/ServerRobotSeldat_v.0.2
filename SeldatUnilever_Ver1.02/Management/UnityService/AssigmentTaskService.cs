@@ -36,10 +36,12 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         }
         public void Dispose()
         {
+            Console.WriteLine("MainProcessAssignTask Stop in Dispose");
             Alive = false;
         }
         public void Stop()
         {
+            Console.WriteLine("MainProcessAssignTask Stop in Stop");
             Alive = false;
         }
         public void MainProcessAssignTask()
