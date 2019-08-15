@@ -73,10 +73,10 @@ namespace SeldatMRMS
             robot.ProcedureAs = ProcedureControlAssign.PRO_CHARGE;
             StateRobotToCharge = state;
             ProRobotToCharger = new Thread(this.Procedure);
-            ProRobotToCharger.Start(this);
             procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE;
             ProRun = true;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+            ProRobotToCharger.Start(this);
         }
         public void Destroy()
         {

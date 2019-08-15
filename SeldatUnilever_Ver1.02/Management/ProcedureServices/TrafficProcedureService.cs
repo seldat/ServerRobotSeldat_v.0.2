@@ -116,7 +116,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             {
                 if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP)
                 {
-                    door = this.doorservice.DoorMezzamineUp;
+                    door = this.doorservice.DoorMezzamineUp_InV;
                 }
                 else if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP_NEW)
                 {

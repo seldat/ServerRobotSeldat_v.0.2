@@ -146,14 +146,12 @@ namespace SeldatMRMS.Management
             robotTag = RobotStatus.IDLE;
             //  robotTag = RobotStatus.WORKING;
             onFlagReadyGo = false;
-
-
         }
         public void StartTraffic()
         {
             new Thread(TrafficUpdate).Start();
-
         }
+
         public PriorityLevel prioritLevel;
         public void RegisteRobotInAvailable(Dictionary<String, RobotUnity> RobotUnitylistdc)
         {
@@ -269,7 +267,7 @@ namespace SeldatMRMS.Management
                             bool onTouch2 = r.FindHeaderInsideCircleArea(mdCV2, r.Radius_S);
                             bool onTouch3 = r.FindHeaderInsideCircleArea(mdCV3, r.Radius_S);
 
-                            if ( onTouch1 )
+                            if (onTouch1)
                             {
                                 //  robotLogOut.ShowTextTraffic(r.properties.Label+" => CheckIntersection");   
                                 if (r.onFlagSafeSmallcircle || r.onFlagSafeYellowcircle || r.onFlagSafeOrgancircle)
@@ -774,7 +772,7 @@ namespace SeldatMRMS.Management
             }
             return onstop;
         }
-        public void SetSafeYellowcircle(bool flagonoff,double radius = 50)
+        public void SetSafeYellowcircle(bool flagonoff, double radius = 50)
         {
             if (flagonoff)
                 Radius_Y = radius;
@@ -790,7 +788,7 @@ namespace SeldatMRMS.Management
                 Radius_B = 0;
             onFlagSafeBluecircle = flagonoff;
         }
-        public void SetSafeSmallcircle(bool flagonoff,double radius=40)
+        public void SetSafeSmallcircle(bool flagonoff, double radius = 40)
         {
             if (flagonoff)
                 Radius_S = radius;
