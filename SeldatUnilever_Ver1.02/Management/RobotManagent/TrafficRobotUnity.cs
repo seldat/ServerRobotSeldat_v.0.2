@@ -67,7 +67,6 @@ namespace SeldatMRMS.Management
             READYGO,
             CHARGING,
             READY
-
         }
         public class RobotRegistryToWorkingZone
         {
@@ -90,32 +89,12 @@ namespace SeldatMRMS.Management
                 onRobotGoingInsideZone = true;
             }
         }
-        // public enum MvDirection{
-        //     INCREASE_X = 0,
-        // 	INCREASE_Y,
-        // 	DECREASE_X,
-        // 	DECREASE_Y
-        // // }
         public enum BrDirection
         {
             FORWARD = 0,
             DIR_LEFT,
             DIR_RIGHT
         }
-        // public class PointDetect {
-        //     public Point p;
-        //     public MvDirection mvDir;
-        //     public PointDetect(Point p, MvDirection mv)
-        //     {
-        //         this.p = p;
-        //         mvDir = mv;
-        //     }
-        // }
-
-        // public class PointDetectBranching{
-        //     public PointDetect xy;
-        //     public BrDirection brDir;
-        // }
         public enum PistonPalletCtrl
         {
             PISTON_PALLET_UP = 0,

@@ -54,11 +54,11 @@ namespace SeldatMRMS
             robot.ProcedureAs = ProcedureControlAssign.PRO_RETURN_TO_GATE;
             StateReturnToGate = state;
             ProReturnToGate = new Thread(this.Procedure);
-            ProReturnToGate.Start(this);
             ProRun = true;
             ProRunStopW = true;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             order.startTimeProcedure = DateTime.Now;
+            ProReturnToGate.Start(this);
         }
         public void Destroy()
         {

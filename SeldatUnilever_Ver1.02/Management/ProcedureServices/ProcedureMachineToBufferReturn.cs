@@ -38,7 +38,6 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             robot.ProcedureAs = ProcedureControlAssign.PRO_MACHINE_TO_BUFFER_RETURN;
             StateMachineToBufferReturn = state;
             ProMachineToBufferReturn = new Thread(this.Procedure);
-            ProMachineToBufferReturn.Start(this);
             ProRun = true;
             ProRunStopW = true;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
@@ -47,6 +46,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             registryRobotJourney.robot = robot;
             registryRobotJourney.traffic = Traffic;
             robot.bayId = -1;
+            ProMachineToBufferReturn.Start(this);
         }
         public void Destroy()
         {

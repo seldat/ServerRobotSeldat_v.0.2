@@ -588,11 +588,14 @@ namespace SeldatMRMS.Management.RobotManagent
                     double theta = pose.AngleW;
                     data.pose.orientation.z = (float)Math.Sin(theta / 2);
                     data.pose.orientation.w = (float)Math.Cos(theta / 2);
-                    robotLogOut.ShowText(this.properties.Label, "--------------------------");
-                    robotLogOut.ShowText(this.properties.Label, pose.AngleW.ToString());
-                    robotLogOut.ShowText(this.properties.Label, data.pose.orientation.z.ToString());
-                    robotLogOut.ShowText(this.properties.Label, data.pose.orientation.w.ToString());
-                    robotLogOut.ShowText(this.properties.Label, "--------------------------");
+
+                    Console.WriteLine(this.properties.Label, "Send Pose => " + JsonConvert.SerializeObject(data).ToString());
+                    
+                    //robotLogOut.ShowText(this.properties.Label, "--------------------------");
+                    //robotLogOut.ShowText(this.properties.Label, pose.AngleW.ToString());
+                    //robotLogOut.ShowText(this.properties.Label, data.pose.orientation.z.ToString());
+                    //robotLogOut.ShowText(this.properties.Label, data.pose.orientation.w.ToString());
+                    //robotLogOut.ShowText(this.properties.Label, "--------------------------");
 
                     this.Publish(paramsRosSocket.publication_robotnavigation, data);
                     robotLogOut.ShowText(this.properties.Label, "Send Pose => " + JsonConvert.SerializeObject(data).ToString());
@@ -613,7 +616,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 }
                 else
                 {
-                    robotLogOut.ShowText(this.properties.Label,"Without Data SendPoseStamped");
+                    robotLogOut.ShowText(this.properties.Label,"Without Data SendPoseStamped : pose is Null");
                     return false;
                 }
             }
