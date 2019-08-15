@@ -72,8 +72,9 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         AssignWaitTask(order);
                         Console.WriteLine("Assign RB goto ready_____________(-_-)______________");
                     }
+                    MoveElementToEnd();
                 }
-                MoveElementToEnd();
+                //MoveElementToEnd();
                 Thread.Sleep(500);
             }
         }

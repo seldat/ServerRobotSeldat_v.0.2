@@ -765,9 +765,9 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             }
             #endregion
             #region VIM (C2) -> READY , GATE12, ELEVATOR, VIM, GATE3
-            if (startZone.Equals("VIM-BTLCAP") && endZone.Equals("GATE3"))
+            if (startZone.Equals("VIM-BTLCAP") && endZone.Equals("GATE12"))
             {
-                return Reg_checkinC2_G3(rrj.robot, rrj.traffic);
+                return Reg_checkinC2_G12(rrj.robot, rrj.traffic);
             }
             // VIM->ELEVATOR && VIM
             if (startZone.Equals("VIM-BTLCAP") && endZone.Equals("ELEVATOR"))
