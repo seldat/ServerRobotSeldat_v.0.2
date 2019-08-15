@@ -589,6 +589,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     KillPID();
                     KillActionLib();
                     TurnOnSupervisorTraffic(true);
+                    SwitchToDetectLine(false);
                     this.PreProcedureAs = ProcedureControlAssign.PRO_IDLE;
                     robotService.RemoveRobotUnityReadyList(this);
                     robotService.AddRobotUnityWaitTaskList(this);
