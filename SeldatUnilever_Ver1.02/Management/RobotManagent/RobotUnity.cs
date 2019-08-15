@@ -520,6 +520,7 @@ namespace SeldatMRMS.Management.RobotManagent
             KillPID();
             KillActionLib();
             TurnOnSupervisorTraffic(true);
+            SwitchToDetectLine(false);
             robotService.RemoveRobotUnityReadyList(this);
             robotService.RemoveRobotUnityWaitTaskList(this);
             MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
@@ -550,6 +551,7 @@ namespace SeldatMRMS.Management.RobotManagent
             connectItem.IsEnabled = true;
             disposeItem.IsEnabled = false;
             TurnOnSupervisorTraffic(false);
+            SwitchToDetectLine(false);
             properties.IsConnected = false;
             robotService.RemoveRobotUnityReadyList(this);
             robotService.RemoveRobotUnityWaitTaskList(this);
