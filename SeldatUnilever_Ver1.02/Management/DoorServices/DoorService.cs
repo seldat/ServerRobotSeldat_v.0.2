@@ -408,9 +408,7 @@ namespace DoorControllerService
                         }
                         break;
                     case StateCtrl.DOOR_ST_WAITTING_CLOSE_DOOR_BACK_WHEN_IT_OPENING:
-                        Thread.Sleep(950);
-                        this.GetStatus(ref status, DoorType.DOOR_BACK);
-                        if (status.data[0] == (byte)DoorStatus.DOOR_CLOSE)
+                        if (RetState.DOOR_CTRL_SUCCESS == this.checkClose(DoorType.DOOR_BACK))
                         {
                             this.stateCtrlDoorFront = StateCtrl.DOOR_ST_OPEN_FRONT;
                             Console.WriteLine("DOOR_ST_OPEN_FRONT");
@@ -731,7 +729,7 @@ namespace DoorControllerService
 
         private bool GetStatus(ref DataReceive data, DoorType id)
         {
-            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "GetStatus Door");
+            //Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "GetStatus Door");
             bool ret = false;
             byte[] dataSend = new byte[7];
 
