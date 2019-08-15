@@ -66,7 +66,6 @@ namespace SeldatMRMS
 
             Task ProForkLift = new Task(() => this.Procedure(this));
             procedureStatus = ProcedureStatus.PROC_ALIVE;
-            ProForkLift.Start();
             ProRun = true;
             ProRunStopW = true;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
@@ -75,8 +74,7 @@ namespace SeldatMRMS
             registryRobotJourney = new RegistryRobotJourney();
             registryRobotJourney.robot = robot;
             registryRobotJourney.traffic = Traffic;
-
-
+            ProForkLift.Start();
         }
         public void Destroy()
         {

@@ -32,20 +32,22 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST;
             Thread threadprocessAssignAnTaskWait = new Thread(MainProcessAssignTask);
             threadprocessAssignAnTaskWait.Start();
-      
+
         }
         public void Dispose()
         {
+            Console.WriteLine("MainProcessAssignTask Stop in Dispose");
             Alive = false;
         }
         public void Stop()
         {
+            Console.WriteLine("MainProcessAssignTask Stop in Stop");
             Alive = false;
         }
         public void MainProcessAssignTask()
         {
             int cntWaitTask = 0;
-            while(Alive)
+            while (Alive)
             {
                 OrderItem order = Gettask();
                 if (order != null)
@@ -68,13 +70,14 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 {
                     if (cntWaitTask++ > deviceItemsList.Count)
                     {
-                        //cntWaitTask = 0;
-                        AssignWaitTask(order);
-                        Console.WriteLine("Assign RB goto ready_____________(-_-)______________");
+                        if (robotManageService.RobotUnityWaitTaskList.Count > 0)
+                        {
+                            //cntWaitTask = 0;
+                            AssignWaitTask(order);
+                        }
                     }
                     MoveElementToEnd();
                 }
-                //MoveElementToEnd();
                 Thread.Sleep(500);
             }
         }
@@ -125,11 +128,12 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK;
                         orderItem_wait.robot = robotwait.properties.Label;
                         robotwait.orderItem = orderItem_wait;
-                      //  MoveElementToEnd();
+                        //  MoveElementToEnd();
                         break;
                     case ProcessAssignAnTaskWait.PROC_ANY_CHECK_ROBOT_GOTO_READY:
                         robotwait.TurnOnSupervisorTraffic(true);
                         procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robotwait, null);
+                        Console.WriteLine(robotwait.properties.Label + " Assign goto ready_____________(-_-)______________");
                         robotManageService.RemoveRobotUnityWaitTaskList(robotwait);
                         return false;
                     case ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK:
@@ -142,7 +146,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         return true;
 
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(10);
             }
         }
         public void SelectProcedureItem(RobotUnity robot, OrderItem orderItem)
@@ -171,7 +175,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             {
                 procedureService.Register(ProcedureItemSelected.PROCEDURE_MACHINE_TO_BUFFER_RETURN, robot, orderItem);
             }
-            else if(orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401) // yes
+            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401) // yes
             {
                 procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_BUFFER, robot, orderItem);
             }
@@ -202,7 +206,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 }
                                 else
                                 {
-                                    if (order !=null)
+                                    if (order != null)
                                     {
                                         if (!trafficService.HasOtherRobotUnityinArea("READY", robotatready))
                                         {
@@ -210,7 +214,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                             {
                                                 if (trafficService.HasOtherRobotUnityinArea("READY-GATE", robotatready))
                                                 {
-                                                   // MoveElementToEnd();
+                                                    // MoveElementToEnd();
                                                 }
                                                 else
                                                 {
@@ -250,30 +254,30 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         orderItem_ready.robot = robotatready.properties.Label;
                         robotatready.orderItem = orderItem_ready;
                         processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_ASSIGN_ANTASK;
-                       // MoveElementToEnd();
+                        // MoveElementToEnd();
                         break;
                     case ProcessAssignTaskReady.PROC_READY_ASSIGN_ANTASK:
-                      TrafficRountineConstants.RegIntZone_READY.Release(robotatready);
-                      robotatready.TurnOnSupervisorTraffic(true);
-                      Console.WriteLine(processAssignTaskReady);
-                      SelectProcedureItem(robotatready, orderItem_ready);
-                      deviceItemsList[0].RemoveFirstOrder();
-                      robotManageService.RemoveRobotUnityReadyList(robotatready);
-                      orderItem_ready.status = StatusOrderResponseCode.DELIVERING;
-                      processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_ROBOT_OUTSIDEREADY;
-                      return true;                       
+                        TrafficRountineConstants.RegIntZone_READY.Release(robotatready);
+                        robotatready.TurnOnSupervisorTraffic(true);
+                        Console.WriteLine(processAssignTaskReady);
+                        SelectProcedureItem(robotatready, orderItem_ready);
+                        deviceItemsList[0].RemoveFirstOrder();
+                        robotManageService.RemoveRobotUnityReadyList(robotatready);
+                        orderItem_ready.status = StatusOrderResponseCode.DELIVERING;
+                        processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_ROBOT_OUTSIDEREADY;
+                        return true;
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(10);
             }
         }
         public bool FindRobotUnitySameOrderItem(String userName)
         {
             bool hasRobotSameOrderItem = false;
-            foreach(RobotUnity robot in robotManageService.RobotUnityRegistedList.Values)
+            foreach (RobotUnity robot in robotManageService.RobotUnityRegistedList.Values)
             {
-                if(robot.orderItem!=null)
+                if (robot.orderItem != null)
                 {
-                    if(robot.orderItem.userName.Equals(userName))
+                    if (robot.orderItem.userName.Equals(userName))
                     {
                         hasRobotSameOrderItem = true; ;
                         break;
@@ -289,7 +293,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 Global_Object.onFlagRobotComingGateBusy = true;
                 return false;
             }
-            return true;           
+            return true;
         }
         public int DetermineAmoutOfDeviceToAssignAnTask()
         {

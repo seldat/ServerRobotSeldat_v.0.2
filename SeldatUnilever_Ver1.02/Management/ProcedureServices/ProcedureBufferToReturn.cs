@@ -47,12 +47,12 @@ namespace SeldatMRMS
             robot.ProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_RETURN;
             StateBufferToReturn = state;
             ProBuferToReturn = new Thread(this.Procedure);
-            ProBuferToReturn.Start(this);
             procedureStatus = ProcedureStatus.PROC_ALIVE;
             ProRun = true;
             ProRunStopW = true;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             order.startTimeProcedure = DateTime.Now;
+            ProBuferToReturn.Start(this);
         }
         public void Destroy()
         {

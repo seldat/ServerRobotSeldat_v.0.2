@@ -48,11 +48,11 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             robot.ProcedureAs = ProcedureControlAssign.PRO_MACHINE_TO_GATE;
             StateMachineToGate = state;
             ProBufferToGate = new Thread(this.Procedure);
-            ProBufferToGate.Start(this);
             ProRun = true;
             ProRunStopW = true;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             order.startTimeProcedure = DateTime.Now;
+            ProBufferToGate.Start(this);
         }
         public void Destroy()
         {

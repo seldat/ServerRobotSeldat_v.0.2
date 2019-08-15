@@ -62,7 +62,6 @@ namespace SeldatMRMS
             robot.ProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_MACHINE;
             StateBufferToMachine = state;
             Task ProBuferToMachine = new Task(() => this.Procedure(this));
-            ProBuferToMachine.Start();
             procedureStatus = ProcedureStatus.PROC_ALIVE;
             ProRun = true;
             ProRunStopW = true;
@@ -72,7 +71,7 @@ namespace SeldatMRMS
             registryRobotJourney.robot = robot;
             registryRobotJourney.traffic = Traffic;
             robot.bayId = -1;
-
+            ProBuferToMachine.Start();
         }
         public void Destroy()
         {

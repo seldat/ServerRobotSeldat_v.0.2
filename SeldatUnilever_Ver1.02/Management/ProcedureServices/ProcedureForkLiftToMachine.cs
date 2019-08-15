@@ -55,12 +55,12 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             robot.ProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
             StateForkLiftToMachine = state;
             ProForkLiftToMachine = new Thread(this.Procedure);
-            ProForkLiftToMachine.Start(this);
             ProRun = true;
             ProRunStopW = true;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             robot.robotRegistryToWorkingZone.onRobotwillCheckInsideGate = true;
             order.startTimeProcedure = DateTime.Now;
+            ProForkLiftToMachine.Start(this);
         }
         public void Destroy()
         {

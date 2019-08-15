@@ -121,7 +121,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         {
             bool onRegReady = false;
             //kiem tra có robot trong vùng này, nếu có trả về false
-            if (traffic.HasOtherRobotUnityinArea("READY", robot) )
+            if (traffic.HasOtherRobotUnityinArea("READY", robot))
             {
                 return false;
             }
@@ -651,7 +651,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
                         if (rrj.traffic.HasRobotUnityinArea("OUTER", rrj.robot))
                         {
                             ReleaseAll(rrj.robot);
-                    
+
                             // rrj.robot.ShowText("RELEASED ROBOT IN REGISTER LIST OF SEPCIAL ZONE FROM VIM -> OUTER");
                             return true;
                         }
@@ -674,18 +674,19 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         {
             // xác định vùng đặt biệt trước khi bắt đầu frontline
 
-            if (rrj.traffic.HasRobotUnityinArea("C1", rrj.robot) || rrj.traffic.HasRobotUnityinArea("C2", rrj.robot) || rrj.traffic.HasRobotUnityinArea("C3", rrj.robot) ||
-                rrj.traffic.HasRobotUnityinArea("C4", rrj.robot) || rrj.traffic.HasRobotUnityinArea("C5", rrj.robot) || rrj.traffic.HasRobotUnityinArea("READY", rrj.robot))
+            if (rrj.traffic.HasRobotUnityinArea("C1", rrj.robot) || rrj.traffic.HasRobotUnityinArea("C2", rrj.robot)
+                || rrj.traffic.HasRobotUnityinArea("C3", rrj.robot) || rrj.traffic.HasRobotUnityinArea("C4", rrj.robot) ||
+                rrj.traffic.HasRobotUnityinArea("C5", rrj.robot) || rrj.traffic.HasRobotUnityinArea("READY", rrj.robot))
             {
                 // Robot được gửi lệnh Stop
                 if (StationCheckInSpecialZone(rrj))
                 {
-                    rrj.robot.SetSpeedRegZone(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+                    rrj.robot.SetSpeedRegZone(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
                     return false;
                 }
                 else
                 {
-                    rrj.robot.SetSpeedRegZone(RobotSpeedLevel.ROBOT_SPEED_STOP,true);
+                    rrj.robot.SetSpeedRegZone(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
                     ReleaseAll(rrj.robot);
                     return true;
                 }
@@ -695,7 +696,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             else
             {
                 // Robot van toc bình thuong
-                rrj.robot.SetSpeedRegZone(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+                rrj.robot.SetSpeedRegZone(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
                 return true;
             }
         }
@@ -714,7 +715,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             String startZone = rrj.traffic.DetermineArea(rrj.startPoint, TypeZone.MAIN_ZONE).Equals("OUTER") ? "OUTER" : rrj.traffic.DetermineArea(rrj.startPoint, TypeZone.OPZS);
             String endZone = rrj.traffic.DetermineArea(rrj.endPoint, TypeZone.MAIN_ZONE).Equals("OUTER") ? "OUTER" : rrj.traffic.DetermineArea(rrj.endPoint, TypeZone.OPZS);
             rrj.robot.StartPointName = startZone;
-            rrj.robot.EndPointName = endZone ;
+            rrj.robot.EndPointName = endZone;
             #region READY -> GATE12, ELEVATOR, GATE3, VIM
             if (startZone.Equals("READY") && endZone.Equals("GATE12"))
             {

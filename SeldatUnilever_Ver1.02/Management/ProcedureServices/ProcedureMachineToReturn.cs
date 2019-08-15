@@ -48,7 +48,6 @@ namespace SeldatMRMS
             robot.ProcedureAs = ProcedureControlAssign.PRO_MACHINE_TO_RETURN;
             StateMachineToReturn = state;
             ProMachineToReturn = new Thread(this.Procedure);
-            ProMachineToReturn.Start(this);
             ProRun = true;
             ProRunStopW = true;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
@@ -56,6 +55,7 @@ namespace SeldatMRMS
             registryRobotJourney = new RegistryRobotJourney();
             registryRobotJourney.robot = robot;
             registryRobotJourney.traffic = Traffic;
+            ProMachineToReturn.Start(this);
         }
         public void Destroy()
         {

@@ -54,7 +54,6 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             robot.ProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_BUFFER;
             StateBufferToBuffer = state;
             Task ProBuferToMachine = new Task(() => this.Procedure(this));
-            ProBuferToMachine.Start();
             procedureStatus = ProcedureStatus.PROC_ALIVE;
             ProRun = true;
             ProRunStopW = true;
@@ -63,7 +62,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             registryRobotJourney = new RegistryRobotJourney();
             registryRobotJourney.robot = robot;
             registryRobotJourney.traffic = Traffic;
-
+            ProBuferToMachine.Start();
         }
         public void Destroy()
         {

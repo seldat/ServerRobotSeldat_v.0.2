@@ -51,7 +51,6 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             robot.ProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_GATE;
             StateBufferToGate = state;
             ProBufferToGate = new Thread(this.Procedure);
-            ProBufferToGate.Start(this);
             ProRun = true;
             ProRunStopW = true;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
@@ -59,6 +58,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             registryRobotJourney = new RegistryRobotJourney();
             registryRobotJourney.robot = robot;
             registryRobotJourney.traffic = Traffic;
+            ProBufferToGate.Start(this);
         }
         public void Destroy()
         {

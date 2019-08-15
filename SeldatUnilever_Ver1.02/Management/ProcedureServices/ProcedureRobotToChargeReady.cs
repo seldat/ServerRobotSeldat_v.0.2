@@ -469,7 +469,6 @@ namespace SeldatMRMS
             robot.ProcedureAs = ProcedureControlAssign.PRO_READY;
             StateRobotGoToReady = state;
             ProRobotToReady = new Thread(this.Procedure);
-            ProRobotToReady.Start(this);
             procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_READY;
             ProRun = true;
             //robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
@@ -481,6 +480,7 @@ namespace SeldatMRMS
             registryRobotJourney = new RegistryRobotJourney();
             registryRobotJourney.robot = robot;
             registryRobotJourney.traffic = Traffic;
+            ProRobotToReady.Start(this);
         }
         public void Destroy()
         {
