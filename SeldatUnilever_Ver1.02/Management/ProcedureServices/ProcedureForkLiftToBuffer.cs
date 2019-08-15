@@ -223,7 +223,7 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_READY:
                         // dò ra điểm đích đến và xóa đăng ký vùng
-                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                       // TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         if (Traffic.RobotIsInArea("C3", rb.properties.pose.Position))
                         {
                             ds.setDoorBusy(true);
@@ -258,7 +258,7 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM:
                         // kiem tra vung đăng ký tai khu vuc xac định
-                        TrafficRountineConstants.DetectRelease(registryRobotJourney);
+                        //TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         if (Traffic.RobotIsInArea("C3", rb.properties.pose.Position))
                         {
                             ds.setDoorBusy(true);
@@ -271,6 +271,7 @@ namespace SeldatMRMS
                         TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
+                            
                             // robot.setTrafficAllCircles(false, false, false, false);
                             TrafficRountineConstants.RegIntZone_READY.Release(robot);
                             robot.SwitchToDetectLine(true);
