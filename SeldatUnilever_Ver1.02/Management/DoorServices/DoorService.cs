@@ -531,7 +531,7 @@ namespace DoorControllerService
                                         }
                                     }
                                 }
-                                catch(Exception e)
+                                catch (Exception e)
                                 {
                                     Console.WriteLine(e);
                                 }
@@ -635,7 +635,7 @@ namespace DoorControllerService
                                         }
                                     }
                                 }
-                                catch(Exception e)
+                                catch (Exception e)
                                 {
                                     Console.WriteLine(e);
                                 }
@@ -686,7 +686,6 @@ namespace DoorControllerService
                             if (this.socketBusy == false)
                             {
                                 this.socketBusy = true;
-                                DataReceive status = new DataReceive();
                                 try
                                 {
                                     this.GetStatus(ref status, DoorType.DOOR_BACK);
@@ -763,7 +762,7 @@ namespace DoorControllerService
             return ret;
         }
 
-        private bool OpenRelease (DoorType id)
+        private bool OpenRelease(DoorType id)
         {
             bool ret = false;
             byte[] dataSend = new byte[7];
