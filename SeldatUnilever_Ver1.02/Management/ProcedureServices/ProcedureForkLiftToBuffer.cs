@@ -110,7 +110,10 @@ namespace SeldatMRMS
                 robot.SwitchToDetectLine(false);
                 // robot.robotTag = RobotStatus.IDLE;
                 robot.ReleaseWorkingZone();
-                rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
+                if(Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
+                    rb.PreProcedureAs = ProcedureControlAssign.PRO_READY;
+                else
+                    rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
                 // if (errorCode == ErrorCode.RUN_OK) {
                 ReleaseProcedureHandler(this);
                 // } else {
@@ -390,7 +393,7 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_CHECK_GOTO_BUFFER_OR_MACHINE:
                         order.status = StatusOrderResponseCode.DELIVERING;
-                        flToMachineInfo = GetPriorityTaskForkLiftToMachine(order.productId);
+                        flToMachineInfo = GetPriorityTaskForkLiftToMachine(order.productDetailId);
                         if (flToMachineInfo == null)
                         {
                             StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY;
@@ -401,6 +404,7 @@ namespace SeldatMRMS
                         else
                         {
                            FreePlanedBuffer(order.palletId_P);
+                           UpdatePalletState(PalletStatus.W, flToMachineInfo.palletId, flToMachineInfo.planId);
                            StateForkLift = ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE_FROM_VIM_REG;
                         }
                         break;
@@ -697,8 +701,10 @@ namespace SeldatMRMS
         {
             public Pose frontLinePose;
             public String infoPallet;
+            public int palletId;
+            public int planId;
         }
-        public ForkLiftToMachineInfo GetPriorityTaskForkLiftToMachine(int productId)
+        public ForkLiftToMachineInfo GetPriorityTaskForkLiftToMachine(int productDetailId)
         {
             ForkLiftToMachineInfo forkLiftToMachineInfo = null;
             try
@@ -707,29 +713,31 @@ namespace SeldatMRMS
                 bool onHasOrder = false;
                 foreach (DeviceItem deviceItem in deviceService.GetDeviceItemList())
                 {
-                    foreach (OrderItem order in deviceItem.PendingOrderList)
+                    foreach (OrderItem _order in deviceItem.PendingOrderList)
                     {
-                        if (order.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
+                        if (_order.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
                         {
-                            if (order.productId == productId)
+                            if (_order.productDetailId == productDetailId)
                             {
                                 forkLiftToMachineInfo = new ForkLiftToMachineInfo();
-                                forkLiftToMachineInfo.frontLinePose = order.palletAtMachine.linePos;
+                                forkLiftToMachineInfo.frontLinePose = _order.palletAtMachine.linePos;
                                 JInfoPallet infoPallet = new JInfoPallet();
 
                                 infoPallet.pallet = PistonPalletCtrl.PISTON_PALLET_DOWN; /* dropdown */
-                                infoPallet.bay = order.palletAtMachine.bay;
+                                infoPallet.bay = _order.palletAtMachine.bay;
                                 infoPallet.hasSubLine = "no"; /* no */
-                                infoPallet.dir_main = (TrafficRobotUnity.BrDirection)order.palletAtMachine.directMain;
-                                infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)order.palletAtMachine.directSub;
-                                infoPallet.dir_out = (TrafficRobotUnity.BrDirection)order.palletAtMachine.directOut;
-                                infoPallet.line_ord = order.palletAtMachine.line_ord;
-                                infoPallet.row = order.palletAtMachine.row;
+                                infoPallet.dir_main = (TrafficRobotUnity.BrDirection)_order.palletAtMachine.directMain;
+                                infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)_order.palletAtMachine.directSub;
+                                infoPallet.dir_out = (TrafficRobotUnity.BrDirection)_order.palletAtMachine.directOut;
+                                infoPallet.line_ord = _order.palletAtMachine.line_ord;
+                                infoPallet.row = _order.palletAtMachine.row;
 
                                 forkLiftToMachineInfo.infoPallet = JsonConvert.SerializeObject(infoPallet);
-                                order.status = StatusOrderResponseCode.CHANGED_FORKLIFT;
+                                forkLiftToMachineInfo.palletId = _order.palletId_H;
+                                forkLiftToMachineInfo.planId = _order.planId;
+                                _order.status = StatusOrderResponseCode.CHANGED_FORKLIFT;
                                 onHasOrder = true;
-                                deviceItem.PendingOrderList.Remove(order);
+                                deviceItem.PendingOrderList.Remove(_order);
                                 break;
                             }
 

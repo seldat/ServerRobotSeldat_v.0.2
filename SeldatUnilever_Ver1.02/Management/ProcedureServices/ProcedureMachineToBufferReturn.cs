@@ -10,6 +10,7 @@ using static SeldatMRMS.Management.TrafficRobotUnity;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterService;
 using SeldatUnilever_Ver1._02.Management.TrafficManager;
+using Newtonsoft.Json;
 
 namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 {
@@ -18,6 +19,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         MachineToBufferReturn StateMachineToBufferReturn;
         Thread ProMachineToBufferReturn;
         public RobotUnity robot;
+        public JPallet JResult;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
         public override event Action<Object> ReleaseProcedureHandler;
@@ -390,8 +392,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-
-                                if (rb.SendCmdAreaPallet(BfToBufRe.GetInfoOfPalletBufferReturn_MBR(PistonPalletCtrl.PISTON_PALLET_DOWN, order.dataRequest)))
+                                JResult = BfToBufRe.GetInfoPallet_P_InBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN);
+                                //  String data = JsonConvert.SerializeObject(FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true));
+                                String data = JsonConvert.SerializeObject(JResult.jInfoPallet);
+                                if (rb.SendCmdAreaPallet(data))
                                 {
                                     StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
                                     //robot.ShowText("MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET");
@@ -417,8 +421,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-
-                                if (rb.SendCmdAreaPallet(BfToBufRe.GetInfoOfPalletBufferReturn_MBR(PistonPalletCtrl.PISTON_PALLET_DOWN,order.dataRequest)))
+                                JResult = BfToBufRe.GetInfoPallet_P_InBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN);
+                                //  String data = JsonConvert.SerializeObject(FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true));
+                                String data = JsonConvert.SerializeObject(JResult.jInfoPallet);
+                                if (rb.SendCmdAreaPallet(data))
                                 {
                                     StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
                                     //robot.ShowText("MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET");

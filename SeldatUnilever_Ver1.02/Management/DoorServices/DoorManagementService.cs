@@ -86,7 +86,7 @@ namespace SeldatMRMS.Management.DoorServices
                 Port = 8081,
                 infoPallet = "{\"pallet\":0,\"dir_main\":2,\"dir_out\":0,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
                 PointCheckInGateStr = "2.54,-6.78,90",
-                PointFrontLineStr = "11.1,0.7,0"
+                PointFrontLineStr = "13.1,0.7,180"
             };
             doorICF_MUB_NEW_INV.ParsePointCheckInGateValue(doorICF_MUB_NEW_INV.PointCheckInGateStr);
             doorICF_MUB_NEW_INV.ParsePointFrontLineValue(doorICF_MUB_NEW_INV.PointFrontLineStr);
@@ -116,7 +116,7 @@ namespace SeldatMRMS.Management.DoorServices
                 Port = 8081,
                 infoPallet = "{\"pallet\":0,\"dir_main\":2,\"dir_out\":0,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
                 PointCheckInGateStr = "2.54,-6.78,90",
-                PointFrontLineStr = "13.88,0.7,0"
+                PointFrontLineStr = "16.5,0.7,180"
             };
             doorICF_MUB_INV.ParsePointCheckInGateValue(doorICF_MUB_INV.PointCheckInGateStr);
             doorICF_MUB_INV.ParsePointFrontLineValue(doorICF_MUB_INV.PointFrontLineStr);
@@ -148,7 +148,7 @@ namespace SeldatMRMS.Management.DoorServices
                 Port = 8081,
                 infoPallet = "{\"pallet\":1\"dir_main\":2,\"dir_out\":0,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
                 PointCheckInGateStr = "2.54,-6.78,90",
-                PointFrontLineStr = "36,0.7,0"
+                PointFrontLineStr = "36,0.7,180"
             };
             doorICF_MRB_INV.ParsePointCheckInGateValue(doorICF_MRB_INV.PointCheckInGateStr);
             doorICF_MRB_INV.ParsePointFrontLineValue(doorICF_MRB_INV.PointFrontLineStr);
