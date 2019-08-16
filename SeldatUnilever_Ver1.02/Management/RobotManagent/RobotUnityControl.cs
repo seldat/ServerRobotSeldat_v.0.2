@@ -209,6 +209,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public int publication_TestLaserError;
             public int publication_TestLaserWarning;
             public int publication_killpid;
+            public int publication_liftCtrl;
         }
 
         public struct LaserErrorCode {
@@ -313,7 +314,7 @@ namespace SeldatMRMS.Management.RobotManagent
             paramsRosSocket.publication_linedetectionctrl = this.Advertise("/linedetectionctrl_servercallback", "std_msgs/Int32");
             paramsRosSocket.publication_postPallet = this.Advertise ("/pospallet_servercallback", "std_msgs/Int32");
             paramsRosSocket.publication_finishStatesCallBack = this.Advertise("/finishStatesCallBack", "std_msgs/Int32");
-
+            paramsRosSocket.publication_liftCtrl = this.Advertise("/lift_control", "std_msgs/String");
             paramsRosSocket.publication_cmdAreaPallet = this.Advertise ("/cmdAreaPallet_servercallback", "std_msgs/String");
             paramsRosSocket.publication_robotnavigation = this.Advertise("/robot_navigation", "geometry_msgs/PoseStamped");
 
@@ -349,7 +350,18 @@ namespace SeldatMRMS.Management.RobotManagent
             }
             catch { }
         }
-
+        public void LiftCtrlUp()
+        {
+            StandardString msg = new StandardString();
+            msg.data = "lift_up";
+            this.Publish(paramsRosSocket.publication_liftCtrl,msg);
+        }
+        public void LiftCtrlDown()
+        {
+            StandardString msg = new StandardString();
+            msg.data = "lift_down";
+            this.Publish(paramsRosSocket.publication_liftCtrl, msg);
+        }
         private void BatteryVolHandler (Communication.Message message) {
             StandardInt32 batVal = (StandardInt32) message;
             properties.BatteryLevelRb = batVal.data;
@@ -629,6 +641,50 @@ namespace SeldatMRMS.Management.RobotManagent
         bool flagSpeedTraffic = false;
         bool flagSpeedRegZone = false;
         bool flagSetSpeedHighPrioprity = false;
+        bool flagSetCtrlSpeed = true;
+
+        public bool SetSpeedCtrl(RobotSpeedLevel robotspeed, bool highpriority)
+        {
+
+            flagSetCtrlSpeed = highpriority;
+            if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity || flagSetCtrlSpeed)
+            {
+                try
+                {
+                    properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
+                    StandardInt32 msg = new StandardInt32();
+                    msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                    this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                    delay(700);
+                    return true;
+                }
+                catch
+                {
+                    Console.WriteLine("Robot Control Error  SetSpeed");
+                    return false;
+                }
+
+
+            }
+            else
+            {
+                try
+                {
+                    properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
+                    StandardInt32 msg = new StandardInt32();
+                    msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                    this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                    delay(700);
+                    return true;
+                }
+                catch
+                {
+                    Console.WriteLine("Robot Control Error  SetSpeed");
+                    return false;
+                }
+            }
+
+        }
         public bool SetSpeedHighPrioprity(RobotSpeedLevel robotspeed, bool highpriority) {
 
             flagSetSpeedHighPrioprity = highpriority;

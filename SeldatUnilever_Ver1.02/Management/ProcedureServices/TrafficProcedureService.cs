@@ -19,7 +19,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         TrafficManagementService traffic;
         DoorManagementService doorservice;
         RobotUnity robot;
-        protected int DISTANCE_CHECk_BAYID = 8;
+        protected double DISTANCE_CHECk_BAYID = 4.5; //meter
         public TrafficProcedureService(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService trafficService) :base(robot)
         {
             this.traffic = trafficService;

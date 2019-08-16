@@ -372,17 +372,21 @@ namespace SeldatUnilever_Ver1._02
         private void RemoveOrder_Click(object sender, RoutedEventArgs e)
         {
             OrderItem orderItem = (sender as Button).DataContext as OrderItem;
-            Task.Run(() => { 
-                 foreach(DeviceItem devI in unityService.deviceRegistrationService.deviceItemList)
+            Task.Run(() => {
+                try
                 {
-                    if (devI.userName == orderItem.userName)
+                    foreach (DeviceItem devI in unityService.deviceRegistrationService.deviceItemList)
                     {
-                        if (orderItem.status == StatusOrderResponseCode.PENDING)
-                            devI.RemoveCallBack(orderItem);
-                        else
-                            MessageBox.Show("Chỉ có thể xóa Pending !");
+                        if (devI.userName == orderItem.userName)
+                        {
+                            if (orderItem.status == StatusOrderResponseCode.PENDING)
+                                devI.RemoveCallBack(orderItem);
+                            else
+                                MessageBox.Show("Chỉ có thể xóa Pending !");
+                        }
                     }
                 }
+                catch { }
                 
             });
 
