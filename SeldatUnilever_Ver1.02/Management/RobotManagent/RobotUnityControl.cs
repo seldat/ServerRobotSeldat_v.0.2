@@ -352,15 +352,23 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void LiftCtrlUp()
         {
-            StandardString msg = new StandardString();
-            msg.data = "lift_up";
-            this.Publish(paramsRosSocket.publication_liftCtrl,msg);
+            try
+            {
+                StandardString msg = new StandardString();
+                msg.data = "lift_up";
+                this.Publish(paramsRosSocket.publication_liftCtrl, msg);
+            }
+            catch { }
         }
         public void LiftCtrlDown()
         {
-            StandardString msg = new StandardString();
-            msg.data = "lift_down";
-            this.Publish(paramsRosSocket.publication_liftCtrl, msg);
+            try
+            {
+                StandardString msg = new StandardString();
+                msg.data = "lift_down";
+                this.Publish(paramsRosSocket.publication_liftCtrl, msg);
+            }
+            catch { }
         }
         private void BatteryVolHandler (Communication.Message message) {
             StandardInt32 batVal = (StandardInt32) message;

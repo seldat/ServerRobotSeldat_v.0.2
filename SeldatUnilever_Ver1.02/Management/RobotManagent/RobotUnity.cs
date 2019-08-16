@@ -94,6 +94,8 @@ namespace SeldatMRMS.Management.RobotManagent
         MenuItem problemSolutionItem = new MenuItem();
         MenuItem startItem = new MenuItem();
         MenuItem pauseItem = new MenuItem();
+        MenuItem liftUp = new MenuItem();
+        MenuItem liftDown = new MenuItem();
         MenuItem connectItem = new MenuItem();
         MenuItem retryconnectItem = new MenuItem();
         MenuItem disposeItem = new MenuItem();
@@ -129,6 +131,13 @@ namespace SeldatMRMS.Management.RobotManagent
             pauseItem.Header = "Pause";
             pauseItem.Click += PauseMenu;
             pauseItem.IsEnabled = true;
+
+            liftUp.Header = "Lift Up";
+            liftUp.Click += LiftUpMenu;
+            liftUp.IsEnabled = true;
+            liftDown.Header = "Lift Down";
+            liftDown.Click += LiftDownMenu;
+            liftDown.IsEnabled = true;
 
             logOutItem.Header = "Log";
             logOutItem.Click += LogOut;
@@ -168,6 +177,9 @@ namespace SeldatMRMS.Management.RobotManagent
             border.ContextMenu.Items.Add(problemSolutionItem);
             border.ContextMenu.Items.Add(startItem);
             border.ContextMenu.Items.Add(pauseItem);
+
+            border.ContextMenu.Items.Add(liftUp);
+            border.ContextMenu.Items.Add(liftDown);
             border.ContextMenu.Items.Add(logOutItem);
 
             border.ContextMenu.Items.Add(connectItem);
@@ -447,7 +459,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         private void PauseMenu(object sender, RoutedEventArgs e)
         {
-            SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+            SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
         }
         private void AddReadyListMenu(object sender, RoutedEventArgs e)
         {
@@ -601,7 +613,17 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         private void StartMenu(object sender, RoutedEventArgs e)
         {
-            SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+            SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+        }
+
+        private void LiftUpMenu(object sender, RoutedEventArgs e)
+        {
+            LiftCtrlUp();
+        }
+
+        private void LiftDownMenu(object sender, RoutedEventArgs e)
+        {
+            LiftCtrlDown();
         }
         public void RemoveDraw()
         {

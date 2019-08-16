@@ -48,23 +48,23 @@
     },
     "PointFrontLine": {
       "bayId": 0,
-      "Position": "12.2,0.7",
+      "Position": "13.1,0.7",
       "VFbx": 0.0,
       "VFby": 0.0,
       "VFbw": 0.0,
       "VCtrlx": 0.0,
       "VCtrly": 0.0,
       "VCtrlw": 0.0,
-      "AngleW": 0.0,
-      "Angle": 0.0
+      "AngleW": 3.1415926535897931,
+      "Angle": 180.0
     },
     "Name": "GATE1-INV",
     "Ip": "192.168.1.242",
     "Port": 8081,
     "Id": 1,
     "PointCheckInGateStr": "2.54,-6.78,90",
-    "PointFrontLineStr": "12.2,0.7,0",
-    "infoPallet": "{\"pallet\":0,\"dir_main\":1,\"dir_out\":0,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
+    "PointFrontLineStr": "13.1,0.7,180",
+    "infoPallet": "{\"pallet\":0,\"dir_main\":2,\"dir_out\":0,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
     "infoPalletInv": null
   },
   {
@@ -116,23 +116,23 @@
     },
     "PointFrontLine": {
       "bayId": 0,
-      "Position": "13.88,0.7",
+      "Position": "16.5,0.7",
       "VFbx": 0.0,
       "VFby": 0.0,
       "VFbw": 0.0,
       "VCtrlx": 0.0,
       "VCtrly": 0.0,
       "VCtrlw": 0.0,
-      "AngleW": 0.0,
-      "Angle": 0.0
+      "AngleW": 3.1415926535897931,
+      "Angle": 180.0
     },
     "Name": "GATE2-INV",
     "Ip": "192.168.1.240",
     "Port": 8081,
     "Id": 2,
     "PointCheckInGateStr": "2.54,-6.78,90",
-    "PointFrontLineStr": "13.88,0.7,0",
-    "infoPallet": "{\"pallet\":0,\"dir_main\":1,\"dir_out\":0,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
+    "PointFrontLineStr": "16.5,0.7,180",
+    "infoPallet": "{\"pallet\":0,\"dir_main\":2,\"dir_out\":0,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
     "infoPalletInv": null
   },
   {
@@ -150,7 +150,7 @@
     },
     "PointFrontLine": {
       "bayId": 0,
-      "Position": "38.64,0.7",
+      "Position": "39,0.7",
       "VFbx": 0.0,
       "VFby": 0.0,
       "VFbw": 0.0,
@@ -165,8 +165,8 @@
     "Port": 8081,
     "Id": 3,
     "PointCheckInGateStr": "2.54,-6.78,90",
-    "PointFrontLineStr": "38.64,0.7,0",
-    "infoPallet": "{\"pallet\":1,\"dir_main\":1,\"dir_out\":0,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
+    "PointFrontLineStr": "39,0.7,0",
+    "infoPallet": "{\"pallet\":1\"dir_main\":1,\"dir_out\":0,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
     "infoPalletInv": null
   },
   {
@@ -184,23 +184,23 @@
     },
     "PointFrontLine": {
       "bayId": 0,
-      "Position": "38.64,0.7",
+      "Position": "36,0.7",
       "VFbx": 0.0,
       "VFby": 0.0,
       "VFbw": 0.0,
       "VCtrlx": 0.0,
       "VCtrly": 0.0,
       "VCtrlw": 0.0,
-      "AngleW": 0.0,
-      "Angle": 0.0
+      "AngleW": 3.1415926535897931,
+      "Angle": 180.0
     },
     "Name": "GATE_RETURN_INV",
     "Ip": "192.168.1.241",
     "Port": 8081,
     "Id": 3,
     "PointCheckInGateStr": "2.54,-6.78,90",
-    "PointFrontLineStr": "38.64,0.7,0",
-    "infoPallet": "{\"pallet\":1,\"dir_main\":1,\"dir_out\":0,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
+    "PointFrontLineStr": "36,0.7,180",
+    "infoPallet": "{\"pallet\":1\"dir_main\":2,\"dir_out\":0,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
     "infoPalletInv": null
   }
 ]
