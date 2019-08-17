@@ -5,6 +5,7 @@ using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
+using SelDatUnilever_Ver1._00.Management.UnityService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace SeldatMRMS
         protected TrafficManagementService trafficService;
         protected DeviceRegistrationService deviceService;
         protected RobotManagementService robotManagementService;
+        protected AssigmentTaskService assigmentTask;
         protected virtual bool Cancel() { return false; }
 
         public class RegisterProcedureItem
@@ -86,6 +88,10 @@ namespace SeldatMRMS
         public void RegistryService(DeviceRegistrationService deviceService)
         {
             this.deviceService = deviceService;
+        }
+        public void RegistryService(AssigmentTaskService assigmentTask)
+        {
+            this.assigmentTask = assigmentTask;
         }
         public void StoreProceduresInDataBase()
         {

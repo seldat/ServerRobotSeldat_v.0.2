@@ -9,6 +9,7 @@ using SeldatUnilever_Ver1._02.Management.ProcedureServices;
 using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
+using SelDatUnilever_Ver1._00.Management.UnityService;
 using static DoorControllerService.DoorService;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnity;
@@ -443,6 +444,7 @@ namespace SeldatMRMS
         TrafficManagementService Traffic;
         public override event Action<Object> ReleaseProcedureHandler;
         private DeviceRegistrationService deviceService;
+        private AssigmentTaskService assigmentTask;
 
         // public override event Action<Object> ErrorProcedureHandler;
         public ProcedureRobotToReady(RobotUnity robot, ChargerId id, TrafficManagementService trafficService, ChargerManagementService chargerService, Pose PointCheckIn) : base(robot, trafficService)
