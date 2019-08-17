@@ -140,6 +140,7 @@ namespace DoorControllerService
         private const UInt32 TIME_OUT_WAIT_DOOR_BACK = 9000;
         private const UInt32 NUM_TRY_OPEN_DOOR = 100;
         private const UInt32 NUM_TRY_CLOSE_DOOR = 100;
+        private const UInt32 TIME_OUT_PRESS_BUTTON = 2000;
         private UInt32 numTryOpen = 0;
         private UInt32 numTryClose = 0;
         private bool socketBusy = false;
@@ -368,6 +369,8 @@ namespace DoorControllerService
             DataReceive status = new DataReceive();
             Stopwatch elapsedTimeFront = new Stopwatch();
             elapsedTimeFront.Start();
+            Stopwatch elapsedTimeReleaseButton = new Stopwatch();
+            elapsedTimeReleaseButton.Start();
             while (true)
             {
                 switch (this.stateCtrlDoorFront)
@@ -385,6 +388,7 @@ namespace DoorControllerService
                                 if (this.OpenPress(DoorType.DOOR_FRONT))
                                 {
                                     elapsedTimeFront.Restart();
+                                    elapsedTimeReleaseButton.Restart();
                                     this.stateCtrlDoorFront = StateCtrl.DOOR_ST_WAITTING_OPEN_DOOR_FRONT;
                                     Console.WriteLine("DOOR_ST_WAITTING_OPEN_DOOR_FRONT");
                                 }
@@ -415,6 +419,19 @@ namespace DoorControllerService
                         }
                         break;
                     case StateCtrl.DOOR_ST_WAITTING_OPEN_DOOR_FRONT:
+                        if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
+                        {
+                            if (this.OpenRelease(DoorType.DOOR_FRONT))
+                            {
+                                Console.WriteLine("OpenRelease(DoorType.DOOR_FRONT) success");
+                                elapsedTimeReleaseButton.Stop();
+                            }
+                            else
+                            {
+                                elapsedTimeReleaseButton.Restart();
+                            }
+                            Thread.Sleep(50);
+                        }
                         if (elapsedTimeFront.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR_FRONT)
                         {
                             elapsedTimeFront.Stop();
@@ -473,6 +490,7 @@ namespace DoorControllerService
                             if (this.ClosePress(DoorType.DOOR_FRONT))
                             {
                                 elapsedTimeFront.Restart();
+                                elapsedTimeReleaseButton.Restart();
                                 this.stateCtrlDoorFront = StateCtrl.DOOR_ST_WAITTING_CLOSE_DOOR_FRONT;
                                 Console.WriteLine("DOOR_ST_WAITTING_CLOSE_DOOR_FRONT");
                             }
@@ -489,6 +507,19 @@ namespace DoorControllerService
                         this.socketBusy = false;
                         break;
                     case StateCtrl.DOOR_ST_WAITTING_CLOSE_DOOR_FRONT:
+                        if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
+                        {
+                            if (this.CloseRelease(DoorType.DOOR_FRONT))
+                            {
+                                Console.WriteLine("this.CloseRelease(DoorType.DOOR_FRONT)) success");
+                                elapsedTimeReleaseButton.Stop();
+                            }
+                            else
+                            {
+                                elapsedTimeReleaseButton.Restart();
+                            }
+                            Thread.Sleep(50);
+                        }
                         if (elapsedTimeFront.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR_FRONT)
                         {
                             elapsedTimeFront.Stop();
@@ -555,6 +586,8 @@ namespace DoorControllerService
             DataReceive status = new DataReceive();
             Stopwatch elapsedTimeBack = new Stopwatch();
             elapsedTimeBack.Start();
+            Stopwatch elapsedTimeReleaseButton = new Stopwatch();
+            elapsedTimeReleaseButton.Start();
             while (true)
             {
                 switch (this.stateCtrlDoorBack)
@@ -572,6 +605,7 @@ namespace DoorControllerService
                                 if (this.OpenPress(DoorType.DOOR_BACK))
                                 {
                                     elapsedTimeBack.Restart();
+                                    elapsedTimeReleaseButton.Restart();
                                     this.stateCtrlDoorBack = StateCtrl.DOOR_ST_WAITTING_OPEN_DOOR_BACK;
                                     Console.WriteLine("DOOR_ST_WAITTING_OPEN_DOOR_BACK");
                                 }
@@ -593,6 +627,19 @@ namespace DoorControllerService
                         }
                         break;
                     case StateCtrl.DOOR_ST_WAITTING_OPEN_DOOR_BACK:
+                        if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
+                        {
+                            if (this.OpenRelease(DoorType.DOOR_BACK))
+                            {
+                                Console.WriteLine("this.OpenRelease(DoorType.DOOR_BACK) success");
+                                elapsedTimeReleaseButton.Stop();
+                            }
+                            else
+                            {
+                                elapsedTimeReleaseButton.Restart();
+                            }
+                            Thread.Sleep(50);
+                        }
                         if (elapsedTimeBack.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR_BACK)
                         {
                             elapsedTimeBack.Stop();
@@ -651,6 +698,7 @@ namespace DoorControllerService
                             if (this.ClosePress(DoorType.DOOR_BACK))
                             {
                                 elapsedTimeBack.Restart();
+                                elapsedTimeReleaseButton.Restart();
                                 this.stateCtrlDoorBack = StateCtrl.DOOR_ST_WAITTING_CLOSE_DOOR_BACK;
                                 Console.WriteLine("DOOR_ST_WAITTING_CLOSE_DOOR_BACK");
                             }
@@ -667,6 +715,19 @@ namespace DoorControllerService
                         this.socketBusy = false;
                         break;
                     case StateCtrl.DOOR_ST_WAITTING_CLOSE_DOOR_BACK:
+                        if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
+                        {
+                            if (this.CloseRelease(DoorType.DOOR_BACK))
+                            {
+                                Console.WriteLine("this.CloseRelease(DoorType.DOOR_BACK) success");
+                                elapsedTimeReleaseButton.Stop();
+                            }
+                            else
+                            {
+                                elapsedTimeReleaseButton.Restart();
+                            }
+                            Thread.Sleep(50);
+                        }
                         if (elapsedTimeBack.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR_BACK)
                         {
                             elapsedTimeBack.Stop();
