@@ -195,10 +195,11 @@ namespace SeldatMRMS
                                 if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                 {
                                     robot.onFlagGoBackReady = false;
-                                    resCmd = ResponseCommand.RESPONSE_NONE;
+                                    
                                     robot.robotTag = RobotStatus.WORKING;
                                     if (rb.SendPoseStamped(ds.config.PointFrontLine))
                                     {
+                                        resCmd = ResponseCommand.RESPONSE_NONE;
                                         StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_READY;
                                         robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_GATE");
                                         break;
@@ -439,16 +440,8 @@ namespace SeldatMRMS
                             {
                                 robot.SwitchToDetectLine(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                JResult = FlToBuf.GetInfoPallet_P_InBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN);
-                                //  String data = JsonConvert.SerializeObject(FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true));
-                                String data = JsonConvert.SerializeObject(JResult.jInfoPallet);
+                                StateForkLift = ForkLift.FORBUF_ROBOT_SEND_CMD_DROPDOWN_PALLET_BUFFER;
 
-                               // String data = JsonConvert.SerializeObject( FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true));
-                                if (rb.SendCmdAreaPallet(data))
-                                {
-                                    StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER;
-                                    robot.ShowText("FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER");
-                                }
                             }
                         }
                         catch (System.Exception)
@@ -462,22 +455,13 @@ namespace SeldatMRMS
                         TrafficRountineConstants.DetectRelease(registryRobotJourney);
                         if (TrafficCheckInBuffer(goalFrontLinePos, bayId))
                             break;
-                       
                         try
                         {
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 robot.SwitchToDetectLine(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                               JResult= FlToBuf.GetInfoPallet_P_InBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN);
-                                //  String data = JsonConvert.SerializeObject(FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true));
-                                String data = JsonConvert.SerializeObject(JResult.jInfoPallet);
-
-                                if (rb.SendCmdAreaPallet(data))
-                                {
-                                    StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER;
-                                    robot.ShowText("FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER");
-                                }
+                                StateForkLift = ForkLift.FORBUF_ROBOT_SEND_CMD_DROPDOWN_PALLET_BUFFER;
                             }
                         }
                         catch (System.Exception)
@@ -486,7 +470,15 @@ namespace SeldatMRMS
                             CheckUserHandleError(this);
                         }
                         break;
-
+                    case ForkLift.FORBUF_ROBOT_SEND_CMD_DROPDOWN_PALLET_BUFFER:
+                        JResult = FlToBuf.GetInfoPallet_P_InBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN);
+                        String data = JsonConvert.SerializeObject(JResult.jInfoPallet);
+                        if (rb.SendCmdAreaPallet(data))
+                        {
+                            StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER;
+                            robot.ShowText("FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER");
+                        }
+                        break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER:
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETDOWN)
                         {
@@ -580,31 +572,11 @@ namespace SeldatMRMS
                     case ForkLift.FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE:
                         try
                         {
-                            // xóa đăng ký vùng
                             TrafficRountineConstants.DetectRelease(registryRobotJourney);
-                           // Global_Object.onFlagDoorBusy = false;
-                           /* if (!Traffic.HasRobotUnityinArea("GATE_CHECKOUT", robot))
-                            {
-                                if (!onFlagResetedGate)
-                                {
-                                    TrafficRountineConstants.RegIntZone_READY.Release(robot);
-                                    onFlagResetedGate = true;
-                                    robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.IDLE;
-                                    Global_Object.onFlagRobotComingGateBusy = false;
-                                    robot.ReleaseWorkingZone();
-                                }
-                            }*/
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
-                            //if (robot.ReachedGoal())
                             {
                                 robot.SwitchToDetectLine(true);
-                           
-                                if (rb.SendCmdAreaPallet(flToMachineInfo.infoPallet))
-                                {
-                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                    StateForkLift = ForkLift.FORMAC_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE;
-                                    robot.ShowText("FORMAC_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE");
-                                }
+                                StateForkLift = ForkLift.FORMAC_ROBOT_SEND_CMD_DROPDOWN_PALLET_MACHINE;
                             }
                         }
                         catch (System.Exception)
@@ -613,7 +585,13 @@ namespace SeldatMRMS
                             CheckUserHandleError(this);
                         }
                         break;
-
+                    case ForkLift.FORMAC_ROBOT_SEND_CMD_DROPDOWN_PALLET_MACHINE:
+                        if (rb.SendCmdAreaPallet(flToMachineInfo.infoPallet))
+                        {
+                            StateForkLift = ForkLift.FORMAC_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE;
+                            robot.ShowText("FORMAC_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE");
+                        }
+                        break;
                     case ForkLift.FORMAC_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE:
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETDOWN)
                         {

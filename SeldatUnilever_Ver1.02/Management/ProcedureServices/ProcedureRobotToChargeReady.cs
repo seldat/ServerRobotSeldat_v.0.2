@@ -445,7 +445,7 @@ namespace SeldatMRMS
         public override event Action<Object> ReleaseProcedureHandler;
         private DeviceRegistrationService deviceService;
         private AssigmentTaskService assigmentTask;
-
+        private int cntOrderItem = 0;
         // public override event Action<Object> ErrorProcedureHandler;
         public ProcedureRobotToReady(RobotUnity robot, ChargerId id, TrafficManagementService trafficService, ChargerManagementService chargerService, Pose PointCheckIn) : base(robot, trafficService)
         {
@@ -460,6 +460,10 @@ namespace SeldatMRMS
         public void Registry(DeviceRegistrationService deviceService)
         {
             this.deviceService = deviceService;
+        }
+        public void Registry(AssigmentTaskService assigmentTask)
+        {
+            this.assigmentTask = assigmentTask;
         }
 
         public void Start(RobotGoToReady state = RobotGoToReady.ROBREA_SELECT_BEHAVIOR_ONZONE)
@@ -483,6 +487,7 @@ namespace SeldatMRMS
             registryRobotJourney.robot = robot;
             registryRobotJourney.traffic = Traffic;
             ProRobotToReady.Start(this);
+            cntOrderItem = 0;
         }
         public void Destroy()
         {
@@ -637,7 +642,7 @@ namespace SeldatMRMS
                         KillEvent();
                         break;
                 }
-                Thread.Sleep(50);
+                Thread.Sleep(500);
             }
             StateRobotGoToReady = RobotGoToReady.ROBREA_IDLE;
         }
@@ -658,23 +663,18 @@ namespace SeldatMRMS
             return false;
         }
         // xác định còn task trong order
+        
         public bool DetermineHasTaskWaitingAnRobotAvailable()
         {
             try
             {
-                List<DeviceItem> deviceList = deviceService.GetDeviceItemList();
-                if (deviceList.Count > 0)
+                OrderItem order = assigmentTask.Gettask();
+                if(order!=null)
                 {
-                    int cntAmoutOrderItem = 0;
-                    foreach (DeviceItem item in deviceList)
-                    {
-                        if (item.PendingOrderList.Count > 0)
-                        {
-                            cntAmoutOrderItem++;
-                        }
-                    }
-                    if (cntAmoutOrderItem >= 1) //
-                    {
+                    cntOrderItem++;
+                }
+                if (cntOrderItem > 1) //
+                {
                         if (robotService.RobotUnityWaitTaskList.Count > 0 || robotService.RobotUnityReadyList.Count > 0)
                         {
                             return false;
@@ -683,11 +683,12 @@ namespace SeldatMRMS
                         {
                             if (!Traffic.HasRobotUnityinArea("C1", robot) || !Traffic.HasRobotUnityinArea("READY", robot))
                             {
+                                cntOrderItem = 0;
                                 robot.ShowText("Break goto ready and assign task _____(-_ -)____");
                                 return true;
                             }
                         }
-                    }
+
                 }
             }
             catch { }

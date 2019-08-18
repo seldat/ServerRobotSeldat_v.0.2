@@ -103,9 +103,10 @@ namespace SeldatMRMS
                                     {
                                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                         {
-                                            resCmd = ResponseCommand.RESPONSE_NONE;
+                                           
                                             if (rb.SendPoseStamped(ReToGate.GetCheckInBuffer()))
                                             {
+                                                resCmd = ResponseCommand.RESPONSE_NONE;
                                                 StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY;
                                                 robot.ShowText("RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY");
                                                 break;
@@ -168,13 +169,7 @@ namespace SeldatMRMS
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                if (rb.SendCmdAreaPallet(ReToGate.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_UP)))
-                                {
-                                    // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
-                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                    StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_PICKUP_PALLET_RETURN;
-                                    robot.ShowText("RETGATE_ROBOT_WAITTING_PICKUP_PALLET_RETURN");
-                                }
+                                StateReturnToGate = ReturnToGate.RETGATE_ROBOT_SEND_CMD_PICKUP_PALLET;
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -188,13 +183,13 @@ namespace SeldatMRMS
                             CheckUserHandleError(this);
                         }
                         break;
-                    // case ReturnToGate.RETGATE_ROBOT_GOTO_PICKUP_PALLET_RETURN:
-                    //     if (true == rb.CheckPointDetectLine(ReToGate.GetPointPallet(), rb))
-                    //     {
-                    //         rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_LINEDETECT_COMING_POSITION);
-                    //         StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_PICKUP_PALLET_RETURN;
-                    //     }
-                    //     break;
+                    case ReturnToGate.RETGATE_ROBOT_SEND_CMD_PICKUP_PALLET:
+                        if (rb.SendCmdAreaPallet(ReToGate.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_UP)))
+                        {
+                            StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_PICKUP_PALLET_RETURN;
+                            robot.ShowText("RETGATE_ROBOT_WAITTING_PICKUP_PALLET_RETURN");
+                        }
+                        break;
                     case ReturnToGate.RETGATE_ROBOT_WAITTING_PICKUP_PALLET_RETURN:
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
                         {
@@ -212,10 +207,11 @@ namespace SeldatMRMS
                     case ReturnToGate.RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_RETURN: // đợi
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
-                            resCmd = ResponseCommand.RESPONSE_NONE;
+                            
                             //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             if (rb.SendPoseStamped(ds.config.PointCheckInGate))
                             {
+                                resCmd = ResponseCommand.RESPONSE_NONE;
                                 StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
                                 robot.ShowText("RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE");
                             }

@@ -118,6 +118,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                     }
                                     else
                                     {
+                                        item.status = StatusOrderResponseCode.ERROR_GET_PALLETID;
+                                        deviceItemsList[0].RemoveOrder(item);
                                         return null;
                                     }
                             }
@@ -146,7 +148,11 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                         return item;
                                     }
                                     else
+                                    {
+                                        item.status = StatusOrderResponseCode.ERROR_GET_PALLETID;
+                                        deviceItemsList[0].RemoveOrder(item);
                                         return null;
+                                    }
                                 }
                             case TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFER_TO_GATE:
                                 {
@@ -167,6 +173,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                     }
                                     else
                                     {
+                                        item.status = StatusOrderResponseCode.ERROR_GET_PALLETID;
+                                        deviceItemsList[0].RemoveOrder(item);
                                         return null;
                                     }
                                 }
@@ -176,7 +184,13 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 {
                                     item.palletId_P = palletId;
                                     UpdatePalletStateToPlan(palletId, item);
-                                  }
+                                }
+                                else
+                                {
+                                    item.status = StatusOrderResponseCode.ERROR_GET_PALLETID;
+                                    deviceItemsList[0].RemoveOrder(item);
+                                    return null;
+                                }
 
                                 break;
                             case TyeRequest.TYPEREQUEST_PALLET_EMPTY_MACHINE_TO_RETURN:
@@ -190,7 +204,11 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                     item.dataRequest = product.ToString();
                                 }
                                 else
+                                {
+                                    item.status = StatusOrderResponseCode.ERROR_GET_PALLETID;
+                                    deviceItemsList[0].RemoveOrder(item);
                                     return null;
+                                }
                                 break;
                             default:
                                 return item;

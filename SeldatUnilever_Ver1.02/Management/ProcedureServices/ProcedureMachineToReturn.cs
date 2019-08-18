@@ -153,7 +153,7 @@ namespace SeldatMRMS
                                 if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                 {
                                     robot.onFlagGoBackReady = false;
-                                    resCmd = ResponseCommand.RESPONSE_NONE;
+                                    
                                     Pose destPos1 = BfToRe.GetFrontLineMachine();
                                     String destName1 = Traffic.DetermineArea(destPos1.Position, TypeZone.MAIN_ZONE);
                                     if (destName1.Equals("OUTER"))
@@ -161,6 +161,7 @@ namespace SeldatMRMS
                                         //robot.ShowText("GO FRONTLINE IN OUTER");
                                         if (rb.SendPoseStamped(destPos1))
                                         {
+                                            resCmd = ResponseCommand.RESPONSE_NONE;
                                             StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
                                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                             registryRobotJourney.startPoint = robot.properties.pose.Position;
@@ -173,6 +174,7 @@ namespace SeldatMRMS
                                         //robot.ShowText("GO FRONTLINE IN VIM");
                                         if (rb.SendPoseStamped(destPos1))
                                         {
+                                            resCmd = ResponseCommand.RESPONSE_NONE;
                                             StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM_READY;
                                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                             registryRobotJourney.startPoint = robot.properties.pose.Position;
@@ -209,11 +211,7 @@ namespace SeldatMRMS
                             //if (robot.ReachedGoal())
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_UP)))
-                                {
-                                    StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
-                                    //robot.ShowText("MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
-                                }
+                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_SEND_CMD_CAME_FRONTLINE_MACHINE;
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -246,11 +244,7 @@ namespace SeldatMRMS
                             //if (robot.ReachedGoal())
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_UP)))
-                                {
-                                    StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
-                                    //robot.ShowText("MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
-                                }
+                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_SEND_CMD_CAME_FRONTLINE_MACHINE;
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -271,11 +265,8 @@ namespace SeldatMRMS
                             //if (robot.ReachedGoal())
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_UP)))
-                                {
-                                    StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
-                                    //robot.ShowText("MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
-                                }
+                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_SEND_CMD_CAME_FRONTLINE_MACHINE;
+
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -287,6 +278,13 @@ namespace SeldatMRMS
                         {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
                             CheckUserHandleError(this);
+                        }
+                        break;
+                    case MachineToReturn.MACRET_ROBOT_SEND_CMD_CAME_FRONTLINE_MACHINE:
+                        if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_UP)))
+                        {
+                            StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
+                            //robot.ShowText("MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
                         }
                         break;
                     case MachineToReturn.MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE:
@@ -376,13 +374,8 @@ namespace SeldatMRMS
                             //if ( robot.ReachedGoal())
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
+                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_SEND_CMD_DROPDOWN_PALLET;
 
-                                if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_DOWN)))
-                                {
-                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                    StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_DROPDOWN_PALLET;
-                                    //robot.ShowText("MACRET_ROBOT_WAITTING_DROPDOWN_PALLET");
-                                }
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -403,13 +396,8 @@ namespace SeldatMRMS
                             //if ( robot.ReachedGoal())
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
+                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_SEND_CMD_DROPDOWN_PALLET;
 
-                                if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_DOWN)))
-                                {
-                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                    StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_DROPDOWN_PALLET;
-                                    //robot.ShowText("MACRET_ROBOT_WAITTING_DROPDOWN_PALLET");
-                                }
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -421,6 +409,14 @@ namespace SeldatMRMS
                         {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
                             CheckUserHandleError(this);
+                        }
+                        break;
+                    case MachineToReturn.MACRET_ROBOT_SEND_CMD_DROPDOWN_PALLET:
+                        if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_DOWN)))
+                        {
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_DROPDOWN_PALLET;
+                            //robot.ShowText("MACRET_ROBOT_WAITTING_DROPDOWN_PALLET");
                         }
                         break;
                     case MachineToReturn.MACRET_ROBOT_WAITTING_DROPDOWN_PALLET:

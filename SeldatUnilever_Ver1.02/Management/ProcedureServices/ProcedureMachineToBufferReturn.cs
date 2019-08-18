@@ -154,7 +154,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                 if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                 {
                                     robot.onFlagGoBackReady = false;
-                                    resCmd = ResponseCommand.RESPONSE_NONE;
+                                    
                                     Pose destPos = BfToBufRe.GetFrontLineMachine();
                                     String destName2 = Traffic.DetermineArea(destPos.Position, TypeZone.MAIN_ZONE);
                                     if (destName2.Equals("OUTER"))
@@ -162,6 +162,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                         //robot.ShowText("GO FRONTLINE IN OUTER");
                                         if (rb.SendPoseStamped(destPos))
                                         {
+                                            resCmd = ResponseCommand.RESPONSE_NONE;
                                             StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
                                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                             registryRobotJourney.startPoint = robot.properties.pose.Position;
@@ -174,6 +175,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                         //robot.ShowText("GO FRONTLINE IN VIM");
                                         if (rb.SendPoseStamped(destPos))
                                         {
+                                            resCmd = ResponseCommand.RESPONSE_NONE;
                                             StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM_REG;
                                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                             registryRobotJourney.startPoint = robot.properties.pose.Position;
@@ -209,13 +211,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                if (rb.SendCmdAreaPallet(BfToBufRe.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_UP)))
-                                {
-                                    // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
-                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                    StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
-                                    //robot.ShowText("MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
-                                }
+                                StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_SEND_CMD_PICKUP_PALLET_MACHINE;
+
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -246,13 +243,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                if (rb.SendCmdAreaPallet(BfToBufRe.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_UP)))
-                                {
-                                    // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
-                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                    StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
-                                    //robot.ShowText("MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
-                                }
+                                StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_SEND_CMD_PICKUP_PALLET_MACHINE;
+ 
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -273,13 +265,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             //if (robot.ReachedGoal())
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                if (rb.SendCmdAreaPallet(BfToBufRe.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_UP)))
-                                {
-                                    // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
-                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                    StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
-                                    //robot.ShowText("MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
-                                }
+                                StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_SEND_CMD_PICKUP_PALLET_MACHINE;
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -291,6 +277,12 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
                             CheckUserHandleError(this);
+                        }
+                        break;
+                    case MachineToBufferReturn.MACBUFRET_ROBOT_SEND_CMD_PICKUP_PALLET_MACHINE:
+                        if (rb.SendCmdAreaPallet(BfToBufRe.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_UP)))
+                        {
+                            StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
                         }
                         break;
                     case MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE:
@@ -392,14 +384,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                JResult = BfToBufRe.GetInfoPallet_P_InBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN);
-                                //  String data = JsonConvert.SerializeObject(FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true));
-                                String data = JsonConvert.SerializeObject(JResult.jInfoPallet);
-                                if (rb.SendCmdAreaPallet(data))
-                                {
-                                    StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
-                                    //robot.ShowText("MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET");
-                                }
+                                StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_SEND_CMD_DROPDOWN_PALLET;
+
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -421,14 +407,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                JResult = BfToBufRe.GetInfoPallet_P_InBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN);
-                                //  String data = JsonConvert.SerializeObject(FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true));
-                                String data = JsonConvert.SerializeObject(JResult.jInfoPallet);
-                                if (rb.SendCmdAreaPallet(data))
-                                {
-                                    StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
-                                    //robot.ShowText("MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET");
-                                }
+                                StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_SEND_CMD_DROPDOWN_PALLET;
+
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -440,6 +420,15 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
                             CheckUserHandleError(this);
+                        }
+                        break;
+                    case MachineToBufferReturn.MACBUFRET_ROBOT_SEND_CMD_DROPDOWN_PALLET:
+                        JResult = BfToBufRe.GetInfoPallet_P_InBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN);
+                        String data = JsonConvert.SerializeObject(JResult.jInfoPallet);
+                        if (rb.SendCmdAreaPallet(data))
+                        {
+                            StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
+                            //robot.ShowText("MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET");
                         }
                         break;
                     case MachineToBufferReturn.MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET:

@@ -844,8 +844,6 @@ namespace SeldatMRMS.Management.RobotManagent
                 {
                     return false;
                 }
-
-                return true;
             }
             catch {
                 Console.WriteLine("Robot Control Error SendCmdLineDetectionCtrl");
@@ -868,7 +866,6 @@ namespace SeldatMRMS.Management.RobotManagent
                 {
                     return false;
                 }
-                return true;
             }
             catch {
                 Console.WriteLine("Robot Control Error SendCmdPosPallet");

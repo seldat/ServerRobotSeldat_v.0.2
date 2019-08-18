@@ -115,6 +115,7 @@ namespace SeldatMRMS {
             // FORBUF_ROBOT_WAITTING_GOTO_POINT_BRANCHING, // doi khu vuc buffer san sang de di vao
             // FORBUF_ROBOT_CAME_POINT_BRANCHING, //den dau line pallet, gui chieu quay (trai phai), va toa do pallet (option)
             // FORBUF_ROBOT_GOTO_DROPDOWN_PALLET_BUFFER,
+            FORBUF_ROBOT_SEND_CMD_DROPDOWN_PALLET_BUFFER,
             FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER, // doi robot do line den pallet  va tha pallet
             FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER, // doi robot di den dau line buffer.
             FORBUF_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
@@ -125,6 +126,7 @@ namespace SeldatMRMS {
             FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE_FROM_VIM_REG, // doi dong cong.
             FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE_FROM_VIM, // doi dong cong.
             FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
+            FORMAC_ROBOT_SEND_CMD_DROPDOWN_PALLET_MACHINE,
             FORMAC_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE, // doi robot do line den pallet  va tha pallet
             FORMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE, // doi robot di den dau line buffer.
             FORMAC_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
@@ -163,9 +165,10 @@ namespace SeldatMRMS {
             BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM,
             BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM_FROM_READY,
             BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER, // den dau line buffer, chuyen mode do line
-            // BUFMAC_ROBOT_WAITTING_GOTO_POINT_BRANCHING, // doi khu vuc buffer san sang de di vao
-            // BUFMAC_ROBOT_CAME_POINT_BRANCHING, //den dau line pallet, gui chieu quay (trai phai), va toa do pallet (option)
-            // BUFMAC_ROBOT_GOTO_PICKUP_PALLET_BUFFER,
+                                                         // BUFMAC_ROBOT_WAITTING_GOTO_POINT_BRANCHING, // doi khu vuc buffer san sang de di vao
+                                                         // BUFMAC_ROBOT_CAME_POINT_BRANCHING, //den dau line pallet, gui chieu quay (trai phai), va toa do pallet (option)
+                                                         // BUFMAC_ROBOT_GOTO_PICKUP_PALLET_BUFFER,
+            BUFMAC_ROBOT_SEND_CMD_PICKUP_PALLET_BUFFER,
             BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER, // doi robot do line den pallet  va tha pallet
             BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER, // doi robot di den dau line buffer.
 
@@ -177,7 +180,7 @@ namespace SeldatMRMS {
             BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET_IN_VIM,
             // BUFMAC_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET, 
             // BUFMAC_ROBOT_WAITTING_GOTO_POINT_DROP_PALLET, 
-
+            BUFMAC_ROBOT_SEND_CMD_DROPDOWN_PALLET,
             BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET,
             BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE,
             BUFMAC_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
@@ -196,6 +199,7 @@ namespace SeldatMRMS {
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM_REG,
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM, // den dau line buffer, chuyen mode do line
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_A_FROM_VIM_READY, // den dau line buffer, chuyen mode do line
+            BUFTOBUF_ROBOT_SEND_CMD_PICKUP_PALLET_BUFFER_A, // doi robot do line den pallet  va tha pallet
             BUFTOBUF_ROBOT_WAITTING_PICKUP_PALLET_BUFFER_A, // doi robot do line den pallet  va tha pallet
             BUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_A, // doi robot di den dau line buffer.
 
@@ -203,6 +207,7 @@ namespace SeldatMRMS {
             BUFTOBUF_ROBOT_BUFFER_B_SELECT_ZONE, // doi khu vuc buffer san sang de di vao
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B, // den dau line buffer, chuyen mode do line
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B_FROM_VIM_REG,
+            BUFTOBUF_ROBOT_SEND_CMD_CAME_FRONTLINE_BUFFER_B_FROM_VIM,
             BUFTOBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_B_FROM_VIM, // den dau line buffer, chuyen mode do line
             BUFTOBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER_B, // doi robot do line den pallet  va tha pallet
             BUFTOBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_B, // doi robot di den dau line buffer.
@@ -215,6 +220,7 @@ namespace SeldatMRMS {
             BUFRET_ROBOT_GOTO_CHECKIN_BUFFER,
             BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER, // doi robot di den khu vuc checkin cua vung buffer
             BUFRET_ROBOT_WAITTING_ZONE_BUFFER_READY, // doi khu vuc buffer san sang de di vao
+            BUFRET_ROBOT_SEND_CMD_CAME_FRONTLINE_BUFFER,
             BUFRET_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER, // den dau line buffer, chuyen mode do line
             // BUFRET_ROBOT_WAITTING_GOTO_POINT_BRANCHING, // doi khu vuc buffer san sang de di vao
             // BUFRET_ROBOT_CAME_POINT_BRANCHING, //den dau line pallet, gui chieu quay (trai phai), va toa do pallet (option)
@@ -228,7 +234,7 @@ namespace SeldatMRMS {
             BUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET, // cho phép dò line vàthả pallet
             // BUFRET_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET, // đang trong tiến trình dò line và thả pallet
             // BUFRET_ROBOT_WAITTING_GOTO_POINT_DROP_PALLET, // hoàn thành dò line và thả pallet
-
+            BUFRET_ROBOT_SEND_CMD_DROPDOWN_PALLET, // quay lại vị trí đầu line
             BUFRET_ROBOT_WAITTING_DROPDOWN_PALLET, // quay lại vị trí đầu line
             BUFRET_ROBOT_WAITTING_GOTO_FRONTLINE,
             BUFRET_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
@@ -239,6 +245,7 @@ namespace SeldatMRMS {
             MACRET_SELECT_BEHAVIOR_ONZONE,
             MACRET_ROBOT_GOTO_FRONTLINE_MACHINE,
             MACRET_ROBOT_GOTO_BACK_FRONTLINE_READY,
+            MACRET_ROBOT_SEND_CMD_CAME_FRONTLINE_MACHINE,
             MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
             MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM_REG,
             MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM,
@@ -256,7 +263,7 @@ namespace SeldatMRMS {
             // MACRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET,  // cho phép dò line vàthả pallet
             // MACRET_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET, // đang trong tiến trình dò line và thả pallet
             // MACRET_ROBOT_WAITTING_GOTO_POINT_DROP_PALLET, // hoàn thành dò line và thả pallet
-
+            MACRET_ROBOT_SEND_CMD_DROPDOWN_PALLET, // quay lại vị trí đầu line
             MACRET_ROBOT_WAITTING_DROPDOWN_PALLET, // quay lại vị trí đầu line
             MACRET_ROBOT_WAITTING_GOTO_FRONTLINE,
             MACRET_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
@@ -274,6 +281,7 @@ namespace SeldatMRMS {
             MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM, // den dau line buffer, chuyen mode do line
             MACBUFRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE_FROM_VIM_READY, // den dau line buffer, chuyen mode do line
             // MACBUFRET_ROBOT_GOTO_PICKUP_PALLET_MACHINE,
+            MACBUFRET_ROBOT_SEND_CMD_PICKUP_PALLET_MACHINE,
             MACBUFRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE, // doi robot do line den pallet  va tha pallet
             MACBUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE, // doi robot di den dau line buffer.
 
@@ -287,7 +295,7 @@ namespace SeldatMRMS {
             // MACBUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET,  // cho phép dò line vàthả pallet
             // MACBUFRET_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET, // đang trong tiến trình dò line và thả pallet
             // MACBUFRET_ROBOT_WAITTING_GOTO_POINT_DROP_PALLET, // hoàn thành dò line và thả pallet
-
+            MACBUFRET_ROBOT_SEND_CMD_DROPDOWN_PALLET, // quay lại vị trí đầu line
             MACBUFRET_ROBOT_WAITTING_DROPDOWN_PALLET, // quay lại vị trí đầu line
             MACBUFRET_ROBOT_WAITTING_GOTO_FRONTLINE,
             MACBUFRET_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
@@ -298,7 +306,8 @@ namespace SeldatMRMS {
             RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_RETURN, // doi robot di den khu vuc checkin cua vung buffer
             RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY, // doi khu vuc buffer san sang de di vao
             RETGATE_ROBOT_WAITTING_CAME_FRONTLINE_RETURN, // den dau line buffer, chuyen mode do line
-            // RETGATE_ROBOT_GOTO_PICKUP_PALLET_RETURN,
+                                                          // RETGATE_ROBOT_GOTO_PICKUP_PALLET_RETURN,
+            RETGATE_ROBOT_SEND_CMD_PICKUP_PALLET,
             RETGATE_ROBOT_WAITTING_PICKUP_PALLET_RETURN, // doi robot do line den pallet  va tha pallet
             RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_RETURN, // doi robot di den dau line buffer.
             RETGATE_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
@@ -327,6 +336,7 @@ namespace SeldatMRMS {
             BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM,
             BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM_READY,
             BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER, // den dau line buffer, chuyen mode do line
+            BUFGATE_ROBOT_SEND_CMD_PICKUP_PALLET_BUFFER,
             BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER, // doi robot do line den pallet  va tha pallet
             BUFGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER, // doi robot di den dau line buffer.
             BUFGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER_FROM_VIM, // doi robot di den dau line buffer.
@@ -351,6 +361,7 @@ namespace SeldatMRMS {
         {
             MACGATE_IDLE,
             MACGATE_ROBOT_GOTO_FRONTLINE_MACHINE,
+            MACGATE_ROBOT_SEND_CMD_CAME_FRONTLINE_MACHINE,
             MACGATE_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
             // MACGATE_ROBOT_GOTO_PICKUP_PALLET_MACHINE,
             MACGATE_ROBOT_WAITTING_PICKUP_PALLET_MACHINE, // doi robot do line den pallet  va tha pallet

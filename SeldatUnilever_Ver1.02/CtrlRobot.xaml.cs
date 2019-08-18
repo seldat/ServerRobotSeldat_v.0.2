@@ -49,12 +49,7 @@ namespace SeldatUnilever_Ver1._02
             }
 
         private void CmdPalletUp_Click(object sender, RoutedEventArgs e)
-        {
-           // rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3203);
-            new Thread(() => {
-                rms.RobotUnityRegistedList.ElementAt(0).Value.SendCmdAreaPallet("hello kh");
-            }).Start();
-            
+        {           
         }
 
         private void CmdPalletDown_Click(object sender, RoutedEventArgs e)

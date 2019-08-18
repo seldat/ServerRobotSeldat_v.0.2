@@ -99,9 +99,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                     {
                                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                         {
-                                            resCmd = ResponseCommand.RESPONSE_NONE;
+                                            
                                             if (rb.SendPoseStamped(MaToGate.GetFrontLineMachine()))
                                             {
+                                                resCmd = ResponseCommand.RESPONSE_NONE;
                                                 StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
                                                 robot.ShowText("MACGATE_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
                                                 break;
@@ -144,16 +145,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         try
                         {
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
-                            //if (robot.ReachedGoal())
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                if (rb.SendCmdAreaPallet(MaToGate.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_UP)))
-                                {
-                                    // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
-                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                    StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
-                                    robot.ShowText("MACGATE_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
-                                }
+                                StateMachineToGate = MachineToGate.MACGATE_ROBOT_SEND_CMD_CAME_FRONTLINE_MACHINE;
+
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -167,13 +162,13 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             CheckUserHandleError(this);
                         }
                         break;
-                    // case MachineToGate.MACGATE_ROBOT_GOTO_PICKUP_PALLET_MACHINE:
-                    //     if (true == rb.CheckPointDetectLine(MaToGate.GetPointPallet(), rb))
-                    //     {
-                    //         rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_LINEDETECT_COMING_POSITION);
-                    //         StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
-                    //     }
-                    //     break;
+                    case MachineToGate.MACGATE_ROBOT_SEND_CMD_CAME_FRONTLINE_MACHINE:
+                        if (rb.SendCmdAreaPallet(MaToGate.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_UP)))
+                        {
+                            StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
+                            robot.ShowText("MACGATE_ROBOT_WAITTING_PICKUP_PALLET_MACHINE");
+                        }
+                        break;
                     case MachineToGate.MACGATE_ROBOT_WAITTING_PICKUP_PALLET_MACHINE:
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
                         {
@@ -193,10 +188,11 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                             {
-                                resCmd = ResponseCommand.RESPONSE_NONE;
+                               
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 if (rb.SendPoseStamped(ds.config.PointCheckInGate))
                                 {
+                                    resCmd = ResponseCommand.RESPONSE_NONE;
                                     StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
                                     robot.ShowText("MACGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE");
                                 }

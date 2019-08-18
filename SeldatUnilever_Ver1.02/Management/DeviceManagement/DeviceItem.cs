@@ -36,6 +36,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             GOING_AND_PICKING_UP = 307,
             PICKED_UP = 308,
             ERROR_GET_FRONTLINE = 309,
+            ERROR_GET_PALLETID = 310,
         }
 
         public class StatusOrderResponse
@@ -180,6 +181,12 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             {
                 PendingOrderList.RemoveAt(0);
             }
+        }
+        public void RemoveOrder(OrderItem order)
+        {
+            if(PendingOrderList.Contains(order))
+                PendingOrderList.Remove(order);
+
         }
         public void AddOrder(OrderItem hasOrder)
         {

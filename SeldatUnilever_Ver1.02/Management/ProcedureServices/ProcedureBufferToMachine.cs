@@ -212,7 +212,7 @@ namespace SeldatMRMS
                                 if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                 {
                                     robot.onFlagGoBackReady = false;
-                                    resCmd = ResponseCommand.RESPONSE_NONE;
+                                   
                                     Point destPos2 = frontLinePose.Position;
                                     String destName2 = Traffic.DetermineArea(destPos2, TypeZone.MAIN_ZONE);
                                     if (destName2.Equals("OUTER"))
@@ -220,6 +220,7 @@ namespace SeldatMRMS
                                         //robot.ShowText("GO FRONTLINE IN OUTER");
                                         if (rb.SendPoseStamped(frontLinePose))
                                         {
+                                            resCmd = ResponseCommand.RESPONSE_NONE;
                                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
                                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                             registryRobotJourney.startPoint = robot.properties.pose.Position;
@@ -232,6 +233,7 @@ namespace SeldatMRMS
                                         //robot.ShowText("GO FRONTLINE IN VIM");
                                         if (rb.SendPoseStamped(frontLinePose))
                                         {
+                                            resCmd = ResponseCommand.RESPONSE_NONE;
                                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_VIM_FROM_READY;
                                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                             registryRobotJourney.startPoint = robot.properties.pose.Position;
@@ -313,17 +315,8 @@ namespace SeldatMRMS
                             {
                                 robot.SwitchToDetectLine(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                JPallet jInfoPallet_H = BfToMa.GetInfoPallet_H_InBuffer(PistonPalletCtrl.PISTON_PALLET_UP);
-                                jPResult = BfToMa.GetInfoOfPalletBuffer_Compare_W_H(PistonPalletCtrl.PISTON_PALLET_UP, jInfoPallet_H.jInfoPallet);
+                                StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_SEND_CMD_PICKUP_PALLET_BUFFER;
 
-                                String data = JsonConvert.SerializeObject(jPResult.jInfoPallet);
-
-                                if (rb.SendCmdAreaPallet(data))
-                                {
-                                    StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
-                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
-                                }
                             }
                         }
                         catch (System.Exception)
@@ -354,14 +347,8 @@ namespace SeldatMRMS
                                 robot.SwitchToDetectLine(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                JPallet jInfoPallet_H = BfToMa.GetInfoPallet_H_InBuffer(PistonPalletCtrl.PISTON_PALLET_UP);
-                                jPResult = BfToMa.GetInfoOfPalletBuffer_Compare_W_H(PistonPalletCtrl.PISTON_PALLET_UP, jInfoPallet_H.jInfoPallet);
-                                String data = JsonConvert.SerializeObject(jPResult.jInfoPallet);
-                                if (rb.SendCmdAreaPallet(data))
-                                {
-                                    StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
-                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
-                                }
+                                StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_SEND_CMD_PICKUP_PALLET_BUFFER;
+
                             }
                         }
                         catch (System.Exception)
@@ -382,20 +369,25 @@ namespace SeldatMRMS
                                 robot.SwitchToDetectLine(true);                       
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                JPallet jInfoPallet_H = BfToMa.GetInfoPallet_H_InBuffer(PistonPalletCtrl.PISTON_PALLET_UP);
-                                jPResult = BfToMa.GetInfoOfPalletBuffer_Compare_W_H(PistonPalletCtrl.PISTON_PALLET_UP, jInfoPallet_H.jInfoPallet);
-                                String data = JsonConvert.SerializeObject(jPResult.jInfoPallet);
-                                if (rb.SendCmdAreaPallet(data))
-                                {
-                                    StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
-                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
-                                }
+
+                                StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_SEND_CMD_PICKUP_PALLET_BUFFER;
+
                             }
                         }
                         catch (System.Exception)
                         {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
                             CheckUserHandleError(this);
+                        }
+                        break;
+                    case BufferToMachine.BUFMAC_ROBOT_SEND_CMD_PICKUP_PALLET_BUFFER:
+                        JPallet jInfoPallet_H = BfToMa.GetInfoPallet_H_InBuffer(PistonPalletCtrl.PISTON_PALLET_UP);
+                        jPResult = BfToMa.GetInfoOfPalletBuffer_Compare_W_H(PistonPalletCtrl.PISTON_PALLET_UP, jInfoPallet_H.jInfoPallet);
+                        String data = JsonConvert.SerializeObject(jPResult.jInfoPallet);
+                        if (rb.SendCmdAreaPallet(data))
+                        {
+                            StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
+                            //robot.ShowText("BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER:
@@ -502,13 +494,8 @@ namespace SeldatMRMS
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 robot.SwitchToDetectLine(true);
-                      
-                                if (rb.SendCmdAreaPallet(BfToMa.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_DOWN)))
-                                {
-                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                    StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET;
-                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET");
-                                }
+                                StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_SEND_CMD_DROPDOWN_PALLET;
+
                             }
                         }
                         catch (System.Exception)
@@ -523,19 +510,21 @@ namespace SeldatMRMS
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 robot.SwitchToDetectLine(true);
-
-                                if (rb.SendCmdAreaPallet(BfToMa.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_DOWN)))
-                                {
-                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                    StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET;
-                                    //robot.ShowText("BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET");
-                                }
+                                StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_SEND_CMD_DROPDOWN_PALLET;
                             }
                         }
                         catch (System.Exception)
                         {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
                             CheckUserHandleError(this);
+                        }
+                        break;
+                    case BufferToMachine.BUFMAC_ROBOT_SEND_CMD_DROPDOWN_PALLET:
+                        if (rb.SendCmdAreaPallet(BfToMa.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_DOWN)))
+                        {
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET;
+                            //robot.ShowText("BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET");
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET:

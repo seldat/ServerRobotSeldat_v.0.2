@@ -155,7 +155,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                 if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                 {
                                     robot.onFlagGoBackReady = false;
-                                    resCmd = ResponseCommand.RESPONSE_NONE;
+                                   
                                     Pose destPos2 = BuffToGate.GetFrontLineBuffer();
                                     String destName2 = Traffic.DetermineArea(destPos2.Position, TypeZone.MAIN_ZONE);
                                     if (destName2.Equals("OUTER"))
@@ -163,6 +163,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                         ////robot.ShowText("GO FRONTLINE IN OUTER");
                                         if (rb.SendPoseStamped(BuffToGate.GetFrontLineBuffer()))
                                         {
+                                            resCmd = ResponseCommand.RESPONSE_NONE;
                                             StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
                                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                             registryRobotJourney.startPoint = robot.properties.pose.Position;
@@ -175,6 +176,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                                         ////robot.ShowText("GO FRONTLINE IN VIM");
                                         if (rb.SendPoseStamped(BuffToGate.GetFrontLineBuffer()))
                                         {
+                                            resCmd = ResponseCommand.RESPONSE_NONE;
                                             StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER_FROM_VIM_READY;
                                             registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                             registryRobotJourney.startPoint = robot.properties.pose.Position;
@@ -227,12 +229,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                String palletInfo = JsonConvert.SerializeObject(BuffToGate.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP));
-                                if (rb.SendCmdAreaPallet(palletInfo))
-                                {
-                                    StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
-                                    ////robot.ShowText("BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
-                                }
+                                StateBufferToGate = BufferToGate.BUFGATE_ROBOT_SEND_CMD_PICKUP_PALLET_BUFFER;
+
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -266,12 +264,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                String palletInfo = JsonConvert.SerializeObject(BuffToGate.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP));
-                                if (rb.SendCmdAreaPallet(palletInfo))
-                                {
-                                    StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
-                                    ////robot.ShowText("BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
-                                }
+                                StateBufferToGate = BufferToGate.BUFGATE_ROBOT_SEND_CMD_PICKUP_PALLET_BUFFER;
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -293,15 +286,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                String palletInfo = JsonConvert.SerializeObject(BuffToGate.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP));
+                                StateBufferToGate = BufferToGate.BUFGATE_ROBOT_SEND_CMD_PICKUP_PALLET_BUFFER;
 
-                                if (rb.SendCmdAreaPallet(palletInfo))
-                                {
-                                    // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
-                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                    StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
-                                    ////robot.ShowText("BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
-                                }
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -313,6 +299,16 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
                             CheckUserHandleError(this);
+                        }
+                        break;
+                    case BufferToGate.BUFGATE_ROBOT_SEND_CMD_PICKUP_PALLET_BUFFER:
+                        String palletInfo = JsonConvert.SerializeObject(BuffToGate.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP));
+                        if (rb.SendCmdAreaPallet(palletInfo))
+                        {
+                            // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
+                            ////robot.ShowText("BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
                         }
                         break;
                     case BufferToGate.BUFGATE_ROBOT_WAITTING_PICKUP_PALLET_BUFFER:

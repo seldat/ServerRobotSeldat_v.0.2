@@ -138,9 +138,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             {
                                 if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                 {
-                                    resCmd = ResponseCommand.RESPONSE_NONE;
+                                    
                                     if (rb.SendPoseStamped(ds.config.PointFrontLine))
                                     {
+                                        resCmd = ResponseCommand.RESPONSE_NONE;
                                         StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOTO_GATE;
                                         robot.ShowText("FORMACH_ROBOT_WAITTING_GOTO_GATE");
                                         break;

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using static DoorControllerService.DoorService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterService;
@@ -40,20 +41,30 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 
             if (ExtensionService.CalDistance(robot.properties.pose.Position, frontLinePoint.Position) < DISTANCE_CHECk_BAYID)
             {
-
-                if (checkAllRobotsHasInsideBayIdNear(bayId, 2))
+                if (robot.bayId < 0)
                 {
-                    robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
-                    return true;
+                    robot.bayId = bayId;
+                }
+                List<RobotUnity> rCompList = checkAllRobotsHasInsideBayIdNear(bayId, 2);
+                if (rCompList.Count>0)
+                {
+                    // so sanh vi tri robot voi robot con lai
+                    if (checkRobotToFrontLineDistanceCtrl(robot, rCompList, frontLinePoint.Position))
+                    {
+                        robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
+                        return false;
+                    }
+                    else
+                    {
+                        robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+                        return true;
+                    }
+
                 }
                 else
                 {
-                    if (robot.bayId < 0)
-                    {// cap nhat bayid for robot
-                        robot.bayId = bayId;
-                    }
+                    
                     robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
-                    //Thread.Sleep(200);
                     return false;
                 }
             }
@@ -76,9 +87,9 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
             return false;
         }
-        protected bool checkAllRobotsHasInsideBayIdNear(int bayId,int step)
+        protected List<RobotUnity> checkAllRobotsHasInsideBayIdNear(int bayId,int step)
         {
-        
+                List<RobotUnity> robotList = new List<RobotUnity>();
                 foreach (RobotUnity robot in robotService.RobotUnityRegistedList.Values)
                 {
                     if (robot != this.robot)
@@ -87,30 +98,25 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             if (Math.Abs(robot.bayId-bayId)<=3)
                             {
-                                return true;
+                                robotList.Add(robot);
                             }
                         }
                     }
                 }
-            return false;
+                return robotList;
         }
-        protected bool checkDistance(int bayId, int step)
+        protected bool checkRobotToFrontLineDistanceCtrl(RobotUnity rThis, List<RobotUnity> rCompList, Point frontLine)
         {
-
-            foreach (RobotUnity robot in robotService.RobotUnityRegistedList.Values)
+            double distRThisMin = ExtensionService.CalDistance(rThis.properties.pose.Position, frontLine);
+            foreach (RobotUnity rComp in rCompList)
             {
-                if (robot != this.robot)
+                double distRComp = ExtensionService.CalDistance(rComp.properties.pose.Position, frontLine);
+                if (distRThisMin > distRComp)
                 {
-                    if (robot.bayId > 0)
-                    {
-                        if (Math.Abs(robot.bayId - bayId) <= 3)
-                        {
-                            return true;
-                        }
-                    }
+                    return false;
                 }
             }
-            return false;
+            return  true;
         }
         protected DoorService getDoorService()
         {

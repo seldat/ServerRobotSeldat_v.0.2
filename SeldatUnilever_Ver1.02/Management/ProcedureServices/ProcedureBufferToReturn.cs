@@ -95,10 +95,11 @@ namespace SeldatMRMS
                                     {
                                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                         {
-                                            resCmd = ResponseCommand.RESPONSE_NONE;
+                                            
 
                                             if (rb.SendPoseStamped(BfToRe.GetCheckInBuffer_Return(order.bufferId)))
                                             {
+                                                resCmd = ResponseCommand.RESPONSE_NONE;
                                                 StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
                                                 robot.ShowText("BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER");
                                                 break;
@@ -180,12 +181,8 @@ namespace SeldatMRMS
                             {
                                 robot.SwitchToDetectLine(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletBuffer_Return(PistonPalletCtrl.PISTON_PALLET_UP,order.bufferId)))
-                                {
-                                    StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
-                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                    robot.ShowText("BUFRET_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
-                                }
+                                StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_SEND_CMD_CAME_FRONTLINE_BUFFER;
+
                             }
                         }
                         catch (System.Exception)
@@ -194,35 +191,14 @@ namespace SeldatMRMS
                             CheckUserHandleError(this);
                         }
                         break;
-                    // case BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_POINT_BRANCHING:
-                    //     if (true == rb.CheckPointDetectLine(BfToRe.GetPointDetectBranching().xy, rb))
-                    //     {
-                    //         if (BfToRe.GetPointDetectBranching().brDir == BrDirection.DIR_LEFT)
-                    //         {
-                    //             rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_TURN_LEFT);
-                    //         }
-                    //         else if (BfToRe.GetPointDetectBranching().brDir == BrDirection.DIR_RIGHT)
-                    //         {
-                    //             rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_TURN_RIGHT);
-                    //         }
-                    //         StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_POINT_BRANCHING;
-                    //     }
-                    //     break;
-                    // case BufferToReturn.BUFRET_ROBOT_CAME_POINT_BRANCHING:  //doi bobot re
-                    //     if ((resCmd == ResponseCommand.RESPONSE_FINISH_TURN_LEFT) || (resCmd == ResponseCommand.RESPONSE_FINISH_TURN_RIGHT))
-                    //     {
-                    //         resCmd = ResponseCommand.RESPONSE_NONE;
-                    //         rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
-                    //         StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_GOTO_PICKUP_PALLET_BUFFER;
-                    //     }
-                    //     break;
-                    // case BufferToReturn.BUFRET_ROBOT_GOTO_PICKUP_PALLET_BUFFER:
-                    //     if (true == rb.CheckPointDetectLine(BfToRe.GetPointPallet(), rb))
-                    //     {
-                    //         rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_LINEDETECT_COMING_POSITION);
-                    //         StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
-                    //     }
-                    // break;
+                    case BufferToReturn.BUFRET_ROBOT_SEND_CMD_CAME_FRONTLINE_BUFFER:
+                        if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletBuffer_Return(PistonPalletCtrl.PISTON_PALLET_UP, order.bufferId)))
+                        {
+                            StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            robot.ShowText("BUFRET_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
+                        }
+                        break;
                     case BufferToReturn.BUFRET_ROBOT_WAITTING_PICKUP_PALLET_BUFFER:
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
                         {
@@ -244,10 +220,11 @@ namespace SeldatMRMS
                             {
                                 robot.ReleaseWorkingZone();
                                 robot.SwitchToDetectLine(false);
-                                resCmd = ResponseCommand.RESPONSE_NONE;
+                                
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 if (rb.SendPoseStamped(BfToRe.GetCheckInReturn()))
                                 {
+                                    resCmd = ResponseCommand.RESPONSE_NONE;
                                     StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_GOTO_CHECKIN_RETURN;
                                     robot.ShowText("BUFRET_ROBOT_GOTO_CHECKIN_RETURN");
                                 }
@@ -304,12 +281,8 @@ namespace SeldatMRMS
                             {
                                 robot.SwitchToDetectLine(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_DOWN)))
-                                {
-                                    StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
-                                    //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                    robot.ShowText("BUFRET_ROBOT_WAITTING_DROPDOWN_PALLET");
-                                }
+                                StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_SEND_CMD_DROPDOWN_PALLET;
+
                             }
                         }
                         catch (System.Exception)
@@ -329,6 +302,14 @@ namespace SeldatMRMS
                     //         StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
                     //     }
                     //     break;
+                    case BufferToReturn.BUFRET_ROBOT_SEND_CMD_DROPDOWN_PALLET:
+                        if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_DOWN)))
+                        {
+                            StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            robot.ShowText("BUFRET_ROBOT_WAITTING_DROPDOWN_PALLET");
+                        }
+                        break;
                     case BufferToReturn.BUFRET_ROBOT_WAITTING_DROPDOWN_PALLET:
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETDOWN)
                         {
