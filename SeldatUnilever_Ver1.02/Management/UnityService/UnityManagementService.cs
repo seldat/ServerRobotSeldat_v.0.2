@@ -3,6 +3,7 @@ using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
 using SeldatUnilever_Ver1._02;
 using SeldatUnilever_Ver1._02.DTO;
+using SeldatUnilever_Ver1._02.Management.RobotManagent;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using SelDatUnilever_Ver1._00.Management.UnityService;
@@ -92,6 +93,8 @@ namespace SeldatMRMS.Management.UnityService
 
             //assigmentTaskService.Start();
             MessageBox.Show("Bấm Start Để Bắt Đầu !");
+            RobotMoving robotMoving = new RobotMoving(robotManagementService.RobotUnityRegistedList);
+            robotMoving.Show();
 
             //assigmentTaskService.Start();
         }
