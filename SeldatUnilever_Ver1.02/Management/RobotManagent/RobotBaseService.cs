@@ -9,12 +9,12 @@ using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
 namespace SeldatMRMS.Management.RobotManagent
 {
-    public class RobotBaseService:TrafficRobotUnity
+    public class RobotBaseService : TrafficRobotUnity
     {
-        public enum ProcedureControlAssign 
+        public enum ProcedureControlAssign
         {
             PRO_ALL = 0,
-            PRO_BUFFER_TO_MACHINE ,
+            PRO_BUFFER_TO_MACHINE,
             PRO_BUFFER_TO_RETURN,
             PRO_FORKLIFT_TO_BUFFER,
             PRO_MACHINE_TO_RETURN,
@@ -47,18 +47,18 @@ namespace SeldatMRMS.Management.RobotManagent
             public ProcedureRobotToReady pRR { get; set; }
             public ProcedureBufferReturnToBuffer401 pBB { get; set; }
             public ProcedureBufferToGate pBG { get; set; }
-            public ProcedureMachineToBufferReturn pMBR{get;set;}
+            public ProcedureMachineToBufferReturn pMBR { get; set; }
             public ProcedureMachineToGate pMG { get; set; }
         }
         public object ProcedureControl;
-        public ProcedureRegistryInRobotUnity proRegistryInRobot=new ProcedureRegistryInRobotUnity();
-        public ProcedureControlAssign  PreProcedureAs;
+        public ProcedureRegistryInRobotUnity proRegistryInRobot = new ProcedureRegistryInRobotUnity();
+        public ProcedureControlAssign PreProcedureAs;
         public ProcedureControlAssign ProcedureRobotAssigned;
         public ProcedureControlAssign ProcedureAs;
         public bool SelectedATask { get; set; }
         public OrderItem orderItem { get; set; }
         public int bayId { get; set; }
-        public bool regGoInsideBayId{ get; set; }
+        public bool regGoInsideBayId { get; set; }
         protected RegistryRobotJourney registryRobotJourney;
         public struct LoadedConfigureInformation
         {
@@ -68,49 +68,49 @@ namespace SeldatMRMS.Management.RobotManagent
 
         public void DisposeProcedure()
         {
-                    if (proRegistryInRobot.pBM != null)
-                    {
-                        proRegistryInRobot.pBM.Destroy();
-                        //proRegistryInRobot.pBM = null;
-                    }
-                 
-                    if (proRegistryInRobot.pMR != null)
-                    {
-                        Global_Object.onFlagRobotComingGateBusy = false;
-                        Global_Object.setGateStatus(proRegistryInRobot.pMR.order.gate, false);
-                        //Global_Object.onFlagDoorBusy = false;
-                        proRegistryInRobot.pMR.Destroy();
-                       // proRegistryInRobot.pMR = null;
-                    }
-                    if (proRegistryInRobot.pFB != null)
-                    {
-                        Global_Object.onFlagRobotComingGateBusy = false;
-                      //  Global_Object.onFlagDoorBusy = false;
-                        proRegistryInRobot.pFB.Destroy();
-                      // proRegistryInRobot.pFB = null;
-                    }
-                    if (proRegistryInRobot.pFM != null)
-                    {
-                        Global_Object.onFlagRobotComingGateBusy = false;
-                        proRegistryInRobot.pFM.Destroy();
-                        // proRegistryInRobot.pFB = null;
-                    }
-                    if (proRegistryInRobot.pBR != null)
-                    {
-                        Global_Object.onFlagRobotComingGateBusy = false;
-                        proRegistryInRobot.pBR.Destroy();
-                       // proRegistryInRobot.pBR = null;
-                    }
-                    if (proRegistryInRobot.pRC != null)
-                    {
-                        proRegistryInRobot.pRC.Destroy();
-                       // proRegistryInRobot.pRC = null;
-                    }
-                    if (proRegistryInRobot.pRR != null)
-                    {
-                        proRegistryInRobot.pRR.Destroy();
-                       // proRegistryInRobot.pRR = null;
-                    }
+            if (proRegistryInRobot.pBM != null)
+            {
+                proRegistryInRobot.pBM.Destroy();
+                //proRegistryInRobot.pBM = null;
+            }
+
+            if (proRegistryInRobot.pMR != null)
+            {
+                Global_Object.onFlagRobotComingGateBusy = false;
+                Global_Object.setGateStatus(proRegistryInRobot.pMR.order.gate, false);
+                //Global_Object.onFlagDoorBusy = false;
+                proRegistryInRobot.pMR.Destroy();
+                // proRegistryInRobot.pMR = null;
+            }
+            if (proRegistryInRobot.pFB != null)
+            {
+                Global_Object.onFlagRobotComingGateBusy = false;
+                //  Global_Object.onFlagDoorBusy = false;
+                proRegistryInRobot.pFB.Destroy();
+                // proRegistryInRobot.pFB = null;
+            }
+            if (proRegistryInRobot.pFM != null)
+            {
+                Global_Object.onFlagRobotComingGateBusy = false;
+                proRegistryInRobot.pFM.Destroy();
+                // proRegistryInRobot.pFB = null;
+            }
+            if (proRegistryInRobot.pBR != null)
+            {
+                Global_Object.onFlagRobotComingGateBusy = false;
+                proRegistryInRobot.pBR.Destroy();
+                // proRegistryInRobot.pBR = null;
+            }
+            if (proRegistryInRobot.pRC != null)
+            {
+                proRegistryInRobot.pRC.Destroy();
+                // proRegistryInRobot.pRC = null;
+            }
+            if (proRegistryInRobot.pRR != null)
+            {
+                proRegistryInRobot.pRR.Destroy();
+                // proRegistryInRobot.pRR = null;
+            }
         }
 
         /* public void DisposeProcedure()

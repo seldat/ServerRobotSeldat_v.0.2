@@ -357,7 +357,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     PubToRb(topic, cmd, cmdRes);
                     et.Restart();
                     this.numResendData++;
-                    Console.WriteLine("TIME_OUT_WAT_RESPONSE from RB" + this.numResendData);
+                    robotLogOut.ShowText(this.properties.Label, "TIME_OUT_WAT_RESPONSE from RB, try time : " + this.numResendData);
                     if (this.numResendData >= NUM_TRY_SEND_TO_RB)
                     {
                         ret = false;
@@ -549,8 +549,8 @@ namespace SeldatMRMS.Management.RobotManagent
                     Console.WriteLine(this.properties.Label, "Send Pose => " + JsonConvert.SerializeObject(data).ToString());
 
                     //this.Publish(paramsRosSocket.publication_robotnavigation, data);
-                    ret = SendToRb(paramsRosSocket.publication_robotnavigation,data, ResponseCtrl.RESPONSE_ROBOT_NAVIGATION);
                     robotLogOut.ShowText(this.properties.Label, "Send Pose => " + JsonConvert.SerializeObject(data).ToString());
+                    ret = SendToRb(paramsRosSocket.publication_robotnavigation,data, ResponseCtrl.RESPONSE_ROBOT_NAVIGATION);
                     // lưu vị trí đích đến
                     gx = data.pose.position.x;
                     gy = data.pose.position.y;
@@ -749,8 +749,8 @@ namespace SeldatMRMS.Management.RobotManagent
                 StandardInt32 msg = new StandardInt32();
                 msg.data = Convert.ToInt32(cmd);
                 //this.Publish(paramsRosSocket.publication_linedetectionctrl, msg);
-                ret = SendToRb(paramsRosSocket.publication_linedetectionctrl, msg, ResponseCtrl.RESPONSE_LINE_CTRL);
                 robotLogOut.ShowText(this.properties.Label, "SendCmdLineDetectionCtrl => " + msg.data);
+                ret = SendToRb(paramsRosSocket.publication_linedetectionctrl, msg, ResponseCtrl.RESPONSE_LINE_CTRL);
             }
             catch
             {
@@ -768,8 +768,8 @@ namespace SeldatMRMS.Management.RobotManagent
                 StandardInt32 msg = new StandardInt32();
                 msg.data = Convert.ToInt32(cmd);
                 //this.Publish(paramsRosSocket.publication_postPallet, msg);
-                ret = SendToRb(paramsRosSocket.publication_postPallet, msg, ResponseCtrl.RESPONSE_POS_PALLET);
                 robotLogOut.ShowText(this.properties.Label, "SendCmdPosPallet => " + msg.data);
+                ret = SendToRb(paramsRosSocket.publication_postPallet, msg, ResponseCtrl.RESPONSE_POS_PALLET);
             }
             catch
             {
@@ -856,8 +856,8 @@ namespace SeldatMRMS.Management.RobotManagent
                 msg.data = cmd;
                 Console.WriteLine(cmd);
                 //this.Publish(paramsRosSocket.publication_cmdAreaPallet, msg);
-                ret = SendToRb(paramsRosSocket.publication_cmdAreaPallet, msg, ResponseCtrl.RESPONSE_AREA_PALLET);
                 robotLogOut.ShowText(this.properties.Label, "SendCmdAreaPallet => " + msg.data);
+                ret = SendToRb(paramsRosSocket.publication_cmdAreaPallet, msg, ResponseCtrl.RESPONSE_AREA_PALLET);
             }
             catch
             {

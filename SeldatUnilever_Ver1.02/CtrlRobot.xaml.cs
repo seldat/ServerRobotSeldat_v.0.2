@@ -72,29 +72,31 @@ namespace SeldatUnilever_Ver1._02
 
         private void CmdBatLevel_Click(object sender, RoutedEventArgs e)
         {
-            rms.RobotUnityRegistedList.ElementAt(0).Value.BatteryPublish(float.Parse(txtBat.Text));
+            new Thread(() => {
+                rms.RobotUnityRegistedList.ElementAt(0).Value.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
+            }).Start();
         }
 
         private void CmdError_Click(object sender, RoutedEventArgs e)
         {
-            rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3215);
+            //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3215);
         }
 
         private void CmdGetInCharger_Click(object sender, RoutedEventArgs e)
         {
-            rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3206);
+            //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3206);
         }
 
         private void CmdGetOutCharger_Click(object sender, RoutedEventArgs e)
         {
-            rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3207);
+            //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3207);
             // String tamp = "1001";
             // rms.RobotUnityRegistedList.ElementAt(0).Value.TestLaserError(tamp);
         }
 
         private void LineCamePoint_Click(object sender, RoutedEventArgs e)
         {
-            rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3205);
+            //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3205);
             // String tamp = "11010";
             // rms.RobotUnityRegistedList.ElementAt(0).Value.TestLaserWarning(tamp);
         }
