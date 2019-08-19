@@ -576,7 +576,7 @@ namespace DoorControllerService
                         break;
                 }
                 this.lampFrontProcess();
-                Thread.Sleep(50);
+                Thread.Sleep(500);
             }
         }
 

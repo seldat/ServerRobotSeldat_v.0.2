@@ -101,7 +101,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public String userName { get; set; }
             public String robot { get; set; }
             public TyeRequest typeReq { get; set; } // FL: ForkLift// BM: BUFFER MACHINE // PR: Pallet return
-
+            public Point frontLinePos { get; set; }
             public StatusOrderResponseCode status { get; set; }
             private String OrderId { get; set; }
             public int planId { get; set; }

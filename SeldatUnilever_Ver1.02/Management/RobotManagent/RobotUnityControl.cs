@@ -305,12 +305,12 @@ namespace SeldatMRMS.Management.RobotManagent
             this.Publish(paramsRosSocket.publication_checkAliveTimeOut, msg);
         }
         public void createRosTerms () {
-            int subscription_robotInfo = this.Subscribe ("/amcl_pose", "geometry_msgs/PoseWithCovarianceStamped", AmclPoseHandler,100);
+            int subscription_robotInfo = this.Subscribe ("/amcl_pose", "geometry_msgs/PoseWithCovarianceStamped", AmclPoseHandler,10);
             paramsRosSocket.publication_ctrlrobotdriving = this.Advertise ("/ctrlRobotDriving", "std_msgs/Int32");
-            int subscription_finishedStates = this.Subscribe ("/finishedStates", "std_msgs/Int32", FinishedStatesHandler,100);
+            int subscription_finishedStates = this.Subscribe ("/finishedStates", "std_msgs/Int32", FinishedStatesHandler,10);
             paramsRosSocket.publication_checkAliveTimeOut = this.Advertise ("/checkAliveTimeOut", "std_msgs/Int32");
 
-            int subscription_respCtrlCallBack = this.Subscribe("/respCtrl", "std_msgs/Int32", ResponseCtrlHandler, 100);
+            int subscription_respCtrlCallBack = this.Subscribe("/respCtrl", "std_msgs/Int32", ResponseCtrlHandler, 10);
             paramsRosSocket.publication_linedetectionctrl = this.Advertise("/linedetectionctrl_servercallback", "std_msgs/Int32");
             paramsRosSocket.publication_postPallet = this.Advertise ("/pospallet_servercallback", "std_msgs/Int32");
             paramsRosSocket.publication_finishStatesCallBack = this.Advertise("/finishStatesCallBack", "std_msgs/Int32");
@@ -323,8 +323,8 @@ namespace SeldatMRMS.Management.RobotManagent
             float subscription_publication_batteryvol = this.Subscribe ("/battery_vol", "std_msgs/Int32", BatteryVolHandler);
             int subscription_AGV_LaserError = this.Subscribe ("/stm_error", "std_msgs/String", AGVLaserErrorHandler);
             int subscription_AGV_LaserWarning = this.Subscribe ("/stm_warning", "std_msgs/String", AGVLaserWarningHandler);
-            int subscription_Odom= this.Subscribe("/odom", "nav_msgs/Odometry", OdometryCallback, 100);
-            int subscription_Navi = this.Subscribe("/cmd_vel_mux/input/navi", "geometry_msgs/Twist", NaviCallback, 100);
+            int subscription_Odom= this.Subscribe("/odom", "nav_msgs/Odometry", OdometryCallback, 10);
+            int subscription_Navi = this.Subscribe("/cmd_vel_mux/input/navi", "geometry_msgs/Twist", NaviCallback, 10);
             int subscription_lineEnable = this.Subscribe("/line_enable","std_msgs/Int32", LineEnableHandler);
             float subscription_RequestGotoReady = this.Subscribe("/requestGotoReady", "std_msgs/Int32", RequestGotoReadyHandler);
 
@@ -540,7 +540,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     responsed = true;
                     break;
                 }
-                if (sw.ElapsedMilliseconds > 10000) break;
+                if (sw.ElapsedMilliseconds > 2000) break;
             }
             robotLogOut.ShowText(this.properties.Label, "CheckResponseTimeOut= " + respCtrlCallBack + " " + responsed);
             respCtrlCallBack = ResponseCtrl.RESPONSE_NONE;
