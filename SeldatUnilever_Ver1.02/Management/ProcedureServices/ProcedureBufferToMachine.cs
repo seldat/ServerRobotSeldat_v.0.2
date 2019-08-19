@@ -71,6 +71,7 @@ namespace SeldatMRMS
             registryRobotJourney.robot = robot;
             registryRobotJourney.traffic = Traffic;
             robot.bayId = -1;
+            robot.bayIdReg = false;
             ProBuferToMachine.Start();
         }
         public void Destroy()
@@ -81,6 +82,7 @@ namespace SeldatMRMS
             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_DESTROY;
             TrafficRountineConstants.ReleaseAll(robot);
             robot.bayId = -1;
+            robot.bayIdReg = false;
 
         }
 
@@ -416,6 +418,7 @@ namespace SeldatMRMS
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                             {
                                 robot.bayId = -1;
+                                robot.bayIdReg = false;
                                 robot.ReleaseWorkingZone();
                                 robot.SwitchToDetectLine(false);                              
                                 resCmd = ResponseCommand.RESPONSE_NONE;
@@ -559,6 +562,7 @@ namespace SeldatMRMS
 
                         TrafficRountineConstants.ReleaseAll(robot);
                         robot.bayId = -1;
+                        robot.bayIdReg = false;
                         robot.orderItem = null;
                         robot.SwitchToDetectLine(false);
                         // Release WorkinZone Robot

@@ -61,6 +61,7 @@ namespace SeldatMRMS
             robot.robotTag = RobotStatus.WORKING;
             robot.ProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
             robot.bayId = -1;
+            robot.bayIdReg = false;
             robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.GOING_INSIDE_GATE;
             StateForkLift = state;
 
@@ -89,6 +90,7 @@ namespace SeldatMRMS
             StateForkLift = ForkLift.FORMAC_ROBOT_DESTROY;
             TrafficRountineConstants.ReleaseAll(robot);
             robot.bayId = -1;
+            robot.bayIdReg = false;
         }
         public void Procedure(object ojb)
         {
@@ -499,6 +501,7 @@ namespace SeldatMRMS
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
                             robot.bayId = -1;
+                            robot.bayIdReg = false;
                             robot.ReleaseWorkingZone();
                             robot.SwitchToDetectLine(false);
                             resCmd = ResponseCommand.RESPONSE_NONE;

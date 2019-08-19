@@ -64,6 +64,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         {
             StateBufferToGate = BufferToGate.BUFGATE_ROBOT_DESTROY;
             robot.bayId = -1;
+            robot.bayIdReg = false;
             if (ds != null) {
                 ds.setDoorBusy(false);
             }
@@ -329,6 +330,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
                             robot.bayId = -1;
+                            robot.bayIdReg = false;
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateBufferToGate = BufferToGate.BUFGATE_SELECT_BEHAVIOR_ONZONE_TO_GATE;
@@ -457,6 +459,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 
                     case BufferToGate.BUFGATE_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
                         robot.bayId = -1;
+                        robot.bayIdReg = false;
                         TrafficRountineConstants.ReleaseAll(robot);
                         robot.robotTag = RobotStatus.IDLE;
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_GATE;

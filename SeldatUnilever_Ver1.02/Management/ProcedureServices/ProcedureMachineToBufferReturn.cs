@@ -48,6 +48,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             registryRobotJourney.robot = robot;
             registryRobotJourney.traffic = Traffic;
             robot.bayId = -1;
+            robot.bayIdReg = false;
             ProMachineToBufferReturn.Start(this);
         }
         public void Destroy()
@@ -66,6 +67,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             SaveOrderItem(order);
             TrafficRountineConstants.ReleaseAll(robot);
             robot.bayId = -1;
+            robot.bayIdReg = false;
             //   this.robot.DestroyRegistrySolvedForm();
         }
         public void Procedure(object ojb)
@@ -449,6 +451,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
                             robot.bayId = -1;
+                            robot.bayIdReg = false;
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateMachineToBufferReturn = MachineToBufferReturn.MACBUFRET_ROBOT_RELEASED;

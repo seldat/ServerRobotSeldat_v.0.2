@@ -46,18 +46,24 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     robot.bayId = bayId;
                 }
                 List<RobotUnity> rCompList = checkAllRobotsHasInsideBayIdNear(bayId, 2);
+                if (rCompList == null) // đã có 1 robot đã đăng ký thành công bayid
+                {
+                    robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+                    return true;// tiep tuc check
+                }
                 if (rCompList.Count>0)
                 {
                     // so sanh vi tri robot voi robot con lai
                     if (checkRobotToFrontLineDistanceCtrl(robot, rCompList, frontLinePoint.Position))
                     {
+                        robot.bayIdReg = true;
                         robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
-                        return false;
+                        return false; // ket thuc check
                     }
                     else
                     {
                         robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
-                        return true;
+                        return true; // tiep tuc check
                     }
 
                 }
@@ -65,13 +71,13 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                 {
                     
                     robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
-                    return false;
+                    return true;// tiep tuc check
                 }
             }
             else
             {
                 robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
-                return false;
+                return true;// tiep tuc check
             }
         }
         protected bool checkAnyRobotAtElevator(RobotUnity robot)
@@ -98,7 +104,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             if (Math.Abs(robot.bayId-bayId)<=3)
                             {
-                                robotList.Add(robot);
+                                if (!robot.bayIdReg)
+                                    robotList.Add(robot);
+                                else
+                                    return null;
                             }
                         }
                     }

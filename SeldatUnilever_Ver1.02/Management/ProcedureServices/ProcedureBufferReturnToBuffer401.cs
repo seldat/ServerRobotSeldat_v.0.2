@@ -49,6 +49,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         public void Start(BufferToBuffer state = BufferToBuffer.BUFTOBUF_SELECT_BEHAVIOR_ONZONE_BUFFER_A)
         {
             robot.bayId = -1;
+            robot.bayIdReg = false;
             errorCode = ErrorCode.RUN_OK;
             robot.robotTag = RobotStatus.WORKING;
             robot.ProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_BUFFER;
@@ -68,6 +69,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         {
             robot.bayId = -1;
             ProRunStopW = false;
+            robot.bayIdReg = false;
             robot.robotTag = RobotStatus.IDLE;
             robot.orderItem = null;
             StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_DESTROY;
@@ -349,6 +351,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                             {
                                 robot.bayId = -1;
+                                robot.bayIdReg = false;
                                 robot.ReleaseWorkingZone();
                                 robot.SwitchToDetectLine(false);
 
@@ -492,6 +495,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                             {
                                 robot.bayId = -1;
+                                robot.bayIdReg = false;
                                 robot.ReleaseWorkingZone();
                                 robot.SwitchToDetectLine(false);
 
