@@ -15,14 +15,11 @@ using static SeldatMRMS.Management.RobotManagent.RobotUnity;
 
 namespace SeldatMRMS.Management.RobotManagent
 {
-
     public class RobotUnityControl : RosSocket
     {
         public McuCtrl mcuCtrl;
         public event Action<int> FinishStatesCallBack;
         public event Action<int> LineEnableCallBack;
-        public event Action<LaserErrorCode> AGVLaserErrorCallBack;
-        public event Action<LaserWarningCode> AGVLaserWarningCallBack;
         public event Action<Pose, Object> PoseHandler;
         public event Action<Object, ConnectionStatus> ConnectionStatusHandler;
         private Timer timerCheckKeepAlive;
@@ -40,7 +37,6 @@ namespace SeldatMRMS.Management.RobotManagent
             RESPONSE_ROBOT_NAVIGATION = 3218,
             RESPONSE_LINE_CTRL = 3219
         }
-       public static ResponseCtrl respCtrlCallBack { get; set; }
         public class Pose
         {
             public Pose(Point p, double Angle) // Angle gốc
@@ -49,14 +45,14 @@ namespace SeldatMRMS.Management.RobotManagent
                 this.AngleW = Angle * Math.PI / 180.0;
                 this.Angle = Angle;
             }
-            public Pose (double X, double Y, double Angle) // Angle gốc
+            public Pose(double X, double Y, double Angle) // Angle gốc
             {
                 this.Position = new Point(X, Y);
-                this.AngleW = Angle*Math.PI/180.0;
+                this.AngleW = Angle * Math.PI / 180.0;
                 this.Angle = Angle;
             }
-            public Pose () { }
-            public void Destroy () // hủy vị trí robot để robot khác có thể làm việc trong quá trình detect
+            public Pose() { }
+            public void Destroy() // hủy vị trí robot để robot khác có thể làm việc trong quá trình detect
             {
                 //this.Position = new Point (-1000, -1000);
                 //this.AngleW = 0;
@@ -74,12 +70,14 @@ namespace SeldatMRMS.Management.RobotManagent
             public double Angle { get; set; } // radian
             public int bayId;
         }
-        public enum RobotSpeedLevel {
+        public enum RobotSpeedLevel
+        {
             ROBOT_SPEED_NORMAL = 2,
             ROBOT_SPEED_SLOW = 1,
             ROBOT_SPEED_STOP = 0,
         }
-        public bool getBattery () {
+        public bool getBattery()
+        {
             return properties.RequestChargeBattery;
         }
 
@@ -92,7 +90,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public String Label { get => _Label; set { _Label = value; RaisePropertyChanged("Label"); } }
             private String _Url { get; set; }
             public String Url { get => _Url; set { _Url = value; RaisePropertyChanged("Url"); } }
-            public Pose pose= new Pose();
+            public Pose pose = new Pose();
             public Pose poseRoot = new Pose();
             public String URL;
             public bool IsConnected { get; set; }
@@ -129,20 +127,21 @@ namespace SeldatMRMS.Management.RobotManagent
             public String solvedProblemContent;
             public String detailInfo;
             private String _ipMcuCtrl;
-            public String ipMcuCtrl{ get => _ipMcuCtrl; set { _ipMcuCtrl = value; RaisePropertyChanged("IpMCU"); } }
+            public String ipMcuCtrl { get => _ipMcuCtrl; set { _ipMcuCtrl = value; RaisePropertyChanged("IpMCU"); } }
             private int _portMcuCtrl;
-            public int portMcuCtrl{ get => _portMcuCtrl; set {_portMcuCtrl = value; RaisePropertyChanged("PortMCU"); } }
+            public int portMcuCtrl { get => _portMcuCtrl; set { _portMcuCtrl = value; RaisePropertyChanged("PortMCU"); } }
             public String speedInSpecicalArea = "ROBOT_SPEED_NORMAL";
-            public double errorVx=0.0001;
-            public double errorVy=0.0001;
-		    public double errorW=0.0001;
-		    public double errorDx=0.5;
-		    public double errorDy=0.5;
+            public double errorVx = 0.0001;
+            public double errorVy = 0.0001;
+            public double errorW = 0.0001;
+            public double errorDx = 0.5;
+            public double errorDy = 0.5;
             public Point goalPoint;
 
         }
 
-        public enum RequestCommandLineDetect {
+        public enum RequestCommandLineDetect
+        {
             REQUEST_CHARGECTRL_CANCEL = 1201,
             REQUEST_LINEDETECT_PALLETUP = 1203,
             REQUEST_LINEDETECT_PALLETDOWN = 1204,
@@ -151,7 +150,8 @@ namespace SeldatMRMS.Management.RobotManagent
             REQUEST_LINEDETECT_READYAREA = 1208,
         }
 
-        public enum RequestCommandPosPallet{
+        public enum RequestCommandPosPallet
+        {
 
             REQUEST_LINEDETECT_COMING_POSITION = 1205,
             REQUEST_TURN_LEFT = 1210,
@@ -180,13 +180,14 @@ namespace SeldatMRMS.Management.RobotManagent
             RESPONSE_FINISH_GOBACK_FRONTLINE = 3213,
             RESPONSE_ERROR = 3215,
             RESPONSE_FINISH_DROPDOWN_PALLET = 3216,
-            
+
         }
 
-        public virtual void updateparams () { }
-        public virtual void OnOccurencyTrigger () { }
-        public virtual void OnBatteryLowTrigger () { }
-        public struct ParamsRosSocket {
+        public virtual void updateparams() { }
+        public virtual void OnOccurencyTrigger() { }
+        public virtual void OnBatteryLowTrigger() { }
+        public struct ParamsRosSocket
+        {
             public int publication_RobotInfo;
             public int publication_RobotParams;
             public int publication_ServerRobotCtrl;
@@ -202,32 +203,19 @@ namespace SeldatMRMS.Management.RobotManagent
             public int publication_postPallet;
             public int publication_finishStatesCallBack;
             public int publication_cmdAreaPallet;
-
-            /*of chau test*/
-            public int publication_finishedStates;
-            public int publication_batteryvol;
-            public int publication_TestLaserError;
-            public int publication_TestLaserWarning;
             public int publication_killpid;
             public int publication_liftCtrl;
-        }
 
-        public struct LaserErrorCode {
-            public bool LaserErrorConnect;
-            public bool LaserErrorShutdown;
-            public bool LaserErrorLostSpeed;
-            public bool LaserErrorLostPath;
-        }
-
-        public struct LaserWarningCode {
-            public bool LaserWarningObstacle;
-            public bool LaserWarningLowBattey;
-            public bool LaserWarningCharging;
-            public bool LaserWarningHazardoes;
-            public bool LaserWarningBackward;
         }
 
         ParamsRosSocket paramsRosSocket;
+
+        private const UInt32 TIME_OUT_WAT_RESPONSE = 10000;
+        private const UInt32 NUM_TRY_SEND_TO_RB = 1000;
+        private UInt32 numResendData = 0;
+        private bool waitRes = false;
+        private ResponseCtrl rbResCtrl = new ResponseCtrl();
+
         public PropertiesRobotUnity properties = new PropertiesRobotUnity();
         protected virtual void SupervisorTraffic() { }
         public RobotUnityControl()
@@ -304,41 +292,89 @@ namespace SeldatMRMS.Management.RobotManagent
             msg.data = 1234;
             this.Publish(paramsRosSocket.publication_checkAliveTimeOut, msg);
         }
-        public void createRosTerms () {
-            int subscription_robotInfo = this.Subscribe ("/amcl_pose", "geometry_msgs/PoseWithCovarianceStamped", AmclPoseHandler,10);
-            paramsRosSocket.publication_ctrlrobotdriving = this.Advertise ("/ctrlRobotDriving", "std_msgs/Int32");
-            int subscription_finishedStates = this.Subscribe ("/finishedStates", "std_msgs/Int32", FinishedStatesHandler,10);
-            paramsRosSocket.publication_checkAliveTimeOut = this.Advertise ("/checkAliveTimeOut", "std_msgs/Int32");
+        public void createRosTerms()
+        {
+            int subscription_robotInfo = this.Subscribe("/amcl_pose", "geometry_msgs/PoseWithCovarianceStamped", AmclPoseHandler, 10);
+            paramsRosSocket.publication_ctrlrobotdriving = this.Advertise("/ctrlRobotDriving", "std_msgs/Int32");
+            int subscription_finishedStates = this.Subscribe("/finishedStates", "std_msgs/Int32", FinishedStatesHandler, 10);
+            paramsRosSocket.publication_checkAliveTimeOut = this.Advertise("/checkAliveTimeOut", "std_msgs/Int32");
 
             int subscription_respCtrlCallBack = this.Subscribe("/respCtrl", "std_msgs/Int32", ResponseCtrlHandler, 10);
-            paramsRosSocket.publication_linedetectionctrl = this.Advertise("/linedetectionctrl_servercallback", "std_msgs/Int32");
-            paramsRosSocket.publication_postPallet = this.Advertise ("/pospallet_servercallback", "std_msgs/Int32");
+            paramsRosSocket.publication_linedetectionctrl = this.Advertise("/linedetectionctrl", "std_msgs/Int32");
+            paramsRosSocket.publication_postPallet = this.Advertise("/pospallet", "std_msgs/Int32");
             paramsRosSocket.publication_finishStatesCallBack = this.Advertise("/finishStatesCallBack", "std_msgs/Int32");
             paramsRosSocket.publication_liftCtrl = this.Advertise("/lift_control", "std_msgs/String");
-            paramsRosSocket.publication_cmdAreaPallet = this.Advertise ("/cmdAreaPallet_servercallback", "std_msgs/String");
+            paramsRosSocket.publication_cmdAreaPallet = this.Advertise("/cmdAreaPallet", "std_msgs/String");
             paramsRosSocket.publication_robotnavigation = this.Advertise("/robot_navigation", "geometry_msgs/PoseStamped");
 
             paramsRosSocket.publication_killpid = this.Advertise("/key_press", "std_msgs/String");
             paramsRosSocket.publication_killActionLid = this.Advertise("/killActionLibCallback", "std_msgs/Int32");
-            float subscription_publication_batteryvol = this.Subscribe ("/battery_vol", "std_msgs/Int32", BatteryVolHandler);
-            int subscription_AGV_LaserError = this.Subscribe ("/stm_error", "std_msgs/String", AGVLaserErrorHandler);
-            int subscription_AGV_LaserWarning = this.Subscribe ("/stm_warning", "std_msgs/String", AGVLaserWarningHandler);
-            int subscription_Odom= this.Subscribe("/odom", "nav_msgs/Odometry", OdometryCallback, 10);
+            float subscription_publication_batteryvol = this.Subscribe("/battery_vol", "std_msgs/Int32", BatteryVolHandler);
+            int subscription_Odom = this.Subscribe("/odom", "nav_msgs/Odometry", OdometryCallback, 10);
             int subscription_Navi = this.Subscribe("/cmd_vel_mux/input/navi", "geometry_msgs/Twist", NaviCallback, 10);
-            int subscription_lineEnable = this.Subscribe("/line_enable","std_msgs/Int32", LineEnableHandler);
+            int subscription_lineEnable = this.Subscribe("/line_enable", "std_msgs/Int32", LineEnableHandler);
             float subscription_RequestGotoReady = this.Subscribe("/requestGotoReady", "std_msgs/Int32", RequestGotoReadyHandler);
+        }
 
-            //paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
-            //paramsRosSocket.publication_batteryvol = this.Advertise ("/battery_vol", "std_msgs/Float32");
-            //   paramsRosSocket.publication_TestLaserError = this.Advertise ("/AGV_LaserError", "std_msgs/String");
-            //  paramsRosSocket.publication_TestLaserWarning = this.Advertise ("/AGV_LaserWarning", "std_msgs/String");
+        private void CheckRbRes(ResponseCtrl res)
+        {
+            if (this.rbResCtrl == res)
+            {
+                this.waitRes = false;
+            }
+        }
+        private void PubToRb(int topic, object cmd, ResponseCtrl cmdRes)
+        {
+            this.rbResCtrl = cmdRes;
+            switch (cmdRes)
+            {
+                case ResponseCtrl.RESPONSE_POS_PALLET:
+                    this.Publish(topic, (StandardInt32)cmd);
+                    break;
+                case ResponseCtrl.RESPONSE_AREA_PALLET:
+                    this.Publish(topic, (StandardString)cmd);
+                    break;
+                case ResponseCtrl.RESPONSE_ROBOT_NAVIGATION:
+                    this.Publish(topic, (GeometryPoseStamped)cmd);
+                    break;
+                case ResponseCtrl.RESPONSE_LINE_CTRL:
+                    this.Publish(topic, (StandardInt32)cmd);
+                    break;
+            }
+        }
+        private bool SendToRb(int topic, object cmd, ResponseCtrl cmdRes)
+        {
+            bool ret = true;
+            PubToRb(topic, cmd, cmdRes);
+            this.waitRes = true;
+            this.numResendData = 0;
+            Stopwatch et = new Stopwatch();
+            et.Start();
+            while (waitRes)
+            {
+                if (et.ElapsedMilliseconds >= TIME_OUT_WAT_RESPONSE)
+                {
+                    PubToRb(topic, cmd, cmdRes);
+                    et.Restart();
+                    this.numResendData++;
+                    Console.WriteLine("TIME_OUT_WAT_RESPONSE from RB" + this.numResendData);
+                    if (this.numResendData >= NUM_TRY_SEND_TO_RB)
+                    {
+                        ret = false;
+                        break;
+                    }
+                }
+                System.Threading.Thread.Sleep(40);
+            }
+            return ret;
         }
 
         private void RequestGotoReadyHandler(Communication.Message message)
         {
             StandardInt32 rqVal = (StandardInt32)message;
-            if (rqVal.data == 1) {
-                Console.WriteLine("request goto ready");       
+            if (rqVal.data == 1)
+            {
+                Console.WriteLine("request goto ready");
             }
         }
         private void LineEnableHandler(Communication.Message message)
@@ -370,23 +406,30 @@ namespace SeldatMRMS.Management.RobotManagent
             }
             catch { }
         }
-        private void BatteryVolHandler (Communication.Message message) {
-            StandardInt32 batVal = (StandardInt32) message;
+        private void BatteryVolHandler(Communication.Message message)
+        {
+            StandardInt32 batVal = (StandardInt32)message;
             properties.BatteryLevelRb = batVal.data;
             //robotLogOut.ShowText(this.properties.Label, "BatteryLevelRb[" + batVal.data + "]");
-            if (properties.RequestChargeBattery == false) {
-                if (properties.BatteryLevelRb <= properties.BatteryLowLevel) {
+            if (properties.RequestChargeBattery == false)
+            {
+                if (properties.BatteryLevelRb <= properties.BatteryLowLevel)
+                {
                     properties.RequestChargeBattery = true;
                     robotLogOut.ShowText(this.properties.Label, "RequestChargeBattery");
                 }
-            } else {
-                if (properties.BatteryLevelRb > (properties.BatteryLowLevel + delBatterry)) {
+            }
+            else
+            {
+                if (properties.BatteryLevelRb > (properties.BatteryLowLevel + delBatterry))
+                {
                     properties.RequestChargeBattery = false;
                 }
             }
         }
 
-        private void AmclPoseHandler (Communication.Message message) {
+        private void AmclPoseHandler(Communication.Message message)
+        {
             try
             {
                 GeometryPoseWithCovarianceStamped standardString = (GeometryPoseWithCovarianceStamped)message;
@@ -403,26 +446,28 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 Console.WriteLine(" Error in AMCL");
             }
-         
+
 
         }
-        private void FinishedStatesHandler (Communication.Message message) {
+        private void FinishedStatesHandler(Communication.Message message)
+        {
             try
             {
                 StandardInt32 standard = (StandardInt32)message;
-                robotLogOut.ShowText(this.properties.Label,"Finished State [" + standard.data + "]");
+                robotLogOut.ShowText(this.properties.Label, "Finished State [" + standard.data + "]");
                 //StandardInt32 cmd = new StandardInt32();
                 //cmd.data = 0;
                 //this.Publish(paramsRosSocket.publication_finishStatesCallBack, cmd);
                 try
                 {
-                   FinishStatesCallBack(standard.data);
+                    FinishStatesCallBack(standard.data);
                 }
                 catch { }
 
 
             }
-            catch {
+            catch
+            {
                 Console.WriteLine(" Error FinishedStatesHandler");
             }
 
@@ -433,8 +478,7 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 StandardInt32 standard = (StandardInt32)message;
                 robotLogOut.ShowText(this.properties.Label, "ResponseCtrl [" + standard.data + "]");
-                respCtrlCallBack = (ResponseCtrl)standard.data;
-
+                CheckRbRes((ResponseCtrl)standard.data);
             }
             catch
             {
@@ -442,7 +486,7 @@ namespace SeldatMRMS.Management.RobotManagent
             }
 
         }
-        
+
         private void OdometryCallback(Communication.Message message)
         {
             NavigationOdometry standard = (NavigationOdometry)message;
@@ -459,103 +503,6 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.pose.VCtrlw = standard.angular.z;
         }
 
-        private void AGVLaserErrorHandler (Communication.Message message) {
-          /*  StandardString standard = (StandardString) message;
-            LaserErrorCode er = new LaserErrorCode ();
-            bool tamddd = standard.data[0].Equals('1');
-            try
-            {
-                if (standard.data[0].Equals('1')) {
-                    er.LaserErrorConnect = true;
-                } else {
-                    er.LaserErrorConnect = false;
-                }
-                if (standard.data[1].Equals ('1')) {
-                    er.LaserErrorShutdown = true;
-                } else {
-                    er.LaserErrorShutdown = false;
-                }
-                if (standard.data[2].Equals ('1')) {
-                    er.LaserErrorLostSpeed = true;
-                } else {
-                    er.LaserErrorLostSpeed = false;
-                }
-                if (standard.data[3].Equals ('1')) {
-                    er.LaserErrorLostPath = true;
-                } else {
-                    er.LaserErrorLostPath = false;
-                }
-            } catch (System.Exception) {
-               // Console.WriteLine ("Cannot parse error laser");
-            }
-            // AGVLaserErrorCallBack (er);*/
-        }
-
-        private void AGVLaserWarningHandler (Communication.Message message) {
-           /* StandardString standard = (StandardString) message;
-            LaserWarningCode war = new LaserWarningCode ();
-            try {
-                if (standard.data[0].Equals ('1')) {
-                    war.LaserWarningObstacle = true;
-                } else {
-                    war.LaserWarningObstacle = false;
-                }
-                if (standard.data[1].Equals ('1')) {
-                    war.LaserWarningLowBattey = true;
-                } else {
-                    war.LaserWarningLowBattey = false;
-                }
-                if (standard.data[2].Equals ('1')) {
-                    war.LaserWarningCharging = true;
-                } else {
-                    war.LaserWarningCharging = false;
-                }
-                if (standard.data[3].Equals ('1')) {
-                    war.LaserWarningHazardoes = true;
-                } else {
-                    war.LaserWarningHazardoes = false;
-                }
-                if (standard.data[4].Equals ('1')) {
-                    war.LaserWarningHazardoes = true;
-                } else {
-                    war.LaserWarningHazardoes = false;
-                }
-            } catch (System.Exception) {
-              //  Console.WriteLine ("Cannot parse warning laser");
-            }
-            // AGVLaserWarningCallBack (war);*/
-        }
-
-        public bool CheckResponseTimeOut(ResponseCtrl value)
-        {
-            respCtrlCallBack = ResponseCtrl.RESPONSE_NONE;
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            bool responsed = false;
-
-            while(true)
-            {
-                if (respCtrlCallBack == value)
-                {
-                    responsed = true;
-                    break;
-                }
-                if (sw.ElapsedMilliseconds > 2000) break;
-            }
-            robotLogOut.ShowText(this.properties.Label, "CheckResponseTimeOut= " + respCtrlCallBack + " " + responsed);
-            respCtrlCallBack = ResponseCtrl.RESPONSE_NONE;
-            return responsed;
-        }
-        public void TestLaserError (String cmd) {
-            StandardString msg = new StandardString ();
-            msg.data = cmd;
-            this.Publish (paramsRosSocket.publication_TestLaserError, msg);
-        }
-        public void TestLaserWarning (String cmd) {
-            StandardString msg = new StandardString ();
-            msg.data = cmd;
-            this.Publish (paramsRosSocket.publication_TestLaserWarning, msg);
-        }
         public void KillPID()
         {
             try
@@ -577,25 +524,15 @@ namespace SeldatMRMS.Management.RobotManagent
             }
             catch { MessageBox.Show("Kill PID error !"); }
         }
-        public void FinishedStatesPublish (int message) {
-            StandardInt32 msg = new StandardInt32 ();
-            msg.data = message;
-            this.Publish (paramsRosSocket.publication_finishedStates, msg);
-        }
-
-        public void BatteryPublish (float message) {
-            StandardFloat32 msg = new StandardFloat32 ();
-            msg.data = message;
-            this.Publish (paramsRosSocket.publication_batteryvol, msg);
-        }
         public virtual void UpdateProperties(PropertiesRobotUnity proR)
         {
             properties = proR;
         }
         double gx;
         double gy;
-        public bool SendPoseStamped (Pose pose) {
-
+        public bool SendPoseStamped(Pose pose)
+        {
+            bool ret = false;
             try
             {
                 if (pose != null)
@@ -610,33 +547,17 @@ namespace SeldatMRMS.Management.RobotManagent
                     data.pose.orientation.w = (float)Math.Cos(theta / 2);
 
                     Console.WriteLine(this.properties.Label, "Send Pose => " + JsonConvert.SerializeObject(data).ToString());
-                    
-                    //robotLogOut.ShowText(this.properties.Label, "--------------------------");
-                    //robotLogOut.ShowText(this.properties.Label, pose.AngleW.ToString());
-                    //robotLogOut.ShowText(this.properties.Label, data.pose.orientation.z.ToString());
-                    //robotLogOut.ShowText(this.properties.Label, data.pose.orientation.w.ToString());
-                    //robotLogOut.ShowText(this.properties.Label, "--------------------------");
 
-                    this.Publish(paramsRosSocket.publication_robotnavigation, data);
+                    //this.Publish(paramsRosSocket.publication_robotnavigation, data);
+                    ret = SendToRb(paramsRosSocket.publication_robotnavigation,data, ResponseCtrl.RESPONSE_ROBOT_NAVIGATION);
                     robotLogOut.ShowText(this.properties.Label, "Send Pose => " + JsonConvert.SerializeObject(data).ToString());
                     // lưu vị trí đích đến
                     gx = data.pose.position.x;
                     gy = data.pose.position.y;
-
-                   if(CheckResponseTimeOut(ResponseCtrl.RESPONSE_ROBOT_NAVIGATION))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        robotLogOut.ShowText(this.properties.Label, "Time out SendPoseStamped");
-                        return false;
-                    }
-
                 }
                 else
                 {
-                    robotLogOut.ShowText(this.properties.Label,"Without Data SendPoseStamped : pose is Null");
+                    robotLogOut.ShowText(this.properties.Label, "Without Data SendPoseStamped : pose is Null");
                     return false;
                 }
             }
@@ -645,6 +566,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 robotLogOut.ShowText(this.properties.Label, "Robot Control Error SendPoseStamped");
                 return false;
             }
+            return ret;
         }
         bool flagSpeedTraffic = false;
         bool flagSpeedRegZone = false;
@@ -671,8 +593,6 @@ namespace SeldatMRMS.Management.RobotManagent
                     Console.WriteLine("Robot Control Error  SetSpeed");
                     return false;
                 }
-
-
             }
             else
             {
@@ -691,9 +611,10 @@ namespace SeldatMRMS.Management.RobotManagent
                     return false;
                 }
             }
-
         }
-        public bool SetSpeedHighPrioprity(RobotSpeedLevel robotspeed, bool highpriority) {
+
+        public bool SetSpeedHighPrioprity(RobotSpeedLevel robotspeed, bool highpriority)
+        {
 
             flagSetSpeedHighPrioprity = highpriority;
             if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity)
@@ -712,8 +633,6 @@ namespace SeldatMRMS.Management.RobotManagent
                     Console.WriteLine("Robot Control Error  SetSpeed");
                     return false;
                 }
-
-               
             }
             else
             {
@@ -732,9 +651,9 @@ namespace SeldatMRMS.Management.RobotManagent
                     return false;
                 }
             }
-
         }
-        public bool SetSpeedTraffic(RobotSpeedLevel robotspeed,bool highpriority)
+
+        public bool SetSpeedTraffic(RobotSpeedLevel robotspeed, bool highpriority)
         {
             flagSpeedTraffic = highpriority;
             if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity)
@@ -753,14 +672,12 @@ namespace SeldatMRMS.Management.RobotManagent
                     Console.WriteLine("Robot Control Error  SetSpeed");
                     return false;
                 }
-
-
             }
             else
             {
                 try
                 {
-                    properties.speedInSpecicalArea = robotspeed+ "_TRAFFIC";
+                    properties.speedInSpecicalArea = robotspeed + "_TRAFFIC";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
                     this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
@@ -790,7 +707,7 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 try
                 {
-                    properties.speedInSpecicalArea = robotspeed+"_REG_ZONE";
+                    properties.speedInSpecicalArea = robotspeed + "_REG_ZONE";
                     StandardInt32 msg = new StandardInt32();
                     msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
 
@@ -803,8 +720,6 @@ namespace SeldatMRMS.Management.RobotManagent
                     Console.WriteLine("Robot Control Error  SetSpeed");
                     return false;
                 }
-
-
             }
             else
             {
@@ -826,76 +741,68 @@ namespace SeldatMRMS.Management.RobotManagent
             }
         }
 
-
-        public bool SendCmdLineDetectionCtrl (RequestCommandLineDetect cmd) {
-
+        public bool SendCmdLineDetectionCtrl(RequestCommandLineDetect cmd)
+        {
+            bool ret = false;
             try
             {
                 StandardInt32 msg = new StandardInt32();
                 msg.data = Convert.ToInt32(cmd);
-                this.Publish(paramsRosSocket.publication_linedetectionctrl, msg);
+                //this.Publish(paramsRosSocket.publication_linedetectionctrl, msg);
+                ret = SendToRb(paramsRosSocket.publication_linedetectionctrl, msg, ResponseCtrl.RESPONSE_LINE_CTRL);
                 robotLogOut.ShowText(this.properties.Label, "SendCmdLineDetectionCtrl => " + msg.data);
-
-                if (CheckResponseTimeOut(ResponseCtrl.RESPONSE_LINE_CTRL))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
             }
-            catch {
+            catch
+            {
                 Console.WriteLine("Robot Control Error SendCmdLineDetectionCtrl");
                 return false;
             }
+            return ret;
         }
 
-        public bool SendCmdPosPallet (RequestCommandPosPallet cmd) {
+        public bool SendCmdPosPallet(RequestCommandPosPallet cmd)
+        {
+            bool ret = false;
             try
             {
                 StandardInt32 msg = new StandardInt32();
                 msg.data = Convert.ToInt32(cmd);
-                this.Publish(paramsRosSocket.publication_postPallet, msg);
+                //this.Publish(paramsRosSocket.publication_postPallet, msg);
+                ret = SendToRb(paramsRosSocket.publication_postPallet, msg, ResponseCtrl.RESPONSE_POS_PALLET);
                 robotLogOut.ShowText(this.properties.Label, "SendCmdPosPallet => " + msg.data);
-               if (CheckResponseTimeOut(ResponseCtrl.RESPONSE_POS_PALLET))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
             }
-            catch {
+            catch
+            {
                 Console.WriteLine("Robot Control Error SendCmdPosPallet");
                 return false;
             }
+            return ret;
         }
+
         int countGoal = 0;
         public bool ReachedGoal()
         {
-            if (countGoal ++ > 200)
+            if (countGoal++ > 200)
             {
                 countGoal = 0;
 
-                double _currentgoal_Ex = Math.Abs(properties.pose.Position.X-gx);
-                double _currentgoal_Ey = Math.Abs(properties.pose.Position.Y-gy);
-               /* */
+                double _currentgoal_Ex = Math.Abs(properties.pose.Position.X - gx);
+                double _currentgoal_Ey = Math.Abs(properties.pose.Position.Y - gy);
+                /* */
                 double gxx = Math.Abs(gx);
                 double gyy = Math.Abs(gy);
                 if (gxx >= 7.0 && gxx <= 8.65 && gyy >= 9.8 && gyy <= 11.0) // truong hop dat biet
                 {
                     //robotLogOut.ShowText("", "Truong hop dat biet");
-                       
-                       // if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
-                        if (_currentgoal_Ex <= 2.0 && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
+
+                    // if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
+                    if (_currentgoal_Ex <= 2.0 && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
+                    {
+                        if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
                         {
-                            if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
-                            {
-                                properties.pose.VCtrlx = 0;
-                                properties.pose.VCtrly = 0;
-                                properties.pose.VCtrlw = 0;
+                            properties.pose.VCtrlx = 0;
+                            properties.pose.VCtrly = 0;
+                            properties.pose.VCtrlw = 0;
                             robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
                             robotLogOut.ShowText("", "Goal X=" + gx);
                             robotLogOut.ShowText("", "Goal Y=" + gy);
@@ -915,13 +822,13 @@ namespace SeldatMRMS.Management.RobotManagent
                     //&& Math.Abs(properties.pose.VCtrlx) <= 0.01 && Math.Abs(properties.pose.VCtrlw) <= 0.01
 
 
-                        if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= properties.errorDy && _currentgoal_Ex >= 0.0 && _currentgoal_Ey >= 0.0)
+                    if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= properties.errorDy && _currentgoal_Ex >= 0.0 && _currentgoal_Ey >= 0.0)
+                    {
+                        if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
                         {
-                            if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
-                            {
-                                properties.pose.VCtrlx = 0;
-                                properties.pose.VCtrly = 0;
-                                properties.pose.VCtrlw = 0;
+                            properties.pose.VCtrlx = 0;
+                            properties.pose.VCtrly = 0;
+                            properties.pose.VCtrlw = 0;
                             robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
                             robotLogOut.ShowText("", "Goal X=" + gx);
                             robotLogOut.ShowText("", "Goal Y=" + gy);
@@ -933,73 +840,70 @@ namespace SeldatMRMS.Management.RobotManagent
                             robotLogOut.ShowText("", "VY=" + properties.pose.VFby);
                             robotLogOut.ShowText("", "REACHED GOAL");
                             return true;
-                            }
                         }
+                    }
                 }
             }
 
             return false;
         }
-        public bool SendCmdAreaPallet (String cmd) {
-
-   
-                    try
-                    {
-                        StandardString msg = new StandardString();
-                        msg.data = cmd;
-                        Console.WriteLine(cmd);
-                        this.Publish(paramsRosSocket.publication_cmdAreaPallet, msg);
-                        robotLogOut.ShowText(this.properties.Label, "SendCmdAreaPallet => " + msg.data);
-                        if (CheckResponseTimeOut(ResponseCtrl.RESPONSE_AREA_PALLET))
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    catch {
-                    Console.WriteLine("Error Send SendCmdAreaPallet");
-                        return false;
-                }
-       
-           
+        public bool SendCmdAreaPallet(String cmd)
+        {
+            bool ret = false;
+            try
+            {
+                StandardString msg = new StandardString();
+                msg.data = cmd;
+                Console.WriteLine(cmd);
+                //this.Publish(paramsRosSocket.publication_cmdAreaPallet, msg);
+                ret = SendToRb(paramsRosSocket.publication_cmdAreaPallet, msg, ResponseCtrl.RESPONSE_AREA_PALLET);
+                robotLogOut.ShowText(this.properties.Label, "SendCmdAreaPallet => " + msg.data);
+            }
+            catch
+            {
+                Console.WriteLine("Error Send SendCmdAreaPallet");
+                return false;
+            }
+            return ret;
         }
 
-        protected override void OnOpenedEvent () {
+        protected override void OnOpenedEvent()
+        {
             properties.IsConnected = true;
-           
-            robotLogOut.ShowText(this.properties.Label,"Connected to Ros Master");
-            
+
+            robotLogOut.ShowText(this.properties.Label, "Connected to Ros Master");
+
             try
             {
                 createRosTerms();
                 Draw();
             }
-            catch {
+            catch
+            {
                 Console.WriteLine("Robot Control Error Send OnOpenedEvent");
             }
-            
+
             //   ConnectionStatusHandler(this, ConnectionStatus.CON_OK);
         }
 
-        protected override void OnClosedEvent (object sender, CloseEventArgs e) {
+        protected override void OnClosedEvent(object sender, CloseEventArgs e)
+        {
             //ConnectionStatusHandler(this, ConnectionStatus.CON_FAILED);
-          //  robotLogOut.ShowText(this.properties.Label,  "Disconnected to Ros Master");
-          //  robotLogOut.ShowText(this.properties.Label,  "Reconnecting...");
+            //  robotLogOut.ShowText(this.properties.Label,  "Disconnected to Ros Master");
+            //  robotLogOut.ShowText(this.properties.Label,  "Reconnecting...");
             properties.IsConnected = false;
             this.url = properties.URL;
-            base.OnClosedEvent (sender, e);
+            base.OnClosedEvent(sender, e);
 
         }
 
-        public override void Dispose () {
+        public override void Dispose()
+        {
             robotLogOut.ShowText(this.properties.Label, "Disconnected to Ros Master");
-            properties.pose.Destroy ();
-            base.Dispose ();
+            properties.pose.Destroy();
+            base.Dispose();
         }
-        public virtual void Draw () { }
+        public virtual void Draw() { }
         public virtual void TrafficUpdate() { }
     }
 }

@@ -241,6 +241,7 @@ namespace DoorControllerService
                 if (listCmdRqCtrl.Count > 0)
                 {
                     cmdRqDoor resCmd = listCmdRqCtrl[0];
+                    Console.WriteLine("Get listCmdRqCtrl");
                     kProcess = true;
                     if (resCmd.cmdRq == DoorCmdRq.DOOR_OPEN)
                     {

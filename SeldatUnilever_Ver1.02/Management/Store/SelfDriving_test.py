@@ -16,16 +16,16 @@ from time import sleep
 
 class ResponseStatus(Enum):
 	RESPONSE_NONE = 0;
-    	RESPONSE_LASER_CAME_POINT = 2000;
+    RESPONSE_LASER_CAME_POINT = 2000;
 	RESPONSE_LINEDETECT_PALLETUP = 3203;
-    	RESPONSE_LINEDETECT_PALLETDOWN = 3204;
-    	RESPONSE_FINISH_GOTO_POSITION = 3205;
-    	RESPONSE_FINISH_DETECTLINE_CHARGEAREA = 3206;
-    	RESPONSE_FINISH_RETURN_LINE_CHARGEAREA = 3207;
-    	RESPONSE_FINISH_TURN_LEFT = 3210;
-    	RESPONSE_FINISH_TURN_RIGHT = 3211;
-    	RESPONSE_FINISH_GOBACK_FRONTLINE = 3213;
-    	RESPONSE_ERROR = 3215;
+    RESPONSE_LINEDETECT_PALLETDOWN = 3204;
+    RESPONSE_FINISH_GOTO_POSITION = 3205;
+    RESPONSE_FINISH_DETECTLINE_CHARGEAREA = 3206;
+    RESPONSE_FINISH_RETURN_LINE_CHARGEAREA = 3207;
+    RESPONSE_FINISH_TURN_LEFT = 3210;
+    RESPONSE_FINISH_TURN_RIGHT = 3211;
+    RESPONSE_FINISH_GOBACK_FRONTLINE = 3213;
+    RESPONSE_ERROR = 3215;
 	RESPONSE_POS_PALLET=3216;
 	RESPONSE_AREA_PALLET = 3217;
 	RESPONSE_ROBOT_NAVIGATION = 3218;
@@ -36,9 +36,9 @@ class SelfDriving():
 	def __init__(self):
     #####################################################
 		print("Initializing SelfDriving Class...")
-        	rospy.init_node("SelfDriving",anonymous=True)
-        	self.nodename = rospy.get_name()
-        	print("%s started" % self.nodename)
+        rospy.init_node("SelfDriving",anonymous=True)
+        self.nodename = rospy.get_name()
+        print("%s started" % self.nodename)
 		self.rate=rospy.get_param('~rate',50);
 		self.amclpose_posX=0;
 		self.amclpose_posY=0;
@@ -141,12 +141,12 @@ class SelfDriving():
 		self.pub_respCtrl.publish(value);
 	def Pospallet_Servercallback(self,msg):
 		self.pub_pospallet.publish(msg);
-                value=ResponseStatus.RESPONSE_POS_PALLET.value
+        value=ResponseStatus.RESPONSE_POS_PALLET.value
 #		print(value)
 		self.pub_respCtrl.publish(value);
 	def CmdAreaPallet_Servercallback(self,msg):
 		self.pub_cmdAreaPallet.publish(msg);
-                value=ResponseStatus.RESPONSE_AREA_PALLET.value
+        value=ResponseStatus.RESPONSE_AREA_PALLET.value
 		self.pub_respCtrl.publish(ResponseStatus.RESPONSE_AREA_PALLET.value);
 		
 
@@ -168,6 +168,6 @@ if __name__ == '__main__':
     try:
 	#call("rosrun seldat_robot reachGoal&", shell=True)  
     	selfDriving = SelfDriving()
-	selfDriving.spin()
+		selfDriving.spin()
     except rospy.ROSInterruptException:
         pass
