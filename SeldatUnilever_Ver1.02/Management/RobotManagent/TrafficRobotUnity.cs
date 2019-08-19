@@ -365,6 +365,18 @@ namespace SeldatMRMS.Management
                 onFlagSafeSmallcircle = false;
 
             }
+            else
+            {
+                properties.L1 = 4;
+                properties.L2 = 3;
+                properties.WS = 4;
+                properties.DistInter = 0;
+                L1Cv = 4* properties.Scale;
+                L2Cv = 3 * properties.Scale;
+                WSCv = 4* properties.Scale;
+                //DistInterCv = rZR.distance * properties.Scale;
+
+            }
         }
         public void TrafficUpdate()
         {

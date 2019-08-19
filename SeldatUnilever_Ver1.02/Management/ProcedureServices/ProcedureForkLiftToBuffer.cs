@@ -100,6 +100,7 @@ namespace SeldatMRMS
             rb.mcuCtrl.lampRbOn();
             robot.ShowText(" Start -> " + procedureCode);
             endPointBuffer = FlToBuf.GetFrontLineBuffer(true);
+            order.frontLinePos = endPointBuffer.Position;
             if(endPointBuffer==null)
             {
                 Console.WriteLine("Error Data Request"+order.dataRequest);

@@ -131,6 +131,7 @@ namespace SeldatMRMS
             //  ProRun = false;
             rb.mcuCtrl.lampRbOn();
             frontLinePose = BfToMa.GetFrontLineBuffer();
+            order.frontLinePos = frontLinePose.Position;
             while (ProRun)
             {
                 switch (StateBufferToMachine)
