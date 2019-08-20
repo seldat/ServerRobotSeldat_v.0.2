@@ -416,10 +416,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         else if (ret == RetState.DOOR_CTRL_ERROR)
                         {
-                            Thread.Sleep(50);
+                            robot.ShowText("BUFGATE_ROBOT_WAITTING_OPEN_DOOR_ERROR__(-_-)");
+                            Thread.Sleep(100);
                             ds.setDoorBusy(true);
                             ds.openDoor(DoorService.DoorType.DOOR_BACK);
-                         //   StateBufferToGate = BufferToGate.BUFGATE_ROBOT_CAME_GATE_POSITION;
                         }
                         break;
                     case BufferToGate.BUFGATE_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER: // doi robot gap hang

@@ -230,6 +230,14 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         break;
                     case MachineToGate.MACGATE_ROBOT_WAITTING_GOTO_GATE:
+                        if (Traffic.RobotIsInArea("GATE3", rb.properties.pose.Position))
+                        {
+                            ds.setDoorBusy(true);
+                            ds.openDoor(DoorService.DoorType.DOOR_BACK);
+                            StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_GOTO_GATE_OPENDOOR;
+                        }
+                        break;
+                    case MachineToGate.MACGATE_ROBOT_WAITTING_GOTO_GATE_OPENDOOR:
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -239,8 +247,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         break;
                     case MachineToGate.MACGATE_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
-                        ds.setDoorBusy(true);
-                        ds.openDoor(DoorService.DoorType.DOOR_BACK);
+                        //ds.setDoorBusy(true);
+                        //ds.openDoor(DoorService.DoorType.DOOR_BACK);
                         StateMachineToGate = MachineToGate.MACGATE_ROBOT_WAITTING_OPEN_DOOR;
                         robot.ShowText("MACGATE_ROBOT_WAITTING_OPEN_DOOR");
                         break;
@@ -256,7 +264,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         else if (ret == RetState.DOOR_CTRL_ERROR)
                         {
-                            StateMachineToGate = MachineToGate.MACGATE_ROBOT_CAME_GATE_POSITION;
+                            robot.ShowText("MACGATE_ROBOT_WAITTING_OPEN_DOOR_ERROR__(-_-)");
+                            Thread.Sleep(100);
+                            ds.setDoorBusy(true);
+                            ds.openDoor(DoorService.DoorType.DOOR_BACK);
                         }
                         break;
                     // case MachineToGate.MACGATE_ROBOT_OPEN_DOOR_SUCCESS: // mo cua thang cong ,gui toa do line de robot di vao

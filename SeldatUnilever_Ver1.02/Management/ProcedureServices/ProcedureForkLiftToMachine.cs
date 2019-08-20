@@ -199,8 +199,15 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         break;
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOTO_GATE:
+                        if (Traffic.RobotIsInArea("C3", rb.properties.pose.Position))
+                        {
+                            ds.setDoorBusy(true);
+                            ds.openDoor(DoorService.DoorType.DOOR_BACK);
+                            StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOTO_GATE_OPENDOOR;
+                        }
+                        break;
+                    case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOTO_GATE_OPENDOOR:
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
-                        //if (robot.ReachedGoal())
                         {
                             TrafficRountineConstants.RegIntZone_READY.Release(robot);
                             robot.SwitchToDetectLine(true);
@@ -212,8 +219,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         break;
                     case ForkLiftToMachine.FORMACH_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
                         robot.robotRegistryToWorkingZone.onRobotwillCheckInsideGate = false;
-                        ds.setDoorBusy(true);
-                        ds.openDoor(DoorService.DoorType.DOOR_BACK);
+                        //ds.setDoorBusy(true);
+                        //ds.openDoor(DoorService.DoorType.DOOR_BACK);
                         StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_OPEN_DOOR;
                         robot.ShowText("FORMACH_ROBOT_WAITTING_OPEN_DOOR");
                         break;
