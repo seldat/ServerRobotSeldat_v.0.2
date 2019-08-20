@@ -260,6 +260,9 @@ namespace DoorControllerService
                     }
                     else
                     {
+                        Console.WriteLine("Remove not command");
+                        listCmdRqCtrl.Remove(resCmd);
+                        Thread.Sleep(50);
                         continue;
                     }
                     while (kProcess)
@@ -432,6 +435,7 @@ namespace DoorControllerService
                             default:
                                 break;
                         }
+                        Thread.Sleep(50);
                     }
                 }
                 Thread.Sleep(100);
