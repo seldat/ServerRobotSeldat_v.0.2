@@ -1,0 +1,974 @@
+[33mcommit a6e8d1b4fdde7be4895b0b656a2c9767befcc82c[m[33m ([m[1;36mHEAD -> [m[1;32mChau/FixBugDoor[m[33m)[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Wed Aug 21 00:40:51 2019 +0700
+
+    Add checkzone open to procedure
+
+[33mcommit 636ad370e16c75bb51d01d3b9b80615a5d668f68[m[33m ([m[1;31morigin/Chau/FixBugDoor[m[33m)[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Wed Aug 21 00:09:36 2019 +0700
+
+    Fix bug
+
+[33mcommit 1226d80aa7cc682a1a24025abf04b67a023ee8dd[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Tue Aug 20 22:41:14 2019 +0700
+
+    Add send turn on lamp Rb 2 time
+
+[33mcommit 0aa33b734e25fad3ce4d6c8828db768c5061fc8a[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Tue Aug 20 20:08:54 2019 +0700
+
+    Add sleep ctrl door
+
+[33mcommit b9bfc09f9ceec7444e6ada97c17800ccc3fe5f2f[m
+Merge: 0cedae5 187d675
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Tue Aug 20 19:31:49 2019 +0700
+
+    Merge branch 'Chau/ChangePubDoor'
+
+[33mcommit 0cedae575bbcc8deadcd9d4632702969af91ab25[m
+Merge: b4b1fe1 062bc86
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Mon Aug 19 22:19:38 2019 +0700
+
+    Merge branch 'master' of https://github.com/seldat/ServerRobotSeldat_v.0.2
+
+[33mcommit b4b1fe16e093d0885e9eaddc587d5e2266c0870f[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Mon Aug 19 22:11:58 2019 +0700
+
+    cap nhat bayIDReg
+
+[33mcommit 187d675496231120a27331f6578b02e04205d8c7[m[33m ([m[1;31morigin/Chau/ChangePubDoor[m[33m, [m[1;32mChau/ChangePubDoor[m[33m)[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Mon Aug 19 17:13:10 2019 +0700
+
+    Door
+
+[33mcommit 062bc8635c896801731cbf956582f83dcb557620[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Mon Aug 19 13:50:05 2019 +0700
+
+    cap nhat 19/08/2019
+
+[33mcommit 763fb0a931d117057bf8d467da55c8b8c2d40dc2[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Sun Aug 18 15:13:52 2019 +0700
+
+    CAP NHAT 18/08 2019 4pm
+
+[33mcommit 44f1d35218f742c1ebaccf2f8e3e2b5b32fbcf19[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Sun Aug 18 14:00:20 2019 +0700
+
+    cap nhat 18/08 2019 2PM
+
+[33mcommit 1f07a5954397d7a5d2a9c355f72ebf55ce867f3d[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Sun Aug 18 00:24:58 2019 +0700
+
+    Check keepalive 250ms
+
+[33mcommit d3a1f4482d879c15c85f31c5b9b96727e78ac007[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Sat Aug 17 22:42:49 2019 +0700
+
+    Check time out release button ctrl door
+
+[33mcommit a73fad1afd7b53008b8e43c25bcb8a8717e4eb68[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Sat Aug 17 12:29:30 2019 +0700
+
+    cap nhat 17/08 2019 2PM
+
+[33mcommit 21017f51f5dfda8077ba50b14dd443a89efb0b99[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Fri Aug 16 13:25:41 2019 +0700
+
+    cap nhat 16/08 2PM
+
+[33mcommit 47361aac0e9968cd90b0d04fbd0d4fa4bfe923e7[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Fri Aug 16 13:11:19 2019 +0700
+
+    cap nhat 16/08 2PM
+
+[33mcommit 1896baa875d686650f885906ff4e8cd58362a006[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Fri Aug 16 10:53:11 2019 +0700
+
+    cap nhat 16/08 12PM
+
+[33mcommit 56d11151f1d4c095d67a5850fb603e67083506d5[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Fri Aug 16 04:56:41 2019 +0700
+
+    Good door (@_@)
+
+[33mcommit 60a8be8d702f6e658de5867dfc5c6d712c0ba7ef[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Fri Aug 16 04:26:21 2019 +0700
+
+    Update (^_^)
+
+[33mcommit 4c0c7cae4553f589c3ff0c6a481f6534a4467eca[m
+Merge: 2f1a359 d71078a
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Fri Aug 16 03:20:05 2019 +0700
+
+    Merge branch 'Chau/TestBug_3'
+
+[33mcommit 2f1a35968fc371fd10acd72e7ef7d1ccfc0df7ba[m
+Merge: 5282a1b 7e6e464
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Fri Aug 16 03:18:11 2019 +0700
+
+    Merge branch 'master' of https://github.com/seldat/ServerRobotSeldat_v.0.2
+
+[33mcommit d71078a0456b6f6ca2ccf58f1def33f27f6ac663[m[33m ([m[1;31morigin/Chau/TestBug_3[m[33m)[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Fri Aug 16 03:15:19 2019 +0700
+
+    Tamp
+
+[33mcommit 61e4f61614aa6e536168a7c932b46f1043b551c2[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Fri Aug 16 02:39:48 2019 +0700
+
+    Fix bug Ready
+
+[33mcommit 7e6e4641a16225fa59fed68fbe55f650bd8768ac[m
+Merge: e687633 e0b0066
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Thu Aug 15 23:10:27 2019 +0700
+
+    Merge branch 'Chau/DoorControlProcess'
+
+[33mcommit 5282a1b15db758c31b8dc19280b9eb976972c7b9[m
+Merge: e687633 e0b0066
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Thu Aug 15 22:10:50 2019 +0700
+
+    Merge branch 'Chau/DoorControlProcess'
+
+[33mcommit e687633ed7102a57c25e27b4460b940b84013388[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Thu Aug 15 21:12:59 2019 +0700
+
+    Cap nhat  SwitchToDetectLine(false);
+
+[33mcommit 8df072436d61d9a0ed2e18bd3b2368d2090f3fc7[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Thu Aug 15 20:47:07 2019 +0700
+
+    cap nhat luc
+
+[33mcommit e0b006613360f6449cf04f2a5339a0bf7e650655[m[33m ([m[1;31morigin/Chau/DoorControlProcess[m[33m, [m[1;32mChau/DoorControlProcess[m[33m)[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Thu Aug 15 18:55:37 2019 +0700
+
+    Save tamp
+
+[33mcommit 70d7e307eb72b2cd583fb80ea87c431d8dafb101[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Thu Aug 15 13:27:41 2019 +0700
+
+    cap nhat 15/08 2PM
+
+[33mcommit 36bedd473ec61fe8ba16f2fca705cd0116f439df[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Thu Aug 15 07:12:14 2019 +0700
+
+    cap nhat 15/08 8AM
+
+[33mcommit 28152de0158ac583e7d761d625b979a2b9b590ab[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Wed Aug 14 22:45:57 2019 +0700
+
+    Xong
+
+[33mcommit 7e2e9171ab6cba76e17ac875034fb41b861e0fb3[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Wed Aug 14 05:06:02 2019 +0700
+
+    Tamp333
+
+[33mcommit 0f719bca516af4b88ef8405d8aa469693b45f4d9[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Tue Aug 13 23:46:06 2019 +0700
+
+    Tamp
+
+[33mcommit ca8d6847ccbbfa34a741307dddc29e38e762d0c3[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Tue Aug 13 15:34:06 2019 +0700
+
+    cap nhat 13/08 4PM
+
+[33mcommit dc85adb2944513f4e7044e77e5ad4b80abec5515[m
+Merge: 0960841 13b8475
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Tue Aug 13 05:28:16 2019 +0700
+
+    Merge branch 'Chau/TestBug_1'
+
+[33mcommit 09608411065283ea662cffa4e49fa8eeec56f5bc[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Tue Aug 13 05:28:02 2019 +0700
+
+    Save tamp
+
+[33mcommit 13b84758c7a8d6bcd7ff8044878238b63192d155[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Tue Aug 13 05:17:27 2019 +0700
+
+    Create bug
+
+[33mcommit ea7861bf3616f8559e092043a58f60b403841a84[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Tue Aug 13 01:46:40 2019 +0700
+
+    Luat request
+
+[33mcommit 0c71855e98cbd58548c89f152590303f4f8ff1d9[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Tue Aug 13 01:42:32 2019 +0700
+
+    Test assign ready
+
+[33mcommit 7b3f8c794ee92f4b32fefcfd0411af20894e6cd7[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Tue Aug 13 01:26:54 2019 +0700
+
+    Check zone C3 open door
+
+[33mcommit 82bee8b6c07585aa1c8230a4d1e6be30bc9e5bb2[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Tue Aug 13 00:50:24 2019 +0700
+
+    Free door when distroy procedure
+
+[33mcommit 447d3df72fea9d1af00d8fa43b01697ca6c6c56b[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Mon Aug 12 23:41:58 2019 +0700
+
+    Modify LuatTran
+
+[33mcommit 1f276bbb58c8da4b08eba13dc41735ca23835f50[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Mon Aug 12 13:44:26 2019 +0700
+
+    cap nhat 12/08 2PM
+
+[33mcommit 650dcb97d4f292a4c33fd8b69d40d57e62a3f8fd[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Sat Aug 10 21:27:02 2019 +0700
+
+    cap nhat 10/08 4:30AM
+
+[33mcommit 06eb043e0770019f4711f1f4065e336753d8fc6d[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Sat Aug 10 21:17:17 2019 +0700
+
+    cap nhat store
+
+[33mcommit 67e23537a7fb4d2e985de35da398ed8031d5dd67[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Sat Aug 10 22:11:49 2019 +0700
+
+    cap nhat 11/08/2019 5AM
+
+[33mcommit ca72811f745a2428d3bc18f5affa4e4ab24dce36[m
+Merge: 81a74e1 8912840
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Sat Aug 10 23:57:48 2019 +0700
+
+    Merge branch 'master' of https://github.com/seldat/ServerRobotSeldat_v.0.2
+
+[33mcommit 81a74e1294f58910a3ed517947ed5e7ed19cd8ac[m[33m ([m[1;31morigin/Chau/TestBug[m[33m, [m[1;32mChau/TestBug[m[33m)[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Sat Aug 10 23:14:00 2019 +0700
+
+    Check door busy
+
+[33mcommit 945590aafa705bd4d0a5afa95cba52d577264d8f[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Sat Aug 10 22:59:59 2019 +0700
+
+    Fix bug lamp cannot turn off
+
+[33mcommit 8912840105c956e698ea88cbb32912052c0cf729[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Sat Aug 10 21:52:21 2019 +0700
+
+    cap nhat 10/08/2019 23:49PM
+
+[33mcommit 13f3a8d7b6bbc23bf88914070648ae160fb3e384[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Sat Aug 10 21:46:52 2019 +0700
+
+    cap nhat 08/10/2019 23h
+
+[33mcommit 883a51758b7845b6eb4ed4209fcf6f83ff403694[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Sat Aug 10 05:52:01 2019 +0700
+
+    cap nhat 10/08 4PM
+
+[33mcommit 4a32a89672cc61c28cd87abfed9d2a280a10e86d[m
+Merge: 463e07b e4e6731
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Sat Aug 10 05:33:25 2019 +0700
+
+    Merge branch 'Chau/TestBug'
+
+[33mcommit 463e07b411bb495f45720ac5b328e7a02c47eaed[m
+Merge: 75b6d35 8c44852
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Sat Aug 10 05:31:39 2019 +0700
+
+    Merge branch 'master' of https://github.com/seldat/ServerRobotSeldat_v.0.2
+
+[33mcommit e4e6731d606cfd21359801f871c6853c753f0d9a[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Sat Aug 10 01:07:22 2019 +0700
+
+    Fix
+
+[33mcommit 5b0274259cb77f237c6819f51c1a4323ec1bf127[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Sat Aug 10 00:52:32 2019 +0700
+
+    Change ctrl lamp door
+
+[33mcommit 67c900b892cbd43c05e8dd83fa39041374637cae[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Fri Aug 9 23:34:49 2019 +0700
+
+    Change get method robot waittask list
+
+[33mcommit 5be73b06b5705774706aa05a34d21cbfd84c3672[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Fri Aug 9 23:31:15 2019 +0700
+
+    Commit ofLuat
+
+[33mcommit 8c44852982b31d4c24821571c798a9b7b4563f89[m
+Merge: 4a00e2e 3bfa4a5
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Fri Aug 9 14:33:33 2019 +0700
+
+    Merge branch 'master' of https://github.com/seldat/ServerRobotSeldat_v.0.2
+
+[33mcommit 4a00e2ee85d022aae47ddfe56949b47fd4f2116b[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Fri Aug 9 14:32:52 2019 +0700
+
+    Change timeout ctrl door
+
+[33mcommit 78cdcdb05c651d5c2e953feeeed19950d7f51fa9[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Fri Aug 9 12:54:15 2019 +0700
+
+    Nham Ti
+
+[33mcommit 8bfb6ccbf64baeb5e187a4b5e917a4b6c14f29f1[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Fri Aug 9 12:49:26 2019 +0700
+
+    Add ctrl door return
+
+[33mcommit 75b6d352b6ee384ec3cf26d8c31b5f661422ddfc[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Thu Aug 8 05:32:42 2019 +0700
+
+    Commit for LuatTran
+
+[33mcommit 3bfa4a576ef675583a34411331daf4b454815e07[m
+Merge: 41e3b39 78cdcdb
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Thu Aug 8 05:30:02 2019 +0700
+
+    Merge branch 'master' of https://github.com/seldat/ServerRobotSeldat_v.0.2
+
+[33mcommit 41e3b39bf12e3e40734926e0951f351f63f4025d[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Thu Aug 8 05:29:52 2019 +0700
+
+    cap nhat 09/08 12PM
+
+[33mcommit 91d28c313682cba678083271d01e5cdd2b5d44b6[m
+Merge: ec027c7 96641b7
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Thu Aug 8 05:11:09 2019 +0700
+
+    Merge branch 'master' of https://github.com/seldat/ServerRobotSeldat_v.0.2
+
+[33mcommit 96641b7a563fcd268535432abf72765b5f132883[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Thu Aug 8 22:50:05 2019 +0700
+
+    cap nhat 09/08 23PM
+
+[33mcommit ec027c7aba27f9a2fab727400656964f9c404bdc[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Thu Aug 8 04:33:37 2019 +0700
+
+    cap nhat 8/8 4PM
+
+[33mcommit 99235b08c186d80ba22d5f974899c1ab7486f821[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Wed Aug 7 23:14:56 2019 +0700
+
+    cap nhat selfdriving test
+
+[33mcommit d303a004b24653a67d7fc5696fd90582705daf1f[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Wed Aug 7 23:02:36 2019 +0700
+
+    cap nhat 09/08 12AM
+
+[33mcommit 8d3fa25efe2503bb389f876ca8b2896f081fb0e7[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Wed Aug 7 12:02:14 2019 +0700
+
+    cap nhat 8/08 12PM
+
+[33mcommit 1120c8b843e73dbf7d191ce6109fcd6881f192f8[m
+Merge: 9dc1c87 b8beecb
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Mon Aug 5 06:42:35 2019 +0700
+
+    cap nhat sang 08/08 lan 2
+
+[33mcommit b8beecbc92d9160f2e8c12ff5555c91296d0d3ed[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Tue Aug 6 21:54:20 2019 +0700
+
+    cap nhat 07/08 22:00
+
+[33mcommit 9dc1c87de1922416b8c56b6696c30499dd4fd956[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Mon Aug 5 07:41:33 2019 +0700
+
+    cap nhat sang 08/08
+
+[33mcommit ad7ca08f237b7677122e5c5d25c562b9dff84e6c[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Mon Aug 5 07:12:00 2019 +0700
+
+    capnhat 06/08/2019 4PM
+
+[33mcommit 63af81b06d4f5d235bf69b1ab3329c50c25d78d7[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Mon Aug 5 07:02:41 2019 +0700
+
+    cap nhat 05/08 1PM
+
+[33mcommit 86109158f850ee2f50e3691ff9584e373c8215e4[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Mon Aug 5 04:08:19 2019 +0700
+
+    cap nhat 05/8
+
+[33mcommit d7e046030c0c33c94e1220d8b201ac3f6996fb57[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Sun Aug 4 17:09:45 2019 +0700
+
+    cap nhat 04/08 5PM
+
+[33mcommit 4798183db83de0b1f14ec3221a3847fa4d1a2402[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Sat Aug 3 13:38:27 2019 +0700
+
+    cap nhat 03/08 2PM
+
+[33mcommit 1d4c31da96c937f862aaad6d2a99feba349b3835[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Sat Aug 3 04:24:04 2019 +0700
+
+    cap nhat 03/08 4:23AM
+
+[33mcommit de1a7a4bc5bae875e54f876d2d4d583c749b0696[m
+Merge: 384309f 0ff1ad4
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Sat Aug 3 04:03:15 2019 +0700
+
+    cap nhat 03/08
+
+[33mcommit 384309f764a73c95bd81dbc39a2374132ee68b2b[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Sat Aug 3 04:01:26 2019 +0700
+
+    cap nhat
+
+[33mcommit 807876ecac1045ac13cf609bea97446cd9d096d8[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Fri Aug 2 04:15:18 2019 +0700
+
+    02/08/2019 4PM
+
+[33mcommit 198445db816b65e1d2833916e3668e04aa7f4782[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Fri Aug 2 04:06:28 2019 +0700
+
+    cap nhat 02/08
+
+[33mcommit 9711fd0d27a79a1c6a43fad82a89f961d90577c1[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Thu Aug 1 18:18:48 2019 +0700
+
+    hien thi
+
+[33mcommit 7447356028009e74d536df2262d48ff6b4215c34[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Thu Aug 1 17:56:19 2019 +0700
+
+    cap nhat
+
+[33mcommit 0ff1ad41ad864f704e662afbf80f86a7c21bd0ae[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Thu Aug 1 13:42:24 2019 +0700
+
+    cap nhat 02/08 2PM
+
+[33mcommit a7c563e1b8d87eb1535dd2c192f211ccb6989c50[m
+Merge: 4e6b53b 807876e
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Thu Aug 1 13:28:34 2019 +0700
+
+    Merge branch 'master' of https://github.com/seldat/ServerRobotSeldat_v.0.2
+
+[33mcommit 4e6b53b4deb15523a41f8c5f7bf31e4584ca8b98[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Thu Aug 1 13:28:22 2019 +0700
+
+    cap nhat
+
+[33mcommit 9b48e73d00fb8d16319586ea5ca28ac00b4dd297[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Thu Aug 1 13:05:09 2019 +0700
+
+    cap nhat 1/08 1PM
+
+[33mcommit 5f43c0756ca0aaf6b8d24e29964e63c0d4ecfb79[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Wed Jul 31 16:32:30 2019 +0700
+
+    cap nhat 01/08 11PM
+
+[33mcommit 31be46e7cc5d24939e2db676e37dd4fc00eb720d[m
+Author: luattran <tranhuuluat@gmail.com>
+Date:   Wed Jul 31 20:36:32 2019 +0700
+
+    cap nhat 31/07/2019 8PMM
+
+[33mcommit 17cb5db40b962b95b97bf89d44cd016805380384[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Wed Jul 31 15:25:32 2019 +0700
+
+    cap nhat 31 /07 3:30PM
+
+[33mcommit 4b70c22fe2de5bc9e6a5c4bb377c129f37aa2838[m
+Merge: 5cf67a2 fade381
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Tue Jul 30 14:28:59 2019 +0700
+
+    Merge branch 'master' of https://github.com/seldat/ServerRobotSeldat_v.0.2
+
+[33mcommit fade38124e991afc3e6577715b484e5efa97fa28[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Wed Jul 31 11:48:42 2019 +0700
+
+    Charge auto
+
+[33mcommit 061a60b18468db057d4dd9aae62a527a64cf124a[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Tue Jul 30 14:37:21 2019 +0700
+
+    cap nhat 30/07/2019 3PM
+
+[33mcommit 5cf67a2d84186ef368847f0044605f183b895dd5[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Tue Jul 30 14:05:48 2019 +0700
+
+    cap nhat 2:05 PM
+
+[33mcommit e6fdd172a3e81461b271d597111d1270017dc0f4[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Mon Jul 29 16:34:38 2019 +0700
+
+    cap nhat 30/07
+
+[33mcommit 27fd1a55c897e626ac505949a19376349454d495[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Mon Jul 29 16:31:45 2019 +0700
+
+    cap nhat 30/07 2PM
+
+[33mcommit 47295b6267287d3da8a3e80e25a627a539cc1b78[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Mon Jul 29 16:36:22 2019 +0700
+
+    cap nhat 30/07 12PM L2
+
+[33mcommit 0c892bd180375033b71b06223f7ddc5e0298dadc[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Mon Jul 29 16:32:03 2019 +0700
+
+    cap nhat 30/07 12PM
+
+[33mcommit da2c658f1b245a2d058eeedaa40dac2d40da2eea[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Mon Jul 29 22:06:50 2019 +0700
+
+    cap nhat 29/07 10:06PM
+
+[33mcommit a07dfc4ca40c32ad0450c1afef3e385a577ef229[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Sat Jul 27 09:31:06 2019 +0700
+
+    CAP NHAT 29/07/ 3:30pm
+
+[33mcommit b05b9df05b1862ebd5414f96147b099fd1802fd3[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Sat Jul 27 10:12:18 2019 +0700
+
+    cap nhat 29/07/2019 12PM
+
+[33mcommit 183a6972696f8e0d035dd5bd77d348b8f2995f40[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Sat Jul 27 09:13:24 2019 +0700
+
+    cap nhat 29/07 10AM
+
+[33mcommit d6126604438613a56b09962115bcebd3fbea8d44[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Sat Jul 27 09:33:39 2019 +0700
+
+    cap nhat 28/07/2019 2PM
+
+[33mcommit 2fdc4fd54c5e5a7c522239da979026ba11264404[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Sat Jul 27 21:55:57 2019 +0700
+
+    cap nhat 27/07 9:55PM
+
+[33mcommit 5f4d0feada14a37a2d8950f16381f0675e248330[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Sat Jul 27 21:51:08 2019 +0700
+
+    cap nhat 27/07/2019 9:51PM
+
+[33mcommit cc458344657b6fb48f3381ef20078327a7bf3ac1[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Sat Jul 27 09:13:09 2019 +0700
+
+    cap nhat 27/07
+
+[33mcommit 5c8c033147c49b78d332cb07af3890506ff5e9df[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Thu Jul 25 15:58:17 2019 +0700
+
+    cap nhat 25/07 3:58
+
+[33mcommit 292a2e6e2986052622f823ecfbd6b5530da0a2d9[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Thu Jul 25 22:43:47 2019 +0700
+
+    cap nhat 25/07 10:43PM
+
+[33mcommit 68461f1bda58ec3f791a100bf4318af09d04335c[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Thu Jul 25 10:39:19 2019 +0700
+
+    cap nhat 25/07/2019
+
+[33mcommit 3f4cefbb1c8583d35f96ed2f02d645e9ea2cbd1b[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Wed Jul 24 21:28:55 2019 +0700
+
+    cap nhat 24/7 9:28
+
+[33mcommit 19ec316a9b4fdf08d4a85d5ceb19d6fe6d24ce51[m
+Merge: 8516e56 7ca45f4
+Author: luattran <seldatSWT@gmail.com>
+Date:   Wed Jul 24 20:11:56 2019 +0700
+
+    Merge branch 'master' of https://github.com/seldat/ServerRobotSeldat_v.0.2
+
+[33mcommit 8516e56629738e499c234b6eb237f5f96303891e[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Wed Jul 24 20:11:44 2019 +0700
+
+    cap nhat
+
+[33mcommit 7ca45f4d86cff81b461a53b71fe890f4584ff683[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Wed Jul 24 13:31:02 2019 +0700
+
+    cap nhat zone
+
+[33mcommit 608ca243feb2cc69dc285206c1799dd674c3044c[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Wed Jul 24 13:29:03 2019 +0700
+
+    cap nhat 24/07 1:28PM
+
+[33mcommit f70c697b10f5c2ff885afe5deefc86447d0dcc28[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Thu Jul 18 15:14:37 2019 +0700
+
+    cap nhat 18/07 14:03 PM
+
+[33mcommit 955f6f238c67910a4e76da944dfbf17995420a45[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Thu Jul 18 11:37:51 2019 +0700
+
+    cap nhat 18/0711:37AM
+
+[33mcommit 9c5b804c0f81cb08ec81cc2709077c6ccd1bd320[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Wed Jul 17 16:46:29 2019 +0700
+
+    cap nhat 17/07 4:46 PM
+
+[33mcommit 67263d56212be8bb06439b4b02616298ab399187[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Wed Jul 17 12:33:41 2019 +0700
+
+    cap nhat 17/07 12:33
+
+[33mcommit ca0afee6c3e466bfeda58f844fd64068862a7a93[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Tue Jul 16 17:09:53 2019 +0700
+
+    cap nhat 16/07 5:09
+
+[33mcommit cfd18620d7bd12bc1d6b4866ff92cd325a40f29d[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Tue Jul 16 11:20:11 2019 +0700
+
+    cap 16/07 11:20PM
+
+[33mcommit abef6d55f7d86fe7b7487cb9860cab5be8d77dcc[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Mon Jul 15 17:01:12 2019 +0700
+
+    cap nhat 15/07 5:01 PM
+
+[33mcommit b5b9ebb8ef988f318b51bf9adf6e1a18f4881f87[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Mon Jul 15 14:23:55 2019 +0700
+
+    cap nhat 15/07 2:23
+
+[33mcommit 86d00205cb179e71edeace2ac989e374ab7f63da[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Sun Jul 14 21:23:43 2019 +0700
+
+    cap nhat 14/07 9:23PM
+
+[33mcommit 733c1d127d1ba178d8ad0f2318c285b23d8c25ea[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Sun Jul 14 16:42:39 2019 +0700
+
+    cap nhat 14/07 4:42PM
+
+[33mcommit 331cb1a3614d6b3d8c4155d4a164dd5955364ebb[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Sun Jul 14 11:30:35 2019 +0700
+
+    cap nhat 14/07 - v1
+
+[33mcommit fcf70a3a6d72bf0f11a0db947bf7b9b81dab910c[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Fri Jul 12 12:00:23 2019 +0700
+
+    cap nhat 12/07
+
+[33mcommit de93b09adbf3fe7b7cf83b52e01f838c4bfa6a58[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Thu Jul 11 16:35:54 2019 +0700
+
+    cap nhat 11 /07
+
+[33mcommit 7bb5e1a773ec56dc101e9a2b3841c116a5f0a6ec[m
+Merge: a8370e1 358aa7c
+Author: luattran <seldatSWT@gmail.com>
+Date:   Thu Jul 11 08:38:24 2019 +0700
+
+    Merge remote-tracking branch 'origin/Chau/AddProcedure'
+
+[33mcommit 358aa7c1d8fda627530f12786562d22acbcad12e[m[33m ([m[1;31morigin/Chau/AddProcedure[m[33m)[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Wed Jul 10 16:47:57 2019 +0700
+
+    Tam xong
+
+[33mcommit a8370e1c4b6eb115cd8bce976e19412cc9e0d654[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Wed Jul 10 16:27:05 2019 +0700
+
+    cap nhat 10/07
+
+[33mcommit 55cfc7ec3690795cfb04baa329f3f283bdd9db2a[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Tue Jul 9 16:51:21 2019 +0700
+
+    cap nhat trafficrountineconstant
+
+[33mcommit 72e3d7b72ac4060f7fa1f0301421bca0c93c6580[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Mon Jul 8 15:50:53 2019 +0700
+
+    cap nhat 08/07 giao thong vung vim FL->Buf
+
+[33mcommit 693c2b38a329a87d33788d6cd35969495dabbd33[m[33m ([m[1;31morigin/Chau/AddProcedureBuffertoBuffer[m[33m)[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Fri Jul 5 13:50:41 2019 +0700
+
+    Add procedure buffer to buffer
+
+[33mcommit 32ac4152cf77428329b84ba3d436ce8b5f645961[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Wed Jul 3 15:35:53 2019 +0700
+
+    cap nhat deviceitem 7/03/2019
+
+[33mcommit 1f11dd63d23fc9ce5226376075e145544a5de72e[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Sun Jun 30 11:38:24 2019 +0700
+
+    cap nhat 30/06
+
+[33mcommit a7a981d920b700330d82b401521f0078e8a4bb99[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Sun Jun 30 06:40:53 2019 +0700
+
+    cap nhat procedure
+
+[33mcommit 2af56c1e4559971d69037e8fbbbbed1c7e62d133[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Fri Jun 28 15:30:06 2019 +0700
+
+    cap nhat store
+
+[33mcommit 2668721316f77fa539127b30ab244b6e7ccfa72a[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Fri Jun 28 15:27:36 2019 +0700
+
+    cap nhat 28/06
+
+[33mcommit b9f59d558b3fe78054b46fc56d979bea2d9342ef[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Thu Jun 27 14:41:48 2019 +0700
+
+    cap nhat 2:41
+
+[33mcommit 8cf377e2ace02430e8a6c7eb9e4aedce80f659c9[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Thu Jun 27 14:00:37 2019 +0700
+
+    cap nhat gate
+
+[33mcommit 4b1528fb7e16c4d7276453e8150c8e856f01be17[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Thu Jun 27 13:19:42 2019 +0700
+
+    chap nhat global_object
+
+[33mcommit ebd07d27136edfd9e966f90ae133c5e5505f3d18[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Thu Jun 27 10:56:57 2019 +0700
+
+    cap nhat open/close gate . robot killactionlib
+
+[33mcommit b062707e6bdb55a6e0e4648504948b2a38225e75[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Wed Jun 26 09:28:48 2019 +0700
+
+    cap nhat 2606
+
+[33mcommit db2f7386dfb80a55a9d73118133bb370666bdd04[m
+Author: Phát Nguyễn <phatnguyen.pf@gmail.com>
+Date:   Tue Jun 25 12:14:34 2019 +0700
+
+    cap nhat code 25/06 12:04
+
+[33mcommit 489a1a065bd504354c76767d043322cecc256f2c[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Tue Jun 25 08:51:05 2019 +0700
+
+    cap nhat 8:51
+
+[33mcommit b843722f9b4930409726d688b22e1e8bfe18ab02[m[33m ([m[1;31morigin/Chau/AddNewDoor[m[33m, [m[1;32mChau/AddNewDoor[m[33m)[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Sat Jun 22 10:36:17 2019 +0700
+
+    cap nhat procedure ready
+
+[33mcommit 11148d73bc48c7eb8f013e1c407cd973847c376c[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Sat Jun 22 10:29:52 2019 +0700
+
+    cap nhật 22/06 traffic
+
+[33mcommit 06d4820ebfbdbbafec0870df76d79ee70da6f0a1[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Wed Jun 19 12:30:31 2019 +0700
+
+    cap nhat quy trinh 2 cổng
+
+[33mcommit a8d4063af470603230a6e7d0ac3d6d48a6d03deb[m
+Merge: 6420111 88f32c4
+Author: luattran <seldatSWT@gmail.com>
+Date:   Wed Jun 19 09:47:32 2019 +0700
+
+    Merge branch 'master' into Chau/AddNewDoor
+
+[33mcommit 6420111dc4a71266275906c926d1bebccb77a6d4[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Wed Jun 19 09:46:57 2019 +0700
+
+    cap nhat door
+
+[33mcommit c79ac6d843f75295a393af5e822e1c09ace78b35[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Tue Jun 18 16:55:25 2019 +0700
+
+    Change procedure ready for new position
+
+[33mcommit 88f32c4a7c6f35852d494d317ba01f7bd57af1ec[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Tue Jun 18 14:53:07 2019 +0700
+
+    edited FlagGateBusy
+
+[33mcommit 744d489e8f7ad50061142beffbd682186b1fe354[m
+Merge: 497bb44 521798a
+Author: luattran <seldatSWT@gmail.com>
+Date:   Tue Jun 18 14:15:32 2019 +0700
+
+    merge chau -> master
+
+[33mcommit 497bb441fc6e67f89751eced03c240567fc544ba[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Tue Jun 18 14:13:47 2019 +0700
+
+    edit set/get gate flag
+
+[33mcommit 521798a6823635627c17d67dd8c8b4869d3eeec4[m
+Author: ChauNguyen <ngocchau.ann@gmail.com>
+Date:   Tue Jun 18 14:05:55 2019 +0700
+
+    Add door new
+
+[33mcommit 109d4bce9a85791859738fdbeca1555e96e4faa8[m
+Author: luattran <seldatSWT@gmail.com>
+Date:   Tue Jun 18 09:39:35 2019 +0700
+
+    Add project files.
