@@ -776,12 +776,12 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void delay(int ms)
         {
-            Stopwatch sw = new Stopwatch();
+         /*  Stopwatch sw = new Stopwatch();
             sw.Start();
             while (true)
             {
                 if (sw.ElapsedMilliseconds > ms) break;
-            }
+            }*/
         }
         public bool SetSpeedRegZone(RobotSpeedLevel robotspeed, bool highpriority)
         {

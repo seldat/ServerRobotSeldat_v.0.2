@@ -20,7 +20,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         TrafficManagementService traffic;
         DoorManagementService doorservice;
         RobotUnity robot;
-        protected double DISTANCE_CHECk_BAYID = 4.5; //meter 8
+        protected double DISTANCE_CHECk_BAYID = 7; //meter 8
         public TrafficProcedureService(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService trafficService) :base(robot)
         {
             this.traffic = trafficService;
@@ -62,6 +62,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     }
                     else
                     {
+                       
                         robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
                         return true; // tiep tuc check
                     }
@@ -69,15 +70,15 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                 }
                 else
                 {
-                    
+                    robot.bayIdReg = true;
                     robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
-                    return true;// tiep tuc check
+                    return false;// tiep tuc check
                 }
             }
             else
             {
                 robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
-                return true;// tiep tuc check
+                return false;// tiep tuc check
             }
         }
         protected bool checkAnyRobotAtElevator(RobotUnity robot)
@@ -100,7 +101,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                 {
                     if (robot != this.robot)
                     {
-                        if (robot.bayId > 0)
+                        if (robot.bayId >= 0)
                         {
                             if (Math.Abs(robot.bayId-bayId)<=3)
                             {

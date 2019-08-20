@@ -13,27 +13,22 @@
     <Grid>
         <Grid.RowDefinitions>
 
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="350"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <GroupBox Header="Control" FontSize="15"  BorderThickness="2" BorderBrush="Black">
-                <Grid>
-                    <RichTextBox Grid.Row="0"  Name="txt_logout" VerticalScrollBarVisibility="Visible"  />
-                </Grid>
+            <Grid>
+                <RichTextBox 
+                        Grid.Row="0"  
+                        Name="txt_logout" VerticalScrollBarVisibility="Visible" 
+                        Margin="0,0,0,02" Height="350" VerticalAlignment="Top">
+                </RichTextBox>
+            </Grid>
 
-            </GroupBox>
         </Grid>
         <Grid Grid.Row="1">
-            <GroupBox Header="Traffic" FontSize="15" BorderThickness="2" BorderBrush="Black">
-                <RichTextBox  Grid.Row="1" FontSize="8" x:Name="txt_logout_traffic" VerticalScrollBarVisibility="Visible" />
-            </GroupBox>
-        </Grid>
-        <Grid Grid.Row="2">
-            <Button    Content="Save" Name="btn_save"   Click="Btn_save_Click" FontSize="15" FontStyle="Normal" Width="75" HorizontalAlignment="Right" Height="20" Margin="0,0,100,0"/>
-
-            <Button    Content="Clear" Name="btn_clear"  Click="Btn_clear_Click" FontSize="15" FontStyle="Normal" Width="75" HorizontalAlignment="Right" Height="20" Margin="0,0,5,0"/>
+            <Button  Grid.Row="1"  Content="Save" Name="btn_save"   Click="Btn_save_Click" FontSize="15" FontStyle="Normal" Width="75" HorizontalAlignment="Right" Height="20" Margin="0,0,120,0"/>
+            <Button  Grid.Row="1"  Content="Clear" Name="btn_clear" Click="Btn_clear_Click" FontSize="15" FontStyle="Normal" Width="75" HorizontalAlignment="Right" Height="20" Margin="0,0,20,0"/>
         </Grid>
     </Grid>
 </Window>
