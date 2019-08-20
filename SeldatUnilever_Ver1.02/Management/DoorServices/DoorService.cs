@@ -1,6 +1,7 @@
 ﻿using SelDatUnilever_Ver1._00.Management;
 using SelDatUnilever_Ver1._00.Management.ComSocket;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
@@ -29,16 +30,25 @@ namespace DoorControllerService
         }
         public enum DoorId
         {
-            DOOR_MEZZAMINE_UP_NEW = 1, /* 0x02 */
-            DOOR_MEZZAMINE_UP = 2,
+            DOOR_MEZZAMINE_UP_NEW = 1, /* 0x01 */
+            DOOR_MEZZAMINE_UP = 2,  /* 0x02 */
             DOOR_MEZZAMINE_RETURN, /* 0x03 */
             DOOR_ELEVATOR, /* 0x04 */
+        }
+
+        public enum DoorCmdRq
+        {
+            DOOR_OPEN = 0x01,
+            DOOR_CLOSE,
+            LAMP_ON,
+            LAMP_OFF
         }
         public enum DoorType
         {
             DOOR_FRONT = 0x01,
-            DOOR_BACK, /* 0x02 */
-        };
+            DOOR_BACK /* 0x02 */
+        }
+
         public enum DoorStatus
         {
             DOOR_UNKNOW = 0x00,
@@ -50,31 +60,15 @@ namespace DoorControllerService
         public enum StateCtrl
         {
             DOOR_ST_IDLE = 0x00,
-            DOOR_ST_OPEN_FRONT,
-            DOOR_ST_WAITTING_CLOSE_DOOR_BACK_WHEN_IT_OPENING,
-            DOOR_ST_WAITTING_OPEN_DOOR_FRONT,
-            DOOR_ST_OPEN_FRONT_SUCCESS,
-            DOOR_ST_CLOSE_DOOR_FRONT,
-            DOOR_ST_WAITTING_CLOSE_DOOR_FRONT,
-            DOOR_ST_CLOSE_DOOR_FRONT_SUCCESS,
-
-            DOOR_ST_OPEN_DOOR_BACK,
-            DOOR_ST_WAITTING_OPEN_DOOR_BACK,
-            DOOR_ST_OPEN_DOOR_BACK_SUCCESS,
-            DOOR_ST_CLOSE_DOOR_BACK,
-            DOOR_ST_WAITTING_CLOSE_DOOR_BACK,
-            DOOR_ST_CLOSE_DOOR_BACK_SUCCESS,
-            DOOR_ST_ERROR
-        }
-
-
-        public enum stateCtrlLampDoor
-        {
-            LAMP_DOOR_IDLE = 0,
+            DOOR_ST_OPEN,
+            DOOR_ST_WAITTING_OPEN,
+            DOOR_ST_OPEN_SUCCESS,
+            DOOR_ST_CLOSE,
+            DOOR_ST_WAITTING_CLOSE,
+            DOOR_ST_CLOSE_SUCCESS,
             LAMP_DOOR_ON,
             LAMP_DOOR_OFF
         }
-
         public enum RetState
         {
             DOOR_CTRL_SUCCESS = 0,
@@ -127,24 +121,24 @@ namespace DoorControllerService
             }
         }
 
+        public class cmdRqDoor
+        {
+            public DoorType dType;
+            public DoorCmdRq cmdRq;
+        }
+
         public DoorInfoConfig config;
-        private Thread doorFrontServiceThread;
-        private Thread doorBackServiceThread;
-        private StateCtrl stateCtrlDoorFront;
-        private StateCtrl stateCtrlDoorBack;
-        private stateCtrlLampDoor stateCtrlLampFront;
-        private stateCtrlLampDoor stateCtrlLampBack;
-        //public Stopwatch elapsedTimeFront_;
-        //public Stopwatch elapsedTimeBack_;
-        private const UInt32 TIME_OUT_WAIT_DOOR_FRONT = 9000;
-        private const UInt32 TIME_OUT_WAIT_DOOR_BACK = 9000;
+        private Thread doorServiceThread;
+        private StateCtrl stateCtrlDoor;
+        private DoorStatus doorFrontStatus;
+        private DoorStatus doorBackStatus;
+        private const UInt32 TIME_OUT_WAIT_DOOR = 9000;
         private const UInt32 NUM_TRY_OPEN_DOOR = 100;
         private const UInt32 NUM_TRY_CLOSE_DOOR = 100;
-        private const UInt32 TIME_OUT_PRESS_BUTTON = 2000;
-        private UInt32 numTryOpen = 0;
-        private UInt32 numTryClose = 0;
-        private bool socketBusy = false;
+        private const UInt32 TIME_OUT_PRESS_BUTTON = 1500;
         private bool doorBusy;
+
+        private List<cmdRqDoor> listCmdRqCtrl = new List<cmdRqDoor>();
 
         public bool getDoorBusy()
         {
@@ -158,145 +152,36 @@ namespace DoorControllerService
         public DoorService(DoorInfoConfig cf) : base(cf.Ip, cf.Port)
         {
             config = cf;
-            doorFrontServiceThread = new Thread(this.doorFrontCtrlProcess);
-            doorFrontServiceThread.Start(this);
-            doorBackServiceThread = new Thread(this.doorBackCtrlProcess);
-            doorBackServiceThread.Start(this);
-            stateCtrlDoorFront = StateCtrl.DOOR_ST_IDLE;
-            stateCtrlDoorBack = StateCtrl.DOOR_ST_IDLE;
-            stateCtrlLampFront = stateCtrlLampDoor.LAMP_DOOR_IDLE;
-            stateCtrlLampBack = stateCtrlLampDoor.LAMP_DOOR_IDLE;
-            //elapsedTimeFront_ = new Stopwatch();
-            //elapsedTimeBack_ = new Stopwatch();
-            this.numTryClose = 0;
-            this.numTryOpen = 0;
+            doorServiceThread = new Thread(this.doorCtrlProcess);
+            doorServiceThread.Start(this);
+            stateCtrlDoor = StateCtrl.DOOR_ST_IDLE;
             this.doorBusy = false;
-            //SetId(cf.id);
         }
 
+        private void AddRqToList(DoorType dType, DoorCmdRq dRq) {
+            cmdRqDoor valTamp = new cmdRqDoor();
+            valTamp.cmdRq = dRq;
+            valTamp.dType = dType;
+            listCmdRqCtrl.Add(valTamp);
+        }
         public void LampSetStateOn(DoorType dt)
         {
-            switch (dt)
-            {
-                case DoorType.DOOR_FRONT:
-                    this.stateCtrlLampFront = stateCtrlLampDoor.LAMP_DOOR_ON;
-                    break;
-                case DoorType.DOOR_BACK:
-                    this.stateCtrlLampBack = stateCtrlLampDoor.LAMP_DOOR_ON;
-                    break;
-                default:
-                    break;
-            }
+            AddRqToList(dt, DoorCmdRq.LAMP_ON);
         }
 
         public void LampSetStateOff(DoorType dt)
         {
-            switch (dt)
-            {
-                case DoorType.DOOR_FRONT:
-                    this.stateCtrlLampFront = stateCtrlLampDoor.LAMP_DOOR_OFF;
-                    break;
-                case DoorType.DOOR_BACK:
-                    this.stateCtrlLampBack = stateCtrlLampDoor.LAMP_DOOR_OFF;
-                    break;
-                default:
-                    break;
-            }
+            AddRqToList(dt, DoorCmdRq.LAMP_OFF);
         }
 
-        private void lampFrontProcess()
+        public void openDoor(DoorType dt)
         {
-            switch (stateCtrlLampFront)
-            {
-                case stateCtrlLampDoor.LAMP_DOOR_IDLE:
-                    break;
-                case stateCtrlLampDoor.LAMP_DOOR_ON:
-                    if (true == this.LampOn(DoorType.DOOR_FRONT))
-                    {
-                        this.stateCtrlLampFront = stateCtrlLampDoor.LAMP_DOOR_IDLE;
-                    }
-                    break;
-                case stateCtrlLampDoor.LAMP_DOOR_OFF:
-                    if (true == this.LampOff(DoorType.DOOR_FRONT))
-                    {
-                        this.stateCtrlLampFront = stateCtrlLampDoor.LAMP_DOOR_IDLE;
-                    }
-                    break;
-                default:
-                    break;
-            }
+            AddRqToList(dt, DoorCmdRq.DOOR_OPEN);
         }
 
-        private void lampBackProcess()
+        public void closeDoor(DoorType dt)
         {
-
-            switch (stateCtrlLampBack)
-            {
-                case stateCtrlLampDoor.LAMP_DOOR_IDLE:
-                    break;
-                case stateCtrlLampDoor.LAMP_DOOR_ON:
-                    if (true == this.LampOn(DoorType.DOOR_BACK))
-                    {
-                        this.stateCtrlLampBack = stateCtrlLampDoor.LAMP_DOOR_IDLE;
-                    }
-                    break;
-                case stateCtrlLampDoor.LAMP_DOOR_OFF:
-                    if (true == this.LampOff(DoorType.DOOR_BACK))
-                    {
-                        this.stateCtrlLampBack = stateCtrlLampDoor.LAMP_DOOR_IDLE;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        public void openDoor(DoorType type)
-        {
-            this.numTryOpen = 0;
-            switch (type)
-            {
-                case DoorType.DOOR_FRONT:
-                    if ((this.stateCtrlDoorFront == StateCtrl.DOOR_ST_IDLE) || (this.stateCtrlDoorFront == StateCtrl.DOOR_ST_ERROR) ||
-                    (this.stateCtrlDoorFront == StateCtrl.DOOR_ST_OPEN_FRONT_SUCCESS) || (this.stateCtrlDoorFront == StateCtrl.DOOR_ST_CLOSE_DOOR_FRONT_SUCCESS))
-                    {
-                        this.stateCtrlDoorFront = StateCtrl.DOOR_ST_OPEN_FRONT;
-                    }
-                    break;
-                case DoorType.DOOR_BACK:
-                    if ((this.stateCtrlDoorBack == StateCtrl.DOOR_ST_IDLE) || (this.stateCtrlDoorBack == StateCtrl.DOOR_ST_ERROR) ||
-                    (this.stateCtrlDoorBack == StateCtrl.DOOR_ST_OPEN_DOOR_BACK_SUCCESS) || (this.stateCtrlDoorBack == StateCtrl.DOOR_ST_CLOSE_DOOR_BACK_SUCCESS))
-                    {
-                        this.stateCtrlDoorBack = StateCtrl.DOOR_ST_OPEN_DOOR_BACK;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        public void closeDoor(DoorType type)
-        {
-            this.numTryClose = 0;
-            switch (type)
-            {
-                case DoorType.DOOR_FRONT:
-                    //if ((this.stateCtrlDoorFront == StateCtrl.DOOR_ST_IDLE) || (this.stateCtrlDoorFront == StateCtrl.DOOR_ST_ERROR) ||
-                    //(this.stateCtrlDoorFront == StateCtrl.DOOR_ST_OPEN_FRONT_SUCCESS) || (this.stateCtrlDoorFront == StateCtrl.DOOR_ST_CLOSE_DOOR_FRONT_SUCCESS))
-                    //{
-                    this.stateCtrlDoorFront = StateCtrl.DOOR_ST_CLOSE_DOOR_FRONT;
-                    //}                     
-                    break;
-                case DoorType.DOOR_BACK:
-                    //if ((this.stateCtrlDoorBack == StateCtrl.DOOR_ST_IDLE) || (this.stateCtrlDoorBack == StateCtrl.DOOR_ST_ERROR) ||
-                    //(this.stateCtrlDoorBack == StateCtrl.DOOR_ST_OPEN_DOOR_BACK_SUCCESS) || (this.stateCtrlDoorBack == StateCtrl.DOOR_ST_CLOSE_DOOR_BACK_SUCCESS))
-                    //{
-                    this.stateCtrlDoorBack = StateCtrl.DOOR_ST_CLOSE_DOOR_BACK;
-                    //}
-                    break;
-                default:
-                    break;
-            }
+            AddRqToList(dt, DoorCmdRq.DOOR_CLOSE);
         }
 
         public RetState checkOpen(DoorType type)
@@ -304,25 +189,15 @@ namespace DoorControllerService
             switch (type)
             {
                 case DoorType.DOOR_FRONT:
-                    if (this.stateCtrlDoorFront == StateCtrl.DOOR_ST_OPEN_FRONT_SUCCESS)
+                    if (this.doorFrontStatus == DoorStatus.DOOR_OPEN)
                     {
                         return RetState.DOOR_CTRL_SUCCESS;
-                    }
-                    else if (this.stateCtrlDoorFront == StateCtrl.DOOR_ST_ERROR)
-                    {
-                        Console.WriteLine("OPEN_DOOR_FRONT_ERROR");
-                        return RetState.DOOR_CTRL_ERROR;
                     }
                     break;
                 case DoorType.DOOR_BACK:
-                    if (this.stateCtrlDoorBack == StateCtrl.DOOR_ST_OPEN_DOOR_BACK_SUCCESS)
+                    if (this.doorBackStatus == DoorStatus.DOOR_OPEN)
                     {
                         return RetState.DOOR_CTRL_SUCCESS;
-                    }
-                    else if (this.stateCtrlDoorBack == StateCtrl.DOOR_ST_ERROR)
-                    {
-                        Console.WriteLine("OPEN_DOOR_BACK_ERROR");
-                        return RetState.DOOR_CTRL_ERROR;
                     }
                     break;
                 default:
@@ -336,25 +211,15 @@ namespace DoorControllerService
             switch (type)
             {
                 case DoorType.DOOR_FRONT:
-                    if (this.stateCtrlDoorFront == StateCtrl.DOOR_ST_CLOSE_DOOR_FRONT_SUCCESS)
+                    if (this.doorFrontStatus == DoorStatus.DOOR_CLOSE)
                     {
                         return RetState.DOOR_CTRL_SUCCESS;
-                    }
-                    else if (this.stateCtrlDoorFront == StateCtrl.DOOR_ST_ERROR)
-                    {
-                        Console.WriteLine("CLOSE_DOOR_FRONT_ERROR");
-                        return RetState.DOOR_CTRL_ERROR;
                     }
                     break;
                 case DoorType.DOOR_BACK:
-                    if (this.stateCtrlDoorBack == StateCtrl.DOOR_ST_CLOSE_DOOR_BACK_SUCCESS)
+                    if (this.doorBackStatus == DoorStatus.DOOR_CLOSE)
                     {
                         return RetState.DOOR_CTRL_SUCCESS;
-                    }
-                    else if (this.stateCtrlDoorBack == StateCtrl.DOOR_ST_ERROR)
-                    {
-                        Console.WriteLine("CLOSE_DOOR_BACK_ERROR");
-                        return RetState.DOOR_CTRL_ERROR;
                     }
                     break;
                 default:
@@ -363,428 +228,217 @@ namespace DoorControllerService
             return RetState.DOOR_CTRL_WAITTING;
         }
 
-        public void doorFrontCtrlProcess(object ojb)
+        public void doorCtrlProcess(object ojb)
         {
-            DoorService dS = (DoorService)ojb;
             DataReceive status = new DataReceive();
             Stopwatch elapsedTimeFront = new Stopwatch();
             elapsedTimeFront.Start();
             Stopwatch elapsedTimeReleaseButton = new Stopwatch();
             elapsedTimeReleaseButton.Start();
+            bool kProcess = true;
             while (true)
             {
-                switch (this.stateCtrlDoorFront)
+                if (listCmdRqCtrl.Count > 0)
                 {
-                    case StateCtrl.DOOR_ST_IDLE:
-                        break;
-                    case StateCtrl.DOOR_ST_OPEN_FRONT:
-                        this.GetStatus(ref status, DoorType.DOOR_BACK);
-                        if (status.data[0] == (byte)DoorStatus.DOOR_CLOSE)
+                    cmdRqDoor resCmd = listCmdRqCtrl[0];
+                    kProcess = true;
+                    if (resCmd.cmdRq == DoorCmdRq.DOOR_OPEN)
+                    {
+                        this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN;
+                    }
+                    else if (resCmd.cmdRq == DoorCmdRq.DOOR_CLOSE)
+                    {
+                        this.stateCtrlDoor = StateCtrl.DOOR_ST_CLOSE;
+                    }
+                    else if (resCmd.cmdRq == DoorCmdRq.LAMP_ON)
+                    {
+                        this.stateCtrlDoor = StateCtrl.LAMP_DOOR_ON;
+                    }
+                    else if (resCmd.cmdRq == DoorCmdRq.LAMP_OFF)
+                    {
+                        this.stateCtrlDoor = StateCtrl.LAMP_DOOR_OFF;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Remove not command");
+                        listCmdRqCtrl.Remove(resCmd);
+                        Thread.Sleep(50);
+                        continue;
+                    }
+                    while (kProcess)
+                    {
+                        switch (this.stateCtrlDoor)
                         {
-                            if (this.socketBusy == false)
-                            {
-                                Console.WriteLine("DOOR_ST_OPEN_FRONT");
-                                this.socketBusy = true;
-                                if (this.OpenPress(DoorType.DOOR_FRONT))
+                            case StateCtrl.DOOR_ST_IDLE:
+                                break;
+                            case StateCtrl.DOOR_ST_OPEN:
+                                if (resCmd.dType == DoorType.DOOR_FRONT)
+                                {
+                                    this.GetStatus(ref status, DoorType.DOOR_BACK);
+                                    if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
+                                    {
+                                        cmdRqDoor varTamp = new cmdRqDoor();
+                                        varTamp.cmdRq = DoorCmdRq.DOOR_CLOSE;
+                                        varTamp.dType = DoorType.DOOR_BACK;
+                                        listCmdRqCtrl.Insert(0, varTamp);
+                                        kProcess = false;
+                                        break;
+                                    }
+                                }
+                                this.GetStatus(ref status,resCmd.dType);
+                                if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
+                                {
+                                    this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN_SUCCESS;
+                                    break;
+                                }
+                                Console.WriteLine("DOOR_ST_OPEN");
+                                if (this.OpenPress(resCmd.dType))
                                 {
                                     elapsedTimeFront.Restart();
                                     elapsedTimeReleaseButton.Restart();
-                                    this.stateCtrlDoorFront = StateCtrl.DOOR_ST_WAITTING_OPEN_DOOR_FRONT;
-                                    Console.WriteLine("DOOR_ST_WAITTING_OPEN_DOOR_FRONT");
+                                    this.stateCtrlDoor = StateCtrl.DOOR_ST_WAITTING_OPEN;
+                                    Console.WriteLine("DOOR_ST_WAITTING_OPEN_DOOR");
+                                }
+                                break;
+                            case StateCtrl.DOOR_ST_WAITTING_OPEN:
+                                if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
+                                {
+                                    if (this.OpenRelease(resCmd.dType))
+                                    {
+                                        Console.WriteLine("OpenRelease(DoorType.DOOR) success");
+                                        elapsedTimeReleaseButton.Reset();
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("OpenRelease(DoorType.DOOR) failed");
+                                        elapsedTimeReleaseButton.Restart();
+                                    }
+                                    Thread.Sleep(50);
+                                }
+                                if (elapsedTimeFront.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR)
+                                {
+                                    elapsedTimeFront.Reset();
+                                    this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN;
+                                    Console.WriteLine("TIME_OUT_WAIT_OPEN_DOOR");
                                 }
                                 else
                                 {
-                                    this.numTryOpen++;
-                                    if (this.numTryOpen >= NUM_TRY_OPEN_DOOR)
+                                    try
                                     {
-                                        this.numTryOpen = 0;
-                                        this.stateCtrlDoorFront = StateCtrl.DOOR_ST_ERROR;
-                                    }
-                                }
-                            }
-                            this.socketBusy = false;
-                        }
-                        else
-                        {
-                            this.closeDoor(DoorType.DOOR_BACK);
-                            this.stateCtrlDoorFront = StateCtrl.DOOR_ST_WAITTING_CLOSE_DOOR_BACK_WHEN_IT_OPENING;
-                            Console.WriteLine("DOOR_ST_WAITTING_CLOSE_DOOR_BACK_WHEN_IT_OPENING");
-                        }
-                        break;
-                    case StateCtrl.DOOR_ST_WAITTING_CLOSE_DOOR_BACK_WHEN_IT_OPENING:
-                        if (RetState.DOOR_CTRL_SUCCESS == this.checkClose(DoorType.DOOR_BACK))
-                        {
-                            this.stateCtrlDoorFront = StateCtrl.DOOR_ST_OPEN_FRONT;
-                            Console.WriteLine("DOOR_ST_OPEN_FRONT");
-                        }
-                        break;
-                    case StateCtrl.DOOR_ST_WAITTING_OPEN_DOOR_FRONT:
-                        if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
-                        {
-                            if (this.OpenRelease(DoorType.DOOR_FRONT))
-                            {
-                                Console.WriteLine("OpenRelease(DoorType.DOOR_FRONT) success");
-                                elapsedTimeReleaseButton.Stop();
-                            }
-                            else
-                            {
-                                elapsedTimeReleaseButton.Restart();
-                            }
-                            Thread.Sleep(50);
-                        }
-                        if (elapsedTimeFront.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR_FRONT)
-                        {
-                            elapsedTimeFront.Stop();
-                            this.stateCtrlDoorFront = StateCtrl.DOOR_ST_OPEN_FRONT;
-                            this.numTryOpen++;
-                            Console.WriteLine("TIME_OUT_WAIT_OPEN_DOOR_FRONT");
-                            if (this.numTryOpen >= NUM_TRY_OPEN_DOOR)
-                            {
-                                this.numTryOpen = 0;
-                                this.stateCtrlDoorFront = StateCtrl.DOOR_ST_ERROR;
-                            }
-                        }
-                        else
-                        {
-                            if (this.socketBusy == false)
-                            {
-                                this.socketBusy = true;
-                                try
-                                {
-                                    this.GetStatus(ref status, DoorType.DOOR_FRONT);
-                                    if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
-                                    {
-                                        this.OpenRelease(DoorType.DOOR_FRONT);
-                                        this.stateCtrlDoorFront = StateCtrl.DOOR_ST_OPEN_FRONT_SUCCESS;
-                                        elapsedTimeFront.Stop();
-                                        Console.WriteLine("DOOR_ST_OPEN_FRONT_SUCCESS");
-                                    }
-                                    else if (status.data[0] == (byte)DoorStatus.DOOR_ERROR)
-                                    {
-                                        elapsedTimeFront.Stop();
-                                        this.stateCtrlDoorFront = StateCtrl.DOOR_ST_OPEN_FRONT;
-                                        this.numTryOpen++;
-                                        Console.WriteLine("DOOR_FRONT_OPEN DoorStatus.DOOR_ERROR");
-                                        if (this.numTryOpen >= NUM_TRY_OPEN_DOOR)
+                                        this.GetStatus(ref status, resCmd.dType);
+                                        if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
                                         {
-                                            this.numTryOpen = 0;
-                                            this.stateCtrlDoorFront = StateCtrl.DOOR_ST_ERROR;
+                                            this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN_SUCCESS;
+                                            if (resCmd.dType == DoorType.DOOR_FRONT) {
+                                                doorFrontStatus = DoorStatus.DOOR_OPEN;
+                                            }
+                                            else {
+                                                doorBackStatus = DoorStatus.DOOR_OPEN;
+                                            }
+                                            elapsedTimeFront.Reset();
+                                            Console.WriteLine("DOOR_ST_OPEN_SUCCESS");
                                         }
                                     }
-                                }
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine(e);
-                                }
-                            }
-                            this.socketBusy = false;
-                        }
-                        break;
-                    case StateCtrl.DOOR_ST_OPEN_FRONT_SUCCESS:
-                        break;
-                    case StateCtrl.DOOR_ST_CLOSE_DOOR_FRONT:
-                        if (this.socketBusy == false)
-                        {
-                            this.socketBusy = true;
-                            Console.WriteLine("DOOR_ST_CLOSE_DOOR_FRONT");
-                            if (this.ClosePress(DoorType.DOOR_FRONT))
-                            {
-                                elapsedTimeFront.Restart();
-                                elapsedTimeReleaseButton.Restart();
-                                this.stateCtrlDoorFront = StateCtrl.DOOR_ST_WAITTING_CLOSE_DOOR_FRONT;
-                                Console.WriteLine("DOOR_ST_WAITTING_CLOSE_DOOR_FRONT");
-                            }
-                            else
-                            {
-                                this.numTryClose++;
-                                if (this.numTryClose >= NUM_TRY_CLOSE_DOOR)
-                                {
-                                    this.numTryClose = 0;
-                                    this.stateCtrlDoorFront = StateCtrl.DOOR_ST_ERROR;
-                                }
-                            }
-                        }
-                        this.socketBusy = false;
-                        break;
-                    case StateCtrl.DOOR_ST_WAITTING_CLOSE_DOOR_FRONT:
-                        if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
-                        {
-                            if (this.CloseRelease(DoorType.DOOR_FRONT))
-                            {
-                                Console.WriteLine("this.CloseRelease(DoorType.DOOR_FRONT)) success");
-                                elapsedTimeReleaseButton.Stop();
-                            }
-                            else
-                            {
-                                elapsedTimeReleaseButton.Restart();
-                            }
-                            Thread.Sleep(50);
-                        }
-                        if (elapsedTimeFront.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR_FRONT)
-                        {
-                            elapsedTimeFront.Stop();
-                            this.stateCtrlDoorFront = StateCtrl.DOOR_ST_CLOSE_DOOR_FRONT;
-                            this.numTryClose++;
-                            Console.WriteLine("TIME_OUT_WAIT_CLOSE_DOOR_FRONT");
-                            if (this.numTryClose >= NUM_TRY_CLOSE_DOOR)
-                            {
-                                this.numTryClose = 0;
-                                this.stateCtrlDoorFront = StateCtrl.DOOR_ST_ERROR;
-                            }
-                        }
-                        else
-                        {
-                            if (this.socketBusy == false)
-                            {
-                                this.socketBusy = true;
-                                try
-                                {
-                                    this.GetStatus(ref status, DoorType.DOOR_FRONT);
-                                    if (status.data[0] == (byte)DoorStatus.DOOR_CLOSE)
+                                    catch (Exception e)
                                     {
-                                        this.CloseRelease(DoorType.DOOR_FRONT);
-                                        this.stateCtrlDoorFront = StateCtrl.DOOR_ST_CLOSE_DOOR_FRONT_SUCCESS;
-                                        elapsedTimeFront.Stop();
-                                        Console.WriteLine("DOOR_ST_CLOSE_DOOR_FRONT_SUCCESS");
-                                    }
-                                    else if (status.data[0] == (byte)DoorStatus.DOOR_ERROR)
-                                    {
-                                        elapsedTimeFront.Stop();
-                                        this.stateCtrlDoorFront = StateCtrl.DOOR_ST_CLOSE_DOOR_FRONT;
-                                        this.numTryClose++;
-                                        Console.WriteLine("CLOSE_DOOR_FRONT DoorStatus.DOOR_ERROR");
-                                        if (this.numTryClose >= NUM_TRY_CLOSE_DOOR)
-                                        {
-                                            this.numTryClose = 0;
-                                            this.stateCtrlDoorFront = StateCtrl.DOOR_ST_ERROR;
-                                        }
+                                        Console.WriteLine(e);
                                     }
                                 }
-                                catch (Exception e)
+                                break;
+                            case StateCtrl.DOOR_ST_OPEN_SUCCESS:
+                                listCmdRqCtrl.Remove(resCmd);
+                                kProcess = false;
+                                break;
+                            case StateCtrl.DOOR_ST_CLOSE:
+                                this.GetStatus(ref status, resCmd.dType);
+                                if (status.data[0] == (byte)DoorStatus.DOOR_CLOSE)
                                 {
-                                    Console.WriteLine(e);
+                                    this.stateCtrlDoor = StateCtrl.DOOR_ST_CLOSE_SUCCESS;
+                                    break;
                                 }
-                            }
-                            this.socketBusy = false;
-                        }
-                        break;
-                    case StateCtrl.DOOR_ST_CLOSE_DOOR_FRONT_SUCCESS:
-                        break;
-                    case StateCtrl.DOOR_ST_ERROR:
-                        break;
-                    default:
-                        break;
-                }
-                this.lampFrontProcess();
-                Thread.Sleep(500);
-            }
-        }
-
-        public void doorBackCtrlProcess(object ojb)
-        {
-            DoorService dS = (DoorService)ojb;
-            DataReceive status = new DataReceive();
-            Stopwatch elapsedTimeBack = new Stopwatch();
-            elapsedTimeBack.Start();
-            Stopwatch elapsedTimeReleaseButton = new Stopwatch();
-            elapsedTimeReleaseButton.Start();
-            while (true)
-            {
-                switch (this.stateCtrlDoorBack)
-                {
-                    case StateCtrl.DOOR_ST_IDLE:
-                        break;
-                    case StateCtrl.DOOR_ST_OPEN_DOOR_BACK:
-                        this.GetStatus(ref status, DoorType.DOOR_FRONT);
-                        if (status.data[0] == (byte)DoorStatus.DOOR_CLOSE)
-                        {
-                            if (this.socketBusy == false)
-                            {
-                                this.socketBusy = true;
-                                Console.WriteLine("DOOR_ST_OPEN_DOOR_BACK");
-                                if (this.OpenPress(DoorType.DOOR_BACK))
+                                Console.WriteLine("DOOR_ST_CLOSE_DOOR");
+                                if (this.ClosePress(resCmd.dType))
                                 {
-                                    elapsedTimeBack.Restart();
+                                    elapsedTimeFront.Restart();
                                     elapsedTimeReleaseButton.Restart();
-                                    this.stateCtrlDoorBack = StateCtrl.DOOR_ST_WAITTING_OPEN_DOOR_BACK;
-                                    Console.WriteLine("DOOR_ST_WAITTING_OPEN_DOOR_BACK");
+                                    this.stateCtrlDoor = StateCtrl.DOOR_ST_WAITTING_CLOSE;
+                                    Console.WriteLine("DOOR_ST_WAITTING_CLOSE_DOOR");
+                                }
+                                break;
+                            case StateCtrl.DOOR_ST_WAITTING_CLOSE:
+                                if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
+                                {
+                                    if (this.CloseRelease(resCmd.dType))
+                                    {
+                                        Console.WriteLine("this.CloseRelease(DoorType.DOOR)) success");
+                                        elapsedTimeReleaseButton.Reset();
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("this.CloseRelease(DoorType.DOOR)) failed");
+                                        elapsedTimeReleaseButton.Restart();
+                                    }
+                                    Thread.Sleep(50);
+                                }
+                                if (elapsedTimeFront.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR)
+                                {
+                                    elapsedTimeFront.Restart();
+                                    this.stateCtrlDoor = StateCtrl.DOOR_ST_CLOSE;
+                                    Console.WriteLine("TIME_OUT_WAIT_CLOSE_DOOR");
                                 }
                                 else
                                 {
-                                    this.numTryOpen++;
-                                    if (this.numTryOpen >= NUM_TRY_OPEN_DOOR)
+                                    try
                                     {
-                                        this.numTryOpen = 0;
-                                        this.stateCtrlDoorBack = StateCtrl.DOOR_ST_ERROR;
-                                    }
-                                }
-                                this.socketBusy = false;
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("Door front is opening please close it ___(^_^)___");
-                        }
-                        break;
-                    case StateCtrl.DOOR_ST_WAITTING_OPEN_DOOR_BACK:
-                        if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
-                        {
-                            if (this.OpenRelease(DoorType.DOOR_BACK))
-                            {
-                                Console.WriteLine("this.OpenRelease(DoorType.DOOR_BACK) success");
-                                elapsedTimeReleaseButton.Stop();
-                            }
-                            else
-                            {
-                                elapsedTimeReleaseButton.Restart();
-                            }
-                            Thread.Sleep(50);
-                        }
-                        if (elapsedTimeBack.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR_BACK)
-                        {
-                            elapsedTimeBack.Stop();
-                            this.stateCtrlDoorBack = StateCtrl.DOOR_ST_OPEN_DOOR_BACK;
-                            this.numTryOpen++;
-                            Console.WriteLine("TIME_OUT_WAIT_OPEN_DOOR_BACK");
-                            if (this.numTryOpen >= NUM_TRY_OPEN_DOOR)
-                            {
-                                this.numTryOpen = 0;
-                                this.stateCtrlDoorBack = StateCtrl.DOOR_ST_ERROR;
-                            }
-                        }
-                        else
-                        {
-                            if (this.socketBusy == false)
-                            {
-                                this.socketBusy = true;
-                                try
-                                {
-                                    this.GetStatus(ref status, DoorType.DOOR_BACK);
-                                    if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
-                                    {
-                                        this.OpenRelease(DoorType.DOOR_BACK);
-                                        this.stateCtrlDoorBack = StateCtrl.DOOR_ST_OPEN_DOOR_BACK_SUCCESS;
-                                        elapsedTimeBack.Stop();
-                                        Console.WriteLine("DOOR_ST_OPEN_DOOR_BACK_SUCCESS");
-                                    }
-                                    else if (status.data[0] == (byte)DoorStatus.DOOR_ERROR)
-                                    {
-                                        elapsedTimeBack.Stop();
-                                        this.stateCtrlDoorBack = StateCtrl.DOOR_ST_OPEN_DOOR_BACK;
-                                        this.numTryOpen++;
-                                        Console.WriteLine("DOOR_BACK_OPEN DoorStatus.DOOR_ERROR");
-                                        if (this.numTryOpen >= NUM_TRY_OPEN_DOOR)
+                                        this.GetStatus(ref status, resCmd.dType);
+                                        if (status.data[0] == (byte)DoorStatus.DOOR_CLOSE)
                                         {
-                                            this.numTryOpen = 0;
-                                            this.stateCtrlDoorBack = StateCtrl.DOOR_ST_ERROR;
+                                            this.stateCtrlDoor = StateCtrl.DOOR_ST_CLOSE_SUCCESS;
+                                            if (resCmd.dType == DoorType.DOOR_FRONT)
+                                            {
+                                                doorFrontStatus = DoorStatus.DOOR_CLOSE;
+                                            }
+                                            else
+                                            {
+                                                doorBackStatus = DoorStatus.DOOR_CLOSE;
+                                            }
+                                            elapsedTimeFront.Reset();
+                                            Console.WriteLine("DOOR_ST_CLOSE_DOOR_SUCCESS");
                                         }
                                     }
-                                }
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine(e);
-                                }
-                            }
-                            this.socketBusy = false;
-                        }
-                        break;
-                    case StateCtrl.DOOR_ST_OPEN_DOOR_BACK_SUCCESS:
-                        break;
-                    case StateCtrl.DOOR_ST_CLOSE_DOOR_BACK:
-                        if (this.socketBusy == false)
-                        {
-                            this.socketBusy = true;
-                            Console.WriteLine("DOOR_ST_CLOSE_DOOR_BACK");
-                            if (this.ClosePress(DoorType.DOOR_BACK))
-                            {
-                                elapsedTimeBack.Restart();
-                                elapsedTimeReleaseButton.Restart();
-                                this.stateCtrlDoorBack = StateCtrl.DOOR_ST_WAITTING_CLOSE_DOOR_BACK;
-                                Console.WriteLine("DOOR_ST_WAITTING_CLOSE_DOOR_BACK");
-                            }
-                            else
-                            {
-                                this.numTryClose++;
-                                if (this.numTryClose >= NUM_TRY_CLOSE_DOOR)
-                                {
-                                    this.numTryClose = 0;
-                                    this.stateCtrlDoorBack = StateCtrl.DOOR_ST_ERROR;
-                                }
-                            }
-                        }
-                        this.socketBusy = false;
-                        break;
-                    case StateCtrl.DOOR_ST_WAITTING_CLOSE_DOOR_BACK:
-                        if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
-                        {
-                            if (this.CloseRelease(DoorType.DOOR_BACK))
-                            {
-                                Console.WriteLine("this.CloseRelease(DoorType.DOOR_BACK) success");
-                                elapsedTimeReleaseButton.Stop();
-                            }
-                            else
-                            {
-                                elapsedTimeReleaseButton.Restart();
-                            }
-                            Thread.Sleep(50);
-                        }
-                        if (elapsedTimeBack.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR_BACK)
-                        {
-                            elapsedTimeBack.Stop();
-                            this.stateCtrlDoorBack = StateCtrl.DOOR_ST_CLOSE_DOOR_BACK;
-                            this.numTryClose++;
-                            Console.WriteLine("TIME_OUT_WAIT_CLOSE_DOOR_BACK");
-                            if (this.numTryClose >= NUM_TRY_CLOSE_DOOR)
-                            {
-                                this.numTryClose = 0;
-                                this.stateCtrlDoorBack = StateCtrl.DOOR_ST_ERROR;
-                            }
-                        }
-                        else
-                        {
-                            if (this.socketBusy == false)
-                            {
-                                this.socketBusy = true;
-                                try
-                                {
-                                    this.GetStatus(ref status, DoorType.DOOR_BACK);
-                                    if (status.data[0] == (byte)DoorStatus.DOOR_CLOSE)
+                                    catch (Exception e)
                                     {
-                                        this.CloseRelease(DoorType.DOOR_BACK);
-                                        this.stateCtrlDoorBack = StateCtrl.DOOR_ST_CLOSE_DOOR_BACK_SUCCESS;
-                                        elapsedTimeBack.Stop();
-                                        Console.WriteLine("DOOR_ST_CLOSE_DOOR_BACK_SUCCESS");
-                                    }
-                                    else if (status.data[0] == (byte)DoorStatus.DOOR_ERROR)
-                                    {
-                                        elapsedTimeBack.Stop();
-                                        this.stateCtrlDoorBack = StateCtrl.DOOR_ST_CLOSE_DOOR_BACK;
-                                        this.numTryClose++;
-                                        Console.WriteLine("DOOR_BACK_CLOSE DoorStatus.DOOR_ERROR");
-                                        if (this.numTryClose >= NUM_TRY_CLOSE_DOOR)
-                                        {
-                                            this.numTryClose = 0;
-                                            this.stateCtrlDoorBack = StateCtrl.DOOR_ST_ERROR;
-                                        }
+                                        Console.WriteLine(e);
                                     }
                                 }
-                                catch (Exception e)
+                                break;
+                            case StateCtrl.DOOR_ST_CLOSE_SUCCESS:
+                                listCmdRqCtrl.Remove(resCmd);
+                                kProcess = false;
+                                break;
+                            case StateCtrl.LAMP_DOOR_ON:
+                                if (true == this.LampOn(resCmd.dType))
                                 {
-                                    Console.WriteLine(e);
+                                    listCmdRqCtrl.Remove(resCmd);
+                                    kProcess = false;
+                                    Console.WriteLine(resCmd.dType + "Lamp on success");
                                 }
-                            }
-                            this.socketBusy = false;
+                                break;
+                            case StateCtrl.LAMP_DOOR_OFF:
+                                if (true == this.LampOff(resCmd.dType))
+                                {
+                                    listCmdRqCtrl.Remove(resCmd);
+                                    kProcess = false;
+                                    Console.WriteLine(resCmd.dType + "Lamp off success");
+                                }
+                                break;
+                            default:
+                                break;
                         }
-                        break;
-                    case StateCtrl.DOOR_ST_CLOSE_DOOR_BACK_SUCCESS:
-                        break;
-                    case StateCtrl.DOOR_ST_ERROR:
-                        break;
-                    default:
-                        break;
+                        Thread.Sleep(50);
+                    }
                 }
-                this.lampBackProcess();
-                Thread.Sleep(50);
+                Thread.Sleep(100);
             }
         }
 
@@ -881,13 +535,7 @@ namespace DoorControllerService
             dataSend[4] = 0x00;
             dataSend[5] = (byte)id;
             dataSend[6] = CalChecksum(dataSend, 4);
-            if (this.socketBusy == true)
-            {
-                return false;
-            }
-            this.socketBusy = true;
             ret = this.Tranfer(dataSend);
-            this.socketBusy = false;
             return ret;
         }
 
@@ -903,13 +551,7 @@ namespace DoorControllerService
             dataSend[4] = 0x00;
             dataSend[5] = (byte)id;
             dataSend[6] = CalChecksum(dataSend, 4);
-            if (this.socketBusy == true)
-            {
-                return false;
-            }
-            this.socketBusy = true;
             ret = this.Tranfer(dataSend);
-            this.socketBusy = false;
             return ret;
         }
     }
