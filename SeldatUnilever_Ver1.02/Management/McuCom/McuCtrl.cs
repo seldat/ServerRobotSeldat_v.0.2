@@ -61,12 +61,16 @@ namespace SeldatUnilever_Ver1._02.Management.McuCom {
                     case stateCtrlLamp.LAMP_MCU_ON:
                         if (true == this.TurnOnLampRb())
                         {
+                            Thread.Sleep(50);
+                            this.TurnOnLampRb();
                             stateCtrlLampRb = stateCtrlLamp.LAMP_MCU_IDLE;
                         }
                         break;
                     case stateCtrlLamp.LAMP_MCU_OFF:
                         if (true == this.TurnOffLampRb())
                         {
+                            Thread.Sleep(50);
+                            this.TurnOffLampRb();
                             stateCtrlLampRb = stateCtrlLamp.LAMP_MCU_IDLE;
                         }
                         break;
