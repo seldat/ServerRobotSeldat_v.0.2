@@ -9,8 +9,10 @@ using SeldatMRMS.Management.TrafficManager;
 using static SeldatMRMS.Management.RobotManagent.RobotUnity;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
-namespace SeldatMRMS {
-    public class ProcedureControlServices : ControlService {
+namespace SeldatMRMS
+{
+    public class ProcedureControlServices : ControlService
+    {
         public String ProcedureID { get; set; }
         public String DeliveryInfo { get; set; }
         public const long TIME_OUT_WAIT_GOTO_FRONTLINE = 240000;
@@ -19,7 +21,7 @@ namespace SeldatMRMS {
         public virtual event Action<Object> ReleaseProcedureHandler;
         public virtual event Action<Object> ErrorProcedureHandler;
         public ProcedureCode procedureCode;
-        public virtual ContentDatabase RequestDataFromDataBase () { return new ContentDatabase (); }
+        public virtual ContentDatabase RequestDataFromDataBase() { return new ContentDatabase(); }
         protected RobotUnity robot;
         public ProcedureDataItemsDB procedureDataItemsDB;
         public GateTaskDB gateTaskDB;
@@ -37,7 +39,8 @@ namespace SeldatMRMS {
             PROC_KILLED
         }
 
-        public enum ProcedureCode {
+        public enum ProcedureCode
+        {
             PROC_CODE_BUFFER_TO_MACHINE = 0,
             PROC_CODE_FORKLIFT_TO_BUFFER,
             PROC_CODE_BUFFER_TO_RETURN,
@@ -51,7 +54,8 @@ namespace SeldatMRMS {
             PROC_CODE_MACHINE_TO_GATE,
             PROC_CODE_MACHINE_TO_BUFFER_RETURN
         }
-        public enum ErrorCode {
+        public enum ErrorCode
+        {
             RUN_OK = 0,
             DETECT_LINE_ERROR,
             DETECT_LINE_CHARGER_ERROR,
@@ -69,7 +73,8 @@ namespace SeldatMRMS {
         }
 
         public ErrorCode errorCode;
-        public void RegistrationTranfficService (TrafficManagementService TrafficService) {
+        public void RegistrationTranfficService(TrafficManagementService TrafficService)
+        {
             this.TrafficService = TrafficService;
 
         }
@@ -82,7 +87,8 @@ namespace SeldatMRMS {
             public TrafficManagementService traffic;
             public bool flagWaitReg;
         }
-        public enum ForkLift {
+        public enum ForkLift
+        {
             FORBUF_IDLE,
             FORBUF_SELECT_BEHAVIOR_ONZONE,
             FORBUF_ROBOT_GOTO_CHECKIN_GATE, // vị trí check in liệu có quy trình nào tại cổng
@@ -135,25 +141,27 @@ namespace SeldatMRMS {
 
         public enum ForkLiftToMachine
         {
-           FORMACH_IDLE,
-           FORMACH_ROBOT_GOTO_CHECKIN_GATE, // vị trí check in liệu có quy trình nào tại cổng
-           FORMACH_ROBOT_GOTO_BACK_FRONTLINE_READY,
-           FORMACH_ROBOT_WAITTING_GOTO_CHECKIN_GATE,
-           FORMACH_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.
-           FORMACH_ROBOT_WAITTING_GOTO_GATE, // doi robot di den khu vuc cong
-           FORMACH_ROBOT_CAME_GATE_POSITION, // da den khu vuc cong , gui yeu cau mo cong.
-           FORMACH_ROBOT_WAITTING_OPEN_DOOR, //doi mo cong
-           FORMACH_ROBOT_OPEN_DOOR_SUCCESS, // mo cua thang cong ,gui toa do line de robot di vao gap hang
-           FORMACH_ROBOT_WAITTING_PICKUP_PALLET_IN, // doi robot gap hang
-           FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE, //doi robot di tro lai dau line cong.
-           FORMACH_ROBOT_WAITTING_CLOSE_GATE, // doi dong cong.
-           FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
-           FORMACH_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE, // doi robot do line den pallet  va tha pallet
-           //FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE, // doi robot di den dau line buffer.
-           FORMACH_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
+            FORMACH_IDLE,
+            FORMACH_ROBOT_GOTO_CHECKIN_GATE, // vị trí check in liệu có quy trình nào tại cổng
+            FORMACH_ROBOT_GOTO_BACK_FRONTLINE_READY,
+            FORMACH_ROBOT_WAITTING_GOTO_CHECKIN_GATE,
+            FORMACH_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.
+            FORMACH_ROBOT_WAITTING_GOTO_GATE, // doi robot di den khu vuc cong
+            FORMACH_ROBOT_WAITTING_GOTO_GATE_OPENDOOR,
+            FORMACH_ROBOT_CAME_GATE_POSITION, // da den khu vuc cong , gui yeu cau mo cong.
+            FORMACH_ROBOT_WAITTING_OPEN_DOOR, //doi mo cong
+            FORMACH_ROBOT_OPEN_DOOR_SUCCESS, // mo cua thang cong ,gui toa do line de robot di vao gap hang
+            FORMACH_ROBOT_WAITTING_PICKUP_PALLET_IN, // doi robot gap hang
+            FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE, //doi robot di tro lai dau line cong.
+            FORMACH_ROBOT_WAITTING_CLOSE_GATE, // doi dong cong.
+            FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
+            FORMACH_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE, // doi robot do line den pallet  va tha pallet
+                                                            //FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE, // doi robot di den dau line buffer.
+            FORMACH_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
 
-        public enum BufferToMachine {
+        public enum BufferToMachine
+        {
             BUFMAC_IDLE,
             BUFMAC_SELECT_BEHAVIOR_ONZONE,
             BUFMAC_ROBOT_GOTO_CHECKIN_BUFFER,
@@ -215,7 +223,8 @@ namespace SeldatMRMS {
             BUFTOBUF_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
 
-        public enum BufferToReturn {
+        public enum BufferToReturn
+        {
             BUFRET_IDLE,
             BUFRET_ROBOT_GOTO_CHECKIN_BUFFER,
             BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER, // doi robot di den khu vuc checkin cua vung buffer
@@ -240,7 +249,8 @@ namespace SeldatMRMS {
             BUFRET_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
 
-        public enum MachineToReturn {
+        public enum MachineToReturn
+        {
             MACRET_IDLE,
             MACRET_SELECT_BEHAVIOR_ONZONE,
             MACRET_ROBOT_GOTO_FRONTLINE_MACHINE,
@@ -301,7 +311,8 @@ namespace SeldatMRMS {
             MACBUFRET_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
 
-        public enum ReturnToGate {
+        public enum ReturnToGate
+        {
             RETGATE_IDLE,
             RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_RETURN, // doi robot di den khu vuc checkin cua vung buffer
             RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY, // doi khu vuc buffer san sang de di vao
@@ -315,6 +326,7 @@ namespace SeldatMRMS {
             RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE,
             RETGATE_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.
             RETGATE_ROBOT_WAITTING_GOTO_GATE, // doi robot di den khu vuc cong
+            RETGATE_ROBOT_WAITTING_GOTO_GATE_OPENDOOR, // doi robot di den khu vuc cong
             RETGATE_ROBOT_CAME_GATE_POSITION, // da den khu vuc cong , gui yeu cau mo cong.
             RETGATE_ROBOT_WAITTING_OPEN_DOOR, //doi mo cong
             // RETGATE_ROBOT_OPEN_DOOR_SUCCESS, // mo cua thang cong ,gui toa do line de robot di vao gap hang
@@ -369,6 +381,7 @@ namespace SeldatMRMS {
             MACGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE,
             MACGATE_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.
             MACGATE_ROBOT_WAITTING_GOTO_GATE, // doi robot di den khu vuc cong
+            MACGATE_ROBOT_WAITTING_GOTO_GATE_OPENDOOR, // doi robot di den khu vuc cong
             MACGATE_ROBOT_CAME_GATE_POSITION, // da den khu vuc cong , gui yeu cau mo cong.
             MACGATE_ROBOT_WAITTING_OPEN_DOOR, //doi mo cong
             // MACGATE_ROBOT_OPEN_DOOR_SUCCESS, // mo cua thang cong ,gui toa do line de robot di vao gap hang
@@ -382,7 +395,8 @@ namespace SeldatMRMS {
         {
             this.robotService = robotService;
         }
-        public enum RobotGoToCharge {
+        public enum RobotGoToCharge
+        {
             ROBCHAR_IDLE,
             // ROBCHAR_CHARGER_CHECKSTATUS, //kiểm tra kết nối và trạng thái sạc
             ROBCHAR_ROBOT_GOTO_CHARGER, //robot be lai vao tram sac
@@ -399,7 +413,8 @@ namespace SeldatMRMS {
             // ROBCHAR_ROBOT_STATUS_BAD_OPERATION, //điều kiện hoạt động không tốt thông tin về procedure management chuyển sang quy trình xử lý sự cố
             ROBCHAR_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
-        public enum RobotGoToReady {
+        public enum RobotGoToReady
+        {
             ROBREA_IDLE,
             ROBREA_SELECT_BEHAVIOR_ONZONE,
             ROBREA_ROBOT_GOTO_CHECKIN_READYSTATION,
@@ -414,27 +429,31 @@ namespace SeldatMRMS {
             ROBREA_ROBOT_RELEASED,
             ROBREA_ROBOT_WAITINGREADY_FORCERELEASED
         }
-        public ProcedureControlServices (RobotUnity robot) : base (robot) {
+        public ProcedureControlServices(RobotUnity robot) : base(robot)
+        {
             this.robot = robot;
             this.selectHandleError = SelectHandleError.CASE_ERROR_WAITTING;
-            robotTaskDB = new RobotTaskDB (robot);
-            procedureDataItemsDB = new ProcedureDataItemsDB (procedureCode, robotTaskDB.robotTaskId);
-            readyChargerProcedureDB = new ReadyChargerProcedureDB ();
+            robotTaskDB = new RobotTaskDB(robot);
+            procedureDataItemsDB = new ProcedureDataItemsDB(procedureCode, robotTaskDB.robotTaskId);
+            readyChargerProcedureDB = new ReadyChargerProcedureDB();
         }
 
-        public override void AssignAnOrder (OrderItem order) {
+        public override void AssignAnOrder(OrderItem order)
+        {
             this.order = order;
 
-            procedureDataItemsDB.SetOrderItem (order);
-            base.AssignAnOrder (order);
+            procedureDataItemsDB.SetOrderItem(order);
+            base.AssignAnOrder(order);
         }
-        public RobotUnity GetRobotUnity () {
+        public RobotUnity GetRobotUnity()
+        {
             return this.robot;
         }
         public bool ProRun;
         public bool ProRunStopW;
 
-        public enum SelectHandleError {
+        public enum SelectHandleError
+        {
             CASE_ERROR_EXIT = 0,
             CASE_ERROR_CONTINUOUS,
             CASE_ERROR_WAITTING,
@@ -442,16 +461,19 @@ namespace SeldatMRMS {
 
         public SelectHandleError selectHandleError;
 
-        protected virtual void CheckUserHandleError (object obj) {
+        protected virtual void CheckUserHandleError(object obj)
+        {
             ProcedureControlServices p = (ProcedureControlServices)obj;
             robot.ShowText("ErrorCode -> " + getStringError(p.errorCode));
             robot.border.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
-            new Action(delegate () {
+            new Action(delegate ()
+            {
                 robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_ERROR);
             }));
             Thread.Sleep(1);
             robot.border.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
-            new Action(delegate () {
+            new Action(delegate ()
+            {
                 robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_RUNNING);
             }));
             Thread.Sleep(1);
@@ -506,40 +528,44 @@ namespace SeldatMRMS {
              }
              selectHandleError = SelectHandleError.CASE_ERROR_WAITTING;*/
         }
-        protected void Debug (object ojb, string log) {
-            ProcedureControlServices pCs = (ProcedureControlServices) ojb;
-            RobotUnity rb = pCs.GetRobotUnity ();
+        protected void Debug(object ojb, string log)
+        {
+            ProcedureControlServices pCs = (ProcedureControlServices)ojb;
+            RobotUnity rb = pCs.GetRobotUnity();
             string rBid = rb.properties.Label + " => (^_^) ";
 
-            switch (pCs.procedureCode) {
+            switch (pCs.procedureCode)
+            {
                 case ProcedureCode.PROC_CODE_BUFFER_TO_MACHINE:
-                    Console.WriteLine (rBid + "BUFFER_TO_MACHINE:" + log);
+                    Console.WriteLine(rBid + "BUFFER_TO_MACHINE:" + log);
                     break;
                 case ProcedureCode.PROC_CODE_FORKLIFT_TO_BUFFER:
-                    Console.WriteLine (rBid + "FORKLIFT_TO_BUFFER:" + log);
+                    Console.WriteLine(rBid + "FORKLIFT_TO_BUFFER:" + log);
                     break;
                 case ProcedureCode.PROC_CODE_BUFFER_TO_RETURN:
-                    Console.WriteLine (rBid + "BUFFER_TO_RETURN:" + log);
+                    Console.WriteLine(rBid + "BUFFER_TO_RETURN:" + log);
                     break;
                 case ProcedureCode.PROC_CODE_MACHINE_TO_RETURN:
-                    Console.WriteLine (rBid + "MACHINE_TO_RETURN:" + log);
+                    Console.WriteLine(rBid + "MACHINE_TO_RETURN:" + log);
                     break;
                 case ProcedureCode.PROC_CODE_RETURN_TO_GATE:
-                    Console.WriteLine (rBid + "RETURN_TO_GATE:" + log);
+                    Console.WriteLine(rBid + "RETURN_TO_GATE:" + log);
                     break;
                 case ProcedureCode.PROC_CODE_ROBOT_TO_READY:
-                    Console.WriteLine (rBid + "ROBOT_TO_READY:" + log);
+                    Console.WriteLine(rBid + "ROBOT_TO_READY:" + log);
                     break;
                 case ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE:
-                    Console.WriteLine (rBid + "ROBOT_TO_CHARGE:" + log);
+                    Console.WriteLine(rBid + "ROBOT_TO_CHARGE:" + log);
                     break;
                 default:
                     break;
             }
         }
 
-        protected string getStringError(ErrorCode erCode) {
-            switch (erCode) {
+        protected string getStringError(ErrorCode erCode)
+        {
+            switch (erCode)
+            {
                 case ErrorCode.DETECT_LINE_ERROR:
                     return "DETECT_LINE_ERROR";
                 case ErrorCode.DETECT_LINE_CHARGER_ERROR:
@@ -573,7 +599,8 @@ namespace SeldatMRMS {
         }
         public void SaveOrderItem(OrderItem order)
         {
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 try
                 {
                     String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "OrderItemInProc" + robot.properties.Label + ".txt");
@@ -581,7 +608,7 @@ namespace SeldatMRMS {
 
                     if (!File.Exists(path))
                     {
-                       var myfile=  File.Create(path);
+                        var myfile = File.Create(path);
                         myfile.Close();
 
                     }
