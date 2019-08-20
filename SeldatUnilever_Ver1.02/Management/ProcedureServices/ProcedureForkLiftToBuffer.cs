@@ -304,7 +304,7 @@ namespace SeldatMRMS
                         {
                             robot.ShowText("FORBUF_ROBOT_OPEN_DOOR_ERROR");
                             //StateForkLift = ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION;
-                            Thread.Sleep(50);
+                            Thread.Sleep(100);
                             ds.setDoorBusy(true);
                             ds.openDoor(DoorService.DoorType.DOOR_BACK);
                         }

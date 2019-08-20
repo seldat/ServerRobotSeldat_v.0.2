@@ -158,7 +158,8 @@ namespace DoorControllerService
             this.doorBusy = false;
         }
 
-        private void AddRqToList(DoorType dType, DoorCmdRq dRq) {
+        private void AddRqToList(DoorType dType, DoorCmdRq dRq)
+        {
             cmdRqDoor valTamp = new cmdRqDoor();
             valTamp.cmdRq = dRq;
             valTamp.dType = dType;
@@ -198,6 +199,10 @@ namespace DoorControllerService
                     if (this.doorBackStatus == DoorStatus.DOOR_OPEN)
                     {
                         return RetState.DOOR_CTRL_SUCCESS;
+                    }
+                    else if (this.doorBackStatus == DoorStatus.DOOR_ERROR)
+                    {
+                        return RetState.DOOR_CTRL_ERROR;
                     }
                     break;
                 default:
@@ -285,7 +290,18 @@ namespace DoorControllerService
                                         break;
                                     }
                                 }
-                                this.GetStatus(ref status,resCmd.dType);
+                                else if (resCmd.dType == DoorType.DOOR_BACK)
+                                {
+                                    this.GetStatus(ref status, DoorType.DOOR_FRONT);
+                                    if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
+                                    {
+                                        listCmdRqCtrl.Remove(resCmd);
+                                        doorBackStatus = DoorStatus.DOOR_ERROR;
+                                        kProcess = false;
+                                        break;
+                                    }
+                                }
+                                this.GetStatus(ref status, resCmd.dType);
                                 if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
                                 {
                                     this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN_SUCCESS;
@@ -329,10 +345,12 @@ namespace DoorControllerService
                                         if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
                                         {
                                             this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN_SUCCESS;
-                                            if (resCmd.dType == DoorType.DOOR_FRONT) {
+                                            if (resCmd.dType == DoorType.DOOR_FRONT)
+                                            {
                                                 doorFrontStatus = DoorStatus.DOOR_OPEN;
                                             }
-                                            else {
+                                            else
+                                            {
                                                 doorBackStatus = DoorStatus.DOOR_OPEN;
                                             }
                                             elapsedTimeFront.Reset();
