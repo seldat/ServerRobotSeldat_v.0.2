@@ -97,6 +97,7 @@ namespace SeldatMRMS
             ProcedureForkLiftToBuffer FlToBuf = (ProcedureForkLiftToBuffer)ojb;
             RobotUnity rb = FlToBuf.robot;
             ds = getDoorService();
+            ds.setRb(rb);
             TrafficManagementService Traffic = FlToBuf.Traffic;
             ForkLiftToMachineInfo flToMachineInfo = new ForkLiftToMachineInfo();
             rb.mcuCtrl.lampRbOn();
@@ -304,7 +305,7 @@ namespace SeldatMRMS
                         {
                             robot.ShowText("FORBUF_ROBOT_OPEN_DOOR_ERROR");
                             //StateForkLift = ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION;
-                            Thread.Sleep(100);
+                            Thread.Sleep(1000);
                             ds.setDoorBusy(true);
                             ds.openDoor(DoorService.DoorType.DOOR_BACK);
                         }

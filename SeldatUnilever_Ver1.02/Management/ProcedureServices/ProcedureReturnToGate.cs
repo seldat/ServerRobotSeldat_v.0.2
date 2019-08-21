@@ -81,6 +81,7 @@ namespace SeldatMRMS
             RobotUnity rb = ReToGate.robot;
             // DataReturnToGate p = ReToGate.points;
             ds = ReToGate.door.DoorMezzamineReturn;
+            ds.setRb(rb);
             TrafficManagementService Traffic = ReToGate.Traffic;
             rb.mcuCtrl.lampRbOn();
             robot.ShowText(" Start -> " + procedureCode);
@@ -282,7 +283,7 @@ namespace SeldatMRMS
                         else if (ret == RetState.DOOR_CTRL_ERROR)
                         {
                             robot.ShowText("RETGATE_ROBOT_WAITTING_OPEN_DOOR_ERROR__(-_-)");
-                            Thread.Sleep(100);
+                            Thread.Sleep(1000);
                             ds.setDoorBusy(true);
                             ds.openDoor(DoorService.DoorType.DOOR_BACK);
                         }

@@ -78,6 +78,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             RobotUnity rb = MaToGate.robot;
             TrafficManagementService Traffic = MaToGate.Traffic;
             ds = MaToGate.door.DoorMezzamineReturn;
+            ds.setRb(rb);
             rb.mcuCtrl.lampRbOn();
             robot.ShowText(" Start -> " + procedureCode);
             while (ProRun)
@@ -265,7 +266,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         else if (ret == RetState.DOOR_CTRL_ERROR)
                         {
                             robot.ShowText("MACGATE_ROBOT_WAITTING_OPEN_DOOR_ERROR__(-_-)");
-                            Thread.Sleep(100);
+                            Thread.Sleep(1000);
                             ds.setDoorBusy(true);
                             ds.openDoor(DoorService.DoorType.DOOR_BACK);
                         }
