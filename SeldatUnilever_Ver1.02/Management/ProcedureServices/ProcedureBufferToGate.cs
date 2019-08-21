@@ -75,6 +75,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             RobotUnity rb = BuffToGate.robot;
             // DataBufferToGate p = BuffToGate.points;
             ds = getDoorService();
+            ds.setRb(rb);
             TrafficManagementService Traffic = BuffToGate.Traffic;
             rb.mcuCtrl.lampRbOn();
             
@@ -417,7 +418,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         else if (ret == RetState.DOOR_CTRL_ERROR)
                         {
                             robot.ShowText("BUFGATE_ROBOT_WAITTING_OPEN_DOOR_ERROR__(-_-)");
-                            Thread.Sleep(100);
+                            Thread.Sleep(1000);
                             ds.setDoorBusy(true);
                             ds.openDoor(DoorService.DoorType.DOOR_BACK);
                         }

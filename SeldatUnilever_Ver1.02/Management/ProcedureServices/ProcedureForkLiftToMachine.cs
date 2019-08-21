@@ -93,6 +93,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             ProcedureForkLiftToMachine FlToMach = (ProcedureForkLiftToMachine)ojb;
             RobotUnity rb = FlToMach.robot;
             ds = FlToMach.door;
+            ds.setRb(rb);
             TrafficManagementService Traffic = FlToMach.Traffic;
             rb.mcuCtrl.lampRbOn();
             robot.ShowText(" Start -> " + procedureCode);
@@ -235,7 +236,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             robot.ShowText("FORMACH_ROBOT_OPEN_DOOR_ERROR");
                             StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_CAME_GATE_POSITION;
-                            Thread.Sleep(50);
+                            Thread.Sleep(1000);
                         }
                         break;
                     case ForkLiftToMachine.FORMACH_ROBOT_OPEN_DOOR_SUCCESS: // mo cua thang cong ,gui toa do line de robot di vao gap hang

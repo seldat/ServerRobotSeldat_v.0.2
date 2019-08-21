@@ -1,4 +1,5 @@
-﻿using SelDatUnilever_Ver1._00.Management;
+﻿using SeldatMRMS.Management.RobotManagent;
+using SelDatUnilever_Ver1._00.Management;
 using SelDatUnilever_Ver1._00.Management.ComSocket;
 using System;
 using System.Collections.Generic;
@@ -138,6 +139,13 @@ namespace DoorControllerService
         private const UInt32 TIME_OUT_PRESS_BUTTON = 1500;
         private bool doorBusy;
 
+        private RobotUnity rb;
+
+        public void setRb(RobotUnity robot)
+        {
+            this.rb = robot;
+        }
+
         private List<cmdRqDoor> listCmdRqCtrl = new List<cmdRqDoor>();
 
         public bool getDoorBusy()
@@ -245,6 +253,7 @@ namespace DoorControllerService
             {
                 if (listCmdRqCtrl.Count > 0)
                 {
+                    this.rb.ShowText("Doorctrl listCmdRqCtrl.Count : " + listCmdRqCtrl.Count);
                     cmdRqDoor resCmd = listCmdRqCtrl[0];
                     kProcess = true;
                     if (resCmd.cmdRq == DoorCmdRq.DOOR_OPEN)
@@ -266,8 +275,9 @@ namespace DoorControllerService
                     else
                     {
                         Console.WriteLine("Remove not command");
+                        this.rb.ShowText("Doorctrl Remove not command");
                         listCmdRqCtrl.Remove(resCmd);
-                        Thread.Sleep(50);
+                        Thread.Sleep(100);
                         continue;
                     }
                     while (kProcess)
@@ -275,71 +285,90 @@ namespace DoorControllerService
                         switch (this.stateCtrlDoor)
                         {
                             case StateCtrl.DOOR_ST_IDLE:
+                                this.rb.ShowText("StateCtrl.DOOR_ST_IDLE");
                                 break;
                             case StateCtrl.DOOR_ST_OPEN:
-                                if (resCmd.dType == DoorType.DOOR_FRONT)
+                                try
                                 {
-                                    this.GetStatus(ref status, DoorType.DOOR_BACK);
+                                    this.rb.ShowText("StateCtrl.DOOR_ST_OPEN" + resCmd.dType);
+                                    if (resCmd.dType == DoorType.DOOR_FRONT)
+                                    {
+                                        this.GetStatus(ref status, DoorType.DOOR_BACK);
+                                        if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
+                                        {
+                                            this.rb.ShowText("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + DoorType.DOOR_BACK + "is open");
+                                            cmdRqDoor varTamp = new cmdRqDoor();
+                                            varTamp.cmdRq = DoorCmdRq.DOOR_CLOSE;
+                                            varTamp.dType = DoorType.DOOR_BACK;
+                                            listCmdRqCtrl.Insert(0, varTamp);
+                                            kProcess = false;
+                                            break;
+                                        }
+                                        Thread.Sleep(50);
+                                    }
+                                    else if (resCmd.dType == DoorType.DOOR_BACK)
+                                    {
+                                        this.GetStatus(ref status, DoorType.DOOR_FRONT);
+                                        if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
+                                        {
+                                            this.rb.ShowText("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + DoorType.DOOR_FRONT + "is open");
+                                            listCmdRqCtrl.Remove(resCmd);
+                                            doorBackStatus = DoorStatus.DOOR_ERROR;
+                                            kProcess = false;
+                                            break;
+                                        }
+                                        Thread.Sleep(50);
+                                    }
+                                    this.GetStatus(ref status, resCmd.dType);
                                     if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
                                     {
-                                        cmdRqDoor varTamp = new cmdRqDoor();
-                                        varTamp.cmdRq = DoorCmdRq.DOOR_CLOSE;
-                                        varTamp.dType = DoorType.DOOR_BACK;
-                                        listCmdRqCtrl.Insert(0, varTamp);
-                                        kProcess = false;
+                                        this.rb.ShowText("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + "DOOR_ST_OPEN_SUCCESS");
+                                        this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN_SUCCESS;
                                         break;
                                     }
-                                }
-                                else if (resCmd.dType == DoorType.DOOR_BACK)
-                                {
-                                    this.GetStatus(ref status, DoorType.DOOR_FRONT);
-                                    if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
+                                    Thread.Sleep(50);
+                                    Console.WriteLine("DOOR_ST_OPEN");
+                                    if (this.OpenPress(resCmd.dType))
                                     {
-                                        listCmdRqCtrl.Remove(resCmd);
-                                        doorBackStatus = DoorStatus.DOOR_ERROR;
-                                        kProcess = false;
-                                        break;
+                                        elapsedTimeFront.Restart();
+                                        elapsedTimeReleaseButton.Restart();
+                                        this.stateCtrlDoor = StateCtrl.DOOR_ST_WAITTING_OPEN;
+                                        this.rb.ShowText("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + "DOOR_ST_WAITTING_OPEN_DOOR");
+                                        Console.WriteLine("DOOR_ST_WAITTING_OPEN_DOOR");
                                     }
                                 }
-                                this.GetStatus(ref status, resCmd.dType);
-                                if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
+                                catch (Exception e)
                                 {
-                                    this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN_SUCCESS;
-                                    break;
-                                }
-                                Console.WriteLine("DOOR_ST_OPEN");
-                                if (this.OpenPress(resCmd.dType))
-                                {
-                                    elapsedTimeFront.Restart();
-                                    elapsedTimeReleaseButton.Restart();
-                                    this.stateCtrlDoor = StateCtrl.DOOR_ST_WAITTING_OPEN;
-                                    Console.WriteLine("DOOR_ST_WAITTING_OPEN_DOOR");
+                                    this.rb.ShowText(e.ToString());
                                 }
                                 break;
                             case StateCtrl.DOOR_ST_WAITTING_OPEN:
-                                if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
+                                try
                                 {
-                                    if (this.OpenRelease(resCmd.dType))
+                                    if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
                                     {
-                                        Console.WriteLine("OpenRelease(DoorType.DOOR) success");
-                                        elapsedTimeReleaseButton.Reset();
+                                        if (this.OpenRelease(resCmd.dType))
+                                        {
+                                            Console.WriteLine("OpenRelease(DoorType.DOOR) success");
+                                            this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "OpenRelease(DoorType.DOOR) success");
+                                            elapsedTimeReleaseButton.Reset();
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("OpenRelease(DoorType.DOOR) failed");
+                                            this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "OpenRelease(DoorType.DOOR) failed");
+                                            elapsedTimeReleaseButton.Restart();
+                                        }
+                                        Thread.Sleep(50);
+                                    }
+                                    if (elapsedTimeFront.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR)
+                                    {
+                                        elapsedTimeFront.Reset();
+                                        this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN;
+                                        Console.WriteLine("TIME_OUT_WAIT_OPEN_DOOR");
+                                        this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "TIME_OUT_WAIT_OPEN_DOOR");
                                     }
                                     else
-                                    {
-                                        Console.WriteLine("OpenRelease(DoorType.DOOR) failed");
-                                        elapsedTimeReleaseButton.Restart();
-                                    }
-                                    Thread.Sleep(50);
-                                }
-                                if (elapsedTimeFront.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR)
-                                {
-                                    elapsedTimeFront.Reset();
-                                    this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN;
-                                    Console.WriteLine("TIME_OUT_WAIT_OPEN_DOOR");
-                                }
-                                else
-                                {
-                                    try
                                     {
                                         this.GetStatus(ref status, resCmd.dType);
                                         if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
@@ -355,59 +384,78 @@ namespace DoorControllerService
                                             }
                                             elapsedTimeFront.Reset();
                                             Console.WriteLine("DOOR_ST_OPEN_SUCCESS");
+                                            this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "DOOR_ST_OPEN_SUCCESS");
                                         }
                                     }
-                                    catch (Exception e)
-                                    {
-                                        Console.WriteLine(e);
-                                    }
+
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine(e);
+                                    this.rb.ShowText(e.ToString());
                                 }
                                 break;
                             case StateCtrl.DOOR_ST_OPEN_SUCCESS:
+                                this.rb.ShowText("StateCtrl.DOOR_ST_OPEN_SUCCESS" + resCmd.dType + ':' + "Remove list");
                                 listCmdRqCtrl.Remove(resCmd);
                                 kProcess = false;
                                 break;
                             case StateCtrl.DOOR_ST_CLOSE:
-                                this.GetStatus(ref status, resCmd.dType);
-                                if (status.data[0] == (byte)DoorStatus.DOOR_CLOSE)
+                                try
                                 {
-                                    this.stateCtrlDoor = StateCtrl.DOOR_ST_CLOSE_SUCCESS;
-                                    break;
+                                    this.GetStatus(ref status, resCmd.dType);
+                                    if (status.data[0] == (byte)DoorStatus.DOOR_CLOSE)
+                                    {
+                                        this.rb.ShowText("StateCtrl.DOOR_ST_CLOSE" + resCmd.dType + ':' + "DOOR_ST_CLOSE_SUCCESS");
+                                        this.stateCtrlDoor = StateCtrl.DOOR_ST_CLOSE_SUCCESS;
+                                        break;
+                                    }
+                                    Console.WriteLine("DOOR_ST_CLOSE_DOOR");
+                                    Thread.Sleep(50);
+                                    if (this.ClosePress(resCmd.dType))
+                                    {
+                                        elapsedTimeFront.Restart();
+                                        elapsedTimeReleaseButton.Restart();
+                                        this.stateCtrlDoor = StateCtrl.DOOR_ST_WAITTING_CLOSE;
+                                        this.rb.ShowText("StateCtrl.DOOR_ST_CLOSE" + resCmd.dType + ':' + "DOOR_ST_WAITTING_CLOSE_DOOR");
+                                        Console.WriteLine("DOOR_ST_WAITTING_CLOSE_DOOR");
+                                    }
                                 }
-                                Console.WriteLine("DOOR_ST_CLOSE_DOOR");
-                                if (this.ClosePress(resCmd.dType))
+                                catch (Exception e)
                                 {
-                                    elapsedTimeFront.Restart();
-                                    elapsedTimeReleaseButton.Restart();
-                                    this.stateCtrlDoor = StateCtrl.DOOR_ST_WAITTING_CLOSE;
-                                    Console.WriteLine("DOOR_ST_WAITTING_CLOSE_DOOR");
+                                    this.rb.ShowText(e.ToString());
                                 }
+
                                 break;
                             case StateCtrl.DOOR_ST_WAITTING_CLOSE:
-                                if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
+                                try
                                 {
-                                    if (this.CloseRelease(resCmd.dType))
+                                    if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
                                     {
-                                        Console.WriteLine("this.CloseRelease(DoorType.DOOR)) success");
-                                        elapsedTimeReleaseButton.Reset();
+                                        if (this.CloseRelease(resCmd.dType))
+                                        {
+                                            this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "this.CloseRelease(DoorType.DOOR)) success");
+                                            Console.WriteLine("this.CloseRelease(DoorType.DOOR)) success");
+                                            elapsedTimeReleaseButton.Reset();
+                                        }
+                                        else
+                                        {
+                                            this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "this.CloseRelease(DoorType.DOOR)) failed");
+                                            Console.WriteLine("this.CloseRelease(DoorType.DOOR)) failed");
+                                            elapsedTimeReleaseButton.Restart();
+                                        }
+                                        Thread.Sleep(50);
+                                    }
+                                    if (elapsedTimeFront.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR)
+                                    {
+                                        elapsedTimeFront.Restart();
+                                        this.stateCtrlDoor = StateCtrl.DOOR_ST_CLOSE;
+                                        this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "TIME_OUT_WAIT_CLOSE_DOOR");
+                                        Console.WriteLine("TIME_OUT_WAIT_CLOSE_DOOR");
                                     }
                                     else
                                     {
-                                        Console.WriteLine("this.CloseRelease(DoorType.DOOR)) failed");
-                                        elapsedTimeReleaseButton.Restart();
-                                    }
-                                    Thread.Sleep(50);
-                                }
-                                if (elapsedTimeFront.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR)
-                                {
-                                    elapsedTimeFront.Restart();
-                                    this.stateCtrlDoor = StateCtrl.DOOR_ST_CLOSE;
-                                    Console.WriteLine("TIME_OUT_WAIT_CLOSE_DOOR");
-                                }
-                                else
-                                {
-                                    try
-                                    {
+
                                         this.GetStatus(ref status, resCmd.dType);
                                         if (status.data[0] == (byte)DoorStatus.DOOR_CLOSE)
                                         {
@@ -421,33 +469,59 @@ namespace DoorControllerService
                                                 doorBackStatus = DoorStatus.DOOR_CLOSE;
                                             }
                                             elapsedTimeFront.Reset();
+                                            this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "DOOR_ST_CLOSE_DOOR_SUCCESS");
                                             Console.WriteLine("DOOR_ST_CLOSE_DOOR_SUCCESS");
                                         }
                                     }
-                                    catch (Exception e)
-                                    {
-                                        Console.WriteLine(e);
-                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    this.rb.ShowText(e.ToString());
                                 }
                                 break;
                             case StateCtrl.DOOR_ST_CLOSE_SUCCESS:
+                                this.rb.ShowText("StateCtrl.DOOR_ST_CLOSE_SUCCESS" + resCmd.dType + ':' + "Remove list");
                                 listCmdRqCtrl.Remove(resCmd);
                                 kProcess = false;
                                 break;
                             case StateCtrl.LAMP_DOOR_ON:
-                                if (true == this.LampOn(resCmd.dType))
+                                try
                                 {
-                                    listCmdRqCtrl.Remove(resCmd);
-                                    kProcess = false;
-                                    Console.WriteLine(resCmd.dType + "Lamp on success");
+                                    if (true == this.LampOn(resCmd.dType))
+                                    {
+                                        listCmdRqCtrl.Remove(resCmd);
+                                        kProcess = false;
+                                        this.rb.ShowText("StateCtrl.LAMP_DOOR_ON" + resCmd.dType + ':' + "Lamp on success");
+                                        Console.WriteLine(resCmd.dType + "Lamp on success");
+                                    }
+                                    else
+                                    {
+                                        this.rb.ShowText("StateCtrl.LAMP_DOOR_ON" + resCmd.dType + ':' + "Lamp on failed");
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    this.rb.ShowText(e.ToString());
                                 }
                                 break;
                             case StateCtrl.LAMP_DOOR_OFF:
-                                if (true == this.LampOff(resCmd.dType))
+                                try
                                 {
-                                    listCmdRqCtrl.Remove(resCmd);
-                                    kProcess = false;
-                                    Console.WriteLine(resCmd.dType + "Lamp off success");
+                                    if (true == this.LampOff(resCmd.dType))
+                                    {
+                                        listCmdRqCtrl.Remove(resCmd);
+                                        kProcess = false;
+                                        this.rb.ShowText("StateCtrl.LAMP_DOOR_OFF" + resCmd.dType + ':' + "Lamp off success");
+                                        Console.WriteLine(resCmd.dType + "Lamp off success");
+                                    }
+                                    else
+                                    {
+                                        this.rb.ShowText("StateCtrl.LAMP_DOOR_OFF" + resCmd.dType + ':' + "Lamp off failed");
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    this.rb.ShowText(e.ToString());
                                 }
                                 break;
                             default:
