@@ -22,7 +22,12 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
 {
     public class TrafficRounterService
     {
-        
+        public enum TrafficSetValue
+        {
+           NONE=0,
+           YES
+        }
+
         public enum DIROUT_OPZONE
         {
 
@@ -65,6 +70,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             public String NameId { get => _NameId; set { _NameId = value; RaisePropertyChanged("NameId"); } }
             private String _TypeZone;
             public String TypeZone { get => _TypeZone; set { _TypeZone = value; RaisePropertyChanged("TypeZone"); } }
+
             private int _Index;
             public int Index { get => _Index; set { _Index = value; RaisePropertyChanged("Index"); } }
             private Point _Point1;
@@ -98,6 +104,11 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             public String NameId { get => _NameId; set { _NameId = value; RaisePropertyChanged("NameId"); } }
             private TypeZone _Type;
             public TypeZone Type { get => _Type; set { _Type = value; RaisePropertyChanged("Type"); } }
+
+
+            private TrafficSetValue _TrafficSet;
+            public TrafficSetValue TrafficSet { get => _TrafficSet; set { _TrafficSet = value; RaisePropertyChanged("TrafficSet"); } }
+
             private int _Index;
             public int Index { get => _Index; set { _Index = value; RaisePropertyChanged("Index"); } }
             private Point _Point1;
@@ -413,6 +424,37 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                 }
             }
             return _type;
+        }
+        public TypeZone GetTypeZone(Point position, TrafficSetValue trafficSetValue)
+        {
+            TypeZone _type = TypeZone.IDLE;
+            foreach (var r in ZoneRegisterList.Values) // xác định khu vực đến
+            {
+                if (r.TrafficSet==trafficSetValue)
+                {
+                    if (ExtensionService.IsInPolygon(r.GetZone(), position))
+                    {
+                        _type = r.Type;
+                    }
+                }
+            }
+            return _type;
+        }
+        public ZoneRegister GetTypeZoneReg(Point position, TrafficSetValue trafficSetValue)
+        {
+            ZoneRegister zoneRegister = null;
+            foreach (var r in ZoneRegisterList.Values) // xác định khu vực đến
+            {
+                if (r.TrafficSet == trafficSetValue)
+                {
+                    if (ExtensionService.IsInPolygon(r.GetZone(), position))
+                    {
+                        zoneRegister = r;
+                        break;
+                    }
+                }
+            }
+            return zoneRegister;
         }
         public TrafficRobotUnity.BrDirection GetDirDirection_Zone(Point p)
         {

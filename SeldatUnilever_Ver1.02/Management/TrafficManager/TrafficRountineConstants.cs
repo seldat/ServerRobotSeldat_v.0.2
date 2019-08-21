@@ -870,6 +870,13 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             RegIntZone_GATE3.Release(robot);
             RegIntZone_ELEVATOR.Release(robot);
         }
+        public static void ReleaseAll(RobotUnity robot,String nameException)
+        {
+            RegIntZone_READY.Release(robot);
+            RegIntZone_GATE12.Release(robot);
+            RegIntZone_GATE3.Release(robot);
+            RegIntZone_ELEVATOR.Release(robot);
+        }
 
     }
 }

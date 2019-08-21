@@ -47,7 +47,14 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         }
         public bool Remove(RobotUnity robot)
         {
+            try
+            {
                 return Registryrobotlist.Remove(robot);
+            }
+            catch
+            {
+                return false;
+            }
            
         }
         

@@ -389,7 +389,7 @@ namespace SeldatMRMS.Management
                     {
 
                         // cập nhật vùng riskzone // update vùng risk area cho robot
-                        ZoneRegister rZR = trafficManagementService.Find(properties.pose.Position, 0, 200);
+                        ZoneRegister rZR = trafficManagementService.GetTypeZoneReg(properties.pose.Position,TrafficSetValue.YES) ;// trafficManagementService.Find(properties.pose.Position, 0, 200);
                         if (rZR != null)
                         {
                             properties.L1 = rZR.L1;
@@ -548,7 +548,7 @@ namespace SeldatMRMS.Management
         {
 
             RobotBahaviorAtAnyPlace robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_IDLE;
-            TypeZone _type = trafficManagementService.GetTypeZone(properties.pose.Position, 0, 200);
+            TypeZone _type = trafficManagementService.GetTypeZone(properties.pose.Position, TrafficSetValue.YES);// trafficManagementService.GetTypeZone(properties.pose.Position, 0, 200);
             TyprPlaceStr = _type + "";
             //onFlagDetectLine = true;
             if (_type == TypeZone.READY)
@@ -619,6 +619,7 @@ namespace SeldatMRMS.Management
                     SetSafeSmallcircle(false);
                     SetSafeOrgancircle(true);
                     SetSafeBluecircle(true);
+                    SetSafeYellowcircle(false);
                     if (CheckBlueCircle())
                         break;
                     if (CheckYellowCircle())

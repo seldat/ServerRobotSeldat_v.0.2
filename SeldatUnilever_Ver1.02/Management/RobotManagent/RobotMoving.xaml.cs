@@ -71,15 +71,15 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
             SetLine();
             if (ck_robot1.IsChecked == true)
             {
-               this.robotList.ElementAt(0).Value.properties.pose.AngleW= sld_theta.Value;
+               this.robotList.ElementAt(0).Value.properties.pose.Angle= -sld_theta.Value;
             }
             if (ck_robot2.IsChecked == true)
             {
-                this.robotList.ElementAt(1).Value.properties.pose.AngleW = sld_theta.Value ;
+                this.robotList.ElementAt(1).Value.properties.pose.Angle = -sld_theta.Value ;
             }
             if (ck_robot3.IsChecked == true)
             {
-                this.robotList.ElementAt(2).Value.properties.pose.AngleW = sld_theta.Value;
+                this.robotList.ElementAt(2).Value.properties.pose.Angle = -sld_theta.Value;
             }
         }
         public void SetLine()

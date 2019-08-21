@@ -408,7 +408,7 @@ namespace SeldatMRMS
                         else
                         {
                            FreePlanedBuffer(order.palletId_P);
-                           UpdatePalletState(PalletStatus.W, order.palletId_H, order.planId);
+                           UpdatePalletState(PalletStatus.W, flToMachineInfo.palletId, flToMachineInfo.planId);
                            StateForkLift = ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE_FROM_VIM_REG;
                         }
                         break;

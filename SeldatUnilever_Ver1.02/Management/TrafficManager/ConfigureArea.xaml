@@ -31,6 +31,8 @@
                                         Binding="{Binding Path=NameId, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="Type" 
                                         Binding="{Binding Path=Type, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="TrafficSet" 
+                                        Binding="{Binding Path=TrafficSet, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="Index" 
                                         Binding="{Binding Path=Index, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="Point1" 
