@@ -186,6 +186,12 @@ namespace SeldatMRMS.Management.RobotManagent
 
         }
 
+        public enum TrafficMode
+        {
+            AUTO_MODE = 0,
+            MANUAL_MODE
+        }
+
         public virtual void updateparams() { }
         public virtual void OnOccurencyTrigger() { }
         public virtual void OnBatteryLowTrigger() { }
@@ -241,7 +247,14 @@ namespace SeldatMRMS.Management.RobotManagent
         private bool waitRes = false;
         private ResponseCtrl rbResCtrl = new ResponseCtrl();
         public PropertiesRobotUnity properties = new PropertiesRobotUnity();
+        private TrafficMode trafficMod = TrafficMode.AUTO_MODE;
         protected virtual void SupervisorTraffic() { }
+
+        protected void setTrafficMode(TrafficMode mode)
+        {
+            this.trafficMod = mode;
+        }
+
         public RobotUnityControl()
         {
             timerCheckKeepAlive = new Timer();
@@ -720,120 +733,150 @@ namespace SeldatMRMS.Management.RobotManagent
 
         public bool SetSpeedCtrl(RobotSpeedLevel robotspeed, bool highpriority)
         {
+            if (this.trafficMod == TrafficMode.AUTO_MODE)
+            {
 
-            flagSetCtrlSpeed = highpriority;
-            if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity || flagSetCtrlSpeed)
-            {
-                try
+
+                flagSetCtrlSpeed = highpriority;
+                if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity || flagSetCtrlSpeed)
                 {
-                    properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
-                    StandardInt32 msg = new StandardInt32();
-                    msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                    this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
-                    delay(700);
-                    return true;
+                    try
+                    {
+                        properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
+                        StandardInt32 msg = new StandardInt32();
+                        msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                        this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                        delay(700);
+                        return true;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Robot Control Error  SetSpeed");
+                        return false;
+                    }
                 }
-                catch
+                else
                 {
-                    Console.WriteLine("Robot Control Error  SetSpeed");
-                    return false;
+                    try
+                    {
+                        properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
+                        StandardInt32 msg = new StandardInt32();
+                        msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                        this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                        delay(700);
+                        return true;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Robot Control Error  SetSpeed");
+                        return false;
+                    }
                 }
             }
-            else
-            {
-                try
-                {
-                    properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
-                    StandardInt32 msg = new StandardInt32();
-                    msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
-                    this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
-                    delay(700);
-                    return true;
-                }
-                catch
-                {
-                    Console.WriteLine("Robot Control Error  SetSpeed");
-                    return false;
-                }
-            }
+            return true;
         }
 
         public bool SetSpeedHighPrioprity(RobotSpeedLevel robotspeed, bool highpriority)
         {
-
-            flagSetSpeedHighPrioprity = highpriority;
-            if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity)
+            if (this.trafficMod == TrafficMode.AUTO_MODE)
             {
-                try
+                flagSetSpeedHighPrioprity = highpriority;
+                if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity)
                 {
-                    properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
-                    StandardInt32 msg = new StandardInt32();
-                    msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                    this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
-                    delay(700);
-                    return true;
+                    try
+                    {
+                        properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
+                        StandardInt32 msg = new StandardInt32();
+                        msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                        this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                        delay(700);
+                        return true;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Robot Control Error  SetSpeed");
+                        return false;
+                    }
                 }
-                catch
+                else
                 {
-                    Console.WriteLine("Robot Control Error  SetSpeed");
-                    return false;
+                    try
+                    {
+                        properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
+                        StandardInt32 msg = new StandardInt32();
+                        msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                        this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                        delay(700);
+                        return true;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Robot Control Error  SetSpeed");
+                        return false;
+                    }
                 }
             }
-            else
-            {
-                try
-                {
-                    properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
-                    StandardInt32 msg = new StandardInt32();
-                    msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
-                    this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
-                    delay(700);
-                    return true;
-                }
-                catch
-                {
-                    Console.WriteLine("Robot Control Error  SetSpeed");
-                    return false;
-                }
-            }
+            return true;
         }
 
         public bool SetSpeedTraffic(RobotSpeedLevel robotspeed, bool highpriority)
         {
-            flagSpeedTraffic = highpriority;
-            if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity)
+            if (this.trafficMod == TrafficMode.AUTO_MODE)
             {
-                try
+                flagSpeedTraffic = highpriority;
+                if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity)
                 {
-                    properties.speedInSpecicalArea = robotspeed + "_TRAFFIC";
-                    StandardInt32 msg = new StandardInt32();
-                    msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                    this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
-                    delay(700);
-                    return true;
+                    try
+                    {
+                        properties.speedInSpecicalArea = robotspeed + "_TRAFFIC";
+                        StandardInt32 msg = new StandardInt32();
+                        msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                        this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                        delay(700);
+                        return true;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Robot Control Error  SetSpeed");
+                        return false;
+                    }
                 }
-                catch
+                else
                 {
-                    Console.WriteLine("Robot Control Error  SetSpeed");
-                    return false;
+                    try
+                    {
+                        properties.speedInSpecicalArea = robotspeed + "_TRAFFIC";
+                        StandardInt32 msg = new StandardInt32();
+                        msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                        this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                        delay(700);
+                        return true;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Robot Control Error  SetSpeed");
+                        return false;
+                    }
                 }
             }
-            else
+            return true;
+        }
+
+        public bool SetSpeedTrafficManual(RobotSpeedLevel robotspeed)
+        {
+            this.trafficMod = TrafficMode.MANUAL_MODE;
+            try
             {
-                try
-                {
-                    properties.speedInSpecicalArea = robotspeed + "_TRAFFIC";
-                    StandardInt32 msg = new StandardInt32();
-                    msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
-                    this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
-                    delay(700);
-                    return true;
-                }
-                catch
-                {
-                    Console.WriteLine("Robot Control Error  SetSpeed");
-                    return false;
-                }
+                properties.speedInSpecicalArea = robotspeed + "_TRAFFIC_MANUAL";
+                StandardInt32 msg = new StandardInt32();
+                msg.data = Convert.ToInt32(robotspeed);
+                this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                return true;
+            }
+            catch
+            {
+                Console.WriteLine("Robot Control Error  SetSpeed");
+                return false;
             }
         }
         public void delay(int ms)

@@ -94,6 +94,7 @@ namespace SeldatMRMS.Management.RobotManagent
         MenuItem problemSolutionItem = new MenuItem();
         MenuItem startItem = new MenuItem();
         MenuItem pauseItem = new MenuItem();
+        MenuItem resumeItem = new MenuItem();
         MenuItem liftUp = new MenuItem();
         MenuItem liftDown = new MenuItem();
         MenuItem connectItem = new MenuItem();
@@ -131,6 +132,10 @@ namespace SeldatMRMS.Management.RobotManagent
             pauseItem.Header = "Pause";
             pauseItem.Click += PauseMenu;
             pauseItem.IsEnabled = true;
+
+            resumeItem.Header = "Resume";
+            resumeItem.Click += ResumeMenu;
+            resumeItem.IsEnabled = true;
 
             liftUp.Header = "Lift Up";
             liftUp.Click += LiftUpMenu;
@@ -177,6 +182,7 @@ namespace SeldatMRMS.Management.RobotManagent
             border.ContextMenu.Items.Add(problemSolutionItem);
             border.ContextMenu.Items.Add(startItem);
             border.ContextMenu.Items.Add(pauseItem);
+            border.ContextMenu.Items.Add(resumeItem);
 
             border.ContextMenu.Items.Add(liftUp);
             border.ContextMenu.Items.Add(liftDown);
@@ -459,7 +465,13 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         private void PauseMenu(object sender, RoutedEventArgs e)
         {
-            SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+            SetSpeedTrafficManual(RobotSpeedLevel.ROBOT_SPEED_STOP);
+        }
+
+        private void ResumeMenu(object sender, RoutedEventArgs e)
+        {
+            this.setTrafficMode(TrafficMode.AUTO_MODE);
+            SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
         }
         private void AddReadyListMenu(object sender, RoutedEventArgs e)
         {
@@ -613,6 +625,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         private void StartMenu(object sender, RoutedEventArgs e)
         {
+            this.setTrafficMode(TrafficMode.AUTO_MODE);
             SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
         }
 
