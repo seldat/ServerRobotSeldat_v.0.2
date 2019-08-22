@@ -566,7 +566,7 @@ namespace DoorControllerService
 
         private bool GetStatus(ref DataReceive data, DoorType id)
         {
-            //Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "GetStatus Door");
+            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "GetStatus Door");
             bool ret = false;
             byte[] dataSend = new byte[7];
 
@@ -583,6 +583,7 @@ namespace DoorControllerService
 
         private bool OpenPress(DoorType id)
         {
+            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "OpenPress Door");
             bool ret = false;
             byte[] dataSend = new byte[7];
 
@@ -599,6 +600,7 @@ namespace DoorControllerService
 
         private bool OpenRelease(DoorType id)
         {
+            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "OpenRelease Door");
             bool ret = false;
             byte[] dataSend = new byte[7];
 
@@ -616,6 +618,7 @@ namespace DoorControllerService
 
         private bool ClosePress(DoorType id)
         {
+            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "ClosePress Door");
             bool ret = false;
             byte[] dataSend = new byte[7];
 
@@ -632,6 +635,7 @@ namespace DoorControllerService
 
         private bool CloseRelease(DoorType id)
         {
+            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "CloseRelease Door");
             bool ret = false;
             byte[] dataSend = new byte[7];
 
@@ -647,6 +651,7 @@ namespace DoorControllerService
         }
         private bool LampOn(DoorType id)
         {
+            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "LampOn Door");
             bool ret = false;
             byte[] dataSend = new byte[7];
 
@@ -663,6 +668,7 @@ namespace DoorControllerService
 
         private bool LampOff(DoorType id)
         {
+            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "LampOff Door");
             bool ret = false;
             byte[] dataSend = new byte[7];
 
