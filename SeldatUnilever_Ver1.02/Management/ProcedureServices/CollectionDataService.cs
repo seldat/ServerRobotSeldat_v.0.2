@@ -977,7 +977,8 @@ namespace SelDatUnilever_Ver1
                                 //var bufferResults = result["buffers"][0];
                                 foreach (var buffer in result["buffers"])
                                 {
-
+                                    int palletBay = (int)buffer["bay"];
+                                    int palletRow = (int)buffer["row"];
                                     if (buffer["pallets"].Count() > 0)
                                     {
                                         foreach (var palletInfo in buffer["pallets"])
@@ -992,6 +993,10 @@ namespace SelDatUnilever_Ver1
                                                 double angle = (double)stuff["line"]["angle"];
                                                 poseTemp = new Pose(x, y, angle);
                                                 goalFrontLinePos = poseTemp;
+                                                // lưu order giá trị bay và row
+                                                order.palletBay = palletBay;
+                                                order.palletRow = palletRow;
+
                                                 break;
                                             }
 
@@ -1014,6 +1019,8 @@ namespace SelDatUnilever_Ver1
                         //var bufferResults = result["buffers"][0];
                         foreach (var buffer in result["buffers"])
                         {
+                            int palletBay = (int)buffer["bay"];
+                            int palletRow = (int)buffer["row"];
                             String bufferDataStr = (String)buffer["bufferData"];
                             JObject stuffBData = JObject.Parse(bufferDataStr);
                             bool canOpEdit = (bool)stuffBData["canOpEdit"];
@@ -1033,6 +1040,9 @@ namespace SelDatUnilever_Ver1
                                         double angle = (double)stuff["line"]["angle"];
                                         poseTemp = new Pose(x, y, angle);
                                         goalFrontLinePos = poseTemp;
+                                        // lưu order giá trị bay và row
+                                        order.palletBay = palletBay;
+                                        order.palletRow = palletRow;
                                         break;
                                     }
 

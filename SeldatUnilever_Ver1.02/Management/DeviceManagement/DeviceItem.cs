@@ -110,6 +110,9 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public String productDetailName { get; set; }
             public int productId { get; set; }
             public int gate { get; set; }
+
+            public int palletBay { get; set; }
+            public int palletRow { get; set; }
             public int palletId_H { get; set; }
             public int palletId_P { get; set; }
             public int palletId_F { get; set; }
