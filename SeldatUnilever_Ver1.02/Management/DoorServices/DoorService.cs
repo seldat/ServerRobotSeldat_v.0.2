@@ -193,6 +193,63 @@ namespace DoorControllerService
             AddRqToList(dt, DoorCmdRq.DOOR_CLOSE);
         }
 
+        public void removeListCtrlDoorFront()
+        {
+            if (listCmdRqCtrl.Count > 0)
+            {
+                try
+                {
+                    foreach (var item in listCmdRqCtrl)
+                    {
+                        if ((item.dType == DoorType.DOOR_FRONT) && ((item.cmdRq == DoorCmdRq.DOOR_OPEN) || (item.cmdRq == DoorCmdRq.DOOR_CLOSE)))
+                        {
+                            listCmdRqCtrl.Remove(item);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+        }
+
+        public void removeListCtrlDoorBack()
+        {
+            if (listCmdRqCtrl.Count > 0)
+            {
+                try
+                {
+                    foreach (var item in listCmdRqCtrl)
+                    {
+                        if ((item.dType == DoorType.DOOR_BACK) && ((item.cmdRq == DoorCmdRq.DOOR_OPEN) || (item.cmdRq == DoorCmdRq.DOOR_CLOSE)))
+                        {
+                            listCmdRqCtrl.Remove(item);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+        }
+
+        public void removeItemListCtrlDoor(cmdRqDoor item)
+        {
+            if (listCmdRqCtrl.Count > 0)
+            {
+                try
+                {
+                    listCmdRqCtrl.Remove(item);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+        }
+
         public RetState checkOpen(DoorType type)
         {
             switch (type)
@@ -278,7 +335,7 @@ namespace DoorControllerService
                         Console.WriteLine("Remove not command");
                         if (this.rb != null)
                             this.rb.ShowText("Doorctrl Remove not command");
-                        listCmdRqCtrl.Remove(resCmd);
+                        removeItemListCtrlDoor(resCmd);
                         Thread.Sleep(100);
                         continue;
                     }
@@ -318,7 +375,7 @@ namespace DoorControllerService
                                         {
                                             if (this.rb != null)
                                                 this.rb.ShowText("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + DoorType.DOOR_FRONT + "is open");
-                                            listCmdRqCtrl.Remove(resCmd);
+                                            removeItemListCtrlDoor(resCmd);
                                             doorBackStatus = DoorStatus.DOOR_ERROR;
                                             kProcess = false;
                                             break;
@@ -412,7 +469,7 @@ namespace DoorControllerService
                             case StateCtrl.DOOR_ST_OPEN_SUCCESS:
                                 if (this.rb != null)
                                     this.rb.ShowText("StateCtrl.DOOR_ST_OPEN_SUCCESS" + resCmd.dType + ':' + "Remove list");
-                                listCmdRqCtrl.Remove(resCmd);
+                                removeItemListCtrlDoor(resCmd);
                                 kProcess = false;
                                 break;
                             case StateCtrl.DOOR_ST_CLOSE:
@@ -505,7 +562,7 @@ namespace DoorControllerService
                             case StateCtrl.DOOR_ST_CLOSE_SUCCESS:
                                 if (this.rb != null)
                                     this.rb.ShowText("StateCtrl.DOOR_ST_CLOSE_SUCCESS" + resCmd.dType + ':' + "Remove list");
-                                listCmdRqCtrl.Remove(resCmd);
+                                removeItemListCtrlDoor(resCmd);
                                 kProcess = false;
                                 break;
                             case StateCtrl.LAMP_DOOR_ON:
@@ -513,7 +570,7 @@ namespace DoorControllerService
                                 {
                                     if (true == this.LampOn(resCmd.dType))
                                     {
-                                        listCmdRqCtrl.Remove(resCmd);
+                                        removeItemListCtrlDoor(resCmd);
                                         kProcess = false;
                                         if (this.rb != null)
                                             this.rb.ShowText("StateCtrl.LAMP_DOOR_ON" + resCmd.dType + ':' + "Lamp on success");
@@ -536,7 +593,7 @@ namespace DoorControllerService
                                 {
                                     if (true == this.LampOff(resCmd.dType))
                                     {
-                                        listCmdRqCtrl.Remove(resCmd);
+                                        removeItemListCtrlDoor(resCmd);
                                         kProcess = false;
                                         if (this.rb != null)
                                             this.rb.ShowText("StateCtrl.LAMP_DOOR_OFF" + resCmd.dType + ':' + "Lamp off success");

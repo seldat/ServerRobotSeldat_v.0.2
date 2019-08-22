@@ -62,9 +62,10 @@ namespace SeldatMRMS
         }
         public void Destroy()
         {
-            // StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
             if (ds != null) {
+                ds.LampSetStateOff(DoorType.DOOR_BACK);
                 ds.setDoorBusy(false);
+                ds.removeListCtrlDoorBack();
             }
             ProRunStopW = false;
             robot.robotTag = RobotStatus.IDLE;
@@ -343,6 +344,7 @@ namespace SeldatMRMS
                         break;
 
                     case ReturnToGate.RETGATE_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        ds.removeListCtrlDoorBack();
                         robot.robotTag = RobotStatus.IDLE;
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_RETURN_TO_GATE;
                         // if (errorCode == ErrorCode.RUN_OK) {

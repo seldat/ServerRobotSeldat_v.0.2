@@ -56,10 +56,11 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         public void Destroy()
         {
-            // StateMachineToGate = MachineToGate.MACGATE_ROBOT_RELEASED;
             if (ds != null)
             {
+                ds.LampSetStateOff(DoorType.DOOR_BACK);
                 ds.setDoorBusy(false);
+                ds.removeListCtrlDoorBack();
             }
             ProRunStopW = false;
             robot.orderItem = null;
@@ -328,6 +329,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case MachineToGate.MACGATE_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
                         robot.robotTag = RobotStatus.IDLE;
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_MACHINE_TO_GATE;
+                        ds.removeListCtrlDoorBack();
                         // if (errorCode == ErrorCode.RUN_OK) {
                         ReleaseProcedureHandler(this);
                         // } else {

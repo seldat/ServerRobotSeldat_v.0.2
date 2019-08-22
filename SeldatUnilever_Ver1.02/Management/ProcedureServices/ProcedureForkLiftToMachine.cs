@@ -67,7 +67,9 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             // Global_Object.onFlagDoorBusy = false;
             robot.robotBahaviorAtGate = RobotBahaviorAtReadyGate.IDLE;
             if (ds != null) {
+                ds.LampSetStateOff(DoorType.DOOR_FRONT);
                 ds.setDoorBusy(false);
+                ds.removeListCtrlDoorBack();
             }
             Global_Object.setGateStatus(order.gate, false);
             ProRunStopW = false;
@@ -374,6 +376,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     //    }
                     //    break;
                     case ForkLiftToMachine.FORMACH_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        ds.removeListCtrlDoorBack();
                         robot.orderItem = null;
                         //Global_Object.onFlagDoorBusy = false;
                         robot.SwitchToDetectLine(false);

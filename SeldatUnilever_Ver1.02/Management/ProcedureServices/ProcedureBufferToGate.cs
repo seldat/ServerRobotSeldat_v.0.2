@@ -66,7 +66,9 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             robot.bayId = -1;
             robot.bayIdReg = false;
             if (ds != null) {
+                ds.LampSetStateOff(DoorType.DOOR_BACK);
                 ds.setDoorBusy(false);
+                ds.removeListCtrlDoorBack();
             }
         }
         public void Procedure(object ojb)
@@ -459,6 +461,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         break;
 
                     case BufferToGate.BUFGATE_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        ds.removeListCtrlDoorBack();
                         robot.bayId = -1;
                         robot.bayIdReg = false;
                         TrafficRountineConstants.ReleaseAll(robot);
@@ -473,6 +476,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         KillEvent();
                         break;
                     case BufferToGate.BUFGATE_ROBOT_DESTROY:
+                        ds.removeListCtrlDoorBack();
                         ProRunStopW = false;
                         ProRunStopW = false;
                         robot.robotTag = RobotStatus.IDLE;

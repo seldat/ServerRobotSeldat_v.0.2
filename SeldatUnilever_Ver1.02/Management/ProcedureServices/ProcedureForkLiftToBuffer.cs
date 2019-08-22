@@ -81,7 +81,9 @@ namespace SeldatMRMS
         {
             Global_Object.setGateStatus(order.gate, false);
             if (ds != null) {
+                ds.LampSetStateOff(DoorType.DOOR_FRONT);
                 ds.setDoorBusy(false);
+                ds.removeListCtrlDoorBack();
             }
 
             ProRunStopW = false;
@@ -628,6 +630,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORMAC_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        ds.removeListCtrlDoorBack();
                         TrafficRountineConstants.ReleaseAll(robot);
                         robot.orderItem = null;
                        // Global_Object.onFlagDoorBusy = false;
@@ -650,6 +653,7 @@ namespace SeldatMRMS
                         KillEvent();
                         break;
                     case ForkLift.FORMAC_ROBOT_DESTROY: // trả robot về robotmanagement để nhận quy trình mới
+                        ds.removeListCtrlDoorBack();
                         TrafficRountineConstants.ReleaseAll(robot);
                         robot.SwitchToDetectLine(false);
                         robot.ReleaseWorkingZone();
