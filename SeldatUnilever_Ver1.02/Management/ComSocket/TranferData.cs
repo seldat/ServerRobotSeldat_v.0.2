@@ -6,7 +6,6 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
 {
     public class TranferData : RouterComPort
     {
-        private const UInt32 RESENT_MAX_TIME = 100;
         private UInt32 numResent = 0;
         private const byte ACK = 0;
         private const byte NACK = 1;
@@ -49,33 +48,31 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
         protected bool Tranfer(byte[] dataSend, ref DataReceive dataRec)
         {
             bool flagGetRespone = true;
-            bool result = true;
+            bool result = false;
 
             //this.StartClient(); // open socket
             numResent = 0;
             //Console.WriteLine("len send {0}", dataSend.Length);
             while (true == flagGetRespone)
             {
-                if (numResent < RESENT_MAX_TIME)
-                {
-                    this.Close();
-                    this.StartClient(); // open socket
+                numResent++;
+                Console.WriteLine("try sent socket ------------------ {0} ----------------", numResent);
+                this.Close();
+                if (this.StartClient())// open socket
+                { 
                     if (false == SendCMD(dataSend))
                     {
                         this.Close();
-                        return false;
+                        Thread.Sleep(50);
+                        continue;
                     }
-                    numResent++;
-                 //   Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt")+"Try resent {0}", numResent);
                 }
                 else
                 {
-                    Console.WriteLine("Send data fail");
-                    numResent = 0;
-                    result = false;
-                    flagGetRespone = false;
+                    Thread.Sleep(50);
+                    continue;
                 }
-                //Console.WriteLine("Waitting response");
+
                 if (this.WaitForReadyRead(TIME_OUT_WAIT_RESPONSE))
                 {
                     try
@@ -110,7 +107,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                                         }
                                         result = true;
                                         flagGetRespone = false;
-                                       // Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt")+"Send data success");
+                                        // Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt")+"Send data success");
                                         numResent = 0;
                                         this.Close();
                                         return true;
@@ -119,27 +116,32 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                             }
                         }
                     }
-                    catch (System.Exception)
+                    catch (System.Exception e)
                     {
+                        Console.WriteLine(e.ToString());
                         this.Close();
-                        Thread.Sleep(1000);
+                        result = false;
+                        flagGetRespone = false;
                     }
                 }
-                else {
+                else
+                {
                     this.Close();
-                    Thread.Sleep(1000);
+                    result = false;
+                    flagGetRespone = false;
                 }
             }
             this.Close();
             return result;
         }
-        protected bool Tranfer(byte[] dataSend) {
+        protected bool Tranfer(byte[] dataSend)
+        {
             DataReceive data = new DataReceive();
 
             bool onTranfer = false;
             try
             {
-                onTranfer= Tranfer(dataSend, ref data);
+                onTranfer = Tranfer(dataSend, ref data);
             }
             catch
             {

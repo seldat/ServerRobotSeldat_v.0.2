@@ -16,8 +16,8 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         private ManualResetEvent sendDone = new ManualResetEvent(false);
         private ManualResetEvent receiveDone = new ManualResetEvent(false);
-        protected const UInt32 TIME_OUT_WAIT_RESPONSE = 10000;
-        protected const UInt32 TIME_OUT_WAIT_CONNECT = 60000*10;
+        protected const UInt32 TIME_OUT_WAIT_RESPONSE = 20000;
+        protected const UInt32 TIME_OUT_WAIT_CONNECT = 10000;
 
         // The response from the remote device.  
         private String response = String.Empty;
@@ -209,13 +209,14 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
         }
         protected bool Send(Socket client, byte[] byteData)
         {
-            bool ret = true;
+            bool ret = false;
             // Begin sending the data to the remote device.  
             if (client != null)
             {
                 try
                 {
                     client.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallback), client);
+                    ret = true;
                 }
                 catch (Exception e)
                 {
@@ -250,10 +251,9 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                 Console.WriteLine(e.ToString());
             }
         }
-        protected void StartClient(/*String ip, Int32 port*/)
+        protected bool StartClient()
         {
-            //this.Ip = ip;
-            //this.Port = port;
+            bool ret = false;
             // Connect to a remote device.  
             flagConnected = false;
             try
@@ -265,32 +265,19 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                 client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 // Connect to the remote endpoint.  
                 client.BeginConnect(remoteEP, new AsyncCallback(ConnectCallback), client);
-                //connectDone.WaitOne();
 
-                if (false == this.WaitConnected(TIME_OUT_WAIT_CONNECT))
+                ret = this.WaitConnected(TIME_OUT_WAIT_CONNECT);
+
+                if (ret == false)
                 {
-                    Console.WriteLine("Connnect fail______<->________");
+                    Console.WriteLine("Connnect fail______---------------------------(-_-)---------------------------_______");
                 }
-                // Send test data to the remote device.  
-                // Send(client, "This is a LLLLLlll test<EOF>");
-                //  sendDone.WaitOne();
-
-                // Receive the response from the remote device.  
-                //  Receive(client);
-                //  receiveDone.WaitOne();
-
-                // Write the response to the console.  
-                // Console.WriteLine("Response received : {0}", response);
-
-                // Release the socket.  
-                // client.Shutdown(SocketShutdown.Both);
-                // client.Close();
-
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
+            return ret;
         }
         protected bool SendCMD(byte[] bData)
         {
