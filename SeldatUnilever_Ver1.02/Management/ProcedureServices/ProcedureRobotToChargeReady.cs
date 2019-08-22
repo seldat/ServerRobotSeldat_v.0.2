@@ -636,7 +636,7 @@ namespace SeldatMRMS
                         UpdateInformationInProc(this, ProcessStatus.S);
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-                        SaveOrderItem(order);
+
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_WAIT_TASK;
                         ReleaseProcedureHandler(this);
                         KillEvent();
