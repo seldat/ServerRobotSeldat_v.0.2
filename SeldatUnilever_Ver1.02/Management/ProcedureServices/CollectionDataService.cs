@@ -983,7 +983,8 @@ namespace SelDatUnilever_Ver1
                                         foreach (var palletInfo in buffer["pallets"])
                                         {
                                             int palletId = (int)palletInfo["palletId"];
-                                            if (palletId == order.palletId_P)
+                                            int bay = (int)palletInfo["bay"];
+                                            if (bay == order.palletBay)
                                             {
                                                 JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
                                                 bayId = (int)stuff["bayId"];
@@ -1268,7 +1269,8 @@ namespace SelDatUnilever_Ver1
 
 
                                                 //Compare if pallet H is in this bay
-                                                if (palletId == order.palletId_P)
+                                                //if (palletId == order.palletId_P)
+                                                if (bayToGo == order.palletBay)
                                                 {
                                                     gotLastPalletInBay = true;
                                                     break;
@@ -1363,7 +1365,8 @@ namespace SelDatUnilever_Ver1
 
 
                                             //Compare if pallet H is in this bay
-                                            if (palletId == order.palletId_H)
+                                            //if (palletId == order.palletId_H)
+                                            if (bayToGo == order.palletBay)
                                             {
                                                 gotFirstPalletInBay = true;
                                                 break;

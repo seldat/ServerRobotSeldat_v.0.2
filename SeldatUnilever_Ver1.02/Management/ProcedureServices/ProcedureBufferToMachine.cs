@@ -133,7 +133,32 @@ namespace SeldatMRMS
             //  ProRun = false;
             rb.mcuCtrl.lampRbOn();
             frontLinePose = BfToMa.GetFrontLineBuffer();
-            order.frontLinePos = frontLinePose.Position;
+            if (frontLinePose == null)
+            {
+
+                TrafficRountineConstants.ReleaseAll(robot);
+                robot.bayId = -1;
+                robot.bayIdReg = false;
+                robot.orderItem = null;
+                robot.SwitchToDetectLine(false);
+                if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
+                {
+                    robot.robotTag = RobotStatus.IDLE;
+                    rb.PreProcedureAs = ProcedureControlAssign.PRO_READY;
+                }
+                else
+                    rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
+                ReleaseProcedureHandler(this);
+                ProRun = false;
+                UpdateInformationInProc(this, ProcessStatus.S);
+                order.status = StatusOrderResponseCode.FINISHED;
+                order.endTimeProcedure = DateTime.Now;
+                order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
+                SaveOrderItem(order);
+                KillEvent();
+            }
+            else
+                order.frontLinePos = frontLinePose.Position;
             while (ProRun)
             {
                 switch (StateBufferToMachine)

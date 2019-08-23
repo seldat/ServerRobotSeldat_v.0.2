@@ -399,12 +399,7 @@ namespace SeldatUnilever_Ver1._02
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (unityService == null)
-            {
-                Environment.Exit(0);
-                return;
-            }
-
+         
             if(unityService.robotManagementService.CheckAnyRobotWorking())
             {
                 String wstr = "Cảnh Báo!";
@@ -413,6 +408,12 @@ namespace SeldatUnilever_Ver1._02
                 var result = MessageBox.Show(txtstr, wstr, msgb);
                 if (result == MessageBoxResult.Yes)
                 {
+                    if (unityService == null)
+                    {
+                        Environment.Exit(0);
+                        return;
+                    }
+
                     /*Global_Object.onFlagDoorBusy = false;
                     Global_Object.onFlagRobotComingGateBusy = false;
                     Global_Object.setGateStatus((int)DoorId.DOOR_MEZZAMINE_UP_NEW, false); // gate 1

@@ -72,9 +72,10 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     {
                         if (robotManageService.RobotUnityWaitTaskList.Count > 0)
                         {
-                            //cntWaitTask = 0;
+                            //
                             AssignWaitTask(order);
                         }
+                        cntWaitTask = 0;
                     }
                     MoveElementToEnd();
                 }

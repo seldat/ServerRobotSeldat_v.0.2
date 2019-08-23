@@ -20,6 +20,12 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
 {
    public class TaskRounterService
     {
+        public class PalletINF
+        {
+            public int row;
+            public int bay;
+            public int palletId;
+        }
         public enum ProcessAssignAnTaskWait
         {
             PROC_ANY_IDLE = 0,
@@ -101,9 +107,10 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         {
                             case TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE:
                             {
-                                    palletId = GetPalletId(item.dataRequest);
-                                    if (palletId > 0)
+                                   PalletINF palletIFBM = GetPalletId(item.dataRequest);
+                                    if (palletIFBM!=null)
                                     {
+                                        palletId = palletIFBM.palletId;
                                         dynamic product = new JObject();
                                         UpdatePalletStateToHold(palletId, item);
                                         product.timeWorkId = item.timeWorkId;
@@ -114,6 +121,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                         product.palletStatus = PalletStatus.H.ToString(); // W
                                         item.dataRequest = product.ToString();
                                         item.palletId_H = palletId;
+                                        item.palletBay = palletIFBM.bay;
+                                        item.palletRow = palletIFBM.row;
                                         return item;
                                     }
                                     else
@@ -125,9 +134,10 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             }
                             case TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401:
                                 {
-                                    palletId = GetPalletId(item.dataRequest);
-                                    if (palletId > 0)
+                                    PalletINF palletIFBRB401 = GetPalletId(item.dataRequest);
+                                    if (palletIFBRB401!=null)
                                     {
+                                        palletId = palletIFBRB401.palletId;
                                         dynamic productBR = new JObject();
                                         UpdatePalletStateToHold(palletId, item);
                                         productBR.timeWorkId = item.timeWorkId;
@@ -137,8 +147,11 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                         productBR.palletStatus = PalletStatus.H.ToString(); // đã giữ pallet lấy H
                                         item.dataRequest_BufferReturn = productBR.ToString();
                                         item.palletId_H = palletId;
+                                        item.palletBay = palletIFBRB401.bay;
+                                        item.palletRow = palletIFBRB401.row;
+
                                         dynamic productB401 = new JObject();
-                                        UpdatePalletStateToHold(palletId, item);
+                                        //UpdatePalletStateToHold(palletId, item);
                                         productB401.timeWorkId = item.timeWorkId;
                                         productB401.activeDate = item.activeDate;
                                         productB401.productId = item.productId;
@@ -179,17 +192,22 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                     }
                                 }
                               case TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN:
-                                palletId = GetPalletId(item.dataRequest);
-                                if (palletId > 0)
                                 {
-                                    item.palletId_P = palletId;
-                                    UpdatePalletStateToPlan(palletId, item);
-                                }
-                                else
-                                {
-                                    item.status = StatusOrderResponseCode.ERROR_GET_PALLETID;
-                                    deviceItemsList[0].RemoveOrder(item);
-                                    return null;
+                                    PalletINF palletIFMBR = GetPalletId(item.dataRequest);
+                                    if (palletIFMBR !=null)
+                                    {
+                                        palletId = palletIFMBR.palletId;
+                                        item.palletBay = palletIFMBR.bay;
+                                        item.palletRow = palletIFMBR.row;
+                                        item.palletId_P = palletId;
+                                        UpdatePalletStateToPlan(palletId, item);
+                                    }
+                                    else
+                                    {
+                                        item.status = StatusOrderResponseCode.ERROR_GET_PALLETID;
+                                        deviceItemsList[0].RemoveOrder(item);
+                                        return null;
+                                    }
                                 }
 
                                 break;
@@ -208,6 +226,14 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                     item.status = StatusOrderResponseCode.ERROR_GET_PALLETID;
                                     deviceItemsList[0].RemoveOrder(item);
                                     return null;
+                                }
+                                break;
+                            case TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER:
+                                PalletINF palletINF = GetRowBayPalletPlaned(item.dataRequest,item.palletId_P);
+                                if(palletINF!=null)
+                                {
+                                    item.palletBay = palletINF.bay;
+                                    item.palletRow = palletINF.row;
                                 }
                                 break;
                             default:
@@ -261,9 +287,59 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             Console.WriteLine(collectionData);
         }
 
-
-        public int GetPalletId(String dataReq)
+        public PalletINF GetRowBayPalletPlaned(String dataRequest,int palletId_P)
         {
+            PalletINF palletINF = new PalletINF();
+            try
+            {
+                String collectionData = RequestDataProcedure(dataRequest, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    foreach (var result in results)
+                        {
+                            int temp_planId = (int)result["planId"];
+                            {
+                                foreach (var buffer in result["buffers"])
+                                {
+                                   
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        foreach (var palletInfo in buffer["pallets"])
+                                        {
+                                        int bay = (int)palletInfo["bay"];
+                                        int row = (int)palletInfo["row"];
+                                        int palletId = (int)palletInfo["palletId"];
+                                            if (palletId == palletId_P)
+                                            {
+                                                palletINF.palletId = palletId;
+                                                palletINF.bay = bay;
+                                                palletINF.row = row;
+                                                return palletINF;
+                                            }
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
+                                break;
+
+                            }
+                        }
+                    }
+            }
+            catch
+            {
+                Console.WriteLine("Error Front Line");
+            }
+            return null;
+        }
+        public PalletINF GetPalletId(String dataReq)
+        {
+            PalletINF palletINF = new PalletINF();
             int palletId = -1;
             String collectionData = RequestDataProcedure(dataReq, Global_Object.url + "plan/getListPlanPallet");
             if (collectionData.Length > 0)
@@ -275,6 +351,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     {
                         foreach (var buffer in result["buffers"])
                         {
+                           
                             String bufferDataStr = (String)buffer["bufferData"];
                             JObject stuffBData = JObject.Parse(bufferDataStr);
                             bool canOpEdit = (bool)stuffBData["canOpEdit"];
@@ -282,17 +359,24 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 continue;
                             var bufferResults = buffer;
                             var palletInfo = bufferResults["pallets"][0];
-                            return palletId = (int)palletInfo["palletId"];
+                            int bay = (int)palletInfo["bay"];
+                            int row = (int)palletInfo["row"];
+                            palletId = (int)palletInfo["palletId"];
+                            palletINF.palletId = palletId;
+                            palletINF.bay =bay;
+                            palletINF.row = row;
+                            return palletINF;
                         }
                     }
                 }
                 catch { }
 
             }
-            return palletId;
+            return null;
         }
         public int GetPalletId_Return(String dataReq)
         {
+            PalletINF palletInF = new PalletINF();
             int palletId = -1;
             String collectionData = RequestDataProcedure(dataReq, Global_Object.url + "buffer/getListBufferReturn");
             if (collectionData.Length > 0)

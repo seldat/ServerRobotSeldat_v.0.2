@@ -105,26 +105,24 @@ namespace SeldatMRMS
             rb.mcuCtrl.lampRbOn();
             robot.ShowText(" Start -> " + procedureCode);
             endPointBuffer = FlToBuf.GetFrontLineBuffer(true);
-            order.frontLinePos = endPointBuffer.Position;
+      
             if(endPointBuffer==null)
             {
+
                 Console.WriteLine("Error Data Request"+order.dataRequest);
                 order.status = StatusOrderResponseCode.ERROR_GET_FRONTLINE;
                 TrafficRountineConstants.ReleaseAll(robot);
                 robot.orderItem = null;
-                // Global_Object.onFlagDoorBusy = false;
                 robot.SwitchToDetectLine(false);
-                // robot.robotTag = RobotStatus.IDLE;
                 robot.ReleaseWorkingZone();
-                if(Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
+                if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
+                {
+                    robot.robotTag = RobotStatus.IDLE;
                     rb.PreProcedureAs = ProcedureControlAssign.PRO_READY;
+                }
                 else
                     rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
-                // if (errorCode == ErrorCode.RUN_OK) {
                 ReleaseProcedureHandler(this);
-                // } else {
-                //     ErrorProcedureHandler (this);
-                // }
                 ProRun = false;
                 robot.ShowText("RELEASED");
                 UpdateInformationInProc(this, ProcessStatus.S);
@@ -133,6 +131,8 @@ namespace SeldatMRMS
                 SaveOrderItem(order);
                 KillEvent();
             }
+            else
+                order.frontLinePos = endPointBuffer.Position;
             while (ProRun)
             {
                // JPallet aa= GetInfoPallet_P_InBuffer(TrafficRobotUnity.PistonPalletCtrl.PISTON_PALLET_DOWN);
