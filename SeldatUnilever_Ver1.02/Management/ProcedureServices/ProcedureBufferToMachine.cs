@@ -422,12 +422,8 @@ namespace SeldatMRMS
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            if(jPResult.palletId==order.palletId_H)
-                            {
-                                BfToMa.UpdatePalletState(PalletStatus.F, order.palletId_H, order.planId);
-                            }
-                            else
-                                BfToMa.UpdatePalletState(PalletStatus.F, jPResult.palletId, order.planId);
+      
+                            BfToMa.UpdatePalletState(PalletStatus.F, jPResult.palletId, order.planId);
                             onUpdatedPalletState = true;
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER;
                             //robot.ShowText("BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER");

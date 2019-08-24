@@ -20,7 +20,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         TrafficManagementService traffic;
         DoorManagementService doorservice;
         RobotUnity robot;
-        protected double DISTANCE_CHECk_BAYID = 7; //meter 8
+        protected double DISTANCE_CHECk_BAYID = 10; //meter 8
         public TrafficProcedureService(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService trafficService) :base(robot)
         {
             this.traffic = trafficService;
@@ -103,7 +103,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     {
                         if (robot.bayId >= 0)
                         {
-                            if (Math.Abs(robot.bayId-bayId)<=3)
+                            if (Math.Abs(robot.bayId-bayId)<=2)
                             {
                                 if (!robot.bayIdReg)
                                     robotList.Add(robot);

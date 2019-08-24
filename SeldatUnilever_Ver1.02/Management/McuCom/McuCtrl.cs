@@ -63,6 +63,7 @@ namespace SeldatUnilever_Ver1._02.Management.McuCom {
                         {
                             Thread.Sleep(50);
                             this.TurnOnLampRb();
+                            Console.WriteLine(" Lamp MCU ON SUCCESS");
                             stateCtrlLampRb = stateCtrlLamp.LAMP_MCU_IDLE;
                         }
                         break;
@@ -71,6 +72,7 @@ namespace SeldatUnilever_Ver1._02.Management.McuCom {
                         {
                             Thread.Sleep(50);
                             this.TurnOffLampRb();
+                            Console.WriteLine(" Lamp MCU OFF SUCCESS");
                             stateCtrlLampRb = stateCtrlLamp.LAMP_MCU_IDLE;
                         }
                         break;

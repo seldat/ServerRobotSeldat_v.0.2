@@ -205,6 +205,10 @@ namespace DoorControllerService
                         {
                             listCmdRqCtrl.Remove(item);
                         }
+                        if ((item.dType == DoorType.DOOR_BACK) && ((item.cmdRq == DoorCmdRq.LAMP_ON) || (item.cmdRq == DoorCmdRq.LAMP_OFF)))
+                        {
+                            listCmdRqCtrl.Remove(item);
+                        }
                     }
                 }
                 catch (Exception e)
@@ -223,6 +227,10 @@ namespace DoorControllerService
                     foreach (var item in listCmdRqCtrl)
                     {
                         if ((item.dType == DoorType.DOOR_BACK) && ((item.cmdRq == DoorCmdRq.DOOR_OPEN) || (item.cmdRq == DoorCmdRq.DOOR_CLOSE)))
+                        {
+                            listCmdRqCtrl.Remove(item);
+                        }
+                        if ((item.dType == DoorType.DOOR_FRONT) && ((item.cmdRq == DoorCmdRq.LAMP_ON) || (item.cmdRq == DoorCmdRq.LAMP_OFF)))
                         {
                             listCmdRqCtrl.Remove(item);
                         }
@@ -623,7 +631,7 @@ namespace DoorControllerService
 
         private bool GetStatus(ref DataReceive data, DoorType id)
         {
-            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "GetStatus Door");
+            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "GetStatus Door :" + id);
             bool ret = false;
             byte[] dataSend = new byte[7];
 
@@ -635,6 +643,7 @@ namespace DoorControllerService
             dataSend[5] = (byte)id;
             dataSend[6] = CalChecksum(dataSend, 4);
             ret = this.Tranfer(dataSend, ref data);
+            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "Status door : " + id + ": " +(DoorStatus)data.data[0]);
             return ret;
         }
 
