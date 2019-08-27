@@ -128,7 +128,7 @@ namespace DoorControllerService
             public DoorCmdRq cmdRq;
             public long timePre;
         }
-        
+
         public DoorInfoConfig config;
         private Thread doorServiceThread;
         private StateCtrl stateCtrlDoor;
@@ -136,7 +136,7 @@ namespace DoorControllerService
         private DoorStatus doorBackStatus;
         private const UInt32 TIME_OUT_WAIT_DOOR = 9000;
         private const UInt32 TIME_OUT_PRESS_BUTTON = 1500;
-        private const long TIMEOUT_REMOVE_COMMAND = 600000000; //1 Minutes
+        private const long TIMEOUT_REMOVE_COMMAND = 300000000; //30 second
         private bool doorBusy;
 
         private RobotUnity rb;
@@ -320,12 +320,12 @@ namespace DoorControllerService
             {
                 if (listCmdRqCtrl.Count > 0)
                 {
-                    if (this.rb != null)
-                        this.rb.ShowText("Doorctrl listCmdRqCtrl.Count : " + listCmdRqCtrl.Count);
+                    //if (this.rb != null)
+                    Console.WriteLine("Doorctrl listCmdRqCtrl.Count : " + listCmdRqCtrl.Count);
                     cmdRqDoor resCmd = listCmdRqCtrl[0];
                     if ((DateTime.Now.Ticks - resCmd.timePre) > TIMEOUT_REMOVE_COMMAND)
                     {
-                        this.rb.ShowText("Remove cmd time out : " + resCmd.dType +" "+resCmd.cmdRq);
+                        Console.WriteLine("Remove cmd time out : " + resCmd.dType + " " + resCmd.cmdRq);
                         removeItemListCtrlDoor(resCmd);
                         continue;
                     }
@@ -349,8 +349,8 @@ namespace DoorControllerService
                     else
                     {
                         Console.WriteLine("Remove not command");
-                        if (this.rb != null)
-                            this.rb.ShowText("Doorctrl Remove not command");
+                        //if (this.rb != null)
+                        Console.WriteLine("Doorctrl Remove not command");
                         removeItemListCtrlDoor(resCmd);
                         Thread.Sleep(100);
                         continue;
@@ -360,21 +360,21 @@ namespace DoorControllerService
                         switch (this.stateCtrlDoor)
                         {
                             case StateCtrl.DOOR_ST_IDLE:
-                                if (this.rb != null)
-                                    this.rb.ShowText("StateCtrl.DOOR_ST_IDLE");
+                                //if (this.rb != null)
+                                Console.WriteLine("StateCtrl.DOOR_ST_IDLE");
                                 break;
                             case StateCtrl.DOOR_ST_OPEN:
                                 try
                                 {
-                                    if (this.rb != null)
-                                        this.rb.ShowText("StateCtrl.DOOR_ST_OPEN" + resCmd.dType);
+                                    //if (this.rb != null)
+                                    Console.WriteLine("StateCtrl.DOOR_ST_OPEN" + resCmd.dType);
                                     if (resCmd.dType == DoorType.DOOR_FRONT)
                                     {
                                         this.GetStatus(ref status, DoorType.DOOR_BACK);
                                         if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
                                         {
-                                            if (this.rb != null)
-                                                this.rb.ShowText("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + DoorType.DOOR_BACK + "is open");
+                                            //if (this.rb != null)
+                                            Console.WriteLine("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + DoorType.DOOR_BACK + "is open");
                                             cmdRqDoor varTamp = new cmdRqDoor();
                                             DateTime currentDate = DateTime.Now;
                                             varTamp.timePre = currentDate.Ticks;
@@ -392,8 +392,8 @@ namespace DoorControllerService
                                         this.GetStatus(ref status, DoorType.DOOR_FRONT);
                                         if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
                                         {
-                                            if (this.rb != null)
-                                                this.rb.ShowText("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + DoorType.DOOR_FRONT + "is open");
+                                            //if (this.rb != null)
+                                            Console.WriteLine("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + DoorType.DOOR_FRONT + "is open");
                                             removeItemListCtrlDoor(resCmd);
                                             doorBackStatus = DoorStatus.DOOR_ERROR;
                                             kProcess = false;
@@ -404,8 +404,8 @@ namespace DoorControllerService
                                     this.GetStatus(ref status, resCmd.dType);
                                     if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
                                     {
-                                        if (this.rb != null)
-                                            this.rb.ShowText("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + "DOOR_ST_OPEN_SUCCESS");
+                                        //if (this.rb != null)
+                                        Console.WriteLine("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + "DOOR_ST_OPEN_SUCCESS");
                                         this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN_SUCCESS;
                                         break;
                                     }
@@ -416,15 +416,15 @@ namespace DoorControllerService
                                         elapsedTimeFront.Restart();
                                         elapsedTimeReleaseButton.Restart();
                                         this.stateCtrlDoor = StateCtrl.DOOR_ST_WAITTING_OPEN;
-                                        if (this.rb != null)
-                                            this.rb.ShowText("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + "DOOR_ST_WAITTING_OPEN_DOOR");
+                                        //if (this.rb != null)
+                                        Console.WriteLine("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + "DOOR_ST_WAITTING_OPEN_DOOR");
                                         Console.WriteLine("DOOR_ST_WAITTING_OPEN_DOOR");
                                     }
                                 }
                                 catch (Exception e)
                                 {
-                                    if (this.rb != null)
-                                        this.rb.ShowText(e.ToString());
+                                    //if (this.rb != null)
+                                    Console.WriteLine(e.ToString());
                                 }
                                 break;
                             case StateCtrl.DOOR_ST_WAITTING_OPEN:
@@ -435,15 +435,15 @@ namespace DoorControllerService
                                         if (this.OpenRelease(resCmd.dType))
                                         {
                                             Console.WriteLine("OpenRelease(DoorType.DOOR) success");
-                                            if (this.rb != null)
-                                                this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "OpenRelease(DoorType.DOOR) success");
+                                            //if (this.rb != null)
+                                            Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "OpenRelease(DoorType.DOOR) success");
                                             elapsedTimeReleaseButton.Reset();
                                         }
                                         else
                                         {
                                             Console.WriteLine("OpenRelease(DoorType.DOOR) failed");
-                                            if (this.rb != null)
-                                                this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "OpenRelease(DoorType.DOOR) failed");
+                                            //if (this.rb != null)
+                                            Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "OpenRelease(DoorType.DOOR) failed");
                                             elapsedTimeReleaseButton.Restart();
                                         }
                                         Thread.Sleep(50);
@@ -453,8 +453,8 @@ namespace DoorControllerService
                                         elapsedTimeFront.Reset();
                                         this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN;
                                         Console.WriteLine("TIME_OUT_WAIT_OPEN_DOOR");
-                                        if (this.rb != null)
-                                            this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "TIME_OUT_WAIT_OPEN_DOOR");
+                                        //if (this.rb != null)
+                                        Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "TIME_OUT_WAIT_OPEN_DOOR");
                                     }
                                     else
                                     {
@@ -472,8 +472,8 @@ namespace DoorControllerService
                                             }
                                             elapsedTimeFront.Reset();
                                             Console.WriteLine("DOOR_ST_OPEN_SUCCESS");
-                                            if (this.rb != null)
-                                                this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "DOOR_ST_OPEN_SUCCESS");
+                                            //if (this.rb != null)
+                                            Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "DOOR_ST_OPEN_SUCCESS");
                                         }
                                     }
 
@@ -481,13 +481,13 @@ namespace DoorControllerService
                                 catch (Exception e)
                                 {
                                     Console.WriteLine(e);
-                                    if (this.rb != null)
-                                        this.rb.ShowText(e.ToString());
+                                    //if (this.rb != null)
+                                    Console.WriteLine(e.ToString());
                                 }
                                 break;
                             case StateCtrl.DOOR_ST_OPEN_SUCCESS:
-                                if (this.rb != null)
-                                    this.rb.ShowText("StateCtrl.DOOR_ST_OPEN_SUCCESS" + resCmd.dType + ':' + "Remove list");
+                                //if (this.rb != null)
+                                Console.WriteLine("StateCtrl.DOOR_ST_OPEN_SUCCESS" + resCmd.dType + ':' + "Remove list");
                                 removeItemListCtrlDoor(resCmd);
                                 kProcess = false;
                                 break;
@@ -497,8 +497,8 @@ namespace DoorControllerService
                                     this.GetStatus(ref status, resCmd.dType);
                                     if (status.data[0] == (byte)DoorStatus.DOOR_CLOSE)
                                     {
-                                        if (this.rb != null)
-                                            this.rb.ShowText("StateCtrl.DOOR_ST_CLOSE" + resCmd.dType + ':' + "DOOR_ST_CLOSE_SUCCESS");
+                                        //if (this.rb != null)
+                                        Console.WriteLine("StateCtrl.DOOR_ST_CLOSE" + resCmd.dType + ':' + "DOOR_ST_CLOSE_SUCCESS");
                                         this.stateCtrlDoor = StateCtrl.DOOR_ST_CLOSE_SUCCESS;
                                         break;
                                     }
@@ -509,15 +509,15 @@ namespace DoorControllerService
                                         elapsedTimeFront.Restart();
                                         elapsedTimeReleaseButton.Restart();
                                         this.stateCtrlDoor = StateCtrl.DOOR_ST_WAITTING_CLOSE;
-                                        if (this.rb != null)
-                                            this.rb.ShowText("StateCtrl.DOOR_ST_CLOSE" + resCmd.dType + ':' + "DOOR_ST_WAITTING_CLOSE_DOOR");
+                                        //if (this.rb != null)
+                                        Console.WriteLine("StateCtrl.DOOR_ST_CLOSE" + resCmd.dType + ':' + "DOOR_ST_WAITTING_CLOSE_DOOR");
                                         Console.WriteLine("DOOR_ST_WAITTING_CLOSE_DOOR");
                                     }
                                 }
                                 catch (Exception e)
                                 {
-                                    if (this.rb != null)
-                                        this.rb.ShowText(e.ToString());
+                                    //if (this.rb != null)
+                                    Console.WriteLine(e.ToString());
                                 }
 
                                 break;
@@ -528,15 +528,15 @@ namespace DoorControllerService
                                     {
                                         if (this.CloseRelease(resCmd.dType))
                                         {
-                                            if (this.rb != null)
-                                                this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "this.CloseRelease(DoorType.DOOR)) success");
+                                            //if (this.rb != null)
+                                            Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "this.CloseRelease(DoorType.DOOR)) success");
                                             Console.WriteLine("this.CloseRelease(DoorType.DOOR)) success");
                                             elapsedTimeReleaseButton.Reset();
                                         }
                                         else
                                         {
-                                            if (this.rb != null)
-                                                this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "this.CloseRelease(DoorType.DOOR)) failed");
+                                            //if (this.rb != null)
+                                            Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "this.CloseRelease(DoorType.DOOR)) failed");
                                             Console.WriteLine("this.CloseRelease(DoorType.DOOR)) failed");
                                             elapsedTimeReleaseButton.Restart();
                                         }
@@ -546,8 +546,8 @@ namespace DoorControllerService
                                     {
                                         elapsedTimeFront.Restart();
                                         this.stateCtrlDoor = StateCtrl.DOOR_ST_CLOSE;
-                                        if (this.rb != null)
-                                            this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "TIME_OUT_WAIT_CLOSE_DOOR");
+                                        //if (this.rb != null)
+                                        Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "TIME_OUT_WAIT_CLOSE_DOOR");
                                         Console.WriteLine("TIME_OUT_WAIT_CLOSE_DOOR");
                                     }
                                     else
@@ -566,21 +566,21 @@ namespace DoorControllerService
                                                 doorBackStatus = DoorStatus.DOOR_CLOSE;
                                             }
                                             elapsedTimeFront.Reset();
-                                            if (this.rb != null)
-                                                this.rb.ShowText("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "DOOR_ST_CLOSE_DOOR_SUCCESS");
+                                            //if (this.rb != null)
+                                            Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "DOOR_ST_CLOSE_DOOR_SUCCESS");
                                             Console.WriteLine("DOOR_ST_CLOSE_DOOR_SUCCESS");
                                         }
                                     }
                                 }
                                 catch (Exception e)
                                 {
-                                    if (this.rb != null)
-                                        this.rb.ShowText(e.ToString());
+                                    //if (this.rb != null)
+                                    Console.WriteLine(e.ToString());
                                 }
                                 break;
                             case StateCtrl.DOOR_ST_CLOSE_SUCCESS:
-                                if (this.rb != null)
-                                    this.rb.ShowText("StateCtrl.DOOR_ST_CLOSE_SUCCESS" + resCmd.dType + ':' + "Remove list");
+                                //if (this.rb != null)
+                                Console.WriteLine("StateCtrl.DOOR_ST_CLOSE_SUCCESS" + resCmd.dType + ':' + "Remove list");
                                 removeItemListCtrlDoor(resCmd);
                                 kProcess = false;
                                 break;
@@ -591,20 +591,20 @@ namespace DoorControllerService
                                     {
                                         removeItemListCtrlDoor(resCmd);
                                         kProcess = false;
-                                        if (this.rb != null)
-                                            this.rb.ShowText("StateCtrl.LAMP_DOOR_ON" + resCmd.dType + ':' + "Lamp on success");
+                                        //if (this.rb != null)
+                                        Console.WriteLine("StateCtrl.LAMP_DOOR_ON" + resCmd.dType + ':' + "Lamp on success");
                                         Console.WriteLine(resCmd.dType + "Lamp on success");
                                     }
                                     else
                                     {
-                                        if (this.rb != null)
-                                            this.rb.ShowText("StateCtrl.LAMP_DOOR_ON" + resCmd.dType + ':' + "Lamp on failed");
+                                        //if (this.rb != null)
+                                        Console.WriteLine("StateCtrl.LAMP_DOOR_ON" + resCmd.dType + ':' + "Lamp on failed");
                                     }
                                 }
                                 catch (Exception e)
                                 {
-                                    if (this.rb != null)
-                                        this.rb.ShowText(e.ToString());
+                                    //if (this.rb != null)
+                                    Console.WriteLine(e.ToString());
                                 }
                                 break;
                             case StateCtrl.LAMP_DOOR_OFF:
@@ -614,20 +614,20 @@ namespace DoorControllerService
                                     {
                                         removeItemListCtrlDoor(resCmd);
                                         kProcess = false;
-                                        if (this.rb != null)
-                                            this.rb.ShowText("StateCtrl.LAMP_DOOR_OFF" + resCmd.dType + ':' + "Lamp off success");
+                                        //if (this.rb != null)
+                                        Console.WriteLine("StateCtrl.LAMP_DOOR_OFF" + resCmd.dType + ':' + "Lamp off success");
                                         Console.WriteLine(resCmd.dType + "Lamp off success");
                                     }
                                     else
                                     {
-                                        if (this.rb != null)
-                                            this.rb.ShowText("StateCtrl.LAMP_DOOR_OFF" + resCmd.dType + ':' + "Lamp off failed");
+                                        //if (this.rb != null)
+                                        Console.WriteLine("StateCtrl.LAMP_DOOR_OFF" + resCmd.dType + ':' + "Lamp off failed");
                                     }
                                 }
                                 catch (Exception e)
                                 {
-                                    if (this.rb != null)
-                                        this.rb.ShowText(e.ToString());
+                                    //if (this.rb != null)
+                                    Console.WriteLine(e.ToString());
                                 }
                                 break;
                             default:
@@ -654,7 +654,7 @@ namespace DoorControllerService
             dataSend[5] = (byte)id;
             dataSend[6] = CalChecksum(dataSend, 4);
             ret = this.Tranfer(dataSend, ref data);
-            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "Status door : " + id + ": " +(DoorStatus)data.data[0]);
+            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "Status door : " + id + ": " + (DoorStatus)data.data[0]);
             return ret;
         }
 
