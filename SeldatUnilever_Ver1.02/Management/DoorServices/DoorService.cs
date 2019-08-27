@@ -136,7 +136,7 @@ namespace DoorControllerService
         private DoorStatus doorBackStatus;
         private const UInt32 TIME_OUT_WAIT_DOOR = 9000;
         private const UInt32 TIME_OUT_PRESS_BUTTON = 1500;
-        private const long TIMEOUT_REMOVE_COMMAND = 1800000000; //3 Minutes
+        private const long TIMEOUT_REMOVE_COMMAND = 600000000; //1 Minutes
         private bool doorBusy;
 
         private RobotUnity rb;
@@ -323,7 +323,7 @@ namespace DoorControllerService
                     if (this.rb != null)
                         this.rb.ShowText("Doorctrl listCmdRqCtrl.Count : " + listCmdRqCtrl.Count);
                     cmdRqDoor resCmd = listCmdRqCtrl[0];
-                    if (resCmd.timePre > TIMEOUT_REMOVE_COMMAND)
+                    if ((DateTime.Now.Ticks - resCmd.timePre) > TIMEOUT_REMOVE_COMMAND)
                     {
                         this.rb.ShowText("Remove cmd time out : " + resCmd.dType +" "+resCmd.cmdRq);
                         removeItemListCtrlDoor(resCmd);
