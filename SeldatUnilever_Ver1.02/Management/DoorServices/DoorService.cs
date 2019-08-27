@@ -136,6 +136,7 @@ namespace DoorControllerService
         private DoorStatus doorBackStatus;
         private const UInt32 TIME_OUT_WAIT_DOOR = 9000;
         private const UInt32 TIME_OUT_PRESS_BUTTON = 1500;
+        private const long TIMEOUT_REMOVE_COMMAND = 1800000000; //3 Minutes
         private bool doorBusy;
 
         private RobotUnity rb;
