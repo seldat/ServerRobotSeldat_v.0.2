@@ -126,17 +126,17 @@ namespace DoorControllerService
         {
             public DoorType dType;
             public DoorCmdRq cmdRq;
+            public long timePre;
         }
-
+        
         public DoorInfoConfig config;
         private Thread doorServiceThread;
         private StateCtrl stateCtrlDoor;
         private DoorStatus doorFrontStatus;
         private DoorStatus doorBackStatus;
         private const UInt32 TIME_OUT_WAIT_DOOR = 9000;
-        private const UInt32 NUM_TRY_OPEN_DOOR = 100;
-        private const UInt32 NUM_TRY_CLOSE_DOOR = 100;
         private const UInt32 TIME_OUT_PRESS_BUTTON = 1500;
+        private const long TIMEOUT_REMOVE_COMMAND = 600000000; //1 Minutes
         private bool doorBusy;
 
         private RobotUnity rb;
@@ -169,6 +169,8 @@ namespace DoorControllerService
         private void AddRqToList(DoorType dType, DoorCmdRq dRq)
         {
             cmdRqDoor valTamp = new cmdRqDoor();
+            DateTime currentDate = DateTime.Now;
+            valTamp.timePre = currentDate.Ticks;
             valTamp.cmdRq = dRq;
             valTamp.dType = dType;
             listCmdRqCtrl.Add(valTamp);
@@ -321,6 +323,12 @@ namespace DoorControllerService
                     if (this.rb != null)
                         this.rb.ShowText("Doorctrl listCmdRqCtrl.Count : " + listCmdRqCtrl.Count);
                     cmdRqDoor resCmd = listCmdRqCtrl[0];
+                    if ((DateTime.Now.Ticks - resCmd.timePre) > TIMEOUT_REMOVE_COMMAND)
+                    {
+                        this.rb.ShowText("Remove cmd time out : " + resCmd.dType +" "+resCmd.cmdRq);
+                        removeItemListCtrlDoor(resCmd);
+                        continue;
+                    }
                     kProcess = true;
                     if (resCmd.cmdRq == DoorCmdRq.DOOR_OPEN)
                     {
@@ -368,8 +376,11 @@ namespace DoorControllerService
                                             if (this.rb != null)
                                                 this.rb.ShowText("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + DoorType.DOOR_BACK + "is open");
                                             cmdRqDoor varTamp = new cmdRqDoor();
+                                            DateTime currentDate = DateTime.Now;
+                                            varTamp.timePre = currentDate.Ticks;
                                             varTamp.cmdRq = DoorCmdRq.DOOR_CLOSE;
                                             varTamp.dType = DoorType.DOOR_BACK;
+                                            listCmdRqCtrl[0].timePre = currentDate.Ticks;
                                             listCmdRqCtrl.Insert(0, varTamp);
                                             kProcess = false;
                                             break;
