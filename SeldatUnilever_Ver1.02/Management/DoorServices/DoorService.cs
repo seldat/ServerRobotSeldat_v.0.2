@@ -126,17 +126,17 @@ namespace DoorControllerService
         {
             public DoorType dType;
             public DoorCmdRq cmdRq;
+            public long timePre;
         }
-
+        
         public DoorInfoConfig config;
         private Thread doorServiceThread;
         private StateCtrl stateCtrlDoor;
         private DoorStatus doorFrontStatus;
         private DoorStatus doorBackStatus;
         private const UInt32 TIME_OUT_WAIT_DOOR = 9000;
-        private const UInt32 NUM_TRY_OPEN_DOOR = 100;
-        private const UInt32 NUM_TRY_CLOSE_DOOR = 100;
         private const UInt32 TIME_OUT_PRESS_BUTTON = 1500;
+        private const long TIMEOUT_REMOVE_COMMAND = 1800000000; //3 Minutes
         private bool doorBusy;
 
         private RobotUnity rb;
@@ -169,6 +169,8 @@ namespace DoorControllerService
         private void AddRqToList(DoorType dType, DoorCmdRq dRq)
         {
             cmdRqDoor valTamp = new cmdRqDoor();
+            DateTime currentDate = DateTime.Now;
+            valTamp.timePre = currentDate.Ticks;
             valTamp.cmdRq = dRq;
             valTamp.dType = dType;
             listCmdRqCtrl.Add(valTamp);
@@ -321,6 +323,11 @@ namespace DoorControllerService
                     if (this.rb != null)
                         this.rb.ShowText("Doorctrl listCmdRqCtrl.Count : " + listCmdRqCtrl.Count);
                     cmdRqDoor resCmd = listCmdRqCtrl[0];
+                    if (resCmd.timePre > TIMEOUT_REMOVE_COMMAND)
+                    {
+                        removeItemListCtrlDoor(resCmd);
+                        continue;
+                    }
                     kProcess = true;
                     if (resCmd.cmdRq == DoorCmdRq.DOOR_OPEN)
                     {
