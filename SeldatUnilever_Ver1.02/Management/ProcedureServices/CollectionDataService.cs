@@ -1106,11 +1106,11 @@ namespace SelDatUnilever_Ver1
             }
             return bufferId;
         }
-        public JPallet GetInfoOfPalletBuffer_Compare_W_H(TrafficRobotUnity.PistonPalletCtrl pisCtrl, JInfoPallet jInfoPallet_H)
+        public JPallet GetInfoOfPalletBuffer_Compare_W_H(TrafficRobotUnity.PistonPalletCtrl pisCtrl, JPallet JPResult)
         {
-            JPallet JPResult = new JPallet();
+            /*JPallet JPResult = new JPallet();
             JPResult.jInfoPallet = jInfoPallet_H;
-            JPResult.palletId = order.palletId_H;
+            JPResult.palletId = order.palletId_H;*/
             List<JPallet> jPalletList = new List<JPallet>();
             try
             {
@@ -1141,7 +1141,7 @@ namespace SelDatUnilever_Ver1
                                 {
                                     int bay = (int)palletInfo["bay"];
                                     int _palletId = (int)palletInfo["palletId"];
-                                    if (bay == jInfoPallet_H.bay)
+                                    if (bay == JPResult.jInfoPallet.bay)
                                     {
                                         JPallet jPallet = new JPallet();
                                         JInfoPallet infoPallet = new JInfoPallet();

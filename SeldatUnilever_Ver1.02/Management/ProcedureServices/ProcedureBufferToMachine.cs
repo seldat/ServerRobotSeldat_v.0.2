@@ -409,8 +409,8 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_SEND_CMD_PICKUP_PALLET_BUFFER:
-                        JPallet jInfoPallet_H = BfToMa.GetInfoPallet_H_InBuffer(PistonPalletCtrl.PISTON_PALLET_UP);
-                        jPResult = BfToMa.GetInfoOfPalletBuffer_Compare_W_H(PistonPalletCtrl.PISTON_PALLET_UP, jInfoPallet_H.jInfoPallet);
+                        JPallet jPallet_H = BfToMa.GetInfoPallet_H_InBuffer(PistonPalletCtrl.PISTON_PALLET_UP);
+                        jPResult = BfToMa.GetInfoOfPalletBuffer_Compare_W_H(PistonPalletCtrl.PISTON_PALLET_UP, jPallet_H);
                         String data = JsonConvert.SerializeObject(jPResult.jInfoPallet);
                         if (rb.SendCmdAreaPallet(data))
                         {
