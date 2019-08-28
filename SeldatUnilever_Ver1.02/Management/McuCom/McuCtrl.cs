@@ -38,11 +38,11 @@ namespace SeldatUnilever_Ver1._02.Management.McuCom
 
         private Thread ctrlLampOnRbThread;
         //private stateCtrlLamp stateCtrlLampRb;
-        //private IList<lampLgCtrl> listCtrlLamRb;
+        private List<lampLgCtrl> listCtrlLamRb  = new List<lampLgCtrl>();
 
         public McuCtrl(RobotUnity rb) : base(rb.properties.ipMcuCtrl, rb.properties.portMcuCtrl)
         {
-            this.stateCtrlLampRb = stateCtrlLamp.LAMP_MCU_IDLE;
+            //this.stateCtrlLampRb = stateCtrlLamp.LAMP_MCU_IDLE;
             ctrlLampOnRbThread = new Thread(this.lampOnRbCtrlProcess);
             ctrlLampOnRbThread.Start(this);
         }
@@ -68,11 +68,11 @@ namespace SeldatUnilever_Ver1._02.Management.McuCom
                 if (listCtrlLamRb.Count > 0)
                 {
                     lampLgCtrl lgCtrl = listCtrlLamRb[0];
-                    if (true == this.LampCtrl(lgCtrl))
-                    {
-                        listCtrlLamRb.Remove(lgCtrl);
-                        Console.WriteLine("Lamp MCU " + lgCtrl+ " SUCCESS");
+                    while (false == this.LampCtrl(lgCtrl)) {
+                        Thread.Sleep(100);
                     }
+                    listCtrlLamRb.RemoveAt(0);
+                    Console.WriteLine("Lamp MCU " + lgCtrl+ " SUCCESS");
                 }
                 //switch (stateCtrlLampRb)
                 //{
