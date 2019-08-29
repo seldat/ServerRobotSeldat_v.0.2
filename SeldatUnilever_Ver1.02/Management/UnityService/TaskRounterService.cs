@@ -25,6 +25,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             public int row;
             public int bay;
             public int palletId;
+            public int ofBufferId;
         }
         public enum ProcessAssignAnTaskWait
         {
@@ -302,7 +303,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             {
                                 foreach (var buffer in result["buffers"])
                                 {
-                                   
+                                    int bufferId = (int)buffer["bufferId"];
                                     if (buffer["pallets"].Count() > 0)
                                     {
                                         foreach (var palletInfo in buffer["pallets"])
@@ -315,6 +316,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                                 palletINF.palletId = palletId;
                                                 palletINF.bay = bay;
                                                 palletINF.row = row;
+                                                palletINF.ofBufferId = bufferId;
                                                 return palletINF;
                                             }
 
