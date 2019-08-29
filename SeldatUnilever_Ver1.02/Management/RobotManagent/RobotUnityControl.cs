@@ -413,13 +413,13 @@ namespace SeldatMRMS.Management.RobotManagent
             return ret;
         }
 
-        private void RequestGotoReadyHandler(Communication.Message message)
+        public virtual void RequestGotoReadyHandler(Communication.Message message)
         {
-            StandardInt32 rqVal = (StandardInt32)message;
+           /* StandardInt32 rqVal = (StandardInt32)message;
             if (rqVal.data == 1)
             {
-                Console.WriteLine("request goto ready");
-            }
+                //Console.WriteLine("request goto ready");
+            }*/
         }
         private void LineEnableHandler(Communication.Message message)
         {

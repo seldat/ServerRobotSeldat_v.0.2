@@ -1,4 +1,5 @@
-﻿using SeldatMRMS.RobotView;
+﻿using SeldatMRMS.Communication;
+using SeldatMRMS.RobotView;
 using SeldatUnilever_Ver1._02.Management.RobotManagent;
 using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using System;
@@ -539,7 +540,10 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         private void DisposeMenu(object sender, RoutedEventArgs e)
         {
-
+            DisposeF();
+        }
+        public void DisposeF()
+        {
             DisposeProcedure();
             KillPID();
             KillActionLib();
@@ -550,7 +554,6 @@ namespace SeldatMRMS.Management.RobotManagent
             MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
             onBinding = false;
             Draw();
-
         }
         private void DisConnectMenu(object sender, RoutedEventArgs e)
         {
@@ -565,6 +568,16 @@ namespace SeldatMRMS.Management.RobotManagent
             setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
             Draw();
 
+        }
+        public override void RequestGotoReadyHandler(Communication.Message message)
+        {
+            StandardInt32 rqVal = (StandardInt32)message;
+            if (rqVal.data == 1)
+            {
+                DisposeF();
+                AddWaitTask();
+                //Console.WriteLine("request goto ready");
+            }
         }
         public void Reset()
         {
@@ -608,20 +621,23 @@ namespace SeldatMRMS.Management.RobotManagent
             switch (result)
             {
                 case MessageBoxResult.OK:
-
-                    DisposeProcedure();
-                    KillPID();
-                    KillActionLib();
-                    TurnOnSupervisorTraffic(true);
-                    SwitchToDetectLine(false);
-                    this.PreProcedureAs = ProcedureControlAssign.PRO_IDLE;
-                    robotService.RemoveRobotUnityReadyList(this);
-                    robotService.AddRobotUnityWaitTaskList(this);
-                    Draw();
+                    AddWaitTask();
                     break;
                 case MessageBoxResult.Cancel:
                     break;
             }
+        }
+        public void AddWaitTask()
+        {
+            DisposeProcedure();
+            KillPID();
+            KillActionLib();
+            TurnOnSupervisorTraffic(true);
+            SwitchToDetectLine(false);
+            this.PreProcedureAs = ProcedureControlAssign.PRO_IDLE;
+            robotService.RemoveRobotUnityReadyList(this);
+            robotService.AddRobotUnityWaitTaskList(this);
+            Draw();
         }
         private void StartMenu(object sender, RoutedEventArgs e)
         {
