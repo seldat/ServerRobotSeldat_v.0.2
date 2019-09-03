@@ -43,53 +43,53 @@ namespace SeldatMRMS.Management.RobotManagent
         private bool IsDisposed = false;
         protected bool onBinding = true;
         public int timeOutReConnection = 0;
+        public System.Timers.Timer checkAlive;
         protected virtual void OnClosedEvent(object sender, CloseEventArgs e)
         {
             try
             {
-                if (!IsDisposed)
+               /* if (!IsDisposed)
                 {
                     Close();
                     webSocket.Connect();
-                }
+                }*/
                 
             }
             catch { }
         }
-        protected virtual void OnOpenedEvent() { }
+        protected virtual void OnOpenedEvent() { 
+
+            checkAlive.AutoReset = true;
+            checkAlive.Enabled = true;
+        }
         public String url { get; set; }
         public RosSocket()
         {
+            checkAlive = new System.Timers.Timer();
+            checkAlive.Interval = 5000;
+            checkAlive.Elapsed += CheckConnection;
+        }
+        private void CheckConnection(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            if(webSocket!=null)
+            {
+                if(!webSocket.IsAlive)
+                {
+                    try
+                    {
+                        if (!IsDisposed)
+                        {
+                            Close();
+                            webSocket.Connect();
+                        }
 
+                    }
+                    catch { }
+                }
+            }
         }
         public void Start(string url)
         {
-            /* new Thread(() =>
-             {
-                 while (onBinding)
-                 {
-                     this.url = url;
-                     IsDisposed = false;
-                     webSocket = new WebSocket(url);
-                     webSocket.OnOpen += (sender, e) => OnOpenedEvent();
-                     webSocket.OnMessage += (sender, e) => recievedOperation((WebSocket)sender, e);
-                     webSocket.Connect();
-                     if (webSocket.IsAlive)
-                         break;
-                     else
-                         webSocket=null;
-                     Thread.Sleep(4000);
-                 }
-
-                 if (webSocket != null)
-                 {
-                     if(webSocket.IsAlive)
-                         webSocket.OnClose += (sender, e) => OnClosedEvent((WebSocket)sender, e);
-                 }
-
-             }).Start();*/
-            //  Console.Write("");
-
             new Thread(() =>
             {
                     this.url = url;
@@ -100,8 +100,6 @@ namespace SeldatMRMS.Management.RobotManagent
                     webSocket.OnMessage += (sender, e) => recievedOperation((WebSocket)sender, e);
                     webSocket.WaitTime = TimeSpan.FromMilliseconds(10000);
                     webSocket.Connect();
-              
-                  //  Thread.Sleep(5000);
                     
             }).Start(); 
         }
@@ -118,6 +116,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     if (webSocket.IsAlive)
                         Close();
                     webSocket = null;
+                    checkAlive.Stop();
                 }
             }
             catch
