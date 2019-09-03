@@ -90,6 +90,25 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             }
             catch { }
         }
+
+        public OrderItem CheckHastask()
+        {
+            OrderItem item = null;
+            if (deviceItemsList.Count > 0)
+            {
+                try
+                {
+                    item = deviceItemsList[0].GetOrder();
+                    if (item == null)
+                        return null;
+                }
+                catch
+                {
+
+                }
+            }
+            return item;
+        }
         public OrderItem Gettask()
         {
             OrderItem item = null;
@@ -124,6 +143,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                         item.palletId_H = palletId;
                                         item.palletBay = palletIFBM.bay;
                                         item.palletRow = palletIFBM.row;
+                                        item.bufferId = palletIFBM.ofBufferId;
                                         return item;
                                     }
                                     else
@@ -150,6 +170,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                         item.palletId_H = palletId;
                                         item.palletBay = palletIFBRB401.bay;
                                         item.palletRow = palletIFBRB401.row;
+                                        item.bufferId = palletIFBRB401.ofBufferId;
 
                                         dynamic productB401 = new JObject();
                                         //UpdatePalletStateToHold(palletId, item);
@@ -201,6 +222,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                         item.palletBay = palletIFMBR.bay;
                                         item.palletRow = palletIFMBR.row;
                                         item.palletId_P = palletId;
+                                        item.bufferId = palletIFMBR.ofBufferId;
                                         UpdatePalletStateToPlan(palletId, item);
                                     }
                                     else
@@ -235,6 +257,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 {
                                     item.palletBay = palletINF.bay;
                                     item.palletRow = palletINF.row;
+                                    item.bufferId = palletINF.ofBufferId;
                                 }
                                 break;
                             default:
@@ -353,7 +376,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     {
                         foreach (var buffer in result["buffers"])
                         {
-                           
+                            int bufferId = (int)buffer["bufferId"];
                             String bufferDataStr = (String)buffer["bufferData"];
                             JObject stuffBData = JObject.Parse(bufferDataStr);
                             bool canOpEdit = (bool)stuffBData["canOpEdit"];
@@ -367,6 +390,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             palletINF.palletId = palletId;
                             palletINF.bay =bay;
                             palletINF.row = row;
+                            palletINF.ofBufferId = bufferId;
                             return palletINF;
                         }
                     }

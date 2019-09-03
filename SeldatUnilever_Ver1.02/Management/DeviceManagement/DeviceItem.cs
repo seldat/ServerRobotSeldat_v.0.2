@@ -133,7 +133,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             // public bool status = false; // chua hoan thanh
             public DataPallet palletAtMachine;
 
-            public int bufferId;
+            public int bufferId { get; set; }
             public int bufferIdPut;
             public int palletAmount;
             public DateTime startTimeProcedure = new DateTime();

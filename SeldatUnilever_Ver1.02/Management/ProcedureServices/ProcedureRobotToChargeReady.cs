@@ -668,7 +668,7 @@ namespace SeldatMRMS
         {
             try
             {
-                OrderItem order = assigmentTask.Gettask();
+                OrderItem order = assigmentTask.CheckHastask();
                 if(order!=null)
                 {
                     cntOrderItem++;

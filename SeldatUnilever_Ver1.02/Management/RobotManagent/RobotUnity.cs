@@ -283,7 +283,7 @@ namespace SeldatMRMS.Management.RobotManagent
             props.rbTask.Margin = new Thickness(-5, -1, -5, -1);
             props.rbTask.HorizontalAlignment = HorizontalAlignment.Center;
             props.rbTask.VerticalAlignment = VerticalAlignment.Top;
-            props.rbTask.Content = "9999";
+            props.rbTask.Content = "";
             props.rbTask.Foreground = new SolidColorBrush(Colors.LawnGreen);
             props.rbTask.FontFamily = new FontFamily("Calibri");
             props.rbTask.FontSize = 6;
@@ -551,7 +551,7 @@ namespace SeldatMRMS.Management.RobotManagent
             SwitchToDetectLine(false);
             robotService.RemoveRobotUnityReadyList(this);
             robotService.RemoveRobotUnityWaitTaskList(this);
-            MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
+          //  MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
             onBinding = false;
             Draw();
         }
@@ -713,8 +713,10 @@ namespace SeldatMRMS.Management.RobotManagent
                         pgeometry.Figures.Add(pF);
                         safetyArea.Data = pgeometry;
 
-                        props.rbID.Content = properties.pose.Position.X.ToString("0");
-                        props.rbTask.Content = properties.pose.Position.Y.ToString("0");
+                        //  props.rbID.Content = properties.pose.Position.X.ToString("0");
+                        // props.rbTask.Content = properties.pose.Position.Y.ToString("0");
+                         props.rbID.Content = properties.Label;
+                        // props.rbTask.Content = properties.pose.Position.Y.ToString("0");
 
                         smallCircle.Set(cPoint, new Point(0, 0), new Point(Radius_S, Radius_S));
    

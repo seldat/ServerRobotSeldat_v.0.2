@@ -977,14 +977,14 @@ namespace SelDatUnilever_Ver1
                                 //var bufferResults = result["buffers"][0];
                                 foreach (var buffer in result["buffers"])
                                 {
-
-                                    if (buffer["pallets"].Count() > 0)
+                                    int bufferId = (int)buffer["bufferId"];
+                                    if (buffer["pallets"].Count() > 0 && bufferId==order.bufferId )
                                     {
                                         foreach (var palletInfo in buffer["pallets"])
                                         {
                                             int palletId = (int)palletInfo["palletId"];
                                             int bay = (int)palletInfo["bay"];
-                                            if (bay == order.palletBay)
+                                            if (bay == order.palletBay )
                                             {
                                                 JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
                                                 bayId = (int)stuff["bayId"];
@@ -1015,12 +1015,13 @@ namespace SelDatUnilever_Ver1
                         //var bufferResults = result["buffers"][0];
                         foreach (var buffer in result["buffers"])
                         {
+                            int bufferId = (int)buffer["bufferId"];
                             String bufferDataStr = (String)buffer["bufferData"];
                             JObject stuffBData = JObject.Parse(bufferDataStr);
                             bool canOpEdit = (bool)stuffBData["canOpEdit"];
                             if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy
                                 continue;
-                            if (buffer["pallets"].Count() > 0)
+                            if (buffer["pallets"].Count() > 0 && bufferId==order.bufferId)
                             {
                                 foreach (var palletInfo in buffer["pallets"])
                                 {
@@ -1130,12 +1131,13 @@ namespace SelDatUnilever_Ver1
                     {
                         foreach (var buffer in plan["buffers"]) //loop buffer
                         {
+                            int _bufferId = (int)buffer["bufferId"];
                             String bufferDataStr = (String)buffer["bufferData"];
                             JObject stuffBData = JObject.Parse(bufferDataStr);
                             bool canOpEdit = (bool)stuffBData["canOpEdit"];
                             if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy, áp dụng trong quy trình Buffer -> Machine
                                 continue;
-                            if (buffer["pallets"].Count() > 0)
+                            if (buffer["pallets"].Count() > 0 && _bufferId==order.bufferId)
                             {
                                 foreach (var palletInfo in buffer["pallets"])
                                 {
@@ -1216,6 +1218,7 @@ namespace SelDatUnilever_Ver1
                                 //var bufferResults = result["buffers"][0];
                                 foreach (var buffer in plan["buffers"])
                                 {
+                                    int bufferId = (int)buffer["bufferId"];
                                     if (!gotLastPalletInBay)
                                     {
                                         String bufferDataStr = (String)buffer["bufferData"];
@@ -1223,7 +1226,7 @@ namespace SelDatUnilever_Ver1
                                         bool canOpEdit = (bool)stuffBData["canOpEdit"];
                                         //if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy, áp dụng trong quy trình Buffer -> Machine
                                         //    continue;
-                                        if (buffer["pallets"].Count() > 0)
+                                        if (buffer["pallets"].Count() > 0 && bufferId==order.bufferId)
                                         {
                                             int bayToGo = -1;
                                             bool lastPallet = true;
@@ -1314,6 +1317,7 @@ namespace SelDatUnilever_Ver1
                             //var bufferResults = result["buffers"][0];
                             foreach (var buffer in plan["buffers"])
                             {
+                                int bufferId = (int)buffer["bufferId"];
                                 if (!gotFirstPalletInBay)
                                 {
                                     String bufferDataStr = (String)buffer["bufferData"];
@@ -1321,7 +1325,7 @@ namespace SelDatUnilever_Ver1
                                     bool canOpEdit = (bool)stuffBData["canOpEdit"];
                                     if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy, áp dụng trong quy trình Buffer -> Machine
                                         continue;
-                                    if (buffer["pallets"].Count() > 0)
+                                    if (buffer["pallets"].Count() > 0 && bufferId==order.bufferId)
                                     {
                                         int bayToGo = -1;
                                         bool firstPallet = true;
