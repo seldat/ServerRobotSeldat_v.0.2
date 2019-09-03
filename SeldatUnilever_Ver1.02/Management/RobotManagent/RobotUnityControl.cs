@@ -1062,7 +1062,7 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.IsConnected = true;
 
             robotLogOut.ShowText(this.properties.Label, "Connected to Ros Master");
-
+            base.OnOpenedEvent();
             try
             {
                 createRosTerms();
