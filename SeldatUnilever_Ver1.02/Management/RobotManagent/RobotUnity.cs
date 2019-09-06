@@ -268,15 +268,16 @@ namespace SeldatMRMS.Management.RobotManagent
             }
             //rbID
             props.rbID.Padding = new Thickness(0);
-            props.rbID.Margin = new Thickness(-5, 0, -5, 0);
+            props.rbID.Margin = new Thickness(-5, -2, -5, 0);
             props.rbID.HorizontalAlignment = HorizontalAlignment.Center;
             props.rbID.VerticalAlignment = VerticalAlignment.Bottom;
             props.rbID.Content = "27";
             props.rbID.Foreground = new SolidColorBrush(Colors.Yellow);
             props.rbID.FontFamily = new FontFamily("Calibri");
-            props.rbID.FontSize = 6;
+            props.rbID.FontSize = 14;
             props.rbID.FontWeight = FontWeights.Bold;
             Grid.SetRow(props.rbID, 0);
+            Grid.SetRowSpan(props.rbID, 2);
 
             //rbTask
             props.rbTask.Padding = new Thickness(0);
@@ -288,7 +289,7 @@ namespace SeldatMRMS.Management.RobotManagent
             props.rbTask.FontFamily = new FontFamily("Calibri");
             props.rbTask.FontSize = 6;
             props.rbTask.FontWeight = FontWeights.Bold;
-            Grid.SetRow(props.rbTask, 1);
+            
 
             //===================CHILDREN===================
             props.statusGrid.Children.Add(props.rbID);

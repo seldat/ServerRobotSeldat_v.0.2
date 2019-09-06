@@ -365,20 +365,24 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE:
-                        if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
+                        // kiem tra da toi vung dong cong
+                        if (Traffic.RobotIsInArea("CLOSE-GATE", robot.properties.pose.Position))
                         {
-                            Global_Object.setGateStatus(order.gate, false);
-                            resCmd = ResponseCommand.RESPONSE_NONE;
-                            ds.LampSetStateOff(DoorService.DoorType.DOOR_FRONT);
-                            ds.closeDoor(DoorService.DoorType.DOOR_BACK);
-                            ds.setDoorBusy(false);
-                            StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_CLOSE_GATE;
-                            robot.ShowText("FORBUF_ROBOT_WAITTING_CLOSE_GATE");
-                        }
-                        else if (resCmd == ResponseCommand.RESPONSE_ERROR)
-                        {
-                            errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            CheckUserHandleError(this);
+                            if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
+                            {
+                                Global_Object.setGateStatus(order.gate, false);
+                                resCmd = ResponseCommand.RESPONSE_NONE;
+                                ds.LampSetStateOff(DoorService.DoorType.DOOR_FRONT);
+                                ds.closeDoor(DoorService.DoorType.DOOR_BACK);
+                                ds.setDoorBusy(false);
+                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_CLOSE_GATE;
+                                robot.ShowText("FORBUF_ROBOT_WAITTING_CLOSE_GATE");
+                            }
+                            else if (resCmd == ResponseCommand.RESPONSE_ERROR)
+                            {
+                                errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                CheckUserHandleError(this);
+                            }
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_CLOSE_GATE:

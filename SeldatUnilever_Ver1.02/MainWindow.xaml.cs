@@ -457,5 +457,15 @@ namespace SeldatUnilever_Ver1._02
         {
 
         }
+
+        private void Btn_ResetSpeed_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Btn_ResetSpeed_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

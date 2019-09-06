@@ -220,6 +220,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public int publication_TestLaserWarning;
             public int publication_killpid;
             public int publication_liftCtrl;
+            public int publication_stopLaserBack;
         }
 
         public struct LaserErrorCode

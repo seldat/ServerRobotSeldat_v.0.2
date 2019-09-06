@@ -65,7 +65,7 @@
                     <StackPanel VerticalAlignment="Center">
                         <ToolBarTray 
                             Background="#f5f5f5" 
-                            ToolBarTray.IsLocked="True">
+                            ToolBarTray.IsLocked="False">
                             <ToolBar 
                                 Background="#f5f5f5"
                                 Style="{DynamicResource MaterialDesignToolBar}"
@@ -178,6 +178,8 @@
                                                                 Foreground="Red"
                                                                 Kind="Stop"/>
                                 </Button>
+                                
+                                
                                 <Button 
                                     Name="btn_Play"
                                     Margin="5 0"
@@ -188,6 +190,20 @@
                                                                 Foreground="Green"
                                                                 Kind="Play"/>
                                 </Button>
+                                
+                                <Separator/>
+                                <Button 
+                                    Name="btn_ResetSpeed"
+                                    Margin="5 0"
+                                    Click="Btn_ResetSpeed_Click"
+                                    IsEnabled="True"
+                                    ToolBar.OverflowMode="AsNeeded">
+                                    <iconPacks:PackIconMaterial Name="btn_ResetBack"
+                                                                Foreground="Green"
+                                                                Kind="Amazon"/>
+                                </Button>
+                              
+
                             </ToolBar>
                         </ToolBarTray>
                     </StackPanel>
@@ -244,6 +260,10 @@
                             </Grid>
                         </Border>
                         <Grid Grid.Row="0" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="391*"/>
+                                <ColumnDefinition Width="182*"/>
+                            </Grid.ColumnDefinitions>
                             <!--<Border BorderBrush="#f5f5f5" BorderThickness="1,0,0,0">
                                  <ToolBarTray Background="#f5f5f5" Orientation="Vertical">
                                  <ToolBar Background="Transparent">
