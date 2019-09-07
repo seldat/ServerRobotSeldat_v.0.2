@@ -220,7 +220,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public int publication_TestLaserWarning;
             public int publication_killpid;
             public int publication_liftCtrl;
-            public int publication_stopLaserBack;
+            public int publication_LostMap;
         }
 
         public struct LaserErrorCode
@@ -354,7 +354,7 @@ namespace SeldatMRMS.Management.RobotManagent
             int subscription_Navi = this.Subscribe("/cmd_vel_mux/input/navi", "geometry_msgs/Twist", NaviCallback, 10);
             int subscription_lineEnable = this.Subscribe("/line_enable", "std_msgs/Int32", LineEnableHandler);
             float subscription_RequestGotoReady = this.Subscribe("/requestGotoReady", "std_msgs/Int32", RequestGotoReadyHandler);
-
+            int subscription_LostPostion = this.Subscribe("/lostPositon", "std_msgs/Bool", LostPositionHandler);
             //paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
             //paramsRosSocket.publication_batteryvol = this.Advertise ("/battery_vol", "std_msgs/Float32");
             //   paramsRosSocket.publication_TestLaserError = this.Advertise ("/AGV_LaserError", "std_msgs/String");
@@ -430,6 +430,10 @@ namespace SeldatMRMS.Management.RobotManagent
                 LineEnableCallBack(data.data);
             }
             catch { }
+        }
+
+        public virtual void LostPositionHandler(Communication.Message message)
+        {
         }
         public void LiftCtrlUp()
         {
@@ -730,7 +734,8 @@ namespace SeldatMRMS.Management.RobotManagent
         bool flagSpeedTraffic = false;
         bool flagSpeedRegZone = false;
         bool flagSetSpeedHighPrioprity = false;
-        bool flagSetCtrlSpeed = true;
+        bool flagSetCtrlSpeed = false;
+        bool flagSetCtrlSpeedLostMap = false;
 
         public bool SetSpeedCtrl(RobotSpeedLevel robotspeed, bool highpriority)
         {
@@ -739,11 +744,11 @@ namespace SeldatMRMS.Management.RobotManagent
 
 
                 flagSetCtrlSpeed = highpriority;
-                if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity || flagSetCtrlSpeed)
+                if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity || flagSetCtrlSpeed || flagSetCtrlSpeedLostMap)
                 {
                     try
                     {
-                        properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
+                        properties.speedInSpecicalArea = robotspeed + "_SPEED_CTRL";
                         StandardInt32 msg = new StandardInt32();
                         msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
                         this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
@@ -760,7 +765,52 @@ namespace SeldatMRMS.Management.RobotManagent
                 {
                     try
                     {
-                        properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
+                        properties.speedInSpecicalArea = robotspeed + "_SPEED_CTRL";
+                        StandardInt32 msg = new StandardInt32();
+                        msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                        this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                        delay(700);
+                        return true;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Robot Control Error  SetSpeed");
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public bool SetSpeedCtrlLostMap(RobotSpeedLevel robotspeed, bool highpriority)
+        {
+            if (this.trafficMod == TrafficMode.AUTO_MODE)
+            {
+
+
+                flagSetCtrlSpeedLostMap = highpriority;
+                if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity || flagSetCtrlSpeed || flagSetCtrlSpeedLostMap)
+                {
+                    try
+                    {
+                        properties.speedInSpecicalArea = robotspeed + "_LOST_POSISION_PRIORITY";
+                        StandardInt32 msg = new StandardInt32();
+                        msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                        this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                        delay(700);
+                        return true;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Robot Control Error  SetSpeed");
+                        return false;
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        properties.speedInSpecicalArea = robotspeed + "_LOST_POSISION_PRIORITY";
                         StandardInt32 msg = new StandardInt32();
                         msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
                         this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
@@ -782,7 +832,7 @@ namespace SeldatMRMS.Management.RobotManagent
             if (this.trafficMod == TrafficMode.AUTO_MODE)
             {
                 flagSetSpeedHighPrioprity = highpriority;
-                if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity)
+                if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity || flagSetCtrlSpeed || flagSetCtrlSpeedLostMap)
                 {
                     try
                     {
@@ -825,7 +875,7 @@ namespace SeldatMRMS.Management.RobotManagent
             if (this.trafficMod == TrafficMode.AUTO_MODE)
             {
                 flagSpeedTraffic = highpriority;
-                if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity)
+                if (flagSpeedRegZone || flagSpeedTraffic || flagSetSpeedHighPrioprity || flagSetCtrlSpeed || flagSetCtrlSpeedLostMap)
                 {
                     try
                     {

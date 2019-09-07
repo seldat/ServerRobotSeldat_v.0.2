@@ -1,4 +1,5 @@
-﻿using SeldatMRMS.Management.RobotManagent;
+﻿using SeldatMRMS.Communication;
+using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
 using System;
 using System.Collections.Generic;
@@ -136,6 +137,7 @@ namespace SeldatMRMS.Management
         public RobotStatus robotTag;
         public String STATE_SPEED = "";
         public RobotBahaviorAtReadyGate robotBahaviorAtGate;
+        public bool flagLostPosition = false;
         public TrafficRobotUnity() : base()
         {
             TurnOnSupervisorTraffic(false);
@@ -435,6 +437,44 @@ namespace SeldatMRMS.Management
                 }
             }
             return hasRobot;
+        }
+
+        public override void LostPositionHandler(Communication.Message message)
+        {
+            StandardBoolean data = (StandardBoolean)message;
+            try
+            {
+                if (data.data==true)
+                {
+                    SetStopSpeedOrtherRobotLostPosition();
+                    if (!flagLostPosition)
+                    {
+                        MessageBox.Show("Robot :"+ properties.Label +" Lost Position");
+                    }
+                    flagLostPosition = true;
+                   
+                }
+                else
+                {
+                    flagLostPosition = false;
+                }
+            }
+            catch { }
+        }
+        public void SetStopSpeedOrtherRobotLostPosition()
+        {
+            foreach (RobotUnity r in RobotUnitylist)
+            {
+                r.SetSpeedCtrlLostMap(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+            }
+        }
+        public void SetNormalSpeedOrtherRobotLostPosition()
+        {
+            foreach (RobotUnity r in RobotUnitylist)
+            {
+                if(r.flagLostPosition==false)
+                  r.SetSpeedCtrlLostMap(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
+            }
         }
         public RobotUnity DetermineRobotInWorkingZone(Point anyPoint)
         {

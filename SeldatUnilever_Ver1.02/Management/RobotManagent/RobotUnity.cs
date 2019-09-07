@@ -597,6 +597,11 @@ namespace SeldatMRMS.Management.RobotManagent
             robotRegistryToWorkingZone.onRobotwillCheckInsideGate = false;
             robotTag = RobotStatus.IDLE;
             setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
+
+            // reset lost position
+            flagLostPosition = false;
+            SetNormalSpeedOrtherRobotLostPosition();
+
             Radius_S =0;
             Radius_B = 0;
             Radius_O = 0;

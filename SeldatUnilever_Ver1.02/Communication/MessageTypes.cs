@@ -25,8 +25,9 @@ namespace SeldatMRMS.Communication
         {
             { "geometry_msgs/Twist", typeof(GeometryTwist) },
             { "std_msgs/String", typeof(StandardString) },
-			 { "std_msgs/Int32", typeof(StandardInt32) },
-			  { "std_msgs/Float32", typeof(StandardFloat32) },
+			{ "std_msgs/Int32", typeof(StandardInt32) },
+            { "std_msgs/Bool", typeof(StandardBoolean) },
+            { "std_msgs/Float32", typeof(StandardFloat32) },
 			{ "geometry_msgs/Accel", typeof(GeometryAccel) },
             { "sensor_msgs/JointState", typeof(SensorJointStates) },
             { "geometry_msgs/Vector3", typeof(GeometryVector3) },

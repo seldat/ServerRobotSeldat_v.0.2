@@ -53,7 +53,16 @@ namespace SeldatMRMS.Communication
 		}
 	}
 
-	public class StandardFloat32 : Message
+    public class StandardBoolean : Message
+    {
+        public bool data;
+        public StandardBoolean()
+        {
+            data = false;
+        }
+    }
+
+    public class StandardFloat32 : Message
 	{
 		public float data;
 		public StandardFloat32()
