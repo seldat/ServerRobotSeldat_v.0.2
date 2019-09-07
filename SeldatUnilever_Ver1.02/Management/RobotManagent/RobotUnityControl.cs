@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SeldatMRMS.Communication;
 using SeldatUnilever_Ver1._02.Management.McuCom;
 using SeldatUnilever_Ver1._02.Management.RobotManagent;
@@ -22,6 +23,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public event Action<int> LineEnableCallBack;
         public event Action<LaserErrorCode> AGVLaserErrorCallBack;
         public event Action<LaserWarningCode> AGVLaserWarningCallBack;
+        //public event Action<bool> AgvLaserError;
         public event Action<Pose, Object> PoseHandler;
         public event Action<Object, ConnectionStatus> ConnectionStatusHandler;
         private Timer timerCheckKeepAlive;
@@ -212,6 +214,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public int publication_postPallet;
             public int publication_finishStatesCallBack;
             public int publication_cmdAreaPallet;
+            public int publication_laserBackCtrl;
 
             /*of chau test*/
             public int publication_finishedStates;
@@ -221,6 +224,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public int publication_killpid;
             public int publication_liftCtrl;
             public int publication_LostMap;
+
         }
 
         public struct LaserErrorCode
@@ -330,6 +334,13 @@ namespace SeldatMRMS.Management.RobotManagent
             msg.data = 1234;
             this.Publish(paramsRosSocket.publication_checkAliveTimeOut, msg);
         }
+
+        private void laserBackOff()
+        {
+            StandardInt32 msg = new StandardInt32();
+            msg.data = 0;
+            this.Publish(paramsRosSocket.publication_laserBackCtrl, msg);
+        }
         public void createRosTerms()
         {
             int subscription_robotInfo = this.Subscribe("/amcl_pose", "geometry_msgs/PoseWithCovarianceStamped", AmclPoseHandler, 10);
@@ -347,6 +358,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
             paramsRosSocket.publication_killpid = this.Advertise("/key_press", "std_msgs/String");
             paramsRosSocket.publication_killActionLid = this.Advertise("/killActionLibCallback", "std_msgs/Int32");
+            paramsRosSocket.publication_laserBackCtrl = this.Advertise("/laserBackCtrl", "std_msgs/Int32");
             float subscription_publication_batteryvol = this.Subscribe("/battery_vol", "std_msgs/Int32", BatteryVolHandler);
             int subscription_AGV_LaserError = this.Subscribe("/stm_error", "std_msgs/String", AGVLaserErrorHandler);
             int subscription_AGV_LaserWarning = this.Subscribe("/stm_warning", "std_msgs/String", AGVLaserWarningHandler);
@@ -355,6 +367,8 @@ namespace SeldatMRMS.Management.RobotManagent
             int subscription_lineEnable = this.Subscribe("/line_enable", "std_msgs/Int32", LineEnableHandler);
             float subscription_RequestGotoReady = this.Subscribe("/requestGotoReady", "std_msgs/Int32", RequestGotoReadyHandler);
             int subscription_LostPostion = this.Subscribe("/lostPositon", "std_msgs/Bool", LostPositionHandler);
+            int subscription_AGVInfo = this.Subscribe("/robotInfoDisplay", "std_msgs/String", AGVInfoHandler);
+
             //paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
             //paramsRosSocket.publication_batteryvol = this.Advertise ("/battery_vol", "std_msgs/Float32");
             //   paramsRosSocket.publication_TestLaserError = this.Advertise ("/AGV_LaserError", "std_msgs/String");
@@ -416,11 +430,11 @@ namespace SeldatMRMS.Management.RobotManagent
 
         public virtual void RequestGotoReadyHandler(Communication.Message message)
         {
-           /* StandardInt32 rqVal = (StandardInt32)message;
-            if (rqVal.data == 1)
-            {
-                //Console.WriteLine("request goto ready");
-            }*/
+            /* StandardInt32 rqVal = (StandardInt32)message;
+             if (rqVal.data == 1)
+             {
+                 //Console.WriteLine("request goto ready");
+             }*/
         }
         private void LineEnableHandler(Communication.Message message)
         {
@@ -585,7 +599,58 @@ namespace SeldatMRMS.Management.RobotManagent
               // AGVLaserErrorCallBack (er);*/
         }
 
-        private void AGVLaserWarningHandler(Communication.Message message)
+        public struct RbInfoStatus
+        {
+            public string rbSpeed;
+            public string manualMode;
+            public string batInfo;
+            public string error;
+            public string warning;
+        }
+
+        protected bool agvErr = false;
+        protected bool resetLaserBack = false;
+        private void AGVInfoHandler(Communication.Message message)
+        {
+            StandardString jMsg = (StandardString)message;
+            RbInfoStatus info = new RbInfoStatus();
+            try
+            {
+                JObject jInfo = JObject.Parse(jMsg.data);
+                info.rbSpeed = (string)jInfo["speed"];
+                info.manualMode = (string)jInfo["manual"];
+                info.batInfo = (string)jInfo["battery"];
+                info.error = (string)jInfo["error"];
+                info.warning = (string)jInfo["warning"];
+
+                if ((info.warning[1] == '1')|| (info.error != "000000"))
+                {
+                    if (agvErr == false)
+                    {
+                        if ((info.warning[1] == '1') && (true == resetLaserBack))
+                        {
+                            laserBackOff();
+                        }
+                        this.agvErr = true;
+                        //if(AgvLaserError != null)
+                        //    AgvLaserError(this.agvErr);
+                    }
+                }
+                else {
+                    if(agvErr == true)
+                    {
+                        this.agvErr = false;
+                        //AgvLaserError(this.agvErr);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Parse json infoRb fail");
+                Console.WriteLine(e);
+            }
+        }
+            private void AGVLaserWarningHandler(Communication.Message message)
         {
             /* StandardString standard = (StandardString) message;
              LaserWarningCode war = new LaserWarningCode ();

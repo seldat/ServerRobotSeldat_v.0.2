@@ -26,10 +26,10 @@ namespace SeldatMRMS.Management.RobotManagent
     public class RobotUnity : RobotBaseService
     {
         public String name = "";
-        public String StartPointName="";
-        public String EndPointName="";
-        public Point StartPoint=new Point();
-        public Point EndPoint=new Point();
+        public String StartPointName = "";
+        public String EndPointName = "";
+        public Point StartPoint = new Point();
+        public Point EndPoint = new Point();
         Ellipse headerPoint;
         Ellipse headerPoint1;
         Ellipse headerPoint2;
@@ -98,6 +98,8 @@ namespace SeldatMRMS.Management.RobotManagent
         MenuItem resumeItem = new MenuItem();
         MenuItem liftUp = new MenuItem();
         MenuItem liftDown = new MenuItem();
+        MenuItem laserBackOn = new MenuItem();
+        MenuItem laserBackOff = new MenuItem();
         MenuItem connectItem = new MenuItem();
         MenuItem retryconnectItem = new MenuItem();
         MenuItem disposeItem = new MenuItem();
@@ -145,6 +147,14 @@ namespace SeldatMRMS.Management.RobotManagent
             liftDown.Click += LiftDownMenu;
             liftDown.IsEnabled = true;
 
+            laserBackOn.Header = "Laser Back On";
+            laserBackOn.Click += LaserBackOn;
+            laserBackOn.IsEnabled = true;
+
+            laserBackOff.Header = "Laser Back Off";
+            laserBackOff.Click += LaserBackOff;
+            laserBackOff.IsEnabled = true;
+
             logOutItem.Header = "Log";
             logOutItem.Click += LogOut;
             logOutItem.IsEnabled = true;
@@ -188,6 +198,9 @@ namespace SeldatMRMS.Management.RobotManagent
             border.ContextMenu.Items.Add(liftUp);
             border.ContextMenu.Items.Add(liftDown);
             border.ContextMenu.Items.Add(logOutItem);
+
+            border.ContextMenu.Items.Add(laserBackOn);
+            border.ContextMenu.Items.Add(laserBackOff);
 
             border.ContextMenu.Items.Add(connectItem);
             border.ContextMenu.Items.Add(retryconnectItem);
@@ -289,7 +302,7 @@ namespace SeldatMRMS.Management.RobotManagent
             props.rbTask.FontFamily = new FontFamily("Calibri");
             props.rbTask.FontSize = 6;
             props.rbTask.FontWeight = FontWeights.Bold;
-            
+
 
             //===================CHILDREN===================
             props.statusGrid.Children.Add(props.rbID);
@@ -333,7 +346,7 @@ namespace SeldatMRMS.Management.RobotManagent
             canvas.Children.Add(headerPoint3);
             setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
 
-            smallCircle = new SafeCircle(canvas,Colors.Black,1);
+            smallCircle = new SafeCircle(canvas, Colors.Black, 1);
             blueCircle = new SafeCircle(canvas, Colors.Blue, 1);
             yellowCircle = new SafeCircle(canvas, Colors.Red, 1);
             orangeCircle = new SafeCircle(canvas, Colors.Orange, 1);
@@ -342,7 +355,8 @@ namespace SeldatMRMS.Management.RobotManagent
             Center_B = 45;//40
             Center_Y = 10;
             Center_O = -20;
-            new Thread(() => {
+            new Thread(() =>
+            {
                 while (true)
                 {
                     Draw();
@@ -424,11 +438,19 @@ namespace SeldatMRMS.Management.RobotManagent
                 TypeZone typezone = trafficManagementService.GetTypeZone(properties.pose.Position, 0, 200);
                 double angle = -properties.pose.Angle;
                 Point position = Global_Object.CoorLaser(properties.pose.Position);
+                String statusLaserBack;
+                if (resetLaserBack)
+                {
+                    statusLaserBack = " Passed error laserBack";
+                }
+                else {
+                    statusLaserBack = " LaserBack run normal";
+                }
                 String tooltipStr = "Name: " + properties.Label + Environment.NewLine + "Zone: " + typezone +
                     Environment.NewLine + " Location: " + position.X.ToString("0.00") + " / " +
                     position.Y.ToString("0.00") + " / " + angle.ToString("0.00") + Environment.NewLine +
                     "Place: " + TyprPlaceStr + Environment.NewLine +
-                    "Working Zone: " + robotRegistryToWorkingZone.WorkingZone+ "/ "+ trafficManagementService.DetermineArea(this.properties.pose.Position, 0, 200) + Environment.NewLine +
+                    "Working Zone: " + robotRegistryToWorkingZone.WorkingZone + "/ " + trafficManagementService.DetermineArea(this.properties.pose.Position, 0, 200) + Environment.NewLine +
                     "Radius _S" + Radius_S + Environment.NewLine +
                     "Radius _Y" + Radius_Y + Environment.NewLine +
                     "Radius _B" + Radius_B + Environment.NewLine +
@@ -443,17 +465,18 @@ namespace SeldatMRMS.Management.RobotManagent
                     "CheckGate: " + robotRegistryToWorkingZone.onRobotwillCheckInsideGate + Environment.NewLine +
                     "Order: " + OrderStr + Environment.NewLine +
                     "Battery Level: " + properties.BatteryLevelRb + Environment.NewLine +
-                    "Robots Registry in Ready: " + TrafficRountineConstants.RegIntZone_READY.getNames()+ Environment.NewLine+
+                    "Robots Registry in Ready: " + TrafficRountineConstants.RegIntZone_READY.getNames() + Environment.NewLine +
                      "Robots Registry in GATE 12: " + TrafficRountineConstants.RegIntZone_GATE12.getNames() + Environment.NewLine +
                      "Robots Registry in Elevator: " + TrafficRountineConstants.RegIntZone_ELEVATOR.getNames() + Environment.NewLine +
                        "Robots Registry in Gate3: " + TrafficRountineConstants.RegIntZone_GATE3.getNames() + Environment.NewLine +
-                    "Gate 1: " + Global_Object.getGateStatus((int)DoorId.DOOR_MEZZAMINE_UP) + Environment.NewLine+
-                    "Gate 2: " + Global_Object.getGateStatus((int)DoorId.DOOR_MEZZAMINE_UP_NEW) + Environment.NewLine+
-                    "Robot_BAYID: "+bayId + Environment.NewLine +
+                    "Gate 1: " + Global_Object.getGateStatus((int)DoorId.DOOR_MEZZAMINE_UP) + Environment.NewLine +
+                    "Gate 2: " + Global_Object.getGateStatus((int)DoorId.DOOR_MEZZAMINE_UP_NEW) + Environment.NewLine +
+                    "Robot_BAYID: " + bayId + Environment.NewLine +
                     "Start_Point_Name: " + StartPointName + Environment.NewLine +
-                    "Start_Point: " + StartPoint.ToString()+ Environment.NewLine +
+                    "Start_Point: " + StartPoint.ToString() + Environment.NewLine +
                     "End_Point_Name: " + EndPointName + Environment.NewLine +
-                    "end_Point: " +EndPoint.ToString()+ Environment.NewLine 
+                    "end_Point: " + EndPoint.ToString() + Environment.NewLine +
+                    "laserBackStatus :" + statusLaserBack + Environment.NewLine
                     ;
 
                 border.ToolTip = tooltipStr;
@@ -531,13 +554,13 @@ namespace SeldatMRMS.Management.RobotManagent
                 disconnectedItem.IsEnabled = true;
                 MessageBox.Show("Để robot có thể tiếp tục hãy add Robot vào Ready Mode hoặc TaskWait Mode !");
 
-                SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+                SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
             }
             /*Radius_S = 4 * properties.Scale;
             Radius_B = 4 * properties.Scale;
             Radius_Y = 4 * properties.Scale;
             Radius_O = 3 * properties.Scale;*/
-     
+
         }
         private void DisposeMenu(object sender, RoutedEventArgs e)
         {
@@ -552,7 +575,7 @@ namespace SeldatMRMS.Management.RobotManagent
             SwitchToDetectLine(false);
             robotService.RemoveRobotUnityReadyList(this);
             robotService.RemoveRobotUnityWaitTaskList(this);
-          //  MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
+            //  MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
             onBinding = false;
             Draw();
         }
@@ -602,14 +625,14 @@ namespace SeldatMRMS.Management.RobotManagent
             flagLostPosition = false;
             SetNormalSpeedOrtherRobotLostPosition();
 
-            Radius_S =0;
+            Radius_S = 0;
             Radius_B = 0;
             Radius_O = 0;
             Radius_Y = 0;
-           /* Center_S = 0;
-            Center_B = 0;
-            Center_Y = 0;
-            Center_O = 0;*/
+            /* Center_S = 0;
+             Center_B = 0;
+             Center_Y = 0;
+             Center_O = 0;*/
         }
         public void SetOnOffTrafficMenu(object sender, RoutedEventArgs e)
         {
@@ -648,7 +671,7 @@ namespace SeldatMRMS.Management.RobotManagent
         private void StartMenu(object sender, RoutedEventArgs e)
         {
             this.setTrafficMode(TrafficMode.AUTO_MODE);
-            SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
+            SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
         }
 
         private void LiftUpMenu(object sender, RoutedEventArgs e)
@@ -659,6 +682,16 @@ namespace SeldatMRMS.Management.RobotManagent
         private void LiftDownMenu(object sender, RoutedEventArgs e)
         {
             LiftCtrlDown();
+        }
+
+        private void LaserBackOn(object sender, RoutedEventArgs e)
+        {
+            resetLaserBack = false;
+        }
+
+        private void LaserBackOff(object sender, RoutedEventArgs e)
+        {
+            resetLaserBack = true;
         }
         public void RemoveDraw()
         {
@@ -674,67 +707,74 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 if (properties.IsConnected)
                 {
-                    setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CONNECT);
+                    if ((agvErr == true) || (flagLostPosition == true))
+                    {
+                        setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_ERROR);
+                    }
+                    else
+                    {
+                        setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CONNECT);
+                    }
                 }
                 else
                 {
-                    if(properties.RequestChargeBattery)
+                    if (properties.RequestChargeBattery)
                         setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CHARGING);
                     else
                         setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
 
                 }
-                    this.border.Dispatcher.BeginInvoke(new System.Threading.ThreadStart(() =>
-                    {
+                this.border.Dispatcher.BeginInvoke(new System.Threading.ThreadStart(() =>
+                {
 
-                        props.rbRotateTransform.Angle = -properties.pose.Angle;
-                        Point cPoint = Global_Object.CoorCanvas(properties.pose.Position);
-                        props.rbTranslate = new TranslateTransform(cPoint.X - (border.Width / 2), cPoint.Y - (border.Height / 2));
-                        props.rbTransformGroup.Children[1] = props.rbTranslate;
+                    props.rbRotateTransform.Angle = -properties.pose.Angle;
+                    Point cPoint = Global_Object.CoorCanvas(properties.pose.Position);
+                    props.rbTranslate = new TranslateTransform(cPoint.X - (border.Width / 2), cPoint.Y - (border.Height / 2));
+                    props.rbTransformGroup.Children[1] = props.rbTranslate;
                         //Render Status
                         props.contentRotateTransform.Angle = (properties.pose.Angle);
-                        props.contentTranslate = new TranslateTransform(0, 0);
-                        props.contentTransformGroup.Children[1] = props.contentTranslate;
-                        headerPoint.RenderTransform = new TranslateTransform(MiddleHeaderCv().X - 2.5, MiddleHeaderCv().Y - 1);
-                        headerPoint1.RenderTransform = new TranslateTransform(MiddleHeaderCv1().X - 2.5, MiddleHeaderCv1().Y - 1);
-                        headerPoint2.RenderTransform = new TranslateTransform(MiddleHeaderCv2().X - 2.5, MiddleHeaderCv2().Y - 1);
-                        headerPoint3.RenderTransform = new TranslateTransform(MiddleHeaderCv3().X - 2.5, MiddleHeaderCv3().Y - 1);
+                    props.contentTranslate = new TranslateTransform(0, 0);
+                    props.contentTransformGroup.Children[1] = props.contentTranslate;
+                    headerPoint.RenderTransform = new TranslateTransform(MiddleHeaderCv().X - 2.5, MiddleHeaderCv().Y - 1);
+                    headerPoint1.RenderTransform = new TranslateTransform(MiddleHeaderCv1().X - 2.5, MiddleHeaderCv1().Y - 1);
+                    headerPoint2.RenderTransform = new TranslateTransform(MiddleHeaderCv2().X - 2.5, MiddleHeaderCv2().Y - 1);
+                    headerPoint3.RenderTransform = new TranslateTransform(MiddleHeaderCv3().X - 2.5, MiddleHeaderCv3().Y - 1);
 
 
-                        PathGeometry pgeometry = new PathGeometry();
-                        PathFigure pF = new PathFigure();
-                        pF.StartPoint = TopHeaderCv();
+                    PathGeometry pgeometry = new PathGeometry();
+                    PathFigure pF = new PathFigure();
+                    pF.StartPoint = TopHeaderCv();
 
                         // pF.StartPoint = new Point(TopHeader().X * 10, TopHeader().Y * 10);
                         LineSegment pp = new LineSegment();
 
-                        pF.Segments.Add(new LineSegment() { Point = BottomHeaderCv() });
-                        pF.Segments.Add(new LineSegment() { Point = BottomTailCv() });
-                        pF.Segments.Add(new LineSegment() { Point = TopTailCv() });
-                        pF.Segments.Add(new LineSegment() { Point = TopHeaderCv() });
+                    pF.Segments.Add(new LineSegment() { Point = BottomHeaderCv() });
+                    pF.Segments.Add(new LineSegment() { Point = BottomTailCv() });
+                    pF.Segments.Add(new LineSegment() { Point = TopTailCv() });
+                    pF.Segments.Add(new LineSegment() { Point = TopHeaderCv() });
                         // pF.Segments.Add(new LineSegment() { Point = new Point(BottomHeader().X*10, BottomHeader().Y * 10) });
                         //pF.Segments.Add(new LineSegment() { Point = new Point(BottomTail().X * 10, BottomTail().Y * 10) });
                         //  pF.Segments.Add(new LineSegment() { Point = new Point(TopTail().X * 10, TopTail().Y * 10) });
                         //pF.Segments.Add(new LineSegment() { Point = new Point(TopHeader().X * 10, TopHeader().Y * 10) });
                         pgeometry.Figures.Add(pF);
-                        safetyArea.Data = pgeometry;
+                    safetyArea.Data = pgeometry;
 
                         //  props.rbID.Content = properties.pose.Position.X.ToString("0");
                         // props.rbTask.Content = properties.pose.Position.Y.ToString("0");
-                         props.rbID.Content = properties.Label;
+                        props.rbID.Content = properties.Label;
                         // props.rbTask.Content = properties.pose.Position.Y.ToString("0");
 
                         smallCircle.Set(cPoint, new Point(0, 0), new Point(Radius_S, Radius_S));
-   
-                        Point ccY = CenterOnLineCv(Center_Y);
-                        yellowCircle.Set(ccY, new Point(0,0), new Point(Radius_Y, Radius_Y));
 
-                        Point ccB = CenterOnLineCv(Center_B);
-                        blueCircle.Set(ccB, new Point(0, 0), new Point(Radius_B, Radius_B));
-                 
-                        Point ccO = CenterOnLineCv(Center_O);
-                        orangeCircle.Set(ccO, new Point(0, 0), new Point(Radius_O, Radius_O));
-                    }));
+                    Point ccY = CenterOnLineCv(Center_Y);
+                    yellowCircle.Set(ccY, new Point(0, 0), new Point(Radius_Y, Radius_Y));
+
+                    Point ccB = CenterOnLineCv(Center_B);
+                    blueCircle.Set(ccB, new Point(0, 0), new Point(Radius_B, Radius_B));
+
+                    Point ccO = CenterOnLineCv(Center_O);
+                    orangeCircle.Set(ccO, new Point(0, 0), new Point(Radius_O, Radius_O));
+                }));
             }
             catch { }
 

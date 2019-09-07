@@ -373,9 +373,9 @@ namespace SeldatMRMS.Management
                 properties.L2 = 3;
                 properties.WS = 4;
                 properties.DistInter = 0;
-                L1Cv = 4* properties.Scale;
+                L1Cv = 4 * properties.Scale;
                 L2Cv = 3 * properties.Scale;
-                WSCv = 4* properties.Scale;
+                WSCv = 4 * properties.Scale;
                 //DistInterCv = rZR.distance * properties.Scale;
 
             }
@@ -391,7 +391,7 @@ namespace SeldatMRMS.Management
                     {
 
                         // cập nhật vùng riskzone // update vùng risk area cho robot
-                        ZoneRegister rZR = trafficManagementService.GetTypeZoneReg(properties.pose.Position,TrafficSetValue.YES) ;// trafficManagementService.Find(properties.pose.Position, 0, 200);
+                        ZoneRegister rZR = trafficManagementService.GetTypeZoneReg(properties.pose.Position, TrafficSetValue.YES);// trafficManagementService.Find(properties.pose.Position, 0, 200);
                         if (rZR != null)
                         {
                             properties.L1 = rZR.L1;
@@ -444,15 +444,15 @@ namespace SeldatMRMS.Management
             StandardBoolean data = (StandardBoolean)message;
             try
             {
-                if (data.data==true)
+                if (data.data == true)
                 {
                     SetStopSpeedOrtherRobotLostPosition();
                     if (!flagLostPosition)
                     {
-                        MessageBox.Show("Robot :"+ properties.Label +" Lost Position");
+                        MessageBox.Show("Robot :" + properties.Label + " Lost Position");
                     }
                     flagLostPosition = true;
-                   
+
                 }
                 else
                 {
@@ -472,8 +472,8 @@ namespace SeldatMRMS.Management
         {
             foreach (RobotUnity r in RobotUnitylist)
             {
-                if(r.flagLostPosition==false)
-                  r.SetSpeedCtrlLostMap(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
+                if (r.flagLostPosition == false)
+                    r.SetSpeedCtrlLostMap(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
             }
         }
         public RobotUnity DetermineRobotInWorkingZone(Point anyPoint)
