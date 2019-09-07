@@ -223,7 +223,8 @@ namespace SeldatUnilever_Ver1._02
                 Global_Object.setGateStatus((int)DoorId.DOOR_MEZZAMINE_UP, false); // gate 2
                 Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampSetStateOff(DoorType.DOOR_FRONT);
                 Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampSetStateOff(DoorType.DOOR_FRONT);
-                
+                Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.ResetDoor();
+                Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.ResetDoor();
             }
         }
 

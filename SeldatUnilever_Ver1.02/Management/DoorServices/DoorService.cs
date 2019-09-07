@@ -138,6 +138,7 @@ namespace DoorControllerService
         private const UInt32 TIME_OUT_PRESS_BUTTON = 1500;
         private const long TIMEOUT_REMOVE_COMMAND = 300000000; //30 second
         private bool doorBusy;
+        private bool kProcess = true;
 
         private RobotUnity rb;
 
@@ -260,6 +261,12 @@ namespace DoorControllerService
             }
         }
 
+        public void ResetDoor() {
+            this.removeListCtrlDoorBack();
+            this.removeListCtrlDoorFront();
+            kProcess = false;
+            stateCtrlDoor = StateCtrl.DOOR_ST_IDLE;
+        }
         public RetState checkOpen(DoorType type)
         {
             switch (type)
@@ -307,7 +314,6 @@ namespace DoorControllerService
             }
             return RetState.DOOR_CTRL_WAITTING;
         }
-
         public void doorCtrlProcess(object ojb)
         {
             DataReceive status = new DataReceive();
@@ -315,7 +321,7 @@ namespace DoorControllerService
             elapsedTimeFront.Start();
             Stopwatch elapsedTimeReleaseButton = new Stopwatch();
             elapsedTimeReleaseButton.Start();
-            bool kProcess = true;
+            kProcess = true;
             while (true)
             {
                 if (listCmdRqCtrl.Count > 0)
