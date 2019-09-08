@@ -367,7 +367,7 @@ namespace SeldatMRMS.Management.RobotManagent
             int subscription_Navi = this.Subscribe("/cmd_vel_mux/input/navi", "geometry_msgs/Twist", NaviCallback, 10);
             int subscription_lineEnable = this.Subscribe("/line_enable", "std_msgs/Int32", LineEnableHandler);
             float subscription_RequestGotoReady = this.Subscribe("/requestGotoReady", "std_msgs/Int32", RequestGotoReadyHandler);
-            int subscription_LostPostion = this.Subscribe("/lostPositon", "std_msgs/Bool", LostPositionHandler);
+            int subscription_LostPostion = this.Subscribe("/lostPosition", "std_msgs/Bool", LostPositionHandler);
             int subscription_AGVInfo = this.Subscribe("/robotInfoDisplay", "std_msgs/String", AGVInfoHandler);
 
             //paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
