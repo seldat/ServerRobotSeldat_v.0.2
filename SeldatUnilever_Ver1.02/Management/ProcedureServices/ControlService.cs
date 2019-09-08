@@ -27,6 +27,11 @@ namespace SeldatMRMS
             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
             {
                 robot.SwitchToDetectLine(false);
+                robot.onFlagFinishPalletUpDownINsideBuffer = false;
+            }
+            else if(resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP || resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETDOWN)
+            {
+                robot.onFlagFinishPalletUpDownINsideBuffer = true;
             }
         }
         public virtual void LineEnableCallBack(Int32 message)

@@ -22,7 +22,8 @@ namespace SeldatMRMS.Management
             ROBOT_PLACE_ROAD,
             ROBOT_PLACE_ROAD_DETECTLINE,
             ROBOT_PLACE_HIGHWAY,
-            ROBOT_PLACE_BUFFER,
+            ROBOT_PLACE_BUFFER_GO_IN,
+            ROBOT_PLACE_BUFFER_GO_OUT,
             ROBOT_PLACE_HIGHWAY_DETECTLINE,
             ROBOT_PLACE_HIGHWAY_READY,
             ROBOT_PLACE_GATE,
@@ -612,9 +613,13 @@ namespace SeldatMRMS.Management
             {
                 robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_ROAD_DETECTLINE;
             }
-            if (_type == TypeZone.BUFFER)
+            if (_type == TypeZone.BUFFER && onFlagFinishPalletUpDownINsideBuffer== false)
             {
-                robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER;
+                robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER_GO_IN;
+            }
+            if (_type == TypeZone.BUFFER && onFlagFinishPalletUpDownINsideBuffer == true)
+            {
+                robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER_GO_OUT;
             }
             if (_type == TypeZone.GATE)
             {
@@ -684,7 +689,23 @@ namespace SeldatMRMS.Management
                     SetSafeYellowcircle(true);
                     SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
                     break;
-                case RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER:
+                case RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER_GO_OUT:
+                    // kiem tra vong tròn xanh
+                    SetSafeSmallcircle(false);
+                    SetSafeOrgancircle(true);
+                    SetSafeBluecircle(true);
+                    SetSafeYellowcircle(false);
+                    if (CheckBlueCircle())
+                        break;
+                    if (CheckYellowCircle())
+                        break;
+                    else
+                    {
+                        STATE_SPEED = "ROBOT_PLACE_ROAD_NORMAL ";
+                        SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
+                    }
+                    break;
+                case RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER_GO_IN:
                     SetSafeOrgancircle(false);
                     SetSafeSmallcircle(false);
                     SetSafeBluecircle(false);
