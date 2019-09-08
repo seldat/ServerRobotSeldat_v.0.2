@@ -748,5 +748,30 @@
     "WS": 4.0,
     "distance": 0.0,
     "Speed": 0.0
+  },
+  {
+    "_Detail": null,
+    "NameId": "CLOSE-GATE",
+    "Type": 7,
+    "TrafficSet": 0,
+    "Index": 400,
+    "Point1": "12,4.5",
+    "Point2": "44,4.5",
+    "Point3": "44,0",
+    "Point4": "12,0",
+    "Dir_Out": 0,
+    "Detail": null,
+    "ZonesCheckGoInside": "",
+    "Radius_S": 0.0,
+    "Center_S": 0.0,
+    "Radius_B": 0.0,
+    "Center_B": 0.0,
+    "Radius_Y": 0.0,
+    "Center_Y": 0.0,
+    "L1": 0.0,
+    "L2": 0.0,
+    "WS": 0.0,
+    "distance": 0.0,
+    "Speed": 0.0
   }
 ]
