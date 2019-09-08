@@ -577,6 +577,10 @@ namespace SeldatMRMS.Management.RobotManagent
             robotService.RemoveRobotUnityWaitTaskList(this);
             //  MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
             onBinding = false;
+            onFlagDetectLine = false;
+            onFlagFinishPalletUpDownINsideBuffer = false;
+            onFlagGoBackReady = false;
+            onFlagReadyGo = false;
             Draw();
         }
         private void DisConnectMenu(object sender, RoutedEventArgs e)
@@ -619,7 +623,11 @@ namespace SeldatMRMS.Management.RobotManagent
             robotRegistryToWorkingZone.Release();
             robotRegistryToWorkingZone.onRobotwillCheckInsideGate = false;
             robotTag = RobotStatus.IDLE;
-            setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
+            onFlagDetectLine = false;
+            onFlagFinishPalletUpDownINsideBuffer = false;
+            onFlagGoBackReady = false;
+            onFlagReadyGo = false;
+        setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
 
             // reset lost position
             flagLostPosition = false;
