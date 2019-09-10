@@ -125,6 +125,7 @@ namespace SeldatMRMS.Management
         public bool onFlagSelfTraffic;
         public bool onFlagSafeYellowcircle = false;
         public bool onFlagSafeBluecircle = false;
+        public bool onFlagSafeGreencircle = false;
         public bool onFlagSafeSmallcircle = false;
         public bool onFlagSafeOrgancircle = false;
 
@@ -363,8 +364,9 @@ namespace SeldatMRMS.Management
 
                 Radius_S = 0;
                 Radius_B = 0;
-                Radius_Y = 0;
+                Radius_R = 0;
                 Radius_O = 0;
+                Radius_G = 0;
                 onFlagSafeSmallcircle = false;
 
             }
@@ -628,6 +630,7 @@ namespace SeldatMRMS.Management
             switch (robotBahaviorAtAnyPlace)
             {
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_IDLE:
+                    SetSafeGreencircle(false);
                     SetSafeOrgancircle(false);
                     SetSafeSmallcircle(true);
                     SetSafeBluecircle(false);
@@ -644,6 +647,7 @@ namespace SeldatMRMS.Management
                     if (!CheckYellowCircle())
                     {
                         // mở vòng tròn nhỏ vá kiểm tra va chạm
+                        SetSafeGreencircle(false);
                         SetSafeOrgancircle(false);
                         SetSafeSmallcircle(true);
                         SetSafeBluecircle(false);
@@ -661,6 +665,7 @@ namespace SeldatMRMS.Management
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_ROAD:
                     // kiem tra vong tròn xanh
+                    SetSafeGreencircle(false);
                     SetSafeSmallcircle(false);
                     SetSafeOrgancircle(true);
                     SetSafeBluecircle(true);
@@ -677,6 +682,7 @@ namespace SeldatMRMS.Management
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_ROAD_DETECTLINE:
                     // SetSafeSmallcircle(true);
+                    SetSafeGreencircle(false);
                     SetSafeOrgancircle(true);
                     SetSafeBluecircle(false);
                     SetSafeYellowcircle(true);
@@ -684,6 +690,7 @@ namespace SeldatMRMS.Management
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_DETECTLINE:
                     // SetSafeSmallcircle(true);
+                    SetSafeGreencircle(false);
                     SetSafeOrgancircle(true);
                     SetSafeBluecircle(false);
                     SetSafeYellowcircle(true);
@@ -691,17 +698,18 @@ namespace SeldatMRMS.Management
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER_GO_OUT:
                     // kiem tra vong tròn xanh
+                    SetSafeGreencircle(true);
                     SetSafeSmallcircle(false);
-                    SetSafeOrgancircle(true);
-                    SetSafeBluecircle(true);
+                    SetSafeOrgancircle(false);
+                    SetSafeBluecircle(false);
                     SetSafeYellowcircle(false);
-                    if (CheckBlueCircle())
+                    if (CheckGreenCircle())
                         break;
                     if (CheckYellowCircle())
                         break;
                     else
                     {
-                        STATE_SPEED = "ROBOT_PLACE_ROAD_NORMAL ";
+                        STATE_SPEED = "ROBOT_PLACE_BUFFER_NORMAL ";
                         SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
                     }
                     break;
@@ -710,6 +718,7 @@ namespace SeldatMRMS.Management
                     SetSafeSmallcircle(false);
                     SetSafeBluecircle(false);
                     SetSafeYellowcircle(false);
+                    SetSafeGreencircle(false);
                     if (CheckInBuffer(true))
                         break;
                     else
@@ -720,12 +729,14 @@ namespace SeldatMRMS.Management
                     // tắt vòng tròn nhỏ
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_GATE:
+                    SetSafeGreencircle(false);
                     SetSafeOrgancircle(false);
                     SetSafeSmallcircle(false);
                     SetSafeBluecircle(false);
                     SetSafeYellowcircle(false);
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_READY:
+                    SetSafeGreencircle(false);
                     SetSafeOrgancircle(false);
                     SetSafeSmallcircle(false);
                     SetSafeBluecircle(false);
@@ -819,6 +830,27 @@ namespace SeldatMRMS.Management
             return onStop;
         }
 
+        public bool CheckGreenCircle() // khi robot bặt vòng tròn xanh. chính nó phải ngưng nếu dò ra có robot nào trong vùng vòng tròn này ngược lại với vòng tròn vàng
+        {
+            bool onStop = false;
+            foreach (RobotUnity r in RobotUnitylist)
+            {
+                    Point cG = CenterOnLineCv(Center_G); // TRONG TAM CUA NO
+                    if (r.robotTag == RobotStatus.WORKING)
+                    {
+                        if (FindHeaderInsideCircleArea(r.MiddleHeaderCv(), cG, Radius_G) || FindHeaderInsideCircleArea(Global_Object.CoorCanvas(r.properties.pose.Position), cG, Radius_G))
+                        {
+                            STATE_SPEED = "GREEN_STOP " + r.properties.Label;
+                            SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+                            delay(5000);
+                            onStop = true;
+                            break;
+                        }
+                    }
+            }
+            return onStop;
+        }
+
 
         public bool CheckYellowCircle() // khi robot bặt vòng tròn vàng. tất cả robot khác ngưng nếu dò ra có robot nào trong vùng vòng tròn này
         {
@@ -828,8 +860,8 @@ namespace SeldatMRMS.Management
                 // kiểm tra có robot chinh  nó có nằm trong vòng tròn vàng nào không nếu có ngưng
                 if (r.onFlagSafeYellowcircle)
                 {
-                    Point cY = r.CenterOnLineCv(Center_Y); // TRONG TAM ROBOT KHAC
-                    if (r.FindHeaderInsideCircleArea(MiddleHeaderCv(), cY, r.Radius_Y))
+                    Point cY = r.CenterOnLineCv(Center_R); // TRONG TAM ROBOT KHAC
+                    if (r.FindHeaderInsideCircleArea(MiddleHeaderCv(), cY, r.Radius_R))
                     {
                         STATE_SPEED = "YELLOWC_STOP";
                         SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
@@ -849,9 +881,9 @@ namespace SeldatMRMS.Management
         public void SetSafeYellowcircle(bool flagonoff, double radius = 50)
         {
             if (flagonoff)
-                Radius_Y = radius;
+                Radius_R = radius;
             else
-                Radius_Y = 0;
+                Radius_R = 0;
             onFlagSafeYellowcircle = flagonoff;
         }
         public void SetSafeBluecircle(bool flagonoff, double radius = 50)
@@ -861,6 +893,15 @@ namespace SeldatMRMS.Management
             else
                 Radius_B = 0;
             onFlagSafeBluecircle = flagonoff;
+        }
+
+        public void SetSafeGreencircle(bool flagonoff, double radius = 50)
+        {
+            if (flagonoff)
+                Radius_G = radius;
+            else
+                Radius_G = 0;
+            onFlagSafeGreencircle = flagonoff;
         }
         public void SetSafeSmallcircle(bool flagonoff, double radius = 40)
         {

@@ -38,7 +38,8 @@ namespace SeldatMRMS.Management.RobotManagent
 
         SafeCircle smallCircle;
         SafeCircle blueCircle;
-        SafeCircle yellowCircle;
+        SafeCircle greenCircle;
+        SafeCircle redCircle;
         SafeCircle orangeCircle;
         double angle = 0.0f;
         public Point org = new Point(600, 350);
@@ -348,12 +349,14 @@ namespace SeldatMRMS.Management.RobotManagent
 
             smallCircle = new SafeCircle(canvas, Colors.Black, 1);
             blueCircle = new SafeCircle(canvas, Colors.Blue, 1);
-            yellowCircle = new SafeCircle(canvas, Colors.Red, 1);
+            redCircle = new SafeCircle(canvas, Colors.Red, 1);
+            greenCircle = new SafeCircle(canvas, Colors.Green, 1);
             orangeCircle = new SafeCircle(canvas, Colors.Orange, 1);
 
             Center_S = 0;
             Center_B = 45;//40
-            Center_Y = 10;
+            Center_G = 45;
+            Center_R = 10;
             Center_O = -20;
             new Thread(() =>
             {
@@ -452,7 +455,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     "Place: " + TyprPlaceStr + Environment.NewLine +
                     "Working Zone: " + robotRegistryToWorkingZone.WorkingZone + "/ " + trafficManagementService.DetermineArea(this.properties.pose.Position, 0, 200) + Environment.NewLine +
                     "Radius _S" + Radius_S + Environment.NewLine +
-                    "Radius _Y" + Radius_Y + Environment.NewLine +
+                    "Radius _Y" + Radius_R + Environment.NewLine +
                     "Radius _B" + Radius_B + Environment.NewLine +
                     "Speed Set :" + properties.speedInSpecicalArea + Environment.NewLine +
                     "STATE: " + STATE_SPEED + Environment.NewLine +
@@ -628,7 +631,8 @@ namespace SeldatMRMS.Management.RobotManagent
             Radius_S = 0;
             Radius_B = 0;
             Radius_O = 0;
-            Radius_Y = 0;
+            Radius_R = 0;
+            Radius_G = 0;
             /* Center_S = 0;
              Center_B = 0;
              Center_Y = 0;
@@ -766,11 +770,14 @@ namespace SeldatMRMS.Management.RobotManagent
 
                         smallCircle.Set(cPoint, new Point(0, 0), new Point(Radius_S, Radius_S));
 
-                    Point ccY = CenterOnLineCv(Center_Y);
-                    yellowCircle.Set(ccY, new Point(0, 0), new Point(Radius_Y, Radius_Y));
+                    Point ccR = CenterOnLineCv(Center_R);
+                    redCircle.Set(ccR, new Point(0, 0), new Point(Radius_R, Radius_R));
 
                     Point ccB = CenterOnLineCv(Center_B);
                     blueCircle.Set(ccB, new Point(0, 0), new Point(Radius_B, Radius_B));
+
+                    Point ccG = CenterOnLineCv(Center_G);
+                    greenCircle.Set(ccG, new Point(0, 0), new Point(Radius_G, Radius_G));
 
                     Point ccO = CenterOnLineCv(Center_O);
                     orangeCircle.Set(ccO, new Point(0, 0), new Point(Radius_O, Radius_O));
