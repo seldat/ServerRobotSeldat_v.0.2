@@ -41,10 +41,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 
             if (ExtensionService.CalDistance(robot.properties.pose.Position, frontLinePoint.Position) < DISTANCE_CHECk_BAYID)
             {
-                if (robot.bayId < 0)
+               /* if (robot.bayId < 0)
                 {
                     robot.bayId = bayId;
-                }
+                }*/
                 List<RobotUnity> rCompList = checkAllRobotsHasInsideBayIdNear(bayId, 2);
                 if (rCompList == null) // đã có 1 robot đã đăng ký thành công bayid
                 {

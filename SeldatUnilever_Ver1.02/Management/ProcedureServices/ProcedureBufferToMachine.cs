@@ -158,7 +158,10 @@ namespace SeldatMRMS
                 KillEvent();
             }
             else
+            {
                 order.frontLinePos = frontLinePose.Position;
+                robot.bayId = bayId;
+            }
             while (ProRun)
             {
                 switch (StateBufferToMachine)
