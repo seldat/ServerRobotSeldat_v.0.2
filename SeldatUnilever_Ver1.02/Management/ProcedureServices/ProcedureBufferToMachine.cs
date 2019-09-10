@@ -424,7 +424,7 @@ namespace SeldatMRMS
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             BfToMa.UpdatePalletState(PalletStatus.F, jPResult.palletId, order.planId);
                             //Reset trạng thai W cho pallet_H nếu truoc đó có cây W
-                            if (jPResult.jInfoPallet.row != order.palletRow)
+                            if (jPResult.jInfoPallet.row <order.palletRow)
                             {
                                 BfToMa.UpdatePalletState(PalletStatus.W, order.palletId_H, order.planId);
 

@@ -173,7 +173,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
             retryconnectItem.Header = "ReConnect";
             retryconnectItem.Click += ReConnectMenu;
-            retryconnectItem.IsEnabled = true;
+            retryconnectItem.IsEnabled = false;
 
             disconnectedItem.Header = "DisConnect";
             disconnectedItem.Click += DisConnectMenu;
@@ -536,10 +536,10 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         private void ReConnectMenu(object sender, RoutedEventArgs e)
         {
-            if (webSocket != null)
+          /*  if (webSocket != null)
             {
                 webSocket.Connect();
-            }
+            }*/
         }
         private void ConnectMenu(object sender, RoutedEventArgs e)
         {
