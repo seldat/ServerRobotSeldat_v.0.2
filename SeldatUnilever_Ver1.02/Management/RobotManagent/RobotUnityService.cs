@@ -49,11 +49,13 @@ namespace SeldatMRMS.Management.RobotManagent
         public double Radius_S;
         public double Radius_O;
         public double Radius_B;
-        public double Radius_Y;
+        public double Radius_R;
+        public double Radius_G;
         public double Center_S;
         public double Center_B;
-        public double Center_Y;
+        public double Center_R;
         public double Center_O;
+        public double Center_G;
 
         public RobotUnityService()
         {

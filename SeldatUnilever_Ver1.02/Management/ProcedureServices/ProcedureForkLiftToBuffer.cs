@@ -105,11 +105,11 @@ namespace SeldatMRMS
             rb.mcuCtrl.lampRbOn();
             robot.ShowText(" Start -> " + procedureCode);
             endPointBuffer = FlToBuf.GetFrontLineBuffer(true);
-      
-            if(endPointBuffer==null)
+
+            if (endPointBuffer == null)
             {
 
-                Console.WriteLine("Error Data Request"+order.dataRequest);
+                Console.WriteLine("Error Data Request" + order.dataRequest);
                 order.status = StatusOrderResponseCode.ERROR_GET_FRONTLINE;
                 TrafficRountineConstants.ReleaseAll(robot);
                 robot.orderItem = null;
@@ -132,7 +132,10 @@ namespace SeldatMRMS
                 KillEvent();
             }
             else
+            {
                 order.frontLinePos = endPointBuffer.Position;
+                robot.bayId = bayId;
+            }
             while (ProRun)
             {
                // JPallet aa= GetInfoPallet_P_InBuffer(TrafficRobotUnity.PistonPalletCtrl.PISTON_PALLET_DOWN);

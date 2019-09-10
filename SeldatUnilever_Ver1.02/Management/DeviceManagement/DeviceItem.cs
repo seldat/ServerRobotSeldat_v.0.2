@@ -134,8 +134,10 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public DataPallet palletAtMachine;
 
             public int bufferId { get; set; }
+            public int bayId { get; set; }
             public int bufferIdPut;
             public int palletAmount;
+
             public DateTime startTimeProcedure = new DateTime();
             public DateTime endTimeProcedure = new DateTime();
             public double totalTimeProcedure { get; set; }
