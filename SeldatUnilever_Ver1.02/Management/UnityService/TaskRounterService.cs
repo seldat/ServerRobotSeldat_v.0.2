@@ -24,6 +24,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         {
             public int row;
             public int bay;
+            public int bayId;
             public int palletId;
             public int ofBufferId;
         }
@@ -144,21 +145,14 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                         item.palletBay = palletIFBM.bay;
                                         item.palletRow = palletIFBM.row;
                                         item.bufferId = palletIFBM.ofBufferId;
-                                        int bayId=GetBayId_BM(item);
-                                        if (bayId > 0)
+                                        item.bayId = palletIFBM.bayId;
+                                        if (checkRobotSameBayId(item.bayId))
                                         {
-                                            if (checkRobotSameBayId(bayId))
-                                            {
-                                                return null;
-                                            }
-                                            else
-                                            {
-                                                return item;
-                                            }
+                                            return null;
                                         }
                                         else
                                         {
-                                            return null;
+                                            return item;
                                         }
                                     }
                                     else
@@ -458,7 +452,10 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             int bay = (int)palletInfo["bay"];
                             int row = (int)palletInfo["row"];
                             palletId = (int)palletInfo["palletId"];
+                            JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                            int bayId = (int)stuff["bayId"];
                             palletINF.palletId = palletId;
+                            palletINF.bayId = bayId;
                             palletINF.bay =bay;
                             palletINF.row = row;
                             palletINF.ofBufferId = bufferId;
