@@ -151,7 +151,7 @@ namespace SeldatMRMS
                 ReleaseProcedureHandler(this);
                 ProRun = false;
                 UpdateInformationInProc(this, ProcessStatus.S);
-                order.status = StatusOrderResponseCode.FINISHED;
+                order.status = StatusOrderResponseCode.ERROR_GET_FRONTLINE;
                 order.endTimeProcedure = DateTime.Now;
                 order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
                 SaveOrderItem(order);

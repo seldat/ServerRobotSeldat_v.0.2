@@ -125,7 +125,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         return false;
                     case ProcessAssignAnTaskWait.PROC_ANY_CHECK_HAS_ANTASK:
                         orderItem_wait = order;
-                        orderItem_wait.onAssiged = true;
+                        //orderItem_wait.onAssiged = true;
                         processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK;
                         orderItem_wait.robot = robotwait.properties.Label;
                         robotwait.orderItem = orderItem_wait;
@@ -250,7 +250,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         return false;
                     case ProcessAssignTaskReady.PROC_READY_CHECK_HAS_ANTASK:
                         orderItem_ready = order;
-                        orderItem_ready.onAssiged = true;
+                      //  orderItem_ready.onAssiged = true;
                         Console.WriteLine(processAssignTaskReady);
                         orderItem_ready.robot = robotatready.properties.Label;
                         robotatready.orderItem = orderItem_ready;

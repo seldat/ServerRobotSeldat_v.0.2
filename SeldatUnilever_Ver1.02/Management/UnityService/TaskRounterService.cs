@@ -128,24 +128,45 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         {
                             case TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE:
                             {
-                                   PalletINF palletIFBM = GetPalletId(item.dataRequest);
-                                    if (palletIFBM!=null)
+                                    if (item.onAssiged == false)
                                     {
-                                        palletId = palletIFBM.palletId;
-                                        dynamic product = new JObject();
-                                        UpdatePalletStateToHold(palletId, item);
-                                        product.timeWorkId = item.timeWorkId;
-                                        product.activeDate = item.activeDate;
-                                        product.productId = item.productId;
-                                        product.productDetailId = item.productDetailId;
-                                        // chu y sua 
-                                        product.palletStatus = PalletStatus.H.ToString(); // W
-                                        item.dataRequest = product.ToString();
-                                        item.palletId_H = palletId;
-                                        item.palletBay = palletIFBM.bay;
-                                        item.palletRow = palletIFBM.row;
-                                        item.bufferId = palletIFBM.ofBufferId;
-                                        item.bayId = palletIFBM.bayId;
+                                        PalletINF palletIFBM = GetPalletId(item.dataRequest);
+                                        if (palletIFBM != null)
+                                        {
+                                            palletId = palletIFBM.palletId;
+                                            dynamic product = new JObject();
+                                            UpdatePalletStateToHold(palletId, item);
+                                            product.timeWorkId = item.timeWorkId;
+                                            product.activeDate = item.activeDate;
+                                            product.productId = item.productId;
+                                            product.productDetailId = item.productDetailId;
+                                            // chu y sua 
+                                            product.palletStatus = PalletStatus.H.ToString(); // W
+                                            item.dataRequest = product.ToString();
+                                            item.palletId_H = palletId;
+                                            item.palletBay = palletIFBM.bay;
+                                            item.palletRow = palletIFBM.row;
+                                            item.bufferId = palletIFBM.ofBufferId;
+                                            item.bayId = palletIFBM.bayId;
+                                            item.onAssiged = true;
+                                            if (checkRobotSameBayId(item.bayId))
+                                            {
+                                                return null;
+                                            }
+                                            else
+                                            {
+                                                return item;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            item.status = StatusOrderResponseCode.ERROR_GET_PALLETID;
+                                            deviceItemsList[0].RemoveOrder(item);
+                                            return null;
+                                        }
+                                    }
+                                    else
+                                    {
                                         if (checkRobotSameBayId(item.bayId))
                                         {
                                             return null;
@@ -154,12 +175,6 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                         {
                                             return item;
                                         }
-                                    }
-                                    else
-                                    {
-                                        item.status = StatusOrderResponseCode.ERROR_GET_PALLETID;
-                                        deviceItemsList[0].RemoveOrder(item);
-                                        return null;
                                     }
                             }
                             case TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401:
@@ -261,12 +276,27 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 }
                                 break;
                             case TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER:
-                                PalletINF palletINF = GetRowBayPalletPlaned(item.dataRequest,item.palletId_P);
-                                if(palletINF!=null)
+                                if (item.onAssiged == false)
                                 {
-                                    item.palletBay = palletINF.bay;
-                                    item.palletRow = palletINF.row;
-                                    item.bufferId = palletINF.ofBufferId;
+                                    PalletINF palletINF = GetRowBayPalletPlaned(item.dataRequest, item.palletId_P);
+                                    if (palletINF != null)
+                                    {
+                                        item.palletBay = palletINF.bay;
+                                        item.palletRow = palletINF.row;
+                                        item.bufferId = palletINF.ofBufferId;
+                                        item.onAssiged = true;
+                                        return item;
+                                    }
+                                    else
+                                    {
+                                        item.status = StatusOrderResponseCode.ERROR_GET_PALLETID;
+                                        deviceItemsList[0].RemoveOrder(item);
+                                        return null;
+                                    }
+                                }
+                                else
+                                {
+                                    return item;
                                 }
                                 break;
                             default:
@@ -349,6 +379,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                                 palletINF.bay = bay;
                                                 palletINF.row = row;
                                                 palletINF.ofBufferId = bufferId;
+                                            
                                                 return palletINF;
                                             }
 
