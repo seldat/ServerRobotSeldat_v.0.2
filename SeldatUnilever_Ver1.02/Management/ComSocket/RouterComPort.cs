@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SeldatMRMS.Management.RobotManagent;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -29,6 +30,11 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
         public String Ip { get; set; }
         public Int32 Port { get; set; }
 
+        protected RobotUnity rb;
+        public void setRb(RobotUnity robot)
+        {
+            this.rb = robot;
+        }
         public struct DataReceive
         {
             public int length;
@@ -226,7 +232,8 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
             }
             else
             {
-                Console.WriteLine("Please create socket\r\n");
+                if (this.rb != null)
+                    this.rb.ShowText("SPlease create socket");
                 ret = false;
             }
             return ret;
@@ -270,6 +277,8 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
 
                 if (ret == false)
                 {
+                    if (this.rb != null)
+                        this.rb.ShowText("Connnect fail______---------------------------(-_-)---------------------------_______");
                     Console.WriteLine("Connnect fail______---------------------------(-_-)---------------------------_______");
                 }
             }

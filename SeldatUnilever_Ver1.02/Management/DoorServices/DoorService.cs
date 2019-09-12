@@ -140,13 +140,6 @@ namespace DoorControllerService
         private bool doorBusy;
         private bool kProcess = true;
 
-        private RobotUnity rb;
-
-        public void setRb(RobotUnity robot)
-        {
-            this.rb = robot;
-        }
-
         private List<cmdRqDoor> listCmdRqCtrl = new List<cmdRqDoor>();
 
         public bool getDoorBusy()
@@ -261,11 +254,16 @@ namespace DoorControllerService
             }
         }
 
-        public void ResetDoor() {
+        public void ResetDoor()
+        {
             this.removeListCtrlDoorBack();
             this.removeListCtrlDoorFront();
             kProcess = false;
             stateCtrlDoor = StateCtrl.DOOR_ST_IDLE;
+            this.OpenRelease(DoorType.DOOR_BACK);
+            this.OpenRelease(DoorType.DOOR_FRONT);
+            this.CloseRelease(DoorType.DOOR_BACK);
+            this.CloseRelease(DoorType.DOOR_FRONT);
         }
         public RetState checkOpen(DoorType type)
         {
@@ -376,44 +374,65 @@ namespace DoorControllerService
                                     Console.WriteLine("StateCtrl.DOOR_ST_OPEN" + resCmd.dType);
                                     if (resCmd.dType == DoorType.DOOR_FRONT)
                                     {
-                                        this.GetStatus(ref status, DoorType.DOOR_BACK);
-                                        if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
+                                        if (true == this.GetStatus(ref status, DoorType.DOOR_BACK))
                                         {
-                                            //if (this.rb != null)
-                                            Console.WriteLine("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + DoorType.DOOR_BACK + "is open");
-                                            cmdRqDoor varTamp = new cmdRqDoor();
-                                            DateTime currentDate = DateTime.Now;
-                                            varTamp.timePre = currentDate.Ticks;
-                                            varTamp.cmdRq = DoorCmdRq.DOOR_CLOSE;
-                                            varTamp.dType = DoorType.DOOR_BACK;
-                                            listCmdRqCtrl[0].timePre = currentDate.Ticks;
-                                            listCmdRqCtrl.Insert(0, varTamp);
-                                            kProcess = false;
-                                            break;
+                                            if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
+                                            {
+                                                //if (this.rb != null)
+                                                Console.WriteLine("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + DoorType.DOOR_BACK + "is open");
+                                                cmdRqDoor varTamp = new cmdRqDoor();
+                                                DateTime currentDate = DateTime.Now;
+                                                varTamp.timePre = currentDate.Ticks;
+                                                varTamp.cmdRq = DoorCmdRq.DOOR_CLOSE;
+                                                varTamp.dType = DoorType.DOOR_BACK;
+                                                listCmdRqCtrl[0].timePre = currentDate.Ticks;
+                                                listCmdRqCtrl.Insert(0, varTamp);
+                                                kProcess = false;
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (this.rb != null)
+                                                this.rb.ShowText("Get status door failed");
                                         }
                                         Thread.Sleep(50);
                                     }
                                     else if (resCmd.dType == DoorType.DOOR_BACK)
                                     {
-                                        this.GetStatus(ref status, DoorType.DOOR_FRONT);
-                                        if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
+                                        if (true == this.GetStatus(ref status, DoorType.DOOR_FRONT))
                                         {
-                                            //if (this.rb != null)
-                                            Console.WriteLine("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + DoorType.DOOR_FRONT + "is open");
-                                            removeItemListCtrlDoor(resCmd);
-                                            doorBackStatus = DoorStatus.DOOR_ERROR;
-                                            kProcess = false;
-                                            break;
+                                            if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
+                                            {
+                                                //if (this.rb != null)
+                                                Console.WriteLine("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + DoorType.DOOR_FRONT + "is open");
+                                                removeItemListCtrlDoor(resCmd);
+                                                doorBackStatus = DoorStatus.DOOR_ERROR;
+                                                kProcess = false;
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (this.rb != null)
+                                                this.rb.ShowText("Get status door failed");
                                         }
                                         Thread.Sleep(50);
                                     }
-                                    this.GetStatus(ref status, resCmd.dType);
-                                    if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
+                                    if (true == this.GetStatus(ref status, resCmd.dType))
                                     {
-                                        //if (this.rb != null)
-                                        Console.WriteLine("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + "DOOR_ST_OPEN_SUCCESS");
-                                        this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN_SUCCESS;
-                                        break;
+                                        if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
+                                        {
+                                            //if (this.rb != null)
+                                            Console.WriteLine("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + "DOOR_ST_OPEN_SUCCESS");
+                                            this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN_SUCCESS;
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (this.rb != null)
+                                            this.rb.ShowText("Get status door failed");
                                     }
                                     Thread.Sleep(50);
                                     Console.WriteLine("DOOR_ST_OPEN");
@@ -464,22 +483,29 @@ namespace DoorControllerService
                                     }
                                     else
                                     {
-                                        this.GetStatus(ref status, resCmd.dType);
-                                        if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
+                                        if (true == this.GetStatus(ref status, resCmd.dType))
                                         {
-                                            this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN_SUCCESS;
-                                            if (resCmd.dType == DoorType.DOOR_FRONT)
+                                            if (status.data[0] == (byte)DoorStatus.DOOR_OPEN)
                                             {
-                                                doorFrontStatus = DoorStatus.DOOR_OPEN;
+                                                this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN_SUCCESS;
+                                                if (resCmd.dType == DoorType.DOOR_FRONT)
+                                                {
+                                                    doorFrontStatus = DoorStatus.DOOR_OPEN;
+                                                }
+                                                else
+                                                {
+                                                    doorBackStatus = DoorStatus.DOOR_OPEN;
+                                                }
+                                                elapsedTimeFront.Reset();
+                                                Console.WriteLine("DOOR_ST_OPEN_SUCCESS");
+                                                //if (this.rb != null)
+                                                Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "DOOR_ST_OPEN_SUCCESS");
                                             }
-                                            else
-                                            {
-                                                doorBackStatus = DoorStatus.DOOR_OPEN;
-                                            }
-                                            elapsedTimeFront.Reset();
-                                            Console.WriteLine("DOOR_ST_OPEN_SUCCESS");
-                                            //if (this.rb != null)
-                                            Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "DOOR_ST_OPEN_SUCCESS");
+                                        }
+                                        else
+                                        {
+                                            if (this.rb != null)
+                                                this.rb.ShowText("Get status door failed");
                                         }
                                     }
 
@@ -500,13 +526,20 @@ namespace DoorControllerService
                             case StateCtrl.DOOR_ST_CLOSE:
                                 try
                                 {
-                                    this.GetStatus(ref status, resCmd.dType);
-                                    if (status.data[0] == (byte)DoorStatus.DOOR_CLOSE)
+                                    if (true == this.GetStatus(ref status, resCmd.dType))
                                     {
-                                        //if (this.rb != null)
-                                        Console.WriteLine("StateCtrl.DOOR_ST_CLOSE" + resCmd.dType + ':' + "DOOR_ST_CLOSE_SUCCESS");
-                                        this.stateCtrlDoor = StateCtrl.DOOR_ST_CLOSE_SUCCESS;
-                                        break;
+                                        if (status.data[0] == (byte)DoorStatus.DOOR_CLOSE)
+                                        {
+                                            //if (this.rb != null)
+                                            Console.WriteLine("StateCtrl.DOOR_ST_CLOSE" + resCmd.dType + ':' + "DOOR_ST_CLOSE_SUCCESS");
+                                            this.stateCtrlDoor = StateCtrl.DOOR_ST_CLOSE_SUCCESS;
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (this.rb != null)
+                                            this.rb.ShowText("Get status door failed");
                                     }
                                     Console.WriteLine("DOOR_ST_CLOSE_DOOR");
                                     Thread.Sleep(50);
@@ -559,22 +592,29 @@ namespace DoorControllerService
                                     else
                                     {
 
-                                        this.GetStatus(ref status, resCmd.dType);
-                                        if (status.data[0] == (byte)DoorStatus.DOOR_CLOSE)
+                                        if (true == this.GetStatus(ref status, resCmd.dType))
                                         {
-                                            this.stateCtrlDoor = StateCtrl.DOOR_ST_CLOSE_SUCCESS;
-                                            if (resCmd.dType == DoorType.DOOR_FRONT)
+                                            if (status.data[0] == (byte)DoorStatus.DOOR_CLOSE)
                                             {
-                                                doorFrontStatus = DoorStatus.DOOR_CLOSE;
+                                                this.stateCtrlDoor = StateCtrl.DOOR_ST_CLOSE_SUCCESS;
+                                                if (resCmd.dType == DoorType.DOOR_FRONT)
+                                                {
+                                                    doorFrontStatus = DoorStatus.DOOR_CLOSE;
+                                                }
+                                                else
+                                                {
+                                                    doorBackStatus = DoorStatus.DOOR_CLOSE;
+                                                }
+                                                elapsedTimeFront.Reset();
+                                                //if (this.rb != null)
+                                                Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "DOOR_ST_CLOSE_DOOR_SUCCESS");
+                                                Console.WriteLine("DOOR_ST_CLOSE_DOOR_SUCCESS");
                                             }
-                                            else
-                                            {
-                                                doorBackStatus = DoorStatus.DOOR_CLOSE;
-                                            }
-                                            elapsedTimeFront.Reset();
-                                            //if (this.rb != null)
-                                            Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "DOOR_ST_CLOSE_DOOR_SUCCESS");
-                                            Console.WriteLine("DOOR_ST_CLOSE_DOOR_SUCCESS");
+                                        }
+                                        else
+                                        {
+                                            if (this.rb != null)
+                                                this.rb.ShowText("Get status door failed");
                                         }
                                     }
                                 }
@@ -660,6 +700,8 @@ namespace DoorControllerService
             dataSend[5] = (byte)id;
             dataSend[6] = CalChecksum(dataSend, 4);
             ret = this.Tranfer(dataSend, ref data);
+            if (this.rb != null)
+                this.rb.ShowText("Status door : " + id + ": " + (DoorStatus)data.data[0]);
             Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "Status door : " + id + ": " + (DoorStatus)data.data[0]);
             return ret;
         }

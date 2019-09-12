@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using DoorControllerService;
 
 namespace SelDatUnilever_Ver1._00.Management.ComSocket
 {
@@ -25,6 +24,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                 this.data = new byte[size];
             }
         };
+
         public TranferData(String ip, Int32 port)
         {
             //StartClient(ip,port);
@@ -56,6 +56,8 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
             while (true == flagGetRespone)
             {
                 numResent++;
+                if (this.rb != null)
+                    this.rb.ShowText("try sent socket : " + numResent);
                 Console.WriteLine("try sent socket ------------------ {0} ----------------", numResent);
                 this.Close();
                 if (this.StartClient())// open socket
