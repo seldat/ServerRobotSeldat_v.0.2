@@ -108,7 +108,7 @@ namespace SeldatMRMS
 
             if (endPointBuffer == null)
             {
-
+                robot.bayId = -1;
                 Console.WriteLine("Error Data Request" + order.dataRequest);
                 order.status = StatusOrderResponseCode.ERROR_GET_FRONTLINE;
                 TrafficRountineConstants.ReleaseAll(robot);
@@ -117,11 +117,17 @@ namespace SeldatMRMS
                 robot.ReleaseWorkingZone();
                 if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
                 {
+                    TrafficRountineConstants.RegIntZone_READY.Release(robot);
                     robot.robotTag = RobotStatus.IDLE;
-                    rb.PreProcedureAs = ProcedureControlAssign.PRO_READY;
+                    robot.SetSafeYellowcircle(false);
+                    robot.SetSafeBluecircle(false);
+                    robot.SetSafeSmallcircle(false);
+                    robot.TurnOnSupervisorTraffic(false);
+                   // rb.mcuCtrl.lampRbOff();
+                    procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_READY;
                 }
                 else
-                    rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
+                    procedureCode = ProcedureCode.PROC_CODE_FORKLIFT_TO_BUFFER;
                 ReleaseProcedureHandler(this);
                 ProRun = false;
                 robot.ShowText("RELEASED");

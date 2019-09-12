@@ -488,6 +488,7 @@ namespace SeldatMRMS
             registryRobotJourney.traffic = Traffic;
             ProRobotToReady.Start(this);
             cntOrderItem = 0;
+            robot.bayId = -1;
         }
         public void Destroy()
         {

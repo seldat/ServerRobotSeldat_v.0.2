@@ -961,9 +961,10 @@ namespace SelDatUnilever_Ver1
         public Pose GetFrontLineBuffer(bool onPlandId = false)
         {
             Pose poseTemp = null;
+            String collectionData="";
             try
             {
-                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+               collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
                 if (collectionData.Length > 0)
                 {
                     JArray results = JArray.Parse(collectionData);
@@ -1052,6 +1053,13 @@ namespace SelDatUnilever_Ver1
             }
             catch
             {
+                Console.WriteLine("-----------Error CollectionData----------");
+                Console.WriteLine(collectionData);
+                Console.WriteLine("Error Front Line");
+            }
+            if(poseTemp==null)
+            {
+                Console.WriteLine(collectionData);
                 Console.WriteLine("Error Front Line");
             }
             return poseTemp;

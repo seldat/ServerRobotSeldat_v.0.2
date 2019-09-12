@@ -135,7 +135,7 @@ namespace SeldatMRMS
             frontLinePose = BfToMa.GetFrontLineBuffer();
             if (frontLinePose == null)
             {
-
+                robot.bayId = -1;
                 TrafficRountineConstants.ReleaseAll(robot);
                 robot.bayId = -1;
                 robot.bayIdReg = false;
@@ -143,11 +143,17 @@ namespace SeldatMRMS
                 robot.SwitchToDetectLine(false);
                 if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
                 {
+                    TrafficRountineConstants.RegIntZone_READY.Release(robot);
                     robot.robotTag = RobotStatus.IDLE;
-                    rb.PreProcedureAs = ProcedureControlAssign.PRO_READY;
+                    robot.SetSafeYellowcircle(false);
+                    robot.SetSafeBluecircle(false);
+                    robot.SetSafeSmallcircle(false);
+                    robot.TurnOnSupervisorTraffic(false);
+                   // rb.mcuCtrl.lampRbOff();
+                    procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_READY;
                 }
                 else
-                    rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
+                    procedureCode = ProcedureCode.PROC_CODE_BUFFER_TO_MACHINE;
                 ReleaseProcedureHandler(this);
                 ProRun = false;
                 UpdateInformationInProc(this, ProcessStatus.S);
