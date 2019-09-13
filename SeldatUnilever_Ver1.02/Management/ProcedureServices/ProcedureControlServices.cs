@@ -90,6 +90,7 @@ namespace SeldatMRMS
         public enum ForkLift
         {
             FORBUF_IDLE,
+            FORBUF_GET_FRONTLINE,
             FORBUF_SELECT_BEHAVIOR_ONZONE,
             FORBUF_ROBOT_GOTO_CHECKIN_GATE, // vị trí check in liệu có quy trình nào tại cổng
             FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE,
@@ -163,6 +164,7 @@ namespace SeldatMRMS
         public enum BufferToMachine
         {
             BUFMAC_IDLE,
+            BUFMAC_GET_FRONTLINE,
             BUFMAC_SELECT_BEHAVIOR_ONZONE,
             BUFMAC_ROBOT_GOTO_CHECKIN_BUFFER,
             BUFMAC_ROBOT_GOTO_BACK_FRONTLINE_READY,

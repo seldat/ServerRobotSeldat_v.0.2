@@ -19,7 +19,7 @@ namespace SelDatUnilever_Ver1._00.Communication.HttpBridge
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.Timeout = TimeSpan.FromMilliseconds(5000);
+                   // client.Timeout = TimeSpan.FromMilliseconds(500);
                     var content = new StringContent(jsonObject, Encoding.UTF8, "application/json");
                     var response = await client.PostAsync(url, content);
                     String jsonString = await response.Content.ReadAsStringAsync();

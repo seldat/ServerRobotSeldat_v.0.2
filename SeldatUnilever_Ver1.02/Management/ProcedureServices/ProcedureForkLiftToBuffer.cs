@@ -54,7 +54,7 @@ namespace SeldatMRMS
             procedureCode = ProcedureCode.PROC_CODE_FORKLIFT_TO_BUFFER;
 
         }
-        public void Start(ForkLift state = ForkLift.FORBUF_SELECT_BEHAVIOR_ONZONE)
+        public void Start(ForkLift state = ForkLift.FORBUF_GET_FRONTLINE)
         {
 
             errorCode = ErrorCode.RUN_OK;
@@ -94,6 +94,7 @@ namespace SeldatMRMS
             robot.bayId = -1;
             robot.bayIdReg = false;
         }
+        int countFrontLineNull = 0;
         public void Procedure(object ojb)
         {
             ProcedureForkLiftToBuffer FlToBuf = (ProcedureForkLiftToBuffer)ojb;
@@ -104,8 +105,7 @@ namespace SeldatMRMS
             ForkLiftToMachineInfo flToMachineInfo = new ForkLiftToMachineInfo();
             rb.mcuCtrl.lampRbOn();
             robot.ShowText(" Start -> " + procedureCode);
-            endPointBuffer = FlToBuf.GetFrontLineBuffer(true);
-
+          /*  endPointBuffer = FlToBuf.GetFrontLineBuffer(true);
             if (endPointBuffer == null)
             {
                 robot.bayId = -1;
@@ -141,7 +141,7 @@ namespace SeldatMRMS
             {
                 order.frontLinePos = endPointBuffer.Position;
                 robot.bayId = bayId;
-            }
+            }*/
             while (ProRun)
             {
                // JPallet aa= GetInfoPallet_P_InBuffer(TrafficRobotUnity.PistonPalletCtrl.PISTON_PALLET_DOWN);
@@ -149,6 +149,51 @@ namespace SeldatMRMS
                 {
                     case ForkLift.FORBUF_IDLE:
                         robot.ShowText("FORBUF_IDLE");
+                        break;
+                    case ForkLift.FORBUF_GET_FRONTLINE:
+                        endPointBuffer = FlToBuf.GetFrontLineBuffer(true);
+                        if (endPointBuffer == null)
+                        {
+                            if (countFrontLineNull++ < 10)
+                            {
+                                break;
+                            }
+                            countFrontLineNull = 0;
+                            robot.bayId = -1;
+                            Console.WriteLine("Error Data Request" + order.dataRequest);
+                            order.status = StatusOrderResponseCode.ERROR_GET_FRONTLINE;
+                            TrafficRountineConstants.ReleaseAll(robot);
+                            robot.orderItem = null;
+                            robot.SwitchToDetectLine(false);
+                            robot.ReleaseWorkingZone();
+                            if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
+                            {
+                                TrafficRountineConstants.RegIntZone_READY.Release(robot);
+                                robot.robotTag = RobotStatus.IDLE;
+                                robot.SetSafeYellowcircle(false);
+                                robot.SetSafeBluecircle(false);
+                                robot.SetSafeSmallcircle(false);
+                                robot.TurnOnSupervisorTraffic(false);
+                                // rb.mcuCtrl.lampRbOff();
+                                procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_READY;
+                            }
+                            else
+                                procedureCode = ProcedureCode.PROC_CODE_FORKLIFT_TO_BUFFER;
+                            ReleaseProcedureHandler(this);
+                            ProRun = false;
+                            robot.ShowText("RELEASED");
+                            UpdateInformationInProc(this, ProcessStatus.S);
+                            order.endTimeProcedure = DateTime.Now;
+                            order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
+                            SaveOrderItem(order);
+                            KillEvent();
+                        }
+                        else
+                        {
+                            order.frontLinePos = endPointBuffer.Position;
+                            robot.bayId = bayId;
+                            StateForkLift = ForkLift.FORBUF_SELECT_BEHAVIOR_ONZONE;
+                        }
                         break;
                     case ForkLift.FORBUF_SELECT_BEHAVIOR_ONZONE:
                         order.status = StatusOrderResponseCode.GOING_AND_PICKING_UP;

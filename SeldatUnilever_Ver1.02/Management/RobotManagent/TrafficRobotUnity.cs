@@ -861,8 +861,13 @@ namespace SeldatMRMS.Management
                 if (r.onFlagSafeYellowcircle)
                 {
                     Point cY = r.CenterOnLineCv(Center_R); // TRONG TAM ROBOT KHAC
-                    if (r.FindHeaderInsideCircleArea(MiddleHeaderCv(), cY, r.Radius_R))
-                    {
+                    Point rP=Global_Object.CoorCanvas(r.properties.pose.Position);
+                    Point md = MiddleHeaderCv();
+                    Point md1 = MiddleHeaderCv1();
+                    Point md2 = MiddleHeaderCv2();
+                    Point md3 = MiddleHeaderCv3();
+                    if (r.FindHeaderInsideCircleArea(MiddleHeaderCv(), cY, r.Radius_R) )
+                    { 
                         STATE_SPEED = "YELLOWC_STOP";
                         SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
                         delay(5000);

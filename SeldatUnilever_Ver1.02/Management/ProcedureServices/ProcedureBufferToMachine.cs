@@ -55,7 +55,7 @@ namespace SeldatMRMS
             procedureCode = ProcedureCode.PROC_CODE_BUFFER_TO_MACHINE;
         }
 
-        public void Start(BufferToMachine state = BufferToMachine.BUFMAC_SELECT_BEHAVIOR_ONZONE)
+        public void Start(BufferToMachine state = BufferToMachine.BUFMAC_GET_FRONTLINE)
         {
             errorCode = ErrorCode.RUN_OK;
             robot.robotTag = RobotStatus.WORKING;
@@ -122,6 +122,7 @@ namespace SeldatMRMS
 
             deviceService.FindDeviceItem(_order.userName).AddOrder(_order);
         }
+        int countFrontLineNull = 0;
         public void Procedure(object ojb)
         {
             ProcedureBufferToMachine BfToMa = (ProcedureBufferToMachine)ojb;
@@ -132,7 +133,7 @@ namespace SeldatMRMS
             //GetFrontLineBuffer(false);
             //  ProRun = false;
             rb.mcuCtrl.lampRbOn();
-            frontLinePose = BfToMa.GetFrontLineBuffer();
+           /* frontLinePose = BfToMa.GetFrontLineBuffer();
             if (frontLinePose == null)
             {
                 robot.bayId = -1;
@@ -167,12 +168,57 @@ namespace SeldatMRMS
             {
                 order.frontLinePos = frontLinePose.Position;
                 robot.bayId = bayId;
-            }
+            }*/
             while (ProRun)
             {
                 switch (StateBufferToMachine)
                 {
                     case BufferToMachine.BUFMAC_IDLE:
+                        //robot.ShowText("BUFMAC_IDLE");
+                        break;
+                    case BufferToMachine.BUFMAC_GET_FRONTLINE:
+                        frontLinePose = BfToMa.GetFrontLineBuffer();
+                        if (frontLinePose == null)
+                        {
+                            if(countFrontLineNull++<10)
+                            {
+                                break;
+                            }
+                            countFrontLineNull = 0;
+                            robot.bayId = -1;
+                            TrafficRountineConstants.ReleaseAll(robot);
+                            robot.bayId = -1;
+                            robot.bayIdReg = false;
+                            robot.orderItem = null;
+                            robot.SwitchToDetectLine(false);
+                            if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
+                            {
+                                TrafficRountineConstants.RegIntZone_READY.Release(robot);
+                                robot.robotTag = RobotStatus.IDLE;
+                                robot.SetSafeYellowcircle(false);
+                                robot.SetSafeBluecircle(false);
+                                robot.SetSafeSmallcircle(false);
+                                robot.TurnOnSupervisorTraffic(false);
+                                // rb.mcuCtrl.lampRbOff();
+                                procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_READY;
+                            }
+                            else
+                                procedureCode = ProcedureCode.PROC_CODE_BUFFER_TO_MACHINE;
+                            ReleaseProcedureHandler(this);
+                            ProRun = false;
+                            UpdateInformationInProc(this, ProcessStatus.S);
+                            order.status = StatusOrderResponseCode.ERROR_GET_FRONTLINE;
+                            order.endTimeProcedure = DateTime.Now;
+                            order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
+                            SaveOrderItem(order);
+                            KillEvent();
+                        }
+                        else
+                        {
+                            order.frontLinePos = frontLinePose.Position;
+                            robot.bayId = bayId;
+                            StateBufferToMachine =BufferToMachine.BUFMAC_SELECT_BEHAVIOR_ONZONE;
+                        }
                         //robot.ShowText("BUFMAC_IDLE");
                         break;
                     case BufferToMachine.BUFMAC_SELECT_BEHAVIOR_ONZONE:
