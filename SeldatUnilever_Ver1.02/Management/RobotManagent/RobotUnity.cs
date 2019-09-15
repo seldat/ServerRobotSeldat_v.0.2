@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
@@ -248,6 +249,8 @@ namespace SeldatMRMS.Management.RobotManagent
             border.Background = new SolidColorBrush(Colors.Blue);
             border.CornerRadius = new CornerRadius(3);
             border.RenderTransformOrigin = new Point(0.5, 0.5);
+            border.MouseDown += KeepOnTRaffic;
+            border.MouseUp += KeepOffTRaffic;
             //mainGrid
             props.mainGrid.Background = new SolidColorBrush(Colors.Transparent);
             for (int i = 0; i < 3; i++)
@@ -368,6 +371,17 @@ namespace SeldatMRMS.Management.RobotManagent
             }).Start();
             //  robotLogOut.SetName(properties.Label);
 
+        }
+
+        private void KeepOffTRaffic(object sender, MouseButtonEventArgs e)
+        {
+            TurnOnSupervisorTraffic(true);
+        }
+
+        private void KeepOnTRaffic(object sender, MouseButtonEventArgs e)
+        {
+            TurnOnSupervisorTraffic(false);
+ 
         }
 
         private void Itemw0_Checked(object sender, RoutedEventArgs e)
