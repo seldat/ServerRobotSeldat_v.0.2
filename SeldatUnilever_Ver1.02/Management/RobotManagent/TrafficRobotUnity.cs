@@ -807,11 +807,14 @@ namespace SeldatMRMS.Management
                     {
                         if (FindHeaderInsideCircleArea(r.MiddleHeaderCv(), cB, Radius_B) || FindHeaderInsideCircleArea(Global_Object.CoorCanvas(r.properties.pose.Position), cB, Radius_B))
                         {
-                            STATE_SPEED = "BLUEC_STOP " + r.properties.Label;
-                            SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
-                            delay(5000);
-                            onStop = true;
-                            break;
+                           if (!r.onFlagSafeGreencircle)
+                            {
+                                STATE_SPEED = "BLUEC_STOP " + r.properties.Label;
+                                SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+                                delay(5000);
+                                onStop = true;
+                                break;
+                            }
                         }
                         /* else
                          {

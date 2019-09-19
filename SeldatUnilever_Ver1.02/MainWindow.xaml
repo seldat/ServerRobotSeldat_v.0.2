@@ -242,19 +242,53 @@
                                     <!--<xctk:Zoombox MinScale="0.5" 
                                          MaxScale="100"
                                          >-->
-                                    <Canvas Name="map" RenderTransformOrigin="0.5,0.5" 
+                                    <Grid>
+                                        
+                                        <Canvas Name="map" RenderTransformOrigin="0.5,0.5" 
                                                 Width="Auto" Height="Auto">
-                                        <Canvas.Children>
-                                            <Rectangle x:Name="rect" Fill="Red" Width="1" Height="1"/>
-                                        </Canvas.Children>
-                                        <Canvas.RenderTransform>
-                                            <TransformGroup>
-                                                <MatrixTransform x:Name="canvasMatrixTransform" Matrix="1,0,0,1,0,0"/>
-                                                <ScaleTransform x:Name="canvasScaleTransform"/>
-                                                <TranslateTransform x:Name="canvasTranslateTransform"/>
-                                            </TransformGroup>
-                                        </Canvas.RenderTransform>
-                                    </Canvas>
+                                            <Canvas.Children>
+                                                <Rectangle x:Name="rect" Fill="Red" Width="1" Height="1"/>
+                                            </Canvas.Children>
+                                            <Canvas.RenderTransform>
+                                                <TransformGroup>
+                                                    <MatrixTransform x:Name="canvasMatrixTransform" Matrix="1,0,0,1,0,0"/>
+                                                    <ScaleTransform x:Name="canvasScaleTransform"/>
+                                                    <TranslateTransform x:Name="canvasTranslateTransform"/>
+                                                </TransformGroup>
+                                            </Canvas.RenderTransform>
+                                        </Canvas>
+                                        <DockPanel HorizontalAlignment="Right" VerticalAlignment="Stretch" Width="150" >
+                                            <Grid >
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition></RowDefinition>
+                                                    <RowDefinition></RowDefinition>
+                                                    <RowDefinition></RowDefinition>
+                                                </Grid.RowDefinitions>
+                                                <Grid Grid.Row="0">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Label Content="R1" VerticalAlignment="Center" Foreground="Blue" Width="25" HorizontalAlignment="Left"></Label>
+                                                        <Image Source="pack://siteoforigin:,,,/Resources/chartpie.jpg"></Image>
+                                                    </StackPanel>
+                                                    
+                                                </Grid>
+                                                <Grid Grid.Row="1" >
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Label Content="R2" VerticalAlignment="Center" Foreground="Blue" Width="25" HorizontalAlignment="Left"></Label>
+                                                        <Image Source="pack://siteoforigin:,,,/Resources/chartpie.jpg"></Image>
+                                                    </StackPanel>
+                                                    
+                                                </Grid>
+                                                <Grid Grid.Row="2" >
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Label Content="R3" VerticalAlignment="Center" Foreground="Blue" Width="25" HorizontalAlignment="Left"></Label>
+                                                        <Image Source="pack://siteoforigin:,,,/Resources/chartpie.jpg"></Image>
+                                                    </StackPanel>
+                                                    
+                                                </Grid>
+                                            </Grid>
+                                        </DockPanel>
+                                    </Grid>
+                                    
                                     <!--</xctk:Zoombox>-->
                                 </Border>
                             </Grid>
@@ -272,12 +306,14 @@
                                  </ToolBarTray>
                                  </Border>-->
                         </Grid>
-                        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="14">
                             <Grid Name="Cursorhehe" VerticalAlignment="Bottom">
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Name="MouseCoor" Foreground="Black" Content="X:Y" FontSize="9" Margin="0,-5,0,0"></Label>
-                                    <Label Name="MouseCoor2" Foreground="Black" Content="X:Y" FontSize="9" Margin="0,-5,0,0"></Label>
-
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <Label Name="MouseCoor" Foreground="Black" Content="X:Y" FontSize="9" Margin="0,-6,0,0"></Label>
+                                    <Label Name="MouseCoor2" Foreground="Black" Content="X:Y" FontSize="9" Margin="0,-6,0,0"></Label>
+                                </StackPanel>
+                                <StackPanel>
+                                    <Label Name="txt_Info" Foreground="Green" Content="Information" FontSize="10" Margin="0 -6 0 0" HorizontalContentAlignment="Right"></Label>
                                 </StackPanel>
                             </Grid>
                         </Grid>

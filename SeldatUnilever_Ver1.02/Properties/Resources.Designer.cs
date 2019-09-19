@@ -90,6 +90,16 @@ namespace SeldatUnilever_Ver1._02.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap chartpie {
+            get {
+                object obj = ResourceManager.GetObject("chartpie", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lỗi Dữ Liệu:.
         /// </summary>
         public static string ERROR_FORMAT_DATA_DEVICEITEM {
