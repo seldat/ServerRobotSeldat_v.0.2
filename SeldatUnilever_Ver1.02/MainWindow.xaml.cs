@@ -48,6 +48,7 @@ namespace SeldatUnilever_Ver1._02
         public UnityManagementService unityService;
         public CanvasControlService canvasControlService;
         CtrlRobot ctrR;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -219,6 +220,11 @@ namespace SeldatUnilever_Ver1._02
 
             unityService.assigmentTaskService.AssignTaskGoToReady(unityService.robotManagementService.RobotUnityRegistedList.ElementAt(0).Value);
             */
+#if true
+            FormResetDoor formResetDoor;
+            formResetDoor = new FormResetDoor();
+            formResetDoor.ShowDialog();
+#else
             String wstr = "Cảnh Báo!";
             String txtstr = "Xóa Trạng Thái Cổng ! ";
             MessageBoxButton msgb = MessageBoxButton.YesNo;
@@ -234,6 +240,7 @@ namespace SeldatUnilever_Ver1._02
                 Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.ResetDoor();
                 Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.ResetDoor();
             }
+#endif
         }
 
         private void Ctrl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
