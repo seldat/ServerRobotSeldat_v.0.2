@@ -63,6 +63,7 @@ namespace SeldatUnilever_Ver1._02
             map.Background = img;
             canvasControlService = new CanvasControlService(this);
             DataContext = canvasControlService;
+            
 
             //DataContext = this;
             //DataContext = new ViewModel();
@@ -118,6 +119,7 @@ namespace SeldatUnilever_Ver1._02
                 unityService = new UnityManagementService(this);
                 unityService.Initialize();
                 ctrR = new CtrlRobot(unityService.robotManagementService);
+                Global_Object.mainWindowCtrl = this;
                 stationtimer = new System.Timers.Timer();
                 stationtimer.Interval = 20000;
                 stationtimer.Elapsed += OnTimedOrderListEvent;
@@ -127,7 +129,13 @@ namespace SeldatUnilever_Ver1._02
             }
         }
 
-
+        public void SetTextInfo(String txt)
+        {
+           /* txt_Info.Dispatcher.Invoke(() =>
+            {
+                txt_Info.Content = txt;
+            });*/
+        }
         private void btn_ChangePassword_Click(object sender, RoutedEventArgs e)
         {
             ChangePassForm changePassForm = new ChangePassForm(Thread.CurrentThread.CurrentCulture.ToString());

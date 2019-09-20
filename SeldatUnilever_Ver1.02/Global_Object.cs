@@ -62,6 +62,7 @@ namespace SeldatMRMS
         public static string messageTitileWarning = "Warning";
 
         public static DoorManagementService doorManagementServiceCtrl;
+        public static MainWindow mainWindowCtrl;
 
         public static bool getGateStatus(int id) // gate {1,2} ; FlagGateBusy-Array: 0, 1
         {
