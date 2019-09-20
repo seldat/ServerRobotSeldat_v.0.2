@@ -97,6 +97,7 @@ namespace SeldatMRMS
             ProcedureRobotToCharger RbToChar = (ProcedureRobotToCharger)ojb;
             RobotUnity rb = RbToChar.robot;
             ErrorCodeCharger result;
+            rb.properties.enableChage = true;
             robot.ShowText(" Start -> " + procedureCode);
             while (ProRun)
             {
