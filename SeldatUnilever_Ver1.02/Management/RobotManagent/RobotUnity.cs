@@ -110,6 +110,8 @@ namespace SeldatMRMS.Management.RobotManagent
         MenuItem addReadyListItem = new MenuItem();
         MenuItem addWaitTaskListItem = new MenuItem();
         MenuItem logOutItem = new MenuItem();
+        MenuItem chargeManualStart = new MenuItem();
+        MenuItem chargeManualStop = new MenuItem();
         public void Initialize(Canvas canvas)
         {
             this.canvas = canvas;
@@ -186,9 +188,16 @@ namespace SeldatMRMS.Management.RobotManagent
             disposeItem.IsEnabled = false;
 
             turnOnOffItem.Header = "Set On/Off Traffic";
-            turnOnOffItem.Click += SetOnOffTrafficMenu;
+            turnOnOffItem.Click += ChargeManualStartMenu;
             turnOnOffItem.IsEnabled = true;
 
+            chargeManualStart.Header = "Request Charge";
+            chargeManualStart.Click += ChargeManualStartMenu;
+            chargeManualStart.IsEnabled = true;
+
+            chargeManualStop.Header = "Stop Charge";
+            chargeManualStop.Click += ChargeManualStopMenu;
+            chargeManualStop.IsEnabled = true;
 
 
 
@@ -212,6 +221,9 @@ namespace SeldatMRMS.Management.RobotManagent
 
             border.ContextMenu.Items.Add(addReadyListItem);
             border.ContextMenu.Items.Add(addWaitTaskListItem);
+
+            border.ContextMenu.Items.Add(chargeManualStart);
+            border.ContextMenu.Items.Add(chargeManualStop);
 
             //====================EVENT=====================
             //MouseLeave += MouseLeavePath;
@@ -250,7 +262,7 @@ namespace SeldatMRMS.Management.RobotManagent
             border.CornerRadius = new CornerRadius(3);
             border.RenderTransformOrigin = new Point(0.5, 0.5);
             border.MouseLeftButtonDown += KeepOffTraffic;
-            border.MouseLeftButtonUp+= KeepOnTraffic;
+            border.MouseLeftButtonUp += KeepOnTraffic;
             //mainGrid
             props.mainGrid.Background = new SolidColorBrush(Colors.Transparent);
             for (int i = 0; i < 3; i++)
@@ -461,7 +473,8 @@ namespace SeldatMRMS.Management.RobotManagent
                 {
                     statusLaserBack = " Passed error laserBack";
                 }
-                else {
+                else
+                {
                     statusLaserBack = " LaserBack run normal";
                 }
                 String tooltipStr = "Name: " + properties.Label + Environment.NewLine + "Zone: " + typezone +
@@ -554,10 +567,10 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         private void ReConnectMenu(object sender, RoutedEventArgs e)
         {
-          /*  if (webSocket != null)
-            {
-                webSocket.Connect();
-            }*/
+            /*  if (webSocket != null)
+              {
+                  webSocket.Connect();
+              }*/
         }
         private void ConnectMenu(object sender, RoutedEventArgs e)
         {
@@ -645,7 +658,7 @@ namespace SeldatMRMS.Management.RobotManagent
             onFlagFinishPalletUpDownINsideBuffer = false;
             onFlagGoBackReady = false;
             onFlagReadyGo = false;
-        setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
+            setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
 
             // reset lost position
             flagLostPosition = false;
@@ -660,6 +673,26 @@ namespace SeldatMRMS.Management.RobotManagent
              Center_B = 0;
              Center_Y = 0;
              Center_O = 0;*/
+        }
+
+        public void ChargeManualStartMenu(object sender, RoutedEventArgs e)
+        {
+            if (true == robotService.CheckRobotUnityInReadyList(this))
+            {
+                this.properties.enableChage = true;
+            }
+            else {
+                String wstr = "Warning";
+                String txtstr = "Robot outside the ready area. Can't start manual chage .";
+                MessageBoxButton msgb = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Warning;
+                var result = MessageBox.Show(txtstr, wstr, msgb,icon);
+            }
+        }
+
+        public void ChargeManualStopMenu(object sender, RoutedEventArgs e)
+        {
+            this.properties.enableChage = false;
         }
         public void SetOnOffTrafficMenu(object sender, RoutedEventArgs e)
         {
@@ -758,8 +791,8 @@ namespace SeldatMRMS.Management.RobotManagent
                     Point cPoint = Global_Object.CoorCanvas(properties.pose.Position);
                     props.rbTranslate = new TranslateTransform(cPoint.X - (border.Width / 2), cPoint.Y - (border.Height / 2));
                     props.rbTransformGroup.Children[1] = props.rbTranslate;
-                        //Render Status
-                        props.contentRotateTransform.Angle = (properties.pose.Angle);
+                    //Render Status
+                    props.contentRotateTransform.Angle = (properties.pose.Angle);
                     props.contentTranslate = new TranslateTransform(0, 0);
                     props.contentTransformGroup.Children[1] = props.contentTranslate;
                     headerPoint.RenderTransform = new TranslateTransform(MiddleHeaderCv().X - 2.5, MiddleHeaderCv().Y - 1);
@@ -772,26 +805,26 @@ namespace SeldatMRMS.Management.RobotManagent
                     PathFigure pF = new PathFigure();
                     pF.StartPoint = TopHeaderCv();
 
-                        // pF.StartPoint = new Point(TopHeader().X * 10, TopHeader().Y * 10);
-                        LineSegment pp = new LineSegment();
+                    // pF.StartPoint = new Point(TopHeader().X * 10, TopHeader().Y * 10);
+                    LineSegment pp = new LineSegment();
 
                     pF.Segments.Add(new LineSegment() { Point = BottomHeaderCv() });
                     pF.Segments.Add(new LineSegment() { Point = BottomTailCv() });
                     pF.Segments.Add(new LineSegment() { Point = TopTailCv() });
                     pF.Segments.Add(new LineSegment() { Point = TopHeaderCv() });
-                        // pF.Segments.Add(new LineSegment() { Point = new Point(BottomHeader().X*10, BottomHeader().Y * 10) });
-                        //pF.Segments.Add(new LineSegment() { Point = new Point(BottomTail().X * 10, BottomTail().Y * 10) });
-                        //  pF.Segments.Add(new LineSegment() { Point = new Point(TopTail().X * 10, TopTail().Y * 10) });
-                        //pF.Segments.Add(new LineSegment() { Point = new Point(TopHeader().X * 10, TopHeader().Y * 10) });
-                        pgeometry.Figures.Add(pF);
+                    // pF.Segments.Add(new LineSegment() { Point = new Point(BottomHeader().X*10, BottomHeader().Y * 10) });
+                    //pF.Segments.Add(new LineSegment() { Point = new Point(BottomTail().X * 10, BottomTail().Y * 10) });
+                    //  pF.Segments.Add(new LineSegment() { Point = new Point(TopTail().X * 10, TopTail().Y * 10) });
+                    //pF.Segments.Add(new LineSegment() { Point = new Point(TopHeader().X * 10, TopHeader().Y * 10) });
+                    pgeometry.Figures.Add(pF);
                     safetyArea.Data = pgeometry;
 
-                        //  props.rbID.Content = properties.pose.Position.X.ToString("0");
-                        // props.rbTask.Content = properties.pose.Position.Y.ToString("0");
-                        props.rbID.Content = properties.Label;
-                        // props.rbTask.Content = properties.pose.Position.Y.ToString("0");
+                    //  props.rbID.Content = properties.pose.Position.X.ToString("0");
+                    // props.rbTask.Content = properties.pose.Position.Y.ToString("0");
+                    props.rbID.Content = properties.Label;
+                    // props.rbTask.Content = properties.pose.Position.Y.ToString("0");
 
-                        smallCircle.Set(cPoint, new Point(0, 0), new Point(Radius_S, Radius_S));
+                    smallCircle.Set(cPoint, new Point(0, 0), new Point(Radius_S, Radius_S));
 
                     Point ccR = CenterOnLineCv(Center_R);
                     redCircle.Set(ccR, new Point(0, 0), new Point(Radius_R, Radius_R));

@@ -257,7 +257,7 @@ namespace SeldatMRMS
                                 {
                                     rb.properties.BatteryLevelRb = (float)batLevel.data[0];
 #if USE_AUTO_CHARGE
-                                    if (batLevel.data[0] >= BATTERY_FULL_LEVEL)
+                                    if ((batLevel.data[0] >= BATTERY_FULL_LEVEL)|| (rb.properties.enableChage == false))
 #else
                                     if (batLevel.data[0] >= BATTERY_NEW_BAT)
 #endif
@@ -534,7 +534,7 @@ namespace SeldatMRMS
             RobotUnity rb = RbToRd.robot;
             DataRobotToReady p = RbToRd.points;
             TrafficManagementService Traffic = RbToRd.Traffic;
-            robot.ShowText(" start -> " + procedureCode +"_________________0000000000000000000_____________________");
+            robot.ShowText(" start -> " + procedureCode + "_________________0000000000000000000_____________________");
             while (ProRun)
             {
                 switch (StateRobotGoToReady)
@@ -664,31 +664,31 @@ namespace SeldatMRMS
             return false;
         }
         // xác định còn task trong order
-        
+
         public bool DetermineHasTaskWaitingAnRobotAvailable()
         {
             try
             {
                 OrderItem order = assigmentTask.CheckHastask();
-                if(order!=null)
+                if (order != null)
                 {
                     cntOrderItem++;
                 }
                 if (cntOrderItem > 1) //
                 {
-                        if (robotService.RobotUnityWaitTaskList.Count > 0 || robotService.RobotUnityReadyList.Count > 0)
+                    if (robotService.RobotUnityWaitTaskList.Count > 0 || robotService.RobotUnityReadyList.Count > 0)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        if (!Traffic.HasRobotUnityinArea("C1", robot) || !Traffic.HasRobotUnityinArea("READY", robot))
                         {
-                            return false;
+                            cntOrderItem = 0;
+                            robot.ShowText("Break goto ready and assign task _____(-_ -)____");
+                            return true;
                         }
-                        else
-                        {
-                            if (!Traffic.HasRobotUnityinArea("C1", robot) || !Traffic.HasRobotUnityinArea("READY", robot))
-                            {
-                                cntOrderItem = 0;
-                                robot.ShowText("Break goto ready and assign task _____(-_ -)____");
-                                return true;
-                            }
-                        }
+                    }
 
                 }
             }

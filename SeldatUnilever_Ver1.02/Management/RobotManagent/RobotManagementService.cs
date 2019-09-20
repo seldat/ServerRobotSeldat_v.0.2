@@ -75,6 +75,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.Length = 2.2;
             prop1.ChargeID = ChargerId.CHARGER_ID_1;
             prop1.Scale = 10;
+            prop1.enableChage = false;
             RobotUnity r1 = new RobotUnity();
             r1.name = "Robot1";
             r1.Initialize(this.canvas);
@@ -119,6 +120,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop2.Length = 2.2;
             prop2.ChargeID = ChargerId.CHARGER_ID_2;
             prop2.Scale = 10;
+            prop2.enableChage = false;
             RobotUnity r2 = new RobotUnity();
             r2.name = "Robot1";
             r2.Initialize(this.canvas);
@@ -158,6 +160,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop3.Length = 2.2;
             prop3.ChargeID = ChargerId.CHARGER_ID_3;
             prop3.Scale = 10;
+            prop3.enableChage = false;
             RobotUnity r3 = new RobotUnity();
             r3.name = "Robot1";
             r3.Initialize(this.canvas);
@@ -482,6 +485,17 @@ namespace SeldatMRMS.Management.RobotManagent
             }
 
         }
+
+        public bool CheckRobotUnityInReadyList(RobotUnity robot)
+        {
+            if (RobotUnityReadyList.Contains(robot))
+            {
+                return true;
+            }
+            return false;
+        }
+
+
         public void StopAt(String nameID)
         {
             if (RobotUnityRegistedList.ContainsKey(nameID))
