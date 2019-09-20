@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -32,6 +33,7 @@ namespace SeldatUnilever_Ver1._02
             Global_Object.onFlagRobotComingGateBusy = false;
             Global_Object.setGateStatus((int)DoorId.DOOR_MEZZAMINE_UP_NEW, false); // gate 1
             Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampSetStateOff(DoorType.DOOR_FRONT);
+            Thread.Sleep(1000);
             Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.ResetDoor();
             lblStatus.Content = "Gate 1 finished reset ";
         }
@@ -42,6 +44,7 @@ namespace SeldatUnilever_Ver1._02
             Global_Object.onFlagRobotComingGateBusy = false;
             Global_Object.setGateStatus((int)DoorId.DOOR_MEZZAMINE_UP, false); // gate 2
             Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampSetStateOff(DoorType.DOOR_FRONT);
+            Thread.Sleep(1000);
             Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.ResetDoor();
             lblStatus.Content = "Gate 2 finished reset ";
         }
