@@ -32,6 +32,10 @@ namespace SeldatMRMS.Management.RobotManagent
         public bool onFlagFinishPalletUpDownINsideBuffer = false;
         public bool onFlagGoBackReady = false;
         public bool onFlagReadyGo = false;
+
+        public int bayId = -1;
+        public bool bayIdReg = false;
+        public bool regGoInsideBayId { get; set; }
         private const float delBatterry = 0;
         RobotSpeedLevel regRobotSpeed;
         public enum ResponseCtrl

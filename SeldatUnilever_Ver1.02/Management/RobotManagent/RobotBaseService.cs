@@ -57,9 +57,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public ProcedureControlAssign ProcedureAs;
         public bool SelectedATask { get; set; }
         public OrderItem orderItem { get; set; }
-        public int bayId = -1;
-        public bool bayIdReg = false;
-        public bool regGoInsideBayId{ get; set; }
+
         protected RegistryRobotJourney registryRobotJourney;
         public struct LoadedConfigureInformation
         {

@@ -844,6 +844,7 @@ namespace SeldatMRMS.Management
         public bool CheckGreenCircle() // khi robot bặt vòng tròn xanh. chính nó phải ngưng nếu dò ra có robot nào trong vùng vòng tròn này ngược lại với vòng tròn vàng
         {
             bool onStop = false;
+            List<RobotUnity> robotTochList = new List<RobotUnity>();
             foreach (RobotUnity r in RobotUnitylist)
             {
                     Point cG = CenterOnLineCv(Center_G); // TRONG TAM CUA NO
@@ -851,20 +852,44 @@ namespace SeldatMRMS.Management
                     {
 
                         if (FindHeaderInsideCircleArea(r.MiddleHeaderCv(), cG, Radius_G) || 
-                        FindHeaderInsideCircleArea(Global_Object.CoorCanvas(r.properties.pose.Position), cG, Radius_G) || FindHeaderInsideCircleArea(r.MiddleHeaderCv1(), cG, Radius_G))
+                        FindHeaderInsideCircleArea(Global_Object.CoorCanvas(r.properties.pose.Position), cG, Radius_G)
+                        || FindHeaderInsideCircleArea(r.MiddleHeaderCv1(), cG, Radius_G))
                         {
-                            STATE_SPEED = "GREEN_STOP " + r.properties.Label;
-                            SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
-                            delay(5000);
-                            onStop = true;
-                            break;
+                            // tim do ưu tien tai cac diem giao nhau
+                            robotTochList.Add(r);
                         }
                     }
+            }
+
+            if (robotTochList.Count>0)
+            {
+                foreach (RobotUnity r in robotTochList)
+                {
+                    //
+                    if (!checkAllRobotsHasInsideBayIdNear(r))
+                    {
+                        STATE_SPEED = "GREEN_STOP " + r.properties.Label;
+                        SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+                        delay(5000);
+                        onStop = true;
+                        return onStop;
+                    }
+                }
             }
             return onStop;
         }
 
-
+        protected bool checkAllRobotsHasInsideBayIdNear(RobotUnity robot)
+        {
+            if (robot.bayId >= 0)
+            {
+                if (Math.Abs(robot.bayId - this.bayId) <= 2)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public bool CheckYellowCircle() // khi robot bặt vòng tròn vàng. tất cả robot khác ngưng nếu dò ra có robot nào trong vùng vòng tròn này
         {
             bool onstop = false;
