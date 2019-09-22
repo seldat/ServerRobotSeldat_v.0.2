@@ -690,11 +690,14 @@ namespace SeldatMRMS
                     }
                     else
                     {
-                        if (!Traffic.HasRobotUnityinArea("C1", robot) || !Traffic.HasRobotUnityinArea("READY", robot))
+                        if (!Traffic.HasRobotUnityinArea("C1", robot) )
                         {
-                            cntOrderItem = 0;
-                            robot.ShowText("Break goto ready and assign task _____(-_ -)____");
-                            return true;
+                            if (!Traffic.HasRobotUnityinArea("READY", robot))
+                            {
+                                cntOrderItem = 0;
+                                robot.ShowText("Break goto ready and assign task _____(-_ -)____");
+                                return true;
+                            }
                         }
                     }
 
