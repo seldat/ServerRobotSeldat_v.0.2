@@ -36,12 +36,13 @@ namespace SeldatMRMS
         const UInt32 TIME_OUT_WAIT_TURNOFF_PC = 60000 * 5;
         const UInt32 TIME_OUT_WAIT_STATE = 60000;
         const UInt32 TIME_OUT_ROBOT_RECONNECT_SERVER = 60000 * 10;
-        const UInt32 TIME_COUNT_GET_BAT_LEVEL = 1000;
+        const UInt32 TIME_COUNT_GET_BAT_LEVEL = 100;
         const UInt32 TIME_DELAY_RELEASE_CHARGE = 60000 * 5;
         const UInt32 BATTERY_FULL_LEVEL = 99; /*Never battery full 100%*/
         const UInt32 BATTERY_NEW_BAT = 20; /*Never battery full 100%*/
         private UInt32 timeCountGetBatLevel = 0;
         public override event Action<Object> ReleaseProcedureHandler;
+
         // public override event Action<Object> ErrorProcedureHandler;
         public byte getBatteryLevel()
         {
@@ -97,6 +98,7 @@ namespace SeldatMRMS
             ProcedureRobotToCharger RbToChar = (ProcedureRobotToCharger)ojb;
             RobotUnity rb = RbToChar.robot;
             ErrorCodeCharger result;
+            rb.properties.enableChage = true;
             robot.ShowText(" Start -> " + procedureCode);
             while (ProRun)
             {
@@ -118,7 +120,7 @@ namespace SeldatMRMS
                         {
                             //Thread.Sleep(1000);
                             StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
-                            //robot.ShowText("ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT");
+                            robot.ShowText("ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT");
                         }
                         break;
                     case RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT:
@@ -131,7 +133,7 @@ namespace SeldatMRMS
                                     rb.Dispose();
                                     StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC;
                                     sw.Start();
-                                    //robot.ShowText("ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC");
+                                    robot.ShowText("ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC");
                                 }
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
@@ -150,17 +152,17 @@ namespace SeldatMRMS
                         if (true != rb.properties.IsConnected)
                         {
                             rb.Dispose();
-                            //robot.ShowText("Sleep 30s waitting turnoff power");
+                            robot.ShowText("Sleep 30s waitting turnoff power");
                             Thread.Sleep(30000);
                             StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_START_CHARGE;
-                            sw.Stop();
-                            //robot.ShowText("ROBCHAR_ROBOT_START_CHARGE");
+                            sw.Reset();
+                            robot.ShowText("ROBCHAR_ROBOT_START_CHARGE");
                         }
                         else
                         {
                             if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_TURNOFF_PC)
                             {
-                                sw.Stop();
+                                sw.Reset();
                                 errorCode = ErrorCode.CAN_NOT_TURN_OFF_PC;
                                 CheckUserHandleError(this);
                                 StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
@@ -174,7 +176,7 @@ namespace SeldatMRMS
                             if (true == chargerCtrl.StartCharge())
                             {
                                 StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER;
-                                //robot.ShowText("ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER");
+                                robot.ShowText("ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER");
                             }
                             else
                             {
@@ -195,29 +197,29 @@ namespace SeldatMRMS
                             if (ErrorCodeCharger.TRUE == result)
                             {
                                 StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_CHARGEBATTERY;
-                                //robot.ShowText("ROBCHAR_WAITTING_CHARGEBATTERY");
+                                robot.ShowText("ROBCHAR_WAITTING_CHARGEBATTERY");
                             }
                             else
                             {
                                 if (result == ErrorCodeCharger.ERROR_CONNECT)
                                 {
                                     errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
-                                    //robot.ShowText("CONNECT_CHARGER_ERROR");
+                                    robot.ShowText("CONNECT_CHARGER_ERROR");
                                 }
                                 else
                                 {
                                     errorCode = ErrorCode.CONTACT_CHARGER_ERROR;
-                                    //robot.ShowText("CONTACT_CHARGER_ERROR");
+                                    robot.ShowText("CONTACT_CHARGER_ERROR");
                                 }
-                                CheckUserHandleError(this);
+                                //CheckUserHandleError(this);
                                 StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_START_CHARGE;
                             }
                         }
                         catch (System.Exception)
                         {
                             errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
-                            //robot.ShowText("CONNECT_CHARGER_ERROR");
-                            CheckUserHandleError(this);
+                            robot.ShowText("CONNECT_CHARGER_ERROR");
+                            //CheckUserHandleError(this);
                             StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_START_CHARGE;
                         }
                         break; //robot tiep xuc tram sac        
@@ -257,18 +259,18 @@ namespace SeldatMRMS
                                 {
                                     rb.properties.BatteryLevelRb = (float)batLevel.data[0];
 #if USE_AUTO_CHARGE
-                                    if (batLevel.data[0] >= BATTERY_FULL_LEVEL)
+                                    if ((batLevel.data[0] >= BATTERY_FULL_LEVEL)|| (rb.properties.enableChage == false))
 #else
                                     if (batLevel.data[0] >= BATTERY_NEW_BAT)
 #endif
                                     {
                                         //Thread.Sleep((int)TIME_DELAY_RELEASE_CHARGE);
 #if USE_AUTO_CHARGE
-                                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
+                                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_STOP_CHARGE;
 #else
                                         StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_RECONNECTING;
 #endif
-                                        //robot.ShowText("ROBCHAR_FINISHED_CHARGEBATTERY");
+                                        robot.ShowText("ROBCHAR_ROBOT_STOP_CHARGE");
                                     }
                                 }
                                 else
@@ -295,38 +297,39 @@ namespace SeldatMRMS
 #endif
                         break; //dợi charge battery và thông tin giao tiếp server và trạm sạc
 #if USE_AUTO_CHARGE
-
-                    case RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY:
+                    case RobotGoToCharge.ROBCHAR_ROBOT_STOP_CHARGE:
                         try
                         {
                             if (true == chargerCtrl.StopCharge())
                             {
-                                Console.WriteLine("Stop charger success");
+                                robot.ShowText("Stop charger success");
+                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
+                                robot.ShowText("ROBCHAR_FINISHED_CHARGEBATTERY");
                             }
                             else
                             {
                                 errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
-                                CheckUserHandleError(this);
+                                //CheckUserHandleError(this);
                             }
                         }
                         catch (System.Exception)
                         {
                             errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
-                            CheckUserHandleError(this);
+                            //CheckUserHandleError(this);
                         }
-
+                        break;
+                    case RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY:
                         Thread.Sleep(10000);
-
                         try
                         {
                             if (true == rb.mcuCtrl.TurnOnPcRobot())
                             {
-                                //robot.ShowText("Turn on pc");
-                                Thread.Sleep(45000);
-                                //robot.ShowText("Reconnect server");
+                                robot.ShowText("Turn on pc");
+                                Thread.Sleep(60000);
+                                robot.ShowText("Reconnect server");
                                 rb.Start(rb.properties.Url);
                                 StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_RECONNECTING;
-                                //robot.ShowText("ROBCHAR_ROBOT_WAITTING_RECONNECTING");
+                                robot.ShowText("ROBCHAR_ROBOT_WAITTING_RECONNECTING");
                             }
                             else
                             {
@@ -349,7 +352,7 @@ namespace SeldatMRMS
 #else
                             StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
 #endif
-                            //robot.ShowText("ROBCHAR_ROBOT_GETOUT_CHARGER");
+                            robot.ShowText("ROBCHAR_ROBOT_GETOUT_CHARGER");
                         }
                         else
                         {
@@ -361,20 +364,25 @@ namespace SeldatMRMS
                     case RobotGoToCharge.ROBCHAR_ROBOT_GETOUT_CHARGER:
                         if (rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_GETOUT_CHARGER))
                         {
+                            sw.Restart();
                             StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER;
-                            //robot.ShowText("ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER");
+                            robot.ShowText("ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER");
                         }
                         break;
                     case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER:
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_DETECTLINE_GETOUT_CHARGER)
                         {
                             StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
-                            //robot.ShowText("ROBCHAR_ROBOT_RELEASED");
+                            robot.ShowText("ROBCHAR_ROBOT_RELEASED");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
                             errorCode = ErrorCode.DETECT_LINE_CHARGER_ERROR;
                             CheckUserHandleError(this);
+                        }
+                        if (sw.ElapsedMilliseconds >= 30000) {
+                            sw.Reset();
+                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_GETOUT_CHARGER;
                         }
                         break;
 #endif
@@ -383,7 +391,7 @@ namespace SeldatMRMS
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_READY;
                         ReleaseProcedureHandler(this);
                         ProRun = false;
-                        //robot.ShowText("RELEASED");
+                        robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
@@ -394,7 +402,7 @@ namespace SeldatMRMS
                         break;
                 }
                 //robot.ShowText("-> " + procedureCode);
-                Thread.Sleep(5);
+                Thread.Sleep(100);
             }
             StateRobotToCharge = RobotGoToCharge.ROBCHAR_IDLE;
         }
@@ -402,18 +410,18 @@ namespace SeldatMRMS
         private bool CheckReconnectServer(UInt32 timeOut)
         {
             bool result = true;
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Stopwatch sw1 = new Stopwatch();
+            sw1.Start();
             do
             {
                 Thread.Sleep(1000);
-                if (sw.ElapsedMilliseconds > timeOut)
+                if (sw1.ElapsedMilliseconds > timeOut)
                 {
                     result = false;
                     break;
                 }
             } while (true != robot.properties.IsConnected);
-            sw.Stop();
+            sw1.Stop();
             return result;
         }
         public override void FinishStatesCallBack(Int32 message)
@@ -534,7 +542,7 @@ namespace SeldatMRMS
             RobotUnity rb = RbToRd.robot;
             DataRobotToReady p = RbToRd.points;
             TrafficManagementService Traffic = RbToRd.Traffic;
-            robot.ShowText(" start -> " + procedureCode +"_________________0000000000000000000_____________________");
+            robot.ShowText(" start -> " + procedureCode + "_________________0000000000000000000_____________________");
             while (ProRun)
             {
                 switch (StateRobotGoToReady)
@@ -664,31 +672,31 @@ namespace SeldatMRMS
             return false;
         }
         // xác định còn task trong order
-        
+
         public bool DetermineHasTaskWaitingAnRobotAvailable()
         {
             try
             {
                 OrderItem order = assigmentTask.CheckHastask();
-                if(order!=null)
+                if (order != null)
                 {
                     cntOrderItem++;
                 }
                 if (cntOrderItem > 1) //
                 {
-                        if (robotService.RobotUnityWaitTaskList.Count > 0 || robotService.RobotUnityReadyList.Count > 0)
+                    if (robotService.RobotUnityWaitTaskList.Count > 0 || robotService.RobotUnityReadyList.Count > 0)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        if (!Traffic.HasRobotUnityinArea("C1", robot) || !Traffic.HasRobotUnityinArea("READY", robot))
                         {
-                            return false;
+                            cntOrderItem = 0;
+                            robot.ShowText("Break goto ready and assign task _____(-_ -)____");
+                            return true;
                         }
-                        else
-                        {
-                            if (!Traffic.HasRobotUnityinArea("C1", robot) || !Traffic.HasRobotUnityinArea("READY", robot))
-                            {
-                                cntOrderItem = 0;
-                                robot.ShowText("Break goto ready and assign task _____(-_ -)____");
-                                return true;
-                            }
-                        }
+                    }
 
                 }
             }

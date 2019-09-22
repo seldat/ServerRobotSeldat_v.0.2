@@ -413,6 +413,7 @@ namespace SeldatMRMS.Management
                         {
                             UpdateRiskAraParams(DfL1, DfL2, DfWS, DfDistanceInter);
                         }
+                       
                         RobotBehavior();
                     }
                     // giám sát an toàn
@@ -450,8 +451,14 @@ namespace SeldatMRMS.Management
                 if (data.data == true)
                 {
                     SetStopSpeedOrtherRobotLostPosition();
+                    try
+                    {
+                        Global_Object.mainWindowCtrl.SetTextInfo("Robot :" + properties.Label + " Lost Position");
+                    }
+                    catch { }
                     if (!flagLostPosition)
                     {
+                       
                         MessageBox.Show("Robot :" + properties.Label + " Lost Position");
                     }
                     flagLostPosition = true;
@@ -473,6 +480,7 @@ namespace SeldatMRMS.Management
         }
         public void SetNormalSpeedOrtherRobotLostPosition()
         {
+            Global_Object.mainWindowCtrl.SetTextInfo("");
             foreach (RobotUnity r in RobotUnitylist)
             {
                 if (r.flagLostPosition == false)
@@ -807,12 +815,14 @@ namespace SeldatMRMS.Management
                     {
                         if (FindHeaderInsideCircleArea(r.MiddleHeaderCv(), cB, Radius_B) || FindHeaderInsideCircleArea(Global_Object.CoorCanvas(r.properties.pose.Position), cB, Radius_B))
                         {
-                           // if (r.onFlagSafeGreencircle == false) { }
-                            STATE_SPEED = "BLUEC_STOP " + r.properties.Label;
-                            SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
-                            delay(5000);
-                            onStop = true;
-                            break;
+                           if (!r.onFlagSafeGreencircle)
+                            {
+                                STATE_SPEED = "BLUEC_STOP " + r.properties.Label;
+                                SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+                                delay(5000);
+                                onStop = true;
+                                break;
+                            }
                         }
                         /* else
                          {
@@ -839,7 +849,9 @@ namespace SeldatMRMS.Management
                     Point cG = CenterOnLineCv(Center_G); // TRONG TAM CUA NO
                     if (r.robotTag == RobotStatus.WORKING)
                     {
-                        if (FindHeaderInsideCircleArea(r.MiddleHeaderCv(), cG, Radius_G) || FindHeaderInsideCircleArea(Global_Object.CoorCanvas(r.properties.pose.Position), cG, Radius_G))
+
+                        if (FindHeaderInsideCircleArea(r.MiddleHeaderCv(), cG, Radius_G) || 
+                        FindHeaderInsideCircleArea(Global_Object.CoorCanvas(r.properties.pose.Position), cG, Radius_G) || FindHeaderInsideCircleArea(r.MiddleHeaderCv1(), cG, Radius_G))
                         {
                             STATE_SPEED = "GREEN_STOP " + r.properties.Label;
                             SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);

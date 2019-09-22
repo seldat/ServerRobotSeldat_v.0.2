@@ -53,13 +53,13 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 if (order != null)
                 {
                     cntWaitTask = 0;
-                    if (AssignWaitTask(order))
+                    if (AssignTaskAtReady(order))
                     {
                         MoveElementToEnd();
                         Thread.Sleep(500);
                         continue;
                     }
-                    if (AssignTaskAtReady(order))
+                    if (AssignWaitTask(order))
                     {
                         MoveElementToEnd();
                         Thread.Sleep(500);
@@ -78,6 +78,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         cntWaitTask = 0;
                     }
                     MoveElementToEnd();
+                    /*Check battery at ready and manual charge when rb in area ready*/
+                    AssignTaskAtReady(null);
                 }
                 Thread.Sleep(500);
             }
@@ -201,9 +203,10 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             if (result != null)
                             {
                                 robotatready = result.robot;
-                                if (result.onReristryCharge)
+                                if ((true == result.onReristryCharge)||(robotatready.properties.enableChage == true))
                                 {
                                     procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_CHARGE, robotatready, null);
+                                    robotManageService.RemoveRobotUnityReadyList(robotatready);
                                 }
                                 else
                                 {

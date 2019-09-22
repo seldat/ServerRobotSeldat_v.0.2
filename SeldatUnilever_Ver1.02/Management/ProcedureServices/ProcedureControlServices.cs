@@ -407,6 +407,7 @@ namespace SeldatMRMS
             ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT, //cho phép cắt nguồn robot
             ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC, //cho phép cắt nguồn robot
             ROBCHAR_WAITTING_CHARGEBATTERY, //dợi charge battery và thông tin giao tiếp server và trạm sạc
+            ROBCHAR_ROBOT_STOP_CHARGE,
             ROBCHAR_FINISHED_CHARGEBATTERY, //Hoàn Thành charge battery và thông tin giao tiếp server và trạm sạc
             ROBCHAR_ROBOT_WAITTING_RECONNECTING, //Robot mở nguồng và đợi connect lại
             ROBCHAR_ROBOT_GETOUT_CHARGER, //Robot mở nguồng và đợi connect lại

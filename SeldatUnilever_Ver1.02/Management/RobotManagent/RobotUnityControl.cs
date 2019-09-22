@@ -143,7 +143,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public double errorDx = 0.5;
             public double errorDy = 0.5;
             public Point goalPoint;
-
+            public bool enableChage;
         }
 
         public enum RequestCommandLineDetect
