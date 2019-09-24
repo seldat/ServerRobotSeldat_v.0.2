@@ -43,6 +43,8 @@ namespace SeldatUnilever_Ver1._02
 
 
 
+        public PieChartPercent pie;
+       
 
         public bool drag = true;
         public UnityManagementService unityService;
@@ -52,6 +54,7 @@ namespace SeldatUnilever_Ver1._02
         public MainWindow()
         {
             InitializeComponent();
+
             ApplyLanguage();
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
@@ -64,7 +67,7 @@ namespace SeldatUnilever_Ver1._02
             map.Background = img;
             canvasControlService = new CanvasControlService(this);
             DataContext = canvasControlService;
-            
+            pie = new PieChartPercent(this);
 
             //DataContext = this;
             //DataContext = new ViewModel();
@@ -82,6 +85,31 @@ namespace SeldatUnilever_Ver1._02
 
         private void OnTimedOrderListEvent(object sender, ElapsedEventArgs e)
         {
+            List<ChartInfo> listRealChart = new List<ChartInfo>();
+
+            ChartInfo _temp_FB = new ChartInfo();
+            _temp_FB.name = "Forklift to Buffer";
+            _temp_FB.value = 65;
+            _temp_FB.color = Colors.Firebrick;
+            listRealChart.Add(_temp_FB);
+
+            ChartInfo _temp_BM = new ChartInfo();
+            _temp_BM.name = "Buffer to Machine";
+            _temp_BM.value = 25;
+            _temp_BM.color = Colors.YellowGreen;
+            listRealChart.Add(_temp_BM);
+
+            ChartInfo _temp_RD = new ChartInfo();
+            _temp_RD.name = "Ready";
+            _temp_RD.value = 5;
+            _temp_RD.color = Colors.MediumBlue;
+            listRealChart.Add(_temp_RD);
+
+
+            //   _pie.Draw(listRealChart);
+            pie.Draw(listRealChart);
+            pieChart.Data = pie.pieCollection;
+        
             Dispatcher.BeginInvoke(new ThreadStart(() =>
             {
                 try
@@ -122,7 +150,7 @@ namespace SeldatUnilever_Ver1._02
                 ctrR = new CtrlRobot(unityService.robotManagementService);
                 Global_Object.mainWindowCtrl = this;
                 stationtimer = new System.Timers.Timer();
-                stationtimer.Interval = 20000;
+                stationtimer.Interval = 10000;
                 stationtimer.Elapsed += OnTimedOrderListEvent;
                 stationtimer.AutoReset = true;
                 stationtimer.Enabled = true;
@@ -132,10 +160,10 @@ namespace SeldatUnilever_Ver1._02
 
         public void SetTextInfo(String txt)
         {
-           /* txt_Info.Dispatcher.Invoke(() =>
+           txt_Info.Dispatcher.Invoke(() =>
             {
                 txt_Info.Content = txt;
-            });*/
+            });
         }
         private void btn_ChangePassword_Click(object sender, RoutedEventArgs e)
         {

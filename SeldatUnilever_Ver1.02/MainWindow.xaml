@@ -6,6 +6,7 @@
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:SeldatUnilever_Ver1._02"
+        xmlns:pie="clr-namespace:PieControls;assembly=PieControls"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="600"
        Closing="Window_Closing"
@@ -257,34 +258,19 @@
                                                 </TransformGroup>
                                             </Canvas.RenderTransform>
                                         </Canvas>
-                                        <DockPanel HorizontalAlignment="Right" VerticalAlignment="Stretch" Width="150" >
+                                        <DockPanel HorizontalAlignment="Right" VerticalAlignment="Stretch" Width="250" >
                                             <Grid >
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition></RowDefinition>
-                                                    <RowDefinition></RowDefinition>
-                                                    <RowDefinition></RowDefinition>
+                                                   
                                                 </Grid.RowDefinitions>
                                                 <Grid Grid.Row="0">
                                                     <StackPanel Orientation="Horizontal">
-                                                        <Label Content="R1" VerticalAlignment="Center" Foreground="Blue" Width="25" HorizontalAlignment="Left"></Label>
-                                                        <Image Source="pack://siteoforigin:,,,/Resources/chartpie.jpg"></Image>
+                                                        <pie:PieChart  Margin="0 0 150 0"  Name="pieChart" Height="200" Width="150" PieHeight="100" PieWidth="100"></pie:PieChart>
                                                     </StackPanel>
                                                     
                                                 </Grid>
-                                                <Grid Grid.Row="1" >
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Label Content="R2" VerticalAlignment="Center" Foreground="Blue" Width="25" HorizontalAlignment="Left"></Label>
-                                                        <Image Source="pack://siteoforigin:,,,/Resources/chartpie.jpg"></Image>
-                                                    </StackPanel>
-                                                    
-                                                </Grid>
-                                                <Grid Grid.Row="2" >
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Label Content="R3" VerticalAlignment="Center" Foreground="Blue" Width="25" HorizontalAlignment="Left"></Label>
-                                                        <Image Source="pack://siteoforigin:,,,/Resources/chartpie.jpg"></Image>
-                                                    </StackPanel>
-                                                    
-                                                </Grid>
+                                                
                                             </Grid>
                                         </DockPanel>
                                     </Grid>

@@ -28,7 +28,7 @@
             <Label Content="Thickness:" HorizontalAlignment="Left" Margin="6,204,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
             <TextBox x:Name="txt_gridopacity" HorizontalAlignment="Left" Height="23" Margin="34,207,0,0" TextWrapping="Wrap" Text="0.4" VerticalAlignment="Top" Width="72" Grid.Column="1" TextChanged="txt_gridopacity_TextChanged"/>
             <!--xctk:ColorPicker SelectedColor="Gray" SelectedColorChanged="_colorPicker_SelectedColorChanged" Name="_colorPicker" Margin="54,214,49,-8" MaxHeight="20" Height="30" Grid.Column="1"/ -->
-            <xctk:ColorPicker SelectedColor="Black" x:Name="_colorPicker" Margin="44,177,8,39" RenderTransformOrigin="2.062,0.844" Grid.Column="1"/>
+            <!--<xctk:ColorPicker SelectedColor="Black" x:Name="_colorPicker" Margin="44,177,8,39" RenderTransformOrigin="2.062,0.844" Grid.Column="1"/>-->
         </Grid>
         <TextBox x:Name="txt_pathmap" HorizontalAlignment="Left" Height="23" Margin="22,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="583" TextChanged="TextBox_TextChanged" Text="C:\"/>
         <Button Click="btn_pathmap" Content="..." HorizontalAlignment="Left" Margin="612,11,0,0" VerticalAlignment="Top" Width="34" Height="20"/>

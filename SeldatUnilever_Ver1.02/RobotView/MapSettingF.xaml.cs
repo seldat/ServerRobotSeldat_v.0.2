@@ -79,7 +79,7 @@ namespace SeldatMRMS.RobotView
         }
         private void updategrid()
         {
-            TEXT_GRID_BACKGROUND = "" + _colorPicker.SelectedColor;
+            //TEXT_GRID_BACKGROUND = "" + _colorPicker.SelectedColor;
             String griddata =TEXT_GRID_WIDTH + "%" + TEXT_GRID_LENGTH + "%" + TEXT_GRID_MINORDISTANCE + "%" + TEXT_GRID_MAJORDISTANCE +"%" + TEXT_GRID_BACKGROUND +"%" + TEXT_GRID_OPACITY+"%" + TEXT_GRID_NORMAL;
             Log("TAG-GRID",griddata);
             
