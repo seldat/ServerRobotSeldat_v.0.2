@@ -89,13 +89,13 @@ namespace SeldatUnilever_Ver1._02
 
             ChartInfo _temp_FB = new ChartInfo();
             _temp_FB.name = "Forklift to Buffer";
-            _temp_FB.value = 65;
+            _temp_FB.value = GetAmountForkLift();
             _temp_FB.color = Colors.Firebrick;
             listRealChart.Add(_temp_FB);
 
             ChartInfo _temp_BM = new ChartInfo();
             _temp_BM.name = "Buffer to Machine";
-            _temp_BM.value = 25;
+            _temp_BM.value = GetAmountBufferToMachine();
             _temp_BM.color = Colors.YellowGreen;
             listRealChart.Add(_temp_BM);
 
@@ -120,6 +120,31 @@ namespace SeldatUnilever_Ver1._02
             }));
         }
 
+        public int GetAmountForkLift()
+        {
+            if (unityService.deviceRegistrationService.deviceItemList.Count > 0)
+            {
+                DeviceItem item = unityService.deviceRegistrationService.deviceItemList.Find(e => e.userName == "f");
+                return item.OrderedItemList.Count;
+            }
+            return 0;
+        }
+        public int GetAmountBufferToMachine()
+        {
+            int count = 0;
+            if (unityService.deviceRegistrationService.deviceItemList.Count > 0)
+            {
+                
+                foreach(DeviceItem item in unityService.deviceRegistrationService.deviceItemList)
+                {
+                    if(!item.userName.Equals("f"))
+                    {
+                        count +=item.OrderedItemList.Count;
+                    }
+                }
+            }
+            return count;
+        }
 
         private void OnTimedRedrawRobotEvent(object sender, ElapsedEventArgs e)
         {
