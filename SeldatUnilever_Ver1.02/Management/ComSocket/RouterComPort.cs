@@ -14,14 +14,14 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
     public class RouterComPort
     {
         // ManualResetEvent instances signal completion.  
-        private ManualResetEvent connectDone = new ManualResetEvent(false);
-        private ManualResetEvent sendDone = new ManualResetEvent(false);
-        private ManualResetEvent receiveDone = new ManualResetEvent(false);
-        protected const UInt32 TIME_OUT_WAIT_RESPONSE = 2000;
-        protected const UInt32 TIME_OUT_WAIT_CONNECT = 5000;
+        //private ManualResetEvent connectDone = new ManualResetEvent(false);
+        //private ManualResetEvent sendDone = new ManualResetEvent(false);
+        //private ManualResetEvent receiveDone = new ManualResetEvent(false);
+        protected const UInt32 TIME_OUT_WAIT_RESPONSE = 500;
+        protected const UInt32 TIME_OUT_WAIT_CONNECT = 1000;
 
         // The response from the remote device.  
-        private String response = String.Empty;
+        //private String response = String.Empty;
 
         public bool flagReadyReadData { get; private set; }
         public bool flagConnected { get; private set; }
@@ -70,10 +70,9 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
         {
             if (client != null)
             {
-                client.BeginConnect(remoteEP,
-                    new AsyncCallback(ConnectCallback), client);
+                client.BeginConnect(remoteEP,new AsyncCallback(ConnectCallback), client);
 
-                connectDone.WaitOne();
+                //connectDone.WaitOne();
             }
             else
             {
@@ -87,15 +86,17 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                 // Retrieve the socket from the state object.  
                 Socket client = (Socket)ar.AsyncState;
 
-                // Complete the connection.  
-                client.EndConnect(ar);
-
-                //Console.WriteLine("Socket connected to {0}",
-                //    client.RemoteEndPoint.ToString());
-
-                // Signal that the connection has been made.  
-                //connectDone.Set();
-                flagConnected = true;
+                // Complete the connection.  '
+                if (client.Connected)
+                {
+                    client.EndConnect(ar);
+                    flagConnected = true;
+                }
+                else {
+                    if (this.rb != null)
+                        this.rb.ShowText("Lost connect to board");
+                    Console.WriteLine("Lost connect to board");
+                }
             }
             catch (Exception e)
             {
@@ -105,14 +106,22 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
 
         public void Close()
         {
-            if (client != null)
+            try
             {
-                if (client.Connected)
+                if (client != null)
                 {
-                    client.Shutdown(SocketShutdown.Both);
-                    client.Close();
+                    if (client.Connected)
+                    {
+                        client.Shutdown(SocketShutdown.Both);
+                        client.Close();
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+
         }
         private void Receive(Socket client)
         {
@@ -145,18 +154,26 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                 // Retrieve the state object and the client socket   
                 // from the asynchronous state object.  
                 StateObject state = (StateObject)ar.AsyncState;
-                Socket client = state.workSocket;
-                // Read data from the remote device.  
-                state.buffer.length = client.EndReceive(ar);
-                if (state.buffer.length > 0)
+                if (state.workSocket.Connected)
                 {
-                    // There might be more data, so store the data received so far.  
-                    // state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
-                    // //  Get the rest of the data.  
-                    // client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                    //     new AsyncCallback(ReceiveCallback), state);
-                    // response = state.sb.ToString();
-                    flagReadyReadData = true;
+                    Socket client = state.workSocket;
+                    // Read data from the remote device.  
+                    state.buffer.length = client.EndReceive(ar);
+                    if (state.buffer.length > 0)
+                    {
+                        // There might be more data, so store the data received so far.  
+                        // state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+                        // //  Get the rest of the data.  
+                        // client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                        //     new AsyncCallback(ReceiveCallback), state);
+                        // response = state.sb.ToString();
+                        flagReadyReadData = true;
+                    }
+                }
+                else {
+                    if (this.rb != null)
+                        this.rb.ShowText("Lost connect to board");
+                    Console.WriteLine("Lost connect to board");
                 }
                 //else
                 //{
@@ -251,7 +268,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                 //Console.WriteLine("Sent {0} bytes to server.", bytesSent);
 
                 // Signal that all bytes have been sent.  
-                sendDone.Set();
+                //sendDone.Set();
             }
             catch (Exception e)
             {

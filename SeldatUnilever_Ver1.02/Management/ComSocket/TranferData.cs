@@ -56,6 +56,9 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
             while (true == flagGetRespone)
             {
                 numResent++;
+                if (numResent >= 100) {
+                    return false;
+                }
                 if (this.rb != null)
                     this.rb.ShowText("try sent socket : " + numResent);
                 Console.WriteLine("try sent socket ------------------ {0} ----------------", numResent);
