@@ -1,12 +1,10 @@
-﻿using SeldatMRMS.Management.RobotManagent;
-using SelDatUnilever_Ver1._00.Management;
+﻿using SelDatUnilever_Ver1._00.Management;
 using SelDatUnilever_Ver1._00.Management.ComSocket;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
-using static SeldatMRMS.Management.TrafficRobotUnity;
 
 namespace DoorControllerService
 {
@@ -260,10 +258,10 @@ namespace DoorControllerService
             this.removeListCtrlDoorFront();
             kProcess = false;
             stateCtrlDoor = StateCtrl.DOOR_ST_IDLE;
-            this.OpenRelease(DoorType.DOOR_BACK);
-            this.OpenRelease(DoorType.DOOR_FRONT);
-            this.CloseRelease(DoorType.DOOR_BACK);
-            this.CloseRelease(DoorType.DOOR_FRONT);
+            //this.OpenRelease(DoorType.DOOR_BACK);
+            //this.OpenRelease(DoorType.DOOR_FRONT);
+            //this.CloseRelease(DoorType.DOOR_BACK);
+            //this.CloseRelease(DoorType.DOOR_FRONT);
         }
         public RetState checkOpen(DoorType type)
         {

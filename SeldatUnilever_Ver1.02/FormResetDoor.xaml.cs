@@ -31,8 +31,8 @@ namespace SeldatUnilever_Ver1._02
             Global_Object.onFlagDoorBusy = false;
             Global_Object.onFlagRobotComingGateBusy = false;
             Global_Object.setGateStatus((int)DoorId.DOOR_MEZZAMINE_UP_NEW, false); // gate 1
-            Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampSetStateOff(DoorType.DOOR_FRONT);
             Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.ResetDoor();
+            Global_Object.doorManagementServiceCtrl.DoorMezzamineUpNew.LampSetStateOff(DoorType.DOOR_FRONT);
             lblStatus.Content = "Gate 1 finished reset ";
         }
 
@@ -41,8 +41,8 @@ namespace SeldatUnilever_Ver1._02
             Global_Object.onFlagDoorBusy = false;
             Global_Object.onFlagRobotComingGateBusy = false;
             Global_Object.setGateStatus((int)DoorId.DOOR_MEZZAMINE_UP, false); // gate 2
-            Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampSetStateOff(DoorType.DOOR_FRONT);
             Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.ResetDoor();
+            Global_Object.doorManagementServiceCtrl.DoorMezzamineUp.LampSetStateOff(DoorType.DOOR_FRONT);
             lblStatus.Content = "Gate 2 finished reset ";
         }
     }
