@@ -630,13 +630,13 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public override void RequestGotoReadyHandler(Communication.Message message)
         {
-            StandardInt32 rqVal = (StandardInt32)message;
+          /*  StandardInt32 rqVal = (StandardInt32)message;
             if (rqVal.data == 1)
             {
                 DisposeF();
                 AddWaitTask();
                 //Console.WriteLine("request goto ready");
-            }
+            }*/
         }
         public void Reset()
         {
