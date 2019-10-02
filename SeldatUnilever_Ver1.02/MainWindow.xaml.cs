@@ -101,7 +101,7 @@ namespace SeldatUnilever_Ver1._02
 
             ChartInfo _temp_RD = new ChartInfo();
             _temp_RD.name = "Ready";
-            _temp_RD.value = 5;
+            _temp_RD.value = Global_Object.cntGoready;
             _temp_RD.color = Colors.MediumBlue;
             listRealChart.Add(_temp_RD);
 
@@ -124,8 +124,13 @@ namespace SeldatUnilever_Ver1._02
         {
             if (unityService.deviceRegistrationService.deviceItemList.Count > 0)
             {
-                DeviceItem item = unityService.deviceRegistrationService.deviceItemList.Find(e => e.userName == "f");
-                return item.OrderedItemList.Count;
+                try
+                {
+                    DeviceItem item = unityService.deviceRegistrationService.deviceItemList.Find(e => e.userName == "f");
+                    if (item.OrderedItemList != null)
+                        return item.OrderedItemList.Count;
+                }
+                catch { }
             }
             return 0;
         }
@@ -137,10 +142,14 @@ namespace SeldatUnilever_Ver1._02
                 
                 foreach(DeviceItem item in unityService.deviceRegistrationService.deviceItemList)
                 {
-                    if(!item.userName.Equals("f"))
+                    try
                     {
-                        count +=item.OrderedItemList.Count;
+                        if (!item.userName.Equals("f"))
+                        {
+                            count += item.OrderedItemList.Count;
+                        }
                     }
+                    catch { }
                 }
             }
             return count;

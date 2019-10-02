@@ -60,6 +60,7 @@ namespace SeldatMRMS
         public static string messageTitileInformation = "Information";
         public static string messageTitileError = "Error";
         public static string messageTitileWarning = "Warning";
+        public static int cntGoready = 1;
 
         public static DoorManagementService doorManagementServiceCtrl;
         public static MainWindow mainWindowCtrl;

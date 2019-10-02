@@ -612,6 +612,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_RELEASED:
+                        Global_Object.cntGoready++;
                         TrafficRountineConstants.RegIntZone_READY.Release(robot);
                         robot.robotTag = RobotStatus.IDLE;
                         robot.SetSafeYellowcircle(false);
