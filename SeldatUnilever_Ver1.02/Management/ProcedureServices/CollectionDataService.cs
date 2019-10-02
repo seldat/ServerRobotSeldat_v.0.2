@@ -182,6 +182,7 @@ namespace SelDatUnilever_Ver1
 
         public String RequestDataProcedure(String dataReq, String url)
         {
+
             //String url = Global_Object.url+"plan/getListPlanPallet";
             // String url = "http://localhost:8080";
             BridgeClientRequest clientRequest = new BridgeClientRequest();

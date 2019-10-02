@@ -188,7 +188,7 @@ namespace SeldatMRMS.Management.RobotManagent
             disposeItem.IsEnabled = false;
 
             turnOnOffItem.Header = "Set On/Off Traffic";
-            turnOnOffItem.Click += ChargeManualStartMenu;
+            turnOnOffItem.Click += SetOnOffTrafficMenu;
             turnOnOffItem.IsEnabled = true;
 
             chargeManualStart.Header = "Request Charge";

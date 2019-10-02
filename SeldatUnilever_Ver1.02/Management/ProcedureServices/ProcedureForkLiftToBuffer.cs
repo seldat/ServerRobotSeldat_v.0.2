@@ -740,6 +740,7 @@ namespace SeldatMRMS
         public override void FinishStatesCallBack(Int32 message)
         {
             this.resCmd = (ResponseCommand)message;
+            robot.ShowText("Finish State :"+resCmd);
             base.FinishStatesCallBack(message);
         }
         public class ForkLiftToMachineInfo

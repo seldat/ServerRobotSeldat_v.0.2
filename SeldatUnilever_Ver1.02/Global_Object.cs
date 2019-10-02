@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -104,12 +105,13 @@ namespace SeldatMRMS
             //=====================================================
         }
         //#######################################
-        public static MusicPlayerOld musicPlayerOld = new MusicPlayerOld("ALARM.mp3");
+        public static MusicPlayerOld musicPlayerOld;
         public static void PlayWarning()
         {
+            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Resources/Alarm_EM.mp3");
             if (musicPlayerOld == null)
             {
-                musicPlayerOld = new MusicPlayerOld("ALARM.mp3");
+                musicPlayerOld = new MusicPlayerOld(path);
                 musicPlayerOld.Play(true);
             }
             else
