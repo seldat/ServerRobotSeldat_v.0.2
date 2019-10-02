@@ -123,6 +123,7 @@
                                     <iconPacks:PackIconMaterial 
                                         Kind="DoorOpen"/>
                                 </Button>
+                                <!--
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_3Dmap}"
                                         Name="btn_3Dmap"
                                         Margin="5 0"
@@ -153,7 +154,7 @@
                                     ToolBar.OverflowMode="AsNeeded">
                                     <iconPacks:PackIconMaterial 
                                         Kind="MusicBox"/>
-                                </Button>
+                                </Button> -->
                                 <!--<ListBox SelectedIndex="0">
                                      <StackPanel Orientation="Horizontal" 
                                      HorizontalAlignment="Stretch"

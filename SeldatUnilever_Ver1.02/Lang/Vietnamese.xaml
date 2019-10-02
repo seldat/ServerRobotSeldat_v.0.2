@@ -32,7 +32,7 @@
 
     <sys:String x:Key="MainWindow_Toolbar_riskareaConfigure">Cấu Hình Vùng Giao Thông</sys:String>
     <sys:String x:Key="MainWindow_Toolbar_trafficareaConfigure">Traffic Area Configure</sys:String>
-    <sys:String x:Key="MainWindow_Toolbar_doorConfigure">Cấu Hình Cửa</sys:String>
+    <sys:String x:Key="MainWindow_Toolbar_doorConfigure">Cấu Hình Cổng</sys:String>
     <sys:String x:Key="MainWindow_Toolbar_chargerConfigure">Cấu Hình Trạm Sạc</sys:String>
     <sys:String x:Key="MainWindow_Toolbar_Configure">Tùy chỉnh</sys:String>
     <sys:String x:Key="ConfigureRiskZone_Button_Add">Thêm</sys:String>
