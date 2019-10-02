@@ -473,13 +473,13 @@ namespace SeldatMRMS
             {
                 robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_ERROR);
             }));
-            Thread.Sleep(1);
+            Thread.Sleep(1000);
             robot.border.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
             new Action(delegate ()
             {
                 robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_RUNNING);
             }));
-            Thread.Sleep(1);
+            Thread.Sleep(1000);
             /* bool keepRun = true;
             
              robot.ShowText ("ErrorCode -> " + getStringError(p.errorCode));
