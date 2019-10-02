@@ -765,6 +765,7 @@
     <None Include="Resources\text1.txt" />
     <None Include="Resources\Map_Layout2.jpg" />
     <None Include="Resources\chartpie.jpg" />
+    <Content Include="Resources\Alarm_EM.mp3" />
     <Content Include="sharpdx_direct3d11_1_effects_arm.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

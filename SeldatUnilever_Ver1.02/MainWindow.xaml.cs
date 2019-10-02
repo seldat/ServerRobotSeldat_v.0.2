@@ -68,7 +68,7 @@ namespace SeldatUnilever_Ver1._02
             canvasControlService = new CanvasControlService(this);
             DataContext = canvasControlService;
             pie = new PieChartPercent(this);
-
+            
             //DataContext = this;
             //DataContext = new ViewModel();
         }
