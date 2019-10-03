@@ -89,19 +89,19 @@ namespace SeldatUnilever_Ver1._02
 
             ChartInfo _temp_FB = new ChartInfo();
             _temp_FB.name = "Forklift to Buffer";
-            _temp_FB.value = GetAmountForkLift();
+            _temp_FB.value = Global_Object.cntForkLiftToBuffer;
             _temp_FB.color = Colors.Firebrick;
             listRealChart.Add(_temp_FB);
 
             ChartInfo _temp_BM = new ChartInfo();
             _temp_BM.name = "Buffer to Machine";
-            _temp_BM.value = GetAmountBufferToMachine();
+            _temp_BM.value = Global_Object.cntBufferToMachine;
             _temp_BM.color = Colors.YellowGreen;
             listRealChart.Add(_temp_BM);
 
             ChartInfo _temp_RD = new ChartInfo();
             _temp_RD.name = "Ready";
-            _temp_RD.value = 5;
+            _temp_RD.value = Global_Object.cntGoready;
             _temp_RD.color = Colors.MediumBlue;
             listRealChart.Add(_temp_RD);
 
@@ -124,8 +124,13 @@ namespace SeldatUnilever_Ver1._02
         {
             if (unityService.deviceRegistrationService.deviceItemList.Count > 0)
             {
-                DeviceItem item = unityService.deviceRegistrationService.deviceItemList.Find(e => e.userName == "f");
-                return item.OrderedItemList.Count;
+                try
+                {
+                    DeviceItem item = unityService.deviceRegistrationService.deviceItemList.Find(e => e.userName == "f");
+                    if (item.OrderedItemList != null)
+                        return item.OrderedItemList.Count;
+                }
+                catch { }
             }
             return 0;
         }
@@ -137,10 +142,14 @@ namespace SeldatUnilever_Ver1._02
                 
                 foreach(DeviceItem item in unityService.deviceRegistrationService.deviceItemList)
                 {
-                    if(!item.userName.Equals("f"))
+                    try
                     {
-                        count +=item.OrderedItemList.Count;
+                        if (!item.userName.Equals("f"))
+                        {
+                            count += item.OrderedItemList.Count;
+                        }
                     }
+                    catch { }
                 }
             }
             return count;

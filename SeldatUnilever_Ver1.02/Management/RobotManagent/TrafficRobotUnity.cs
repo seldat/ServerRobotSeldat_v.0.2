@@ -298,6 +298,7 @@ namespace SeldatMRMS.Management
             while (true)
             {
                 if (sw.ElapsedMilliseconds > ms) break;
+                Thread.Sleep(50);
             }
         }
         public int CheckSafeDistance() // KIểm tra khoản cách an toàn/ nếu đang trong vùng close với robot khác thì giảm tốc độ, chuyển sang chế độ dò risk area
