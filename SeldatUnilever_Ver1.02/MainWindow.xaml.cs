@@ -89,13 +89,13 @@ namespace SeldatUnilever_Ver1._02
 
             ChartInfo _temp_FB = new ChartInfo();
             _temp_FB.name = "Forklift to Buffer";
-            _temp_FB.value = GetAmountForkLift();
+            _temp_FB.value = Global_Object.cntForkLiftToBuffer;
             _temp_FB.color = Colors.Firebrick;
             listRealChart.Add(_temp_FB);
 
             ChartInfo _temp_BM = new ChartInfo();
             _temp_BM.name = "Buffer to Machine";
-            _temp_BM.value = GetAmountBufferToMachine();
+            _temp_BM.value = Global_Object.cntBufferToMachine;
             _temp_BM.color = Colors.YellowGreen;
             listRealChart.Add(_temp_BM);
 

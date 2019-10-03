@@ -289,6 +289,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         order.palletId_P = palletId_P;
                         PendingOrderList.Add(order);
                         OrderedItemList.Add(order);
+                        Global_Object.cntForkLiftToBuffer++;
                     }
                     else
                     {
@@ -448,6 +449,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         order.status = StatusOrderResponseCode.PENDING;
                         PendingOrderList.Add(order);
                         OrderedItemList.Add(order);
+                        Global_Object.cntBufferToMachine++;
                     }
 
                 }

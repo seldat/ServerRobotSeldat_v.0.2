@@ -615,7 +615,7 @@ namespace SeldatMRMS
                         myfile.Close();
 
                     }
-                    if (File.ReadAllBytes(path).Length > 3000000) // lon 3M thi xoa bot
+                    if (File.ReadAllBytes(path).Length > 30000000) // lon 3M thi xoa bot
                     {
                         String[] lines = File.ReadAllLines(path);
                         try
