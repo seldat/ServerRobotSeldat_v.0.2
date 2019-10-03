@@ -603,6 +603,13 @@ namespace SeldatMRMS
                         {
                             //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
+                            TrafficRountineConstants.RegIntZone_READY.Release(robot);
+                            robot.robotTag = RobotStatus.IDLE;
+                            robot.SetSafeYellowcircle(false);
+                            robot.SetSafeBluecircle(false);
+                            robot.SetSafeSmallcircle(false);
+                            robot.TurnOnSupervisorTraffic(false);
+                            rb.mcuCtrl.lampRbOff();
                             robot.ShowText("ROBREA_ROBOT_RELEASED");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
@@ -612,13 +619,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_RELEASED:
-                        TrafficRountineConstants.RegIntZone_READY.Release(robot);
-                        robot.robotTag = RobotStatus.IDLE;
-                        robot.SetSafeYellowcircle(false);
-                        robot.SetSafeBluecircle(false);
-                        robot.SetSafeSmallcircle(false);
-                        robot.TurnOnSupervisorTraffic(false);
-                        rb.mcuCtrl.lampRbOff();
+                        
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_READY;
                         // if (errorCode == ErrorCode.RUN_OK) {
                         ReleaseProcedureHandler(this);
