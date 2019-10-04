@@ -687,7 +687,7 @@ namespace SeldatMRMS
                         break;
                 }
              //   robot.ShowText("-> " + procedureCode);
-                Thread.Sleep(50);
+                Thread.Sleep(700);
             }
             StateBufferToMachine = BufferToMachine.BUFMAC_IDLE;
         }
