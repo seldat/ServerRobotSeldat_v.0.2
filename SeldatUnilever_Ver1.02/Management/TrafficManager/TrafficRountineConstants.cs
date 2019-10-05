@@ -701,6 +701,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 // Robot van toc bình thuong
                 rrj.robot.SetSpeedRegZone(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
+                ReleaseAll(rrj.robot);
                 return true;
             }
         }
