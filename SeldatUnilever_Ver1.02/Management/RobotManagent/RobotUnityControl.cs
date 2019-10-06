@@ -82,6 +82,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public enum RobotSpeedLevel
         {
+            ROBOT_SPEED_ALIVE = 3,
             ROBOT_SPEED_NORMAL = 2,
             ROBOT_SPEED_SLOW = 1,
             ROBOT_SPEED_STOP = 0,
@@ -1008,6 +1009,12 @@ namespace SeldatMRMS.Management.RobotManagent
                {
                    if (sw.ElapsedMilliseconds > ms) break;
                }*/
+        }
+        public void SendSpeedCheckAlive()
+        {
+            StandardInt32 msg = new StandardInt32();
+            msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_ALIVE);
+            this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
         }
         public bool SetSpeedRegZone(RobotSpeedLevel robotspeed, bool highpriority)
         {
