@@ -210,7 +210,7 @@ namespace SeldatMRMS.Management
                                 {
                                     STATE_SPEED = "CHECKINT_WORKING_SECTION_STOP " + r.properties.Label;
                                     SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
-                                    delay(5000);
+                                    delay(2000);
                                     onstop = true;
                                 }
                                 break;
@@ -221,7 +221,7 @@ namespace SeldatMRMS.Management
                                 STATE_SPEED = "CHECKINT_WORKING_SECTION_SLOW " + r.properties.Label;
                                 SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
                                 onstop = true;
-                                delay(5000);
+                                delay(2000);
                                 break;
 
                             }
@@ -278,7 +278,7 @@ namespace SeldatMRMS.Management
                                 {
                                     STATE_SPEED = "CHECKINT_BUFFER_SECTION_STOP " + r.properties.Label;
                                     SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
-                                    delay(5000);
+                                    delay(2000);
                                     onstop = true;
                                     break;
                                 }
@@ -782,7 +782,7 @@ namespace SeldatMRMS.Management
                     {
                         STATE_SPEED = "ORGANC_STOP";
                         SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
-                        delay(5000);
+                        delay(2000);
                         onstop = true;
                         break;
                     }
@@ -820,7 +820,7 @@ namespace SeldatMRMS.Management
                             {
                                 STATE_SPEED = "BLUEC_STOP " + r.properties.Label;
                                 SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
-                                delay(5000);
+                                delay(2000);
                                 onStop = true;
                                 break;
                             }
@@ -871,7 +871,7 @@ namespace SeldatMRMS.Management
                     {
                         STATE_SPEED = "GREEN_STOP " + r.properties.Label;
                         SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
-                        delay(5000);
+                        delay(2000);
                         onStop = true;
                         return onStop;
                     }
@@ -905,11 +905,14 @@ namespace SeldatMRMS.Management
                     Point md1 = MiddleHeaderCv1();
                     Point md2 = MiddleHeaderCv2();
                     Point md3 = MiddleHeaderCv3();
-                    if (r.FindHeaderInsideCircleArea(MiddleHeaderCv(), cY, r.Radius_R) )
+                    if (r.FindHeaderInsideCircleArea(MiddleHeaderCv(), cY, r.Radius_R) ||
+                        r.FindHeaderInsideCircleArea(rP, cY, r.Radius_R) 
+                        || r.FindHeaderInsideCircleArea(md1, cY, r.Radius_R)
+                        )
                     { 
                         STATE_SPEED = "YELLOWC_STOP";
                         SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
-                        delay(5000);
+                        delay(2000);
                         onstop = true;
                         break;
                     }
