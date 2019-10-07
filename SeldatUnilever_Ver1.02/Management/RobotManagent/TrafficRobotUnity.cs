@@ -900,7 +900,7 @@ namespace SeldatMRMS.Management
                 if (r.onFlagSafeYellowcircle)
                 {
                     Point cY = r.CenterOnLineCv(Center_R); // TRONG TAM ROBOT KHAC
-                    Point rP=Global_Object.CoorCanvas(r.properties.pose.Position);
+                    Point rP=Global_Object.CoorCanvas(properties.pose.Position);
                     Point md = MiddleHeaderCv();
                     Point md1 = MiddleHeaderCv1();
                     Point md2 = MiddleHeaderCv2();
