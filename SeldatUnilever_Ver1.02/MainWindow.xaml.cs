@@ -109,7 +109,9 @@ namespace SeldatUnilever_Ver1._02
             //   _pie.Draw(listRealChart);
             pie.Draw(listRealChart);
             pieChart.Data = pie.pieCollection;
-        
+            pieChartTime.Data = pie.pieCollection;
+
+
             Dispatcher.BeginInvoke(new ThreadStart(() =>
             {
                 try

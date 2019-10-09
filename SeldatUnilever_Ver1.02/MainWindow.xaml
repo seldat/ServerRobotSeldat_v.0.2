@@ -307,6 +307,7 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"></ColumnDefinition>
                                             <ColumnDefinition Width="300"></ColumnDefinition>
+                                            <ColumnDefinition Width="300"></ColumnDefinition>
                                         </Grid.ColumnDefinitions>
                                         <Grid Grid.Column="0">
                                             <Grid.ColumnDefinitions>
@@ -420,7 +421,11 @@
                                                 <pie:PieChart  Margin="30 0 0 0"  Name="pieChart" Height="130" Width="270" PieHeight="100" PieWidth="100"></pie:PieChart>
                                             </StackPanel>
                                         </Grid>
-                                       
+                                        <Grid Grid.Column="2">
+                                            <StackPanel Orientation="Horizontal">
+                                                <pie:PieChart  Margin="30 0 0 0"  Name="pieChartTime" Height="130" Width="270" PieHeight="100" PieWidth="100"></pie:PieChart>
+                                            </StackPanel>
+                                        </Grid>
                                     </Grid>
                                 </TabItem>
                                 <TabItem Header="{DynamicResource MainWindow_TabItem_LogConsole}" >
@@ -432,7 +437,7 @@
                             </TabControl>
                         </Grid>
                         <Grid Grid.Row="0" Grid.Column="1">
-                            <StackPanel Orientation ="Horizontal" HorizontalAlignment="Right" Margin="7,0">
+                           <StackPanel Orientation ="Horizontal" HorizontalAlignment="Right" Margin="7,0">
                                 <!--<Button Name="ClearButton" HorizontalAlignment="Left" Width="55" Height="18" 
                                      Content="Xóa" FontSize="10" Background="OrangeRed"
                                      VerticalContentAlignment = "Top" Foreground="White"
@@ -440,8 +445,8 @@
                                 <!--<CheckBox Name="CheckScroll" Margin="7,0,0,0" HorizontalAlignment="Left" 
                                      VerticalAlignment="Center" Content="Cuộn" 
                                      Checked="autoScrollLog_Checked"/>-->
-                            </StackPanel>
-                        </Grid>
+                        </StackPanel>  
+                    </Grid>
                     </Grid>
                     <GridSplitter Background="#B9B9B9" Grid.Row="0"
                                   Height="3" HorizontalAlignment="Stretch" 

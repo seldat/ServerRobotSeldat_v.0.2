@@ -661,6 +661,8 @@ namespace SeldatMRMS.Management
                         SetSafeSmallcircle(true);
                         SetSafeBluecircle(false);
                         SetSafeYellowcircle(false);
+                        if (CheckGreenCircle_HighWay()) // va cha5m vo2ng tro2n xanh muc u7u tien
+                            break;
                         if (checkOrgancCircle())
                             break;
                         else if (CheckIntersection(true))
@@ -880,11 +882,40 @@ namespace SeldatMRMS.Management
             return onStop;
         }
 
+        public bool CheckGreenCircle_HighWay() // khi robot bặt vòng tròn xanh. chính nó phải ngưng nếu dò ra có robot nào trong vùng vòng tròn này ngược lại với vòng tròn vàng
+        {
+            bool onStop = false;
+            List<RobotUnity> robotTochList = new List<RobotUnity>();
+            foreach (RobotUnity r in RobotUnitylist)
+            {
+                Point cG = CenterOnLineCv(Center_G); // TRONG TAM CUA NO
+                if (r.robotTag == RobotStatus.WORKING)
+                {
+
+                    if (FindHeaderInsideCircleArea(MiddleHeaderCv(), cG, r.Radius_G) ||
+                    FindHeaderInsideCircleArea(Global_Object.CoorCanvas(properties.pose.Position), cG, r.Radius_G)
+                    || FindHeaderInsideCircleArea(MiddleHeaderCv1(), cG, r.Radius_G))
+                    {
+                        // tim do ưu tien tai cac diem giao nhau
+                        if (checkAllRobotsHasInsideBayIdNear(r))
+                        {
+                            STATE_SPEED = "GREEN_STOP_HIGHWAY " + r.properties.Label;
+                            SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+                            delay(2000);
+                            onStop = true;
+                            return onStop;
+                        }
+                    }
+                }
+            }
+            return onStop;
+        }
+
         protected bool checkAllRobotsHasInsideBayIdNear(RobotUnity robot)
         {
             if (robot.bayId >= 0)
             {
-                if (Math.Abs(robot.bayId - this.bayId) <= 2)
+                if (Math.Abs(robot.bayId - this.bayId) <= 4)
                 {
                     return true;
                 }

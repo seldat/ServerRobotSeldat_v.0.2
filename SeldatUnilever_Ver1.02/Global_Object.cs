@@ -62,7 +62,7 @@ namespace SeldatMRMS
         public static string messageTitileError = "Error";
         public static string messageTitileWarning = "Warning";
         public static int cntGoready = 1;
-        public static int cntForkLiftToBuffer = 0;
+        public static int cntForkLiftToBuffer = 0; //
         public static int cntBufferToMachine = 0;
 
         public static DoorManagementService doorManagementServiceCtrl;
