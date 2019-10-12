@@ -274,6 +274,7 @@ namespace SeldatMRMS.Management.RobotManagent
             timerCheckKeepAlive.AutoReset = true;
             timerCheckKeepAlive.Enabled = true;
             robotLogOut = new RobotLogOut();
+            
         }
         public virtual void setColorRobotStatus(RobotStatusColorCode rsc, RobotUnity robotTemp)
         {

@@ -147,8 +147,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         }
         public string userName { get; set; } // dia chi Emei
         public string codeID;
-        public List<OrderItem> PendingOrderList { get; set; }
-        public List<OrderItem> OrderedItemList { get; set; }
+        public List<OrderItem> PendingOrderList;
+        public List<OrderItem> OrderedItemList;
         public int orderedAmount = 0;
         public int doneAmount = 0;
         public MainWindow mainWindow;

@@ -46,6 +46,7 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
                          txt_logout.Document.Blocks.Clear();
                          countLog = 0;
                     }
+                    SetName(src);
                     txt_logout.AppendText(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + " [" + src + "] [" + mytext.Text.Length + "] >> " + txt + Environment.NewLine);
                     log.Info(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + " [" + src + "] [" + mytext.Text.Length + "] >> " + txt + Environment.NewLine);
                 });

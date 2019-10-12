@@ -38,13 +38,15 @@ namespace SeldatUnilever_Ver1._02
     {
         private SoundPlayer Player = null;
         public System.Timers.Timer stationtimer;
+        public System.Timers.Timer chartIntterupTimer;
 
         public System.Timers.Timer robotTimer;
 
 
 
         public PieChartPercent pie;
-       
+        public PieChartPercent pieTime;
+
 
         public bool drag = true;
         public UnityManagementService unityService;
@@ -68,7 +70,8 @@ namespace SeldatUnilever_Ver1._02
             canvasControlService = new CanvasControlService(this);
             DataContext = canvasControlService;
             pie = new PieChartPercent(this);
-            
+            pieTime = new PieChartPercent(this);
+
             //DataContext = this;
             //DataContext = new ViewModel();
         }
@@ -85,31 +88,7 @@ namespace SeldatUnilever_Ver1._02
 
         private void OnTimedOrderListEvent(object sender, ElapsedEventArgs e)
         {
-            List<ChartInfo> listRealChart = new List<ChartInfo>();
-
-            ChartInfo _temp_FB = new ChartInfo();
-            _temp_FB.name = "Forklift to Buffer";
-            _temp_FB.value = Global_Object.cntForkLiftToBuffer;
-            _temp_FB.color = Colors.Firebrick;
-            listRealChart.Add(_temp_FB);
-
-            ChartInfo _temp_BM = new ChartInfo();
-            _temp_BM.name = "Buffer to Machine";
-            _temp_BM.value = Global_Object.cntBufferToMachine;
-            _temp_BM.color = Colors.YellowGreen;
-            listRealChart.Add(_temp_BM);
-
-            ChartInfo _temp_RD = new ChartInfo();
-            _temp_RD.name = "Ready";
-            _temp_RD.value = Global_Object.cntGoready;
-            _temp_RD.color = Colors.MediumBlue;
-            listRealChart.Add(_temp_RD);
-
-
-            //   _pie.Draw(listRealChart);
-            pie.Draw(listRealChart);
-            pieChart.Data = pie.pieCollection;
-            pieChartTime.Data = pie.pieCollection;
+           
 
 
             Dispatcher.BeginInvoke(new ThreadStart(() =>
@@ -186,12 +165,61 @@ namespace SeldatUnilever_Ver1._02
                 ctrR = new CtrlRobot(unityService.robotManagementService);
                 Global_Object.mainWindowCtrl = this;
                 stationtimer = new System.Timers.Timer();
-                stationtimer.Interval = 10000;
+                stationtimer.Interval = 20000;
                 stationtimer.Elapsed += OnTimedOrderListEvent;
                 stationtimer.AutoReset = true;
                 stationtimer.Enabled = true;
 
+               chartIntterupTimer= new System.Timers.Timer();
+                chartIntterupTimer.Interval = 5000;
+                chartIntterupTimer.Elapsed += OnChartIntterupTimer;
+                chartIntterupTimer.AutoReset = true;
+                chartIntterupTimer.Enabled = true;
+
             }
+        }
+
+        private void OnChartIntterupTimer(object sender, ElapsedEventArgs e)
+        {
+            List<ChartInfo> listRealChart = new List<ChartInfo>();
+            List<ChartInfo> listRealChartTime = new List<ChartInfo>();
+
+            ChartInfo _temp_WT = new ChartInfo();
+            _temp_WT.name = "Woking Time";
+            _temp_WT.value = 60;
+            _temp_WT.color = Colors.Firebrick;
+            listRealChartTime.Add(_temp_WT);
+
+            ChartInfo _temp_RT = new ChartInfo();
+            _temp_RT.name = "Ready Time";
+            _temp_RT.value = 30;
+            _temp_RT.color = Colors.Blue;
+            listRealChartTime.Add(_temp_RT);
+
+            ChartInfo _temp_FB = new ChartInfo();
+            _temp_FB.name = "Forklift to Buffer";
+            _temp_FB.value = Global_Object.cntForkLiftToBuffer;
+            _temp_FB.color = Colors.Firebrick;
+            listRealChart.Add(_temp_FB);
+
+            ChartInfo _temp_BM = new ChartInfo();
+            _temp_BM.name = "Buffer to Machine";
+            _temp_BM.value = Global_Object.cntBufferToMachine;
+            _temp_BM.color = Colors.YellowGreen;
+            listRealChart.Add(_temp_BM);
+
+            ChartInfo _temp_RD = new ChartInfo();
+            _temp_RD.name = "Ready";
+            _temp_RD.value = Global_Object.cntGoready;
+            _temp_RD.color = Colors.MediumBlue;
+            listRealChart.Add(_temp_RD);
+
+
+            //   _pie.Draw(listRealChart);
+            pie.Draw(listRealChart);
+            pieTime.Draw(listRealChartTime);
+            pieChart.Data = pie.pieCollection;
+            pieChartTime.Data = pieTime.pieCollection;
         }
 
         public void SetTextInfo(String txt)
