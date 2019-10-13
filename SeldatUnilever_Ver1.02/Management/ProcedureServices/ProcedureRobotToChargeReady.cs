@@ -1,5 +1,6 @@
 ﻿#define USE_AUTO_CHARGE
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using SeldatMRMS.Management.RobotManagent;
@@ -265,7 +266,6 @@ namespace SeldatMRMS
                                     {
                                         //Thread.Sleep((int)TIME_DELAY_RELEASE_CHARGE);
 #if USE_AUTO_CHARGE
-                                        rb.properties.enableChage = false;
                                         StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_STOP_CHARGE;
 #else
                                         StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_RECONNECTING;
