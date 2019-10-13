@@ -26,7 +26,7 @@ namespace SeldatMRMS.Management.RobotManagent
         //public event Action<bool> AgvLaserError;
         public event Action<Pose, Object> PoseHandler;
         public event Action<Object, ConnectionStatus> ConnectionStatusHandler;
-        private Timer timerCheckKeepAlive;
+        //private Timer timerCheckKeepAlive;
         public RobotLogOut robotLogOut;
         public bool onFlagDetectLine = false;
         public bool onFlagFinishPalletUpDownINsideBuffer = false;
@@ -216,7 +216,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public int publication_robotnavigation;
             public int publication_killActionLid;
             public int publication_linedetectionctrl;
-            public int publication_checkAliveTimeOut;
+            //public int publication_checkAliveTimeOut;
             public int publication_postPallet;
             public int publication_finishStatesCallBack;
             public int publication_cmdAreaPallet;
@@ -268,11 +268,11 @@ namespace SeldatMRMS.Management.RobotManagent
 
         public RobotUnityControl()
         {
-            timerCheckKeepAlive = new Timer();
-            timerCheckKeepAlive.Interval = 100;
-            timerCheckKeepAlive.Elapsed += checkKeepAliveEvent;
-            timerCheckKeepAlive.AutoReset = true;
-            timerCheckKeepAlive.Enabled = true;
+            //timerCheckKeepAlive = new Timer();
+            //timerCheckKeepAlive.Interval = 100;
+            //timerCheckKeepAlive.Elapsed += checkKeepAliveEvent;
+            //timerCheckKeepAlive.AutoReset = true;
+            //timerCheckKeepAlive.Enabled = true;
             robotLogOut = new RobotLogOut();
             
         }
@@ -335,12 +335,12 @@ namespace SeldatMRMS.Management.RobotManagent
             }
             catch { }
         }
-        private void checkKeepAliveEvent(Object source, System.Timers.ElapsedEventArgs e)
-        {
-            StandardInt32 msg = new StandardInt32();
-            msg.data = 1234;
-            this.Publish(paramsRosSocket.publication_checkAliveTimeOut, msg);
-        }
+        //private void checkKeepAliveEvent(Object source, System.Timers.ElapsedEventArgs e)
+        //{
+        //    StandardInt32 msg = new StandardInt32();
+        //    msg.data = 1234;
+        //    this.Publish(paramsRosSocket.publication_checkAliveTimeOut, msg);
+        //}
 
         private void laserBackOff()
         {
@@ -353,7 +353,7 @@ namespace SeldatMRMS.Management.RobotManagent
             int subscription_robotInfo = this.Subscribe("/amcl_pose", "geometry_msgs/PoseWithCovarianceStamped", AmclPoseHandler, 10);
             paramsRosSocket.publication_ctrlrobotdriving = this.Advertise("/ctrlRobotDriving", "std_msgs/Int32");
             int subscription_finishedStates = this.Subscribe("/finishedStates", "std_msgs/Int32", FinishedStatesHandler, 10);
-            paramsRosSocket.publication_checkAliveTimeOut = this.Advertise("/checkAliveTimeOut", "std_msgs/Int32");
+            //paramsRosSocket.publication_checkAliveTimeOut = this.Advertise("/checkAliveTimeOut", "std_msgs/Int32");
 
             int subscription_respCtrlCallBack = this.Subscribe("/respCtrl", "std_msgs/Int32", ResponseCtrlHandler, 10);
             paramsRosSocket.publication_linedetectionctrl = this.Advertise("/linedetectionctrl", "std_msgs/Int32");

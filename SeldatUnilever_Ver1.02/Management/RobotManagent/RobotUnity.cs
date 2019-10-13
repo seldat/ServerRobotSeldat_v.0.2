@@ -1,25 +1,15 @@
-﻿using SeldatMRMS.Communication;
-using SeldatMRMS.RobotView;
+﻿using SeldatMRMS.RobotView;
 using SeldatUnilever_Ver1._02.Management.RobotManagent;
 using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.OleDb;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 using static DoorControllerService.DoorService;
-using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
 using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterService;
 
 namespace SeldatMRMS.Management.RobotManagent
@@ -683,7 +673,7 @@ namespace SeldatMRMS.Management.RobotManagent
             }
             else {
                 String wstr = "Warning";
-                String txtstr = "Robot outside the ready area. Can't start manual chage .";
+                String txtstr = "Robot outside the ready area. Can't start manual charge .";
                 MessageBoxButton msgb = MessageBoxButton.OK;
                 MessageBoxImage icon = MessageBoxImage.Warning;
                 var result = MessageBox.Show(txtstr, wstr, msgb,icon);

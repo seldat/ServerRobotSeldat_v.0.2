@@ -1,11 +1,7 @@
 ﻿using SeldatUnilever_Ver1._02.Management.DeviceManagement;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SelDatUnilever_Ver1._00.Management
 {

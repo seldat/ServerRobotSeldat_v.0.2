@@ -1,6 +1,4 @@
-﻿using SeldatMRMS;
-using System;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Threading;
 using DoorControllerService;
