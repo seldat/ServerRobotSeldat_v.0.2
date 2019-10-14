@@ -752,6 +752,7 @@ namespace SeldatMRMS.Management.RobotManagent
         private void LaserBackOff(object sender, RoutedEventArgs e)
         {
             resetLaserBack = true;
+            laserBackOffRb();
         }
         public void RemoveDraw()
         {

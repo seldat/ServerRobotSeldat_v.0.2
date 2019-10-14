@@ -342,7 +342,7 @@ namespace SeldatMRMS.Management.RobotManagent
             this.Publish(paramsRosSocket.publication_checkAliveTimeOut, msg);
         }
 
-        private void laserBackOff()
+        protected void laserBackOffRb()
         {
             StandardInt32 msg = new StandardInt32();
             msg.data = 0;
@@ -636,7 +636,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     {
                         if ((info.warning[1] == '1') && (true == resetLaserBack))
                         {
-                            laserBackOff();
+                            laserBackOffRb();
                         }
                         this.agvErr = true;
                         //if(AgvLaserError != null)
