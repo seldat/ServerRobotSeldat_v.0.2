@@ -292,13 +292,13 @@ namespace SeldatMRMS
                             do
                             {
                                 robot.onFlagGoBackReady = true;
-                                if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
+                                if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE || Traffic.RobotIsInArea("READY_FRONTLINE", robot.properties.pose.Position))
                                 {
                                     robot.onFlagGoBackReady = false;
                                    
                                     Point destPos2 = frontLinePose.Position;
                                     String destName2 = Traffic.DetermineArea(destPos2, TypeZone.MAIN_ZONE);
-                                    if (destName2.Equals("OUTER") || Traffic.RobotIsInArea("READY_FRONTLINE", robot.properties.pose.Position))
+                                    if (destName2.Equals("OUTER") )
                                     {
                                         //robot.ShowText("GO FRONTLINE IN OUTER");
                                         if (rb.SendPoseStamped(frontLinePose))
@@ -311,7 +311,7 @@ namespace SeldatMRMS
                                             //robot.ShowText("BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
                                         }
                                     }
-                                    else if (destName2.Equals("VIM") || Traffic.RobotIsInArea("READY_FRONTLINE", robot.properties.pose.Position))
+                                    else if (destName2.Equals("VIM"))
                                     {
                                         //robot.ShowText("GO FRONTLINE IN VIM");
                                         if (rb.SendPoseStamped(frontLinePose))
