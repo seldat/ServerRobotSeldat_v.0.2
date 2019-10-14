@@ -284,7 +284,7 @@ namespace SeldatMRMS
                         {
                             break;
                         }
-                        //robot.ShowText("START :GOTO_BACK_FRONTLINE_READY");
+                        robot.ShowText("Detetect Inside Station Check Ready");
                         if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_RIGHT))
                         {
                             Stopwatch sw = new Stopwatch();
@@ -292,13 +292,13 @@ namespace SeldatMRMS
                             do
                             {
                                 robot.onFlagGoBackReady = true;
-                                if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
+                                if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE || Traffic.RobotIsInArea("READY_FRONTLINE", robot.properties.pose.Position))
                                 {
                                     robot.onFlagGoBackReady = false;
                                    
                                     Point destPos2 = frontLinePose.Position;
                                     String destName2 = Traffic.DetermineArea(destPos2, TypeZone.MAIN_ZONE);
-                                    if (destName2.Equals("OUTER"))
+                                    if (destName2.Equals("OUTER") )
                                     {
                                         //robot.ShowText("GO FRONTLINE IN OUTER");
                                         if (rb.SendPoseStamped(frontLinePose))

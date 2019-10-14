@@ -245,6 +245,7 @@ namespace SeldatMRMS
                         {
                             break;
                         }
+                        robot.ShowText("Detetect Inside Station Check Ready");
                         if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_LEFT))
                         {
                             Stopwatch sw = new Stopwatch();
@@ -252,10 +253,9 @@ namespace SeldatMRMS
                             do
                             {
                                 robot.onFlagGoBackReady = true;
-                                if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
+                                if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE || Traffic.RobotIsInArea("READY_FRONTLINE", robot.properties.pose.Position))
                                 {
                                     robot.onFlagGoBackReady = false;
-                                    
                                     robot.robotTag = RobotStatus.WORKING;
                                     if (rb.SendPoseStamped(ds.config.PointFrontLine))
                                     {
