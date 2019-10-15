@@ -132,8 +132,8 @@ namespace DoorControllerService
         private StateCtrl stateCtrlDoor;
         private DoorStatus doorFrontStatus;
         private DoorStatus doorBackStatus;
-        private const UInt32 TIME_OUT_WAIT_DOOR = 9000;
-        private const UInt32 TIME_OUT_PRESS_BUTTON = 1500;
+        private const UInt32 TIME_OUT_WAIT_DOOR = 10000;
+        //private const UInt32 TIME_OUT_PRESS_BUTTON = 1500;
         private const long TIMEOUT_REMOVE_COMMAND = 300000000; //30 second
         private bool doorBusy;
         private bool kProcess = true;
@@ -453,30 +453,33 @@ namespace DoorControllerService
                             case StateCtrl.DOOR_ST_WAITTING_OPEN:
                                 try
                                 {
-                                    if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
-                                    {
-                                        if (this.OpenRelease(resCmd.dType))
-                                        {
-                                            Console.WriteLine("OpenRelease(DoorType.DOOR) success");
-                                            //if (this.rb != null)
-                                            Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "OpenRelease(DoorType.DOOR) success");
-                                            elapsedTimeReleaseButton.Reset();
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine("OpenRelease(DoorType.DOOR) failed");
-                                            //if (this.rb != null)
-                                            Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "OpenRelease(DoorType.DOOR) failed");
-                                            elapsedTimeReleaseButton.Restart();
-                                        }
-                                        Thread.Sleep(50);
-                                    }
+                                    //if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
+                                    //{
+                                    //    if (this.OpenRelease(resCmd.dType))
+                                    //    {
+                                    //        Console.WriteLine("OpenRelease(DoorType.DOOR) success");
+                                    //        //if (this.rb != null)
+                                    //        Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "OpenRelease(DoorType.DOOR) success");
+                                    //        elapsedTimeReleaseButton.Reset();
+                                    //    }
+                                    //    else
+                                    //    {
+                                    //        Console.WriteLine("OpenRelease(DoorType.DOOR) failed");
+                                    //        //if (this.rb != null)
+                                    //        Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "OpenRelease(DoorType.DOOR) failed");
+                                    //        elapsedTimeReleaseButton.Restart();
+                                    //    }
+                                    //    Thread.Sleep(50);
+                                    //}
                                     if (elapsedTimeFront.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR)
                                     {
                                         elapsedTimeFront.Reset();
                                         this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN;
                                         Console.WriteLine("TIME_OUT_WAIT_OPEN_DOOR");
-                                        //if (this.rb != null)
+                                        if (this.rb != null)
+                                        {
+                                            this.rb.ShowText("TIME_OUT_WAIT_OPEN_DOOR" + resCmd.dType + ':' + "REOPEN_DOOR");
+                                        }
                                         Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_OPEN" + resCmd.dType + ':' + "TIME_OUT_WAIT_OPEN_DOOR");
                                     }
                                     else
@@ -561,30 +564,30 @@ namespace DoorControllerService
                             case StateCtrl.DOOR_ST_WAITTING_CLOSE:
                                 try
                                 {
-                                    if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
-                                    {
-                                        if (this.CloseRelease(resCmd.dType))
-                                        {
-                                            //if (this.rb != null)
-                                            Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "this.CloseRelease(DoorType.DOOR)) success");
-                                            Console.WriteLine("this.CloseRelease(DoorType.DOOR)) success");
-                                            elapsedTimeReleaseButton.Reset();
-                                        }
-                                        else
-                                        {
-                                            //if (this.rb != null)
-                                            Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "this.CloseRelease(DoorType.DOOR)) failed");
-                                            Console.WriteLine("this.CloseRelease(DoorType.DOOR)) failed");
-                                            elapsedTimeReleaseButton.Restart();
-                                        }
-                                        Thread.Sleep(50);
-                                    }
+                                    //if (elapsedTimeReleaseButton.ElapsedMilliseconds >= TIME_OUT_PRESS_BUTTON)
+                                    //{
+                                    //    if (this.CloseRelease(resCmd.dType))
+                                    //    {
+                                    //        //if (this.rb != null)
+                                    //        Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "this.CloseRelease(DoorType.DOOR)) success");
+                                    //        Console.WriteLine("this.CloseRelease(DoorType.DOOR)) success");
+                                    //        elapsedTimeReleaseButton.Reset();
+                                    //    }
+                                    //    else
+                                    //    {
+                                    //        //if (this.rb != null)
+                                    //        Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "this.CloseRelease(DoorType.DOOR)) failed");
+                                    //        Console.WriteLine("this.CloseRelease(DoorType.DOOR)) failed");
+                                    //        elapsedTimeReleaseButton.Restart();
+                                    //    }
+                                    //    Thread.Sleep(50);
+                                    //}
                                     if (elapsedTimeFront.ElapsedMilliseconds >= TIME_OUT_WAIT_DOOR)
                                     {
                                         elapsedTimeFront.Restart();
                                         this.stateCtrlDoor = StateCtrl.DOOR_ST_CLOSE;
-                                        //if (this.rb != null)
-                                        Console.WriteLine("StateCtrl.DOOR_ST_WAITTING_CLOSE" + resCmd.dType + ':' + "TIME_OUT_WAIT_CLOSE_DOOR");
+                                        if (this.rb != null)
+                                            this.rb.ShowText("TIME_OUT_WAIT_CLOSE_DOOR" + resCmd.dType + ':' + "TRY RECLOSE DOOR");
                                         Console.WriteLine("TIME_OUT_WAIT_CLOSE_DOOR");
                                     }
                                     else
