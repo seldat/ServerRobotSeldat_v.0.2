@@ -221,7 +221,25 @@ namespace SeldatUnilever_Ver1._02
             pieChart.Data = pie.pieCollection;
             pieChartTime.Data = pieTime.pieCollection;
         }
-
+        public double TotalWorkingTime()
+        {
+            double timeTotal = 0;
+            List<DeviceItem> deviceList=unityService.deviceRegistrationService.deviceItemList;
+            if (deviceList.Count > 0)
+            {
+                foreach (DeviceItem item in deviceList)
+                {
+                    if (item.PendingOrderList.Count > 0)
+                    {
+                        foreach (OrderItem order in item.PendingOrderList)
+                        {
+                            timeTotal += order.totalTimeProcedure;
+                        }
+                    }
+                }
+            }
+            return timeTotal;
+        }
         public void SetTextInfo(String txt)
         {
            txt_Info.Dispatcher.Invoke(() =>
