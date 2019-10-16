@@ -707,7 +707,6 @@ namespace SeldatMRMS
                         order.status = StatusOrderResponseCode.FINISHED;
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-                        SaveOrderItem(order);
                         KillEvent();
                         break;
                     case ForkLift.FORMAC_ROBOT_DESTROY: // trả robot về robotmanagement để nhận quy trình mới
@@ -726,7 +725,6 @@ namespace SeldatMRMS
                         //FreePlanedBuffer(order.palletId_P);
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-                        SaveOrderItem(order);
                         KillEvent();
                         break;
                     //////////////////////////////////////////////////////
