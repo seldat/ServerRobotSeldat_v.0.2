@@ -21,10 +21,6 @@ namespace SeldatMRMS
     public static class Global_Object
     {
 
-        public static class Store
-        {
-
-        }
         public enum PRIORITYLOGIN
         {
             PRIORITYLOGIN_ADMIN0=0,
@@ -67,6 +63,8 @@ namespace SeldatMRMS
         public static int cntGoready = 1;
         public static int cntForkLiftToBuffer = 0; //
         public static int cntBufferToMachine = 0;
+
+        public static DateTime startTimeProgram ;
 
         public static DoorManagementService doorManagementServiceCtrl;
         public static MainWindow mainWindowCtrl;

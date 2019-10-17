@@ -650,7 +650,7 @@ namespace SeldatMRMS
                    //   robot.robotTag = RobotStatus.IDLE;
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_MACHINE;
                         // if (errorCode == ErrorCode.RUN_OK) {
-                        ReleaseProcedureHandler(this);
+                       
                         // } else {
                         //     ErrorProcedureHandler (this);
                         // }
@@ -661,6 +661,7 @@ namespace SeldatMRMS
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
                         KillEvent();
+                        ReleaseProcedureHandler(this);
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_DESTROY:
                         order.endTimeProcedure = DateTime.Now;

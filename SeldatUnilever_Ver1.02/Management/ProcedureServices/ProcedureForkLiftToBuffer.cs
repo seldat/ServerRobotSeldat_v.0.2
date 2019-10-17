@@ -697,7 +697,7 @@ namespace SeldatMRMS
                         robot.ReleaseWorkingZone();
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
                         // if (errorCode == ErrorCode.RUN_OK) {
-                        ReleaseProcedureHandler(this);
+                     
                         // } else {
                         //     ErrorProcedureHandler (this);
                         // }
@@ -708,6 +708,7 @@ namespace SeldatMRMS
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
                         KillEvent();
+                        ReleaseProcedureHandler(this);
                         break;
                     case ForkLift.FORMAC_ROBOT_DESTROY: // trả robot về robotmanagement để nhận quy trình mới
                         ds.removeListCtrlDoorBack();

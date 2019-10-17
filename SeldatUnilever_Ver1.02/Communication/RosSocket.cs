@@ -40,7 +40,7 @@ namespace SeldatMRMS.Management.RobotManagent
             CON_CLOSED
         }
         #region Public
-        private bool IsDisposed = false;
+        public bool IsDisposed = false;
         protected bool onBinding = true;
         public int timeOutReConnection = 0;
         public System.Timers.Timer checkAlive;
@@ -113,11 +113,11 @@ namespace SeldatMRMS.Management.RobotManagent
                 if (webSocket != null)
                 {
                     IsDisposed = true;
+                    isConnected = false;
                     //webSocket.OnMessage -= (sender, e) => recievedOperation((WebSocket)sender, e);
                     webSocket.OnClose -= (sender, e) => OnClosedEvent((WebSocket)sender, e);
                     //webSocket.OnOpen -= (sender, e) => OnOpenedEvent();
-                    if (webSocket.IsAlive)
-                        Close();
+                    Close();
                     webSocket = null;
                     checkAlive.Stop();
                 }

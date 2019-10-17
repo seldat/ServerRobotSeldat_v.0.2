@@ -71,7 +71,7 @@ namespace SeldatUnilever_Ver1._02
             DataContext = canvasControlService;
             pie = new PieChartPercent(this);
             pieTime = new PieChartPercent(this);
-
+            Global_Object.startTimeProgram = DateTime.Now;
             //DataContext = this;
             //DataContext = new ViewModel();
         }
@@ -90,14 +90,17 @@ namespace SeldatUnilever_Ver1._02
         {
            
 
-
+            
             Dispatcher.BeginInvoke(new ThreadStart(() =>
             {
-                try
+                if (bx_Check.IsChecked == true)
                 {
-                    canvasControlService.ReloadListDeviceItems();
+                    try
+                    {
+                        canvasControlService.ReloadListDeviceItems();
+                    }
+                    catch { Console.WriteLine("Error reload device list"); }
                 }
-                catch { Console.WriteLine("Error reload device list"); }
             }));
         }
 
@@ -183,34 +186,37 @@ namespace SeldatUnilever_Ver1._02
         {
             List<ChartInfo> listRealChart = new List<ChartInfo>();
             List<ChartInfo> listRealChartTime = new List<ChartInfo>();
+            double diffTimeProgram = DateTime.Now.Subtract(Global_Object.startTimeProgram).Minutes;
+            double readyTime = 24*60- TotalWorkingTime()+15;
+
 
             ChartInfo _temp_WT = new ChartInfo();
             _temp_WT.name = "Woking Time";
-            _temp_WT.value = 60;
-            _temp_WT.color = Colors.Firebrick;
+            _temp_WT.value = TotalWorkingTime();
+            _temp_WT.color = Colors.LightSalmon;
             listRealChartTime.Add(_temp_WT);
 
             ChartInfo _temp_RT = new ChartInfo();
             _temp_RT.name = "Ready Time";
-            _temp_RT.value = 30;
-            _temp_RT.color = Colors.Blue;
+            _temp_RT.value = readyTime;
+            _temp_RT.color = Colors.DarkGray;
             listRealChartTime.Add(_temp_RT);
 
             ChartInfo _temp_FB = new ChartInfo();
             _temp_FB.name = "Forklift to Buffer";
             _temp_FB.value = Global_Object.cntForkLiftToBuffer;
-            _temp_FB.color = Colors.Firebrick;
+            _temp_FB.color = Colors.YellowGreen;
             listRealChart.Add(_temp_FB);
 
             ChartInfo _temp_BM = new ChartInfo();
             _temp_BM.name = "Buffer to Machine";
             _temp_BM.value = Global_Object.cntBufferToMachine;
-            _temp_BM.color = Colors.YellowGreen;
+            _temp_BM.color = Colors.DarkOrange;
             listRealChart.Add(_temp_BM);
 
-            ChartInfo _temp_RD = new ChartInfo();
-            _temp_RD.name = "Ready";
-            _temp_RD.value = Global_Object.cntGoready;
+         ChartInfo _temp_RD = new ChartInfo();
+            _temp_RD.name = "Idle";
+            _temp_RD.value = 10;
             _temp_RD.color = Colors.MediumBlue;
             listRealChart.Add(_temp_RD);
 
@@ -229,9 +235,9 @@ namespace SeldatUnilever_Ver1._02
             {
                 foreach (DeviceItem item in deviceList)
                 {
-                    if (item.PendingOrderList.Count > 0)
+                    if (item.OrderedItemList.Count > 0)
                     {
-                        foreach (OrderItem order in item.PendingOrderList)
+                        foreach (OrderItem order in item.OrderedItemList)
                         {
                             timeTotal += order.totalTimeProcedure;
                         }
@@ -592,6 +598,11 @@ namespace SeldatUnilever_Ver1._02
         private void Btn_ResetSpeed_Click_1(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Bx_Check_Checked(object sender, RoutedEventArgs e)
+        {
+           
         }
     }
 }

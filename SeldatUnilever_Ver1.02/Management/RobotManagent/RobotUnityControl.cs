@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Media;
 using WebSocketSharp;
 using static SeldatMRMS.Management.RobotManagent.RobotUnity;
+using static SeldatMRMS.Management.RobotManagent.RobotUnity;
 
 namespace SeldatMRMS.Management.RobotManagent
 {
@@ -35,6 +36,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
         public int bayId = -1;
         public bool bayIdReg = false;
+        public bool onFlagKillPub = false;
         public bool regGoInsideBayId { get; set; }
         private const float delBatterry = 0;
         RobotSpeedLevel regRobotSpeed;
@@ -740,6 +742,7 @@ namespace SeldatMRMS.Management.RobotManagent
         {
             try
             {
+                waitRes = false;
                 StandardInt32 msg = new StandardInt32();
                 msg.data = 0;
                 this.Publish(paramsRosSocket.publication_killActionLid, msg);

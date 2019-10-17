@@ -180,8 +180,8 @@
                                                                 Foreground="Red"
                                                                 Kind="Stop"/>
                                 </Button>
-                                
-                                
+
+
                                 <Button 
                                     Name="btn_Play"
                                     Margin="5 0"
@@ -192,7 +192,7 @@
                                                                 Foreground="Green"
                                                                 Kind="Play"/>
                                 </Button>
-                                
+
                                 <Separator/>
                                 <Button 
                                     Name="btn_ResetSpeed"
@@ -204,7 +204,7 @@
                                                                 Foreground="Green"
                                                                 Kind="Amazon"/>
                                 </Button>
-                              
+
 
                             </ToolBar>
                         </ToolBarTray>
@@ -226,6 +226,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="3*"></RowDefinition>
                         <RowDefinition Height="2*" MinHeight="28" ></RowDefinition>
+                        <RowDefinition Height="22"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
@@ -245,7 +246,7 @@
                                          MaxScale="100"
                                          >-->
                                     <Grid>
-                                        
+
                                         <Canvas Name="map" RenderTransformOrigin="0.5,0.5" 
                                                 Width="Auto" Height="Auto">
                                             <Canvas.Children>
@@ -259,9 +260,9 @@
                                                 </TransformGroup>
                                             </Canvas.RenderTransform>
                                         </Canvas>
-                                        
+
                                     </Grid>
-                                    
+
                                     <!--</xctk:Zoombox>-->
                                 </Border>
                             </Grid>
@@ -309,7 +310,7 @@
                                             <ColumnDefinition Width="250"></ColumnDefinition>
                                             <ColumnDefinition Width="250"></ColumnDefinition>
                                         </Grid.ColumnDefinitions>
-                                        
+
                                         <Grid Grid.Column="0">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="90"></ColumnDefinition>
@@ -417,9 +418,9 @@
                                                 </GroupBox>
                                             </Grid>
                                         </Grid>
-                                        
+
                                         <Grid Grid.Column="1" >
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel Orientation="Horizontal" Background="#f1f1f1">
                                                 <pie:PieChart  Margin="10 0 0 0"  Name="pieChartTime" Height="130" Width="150" PieHeight="100" PieWidth="100"></pie:PieChart>
                                             </StackPanel>
                                         </Grid>
@@ -445,7 +446,7 @@
                             </TabControl>
                         </Grid>
                         <Grid Grid.Row="0" Grid.Column="1">
-                           <StackPanel Orientation ="Horizontal" HorizontalAlignment="Right" Margin="7,0">
+                            <StackPanel Orientation ="Horizontal" HorizontalAlignment="Right" Margin="7,0">
                                 <!--<Button Name="ClearButton" HorizontalAlignment="Left" Width="55" Height="18" 
                                      Content="Xóa" FontSize="10" Background="OrangeRed"
                                      VerticalContentAlignment = "Top" Foreground="White"
@@ -453,12 +454,19 @@
                                 <!--<CheckBox Name="CheckScroll" Margin="7,0,0,0" HorizontalAlignment="Left" 
                                      VerticalAlignment="Center" Content="Cuộn" 
                                      Checked="autoScrollLog_Checked"/>-->
-                        </StackPanel>  
-                    </Grid>
+                            </StackPanel>
+                        </Grid>
                     </Grid>
                     <GridSplitter Background="#B9B9B9" Grid.Row="0"
                                   Height="3" HorizontalAlignment="Stretch" 
                                   VerticalAlignment="Bottom"/>
+                    <Grid Grid.Row="2">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Label Name="lb_Roll" Content="Auto-Roll" HorizontalContentAlignment="Center" Margin="350 0 0 0" Padding="3"></Label>
+                            <CheckBox Name="bx_Check" Height="20" Width="20" Margin="5,3,0,-1" IsChecked="True" Checked="Bx_Check_Checked" VerticalAlignment="Top"></CheckBox>
+                        </StackPanel>
+
+                    </Grid>
 
                 </Grid>
             </Border>
