@@ -41,7 +41,7 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
                 txt_logout.Dispatcher.Invoke(() =>
                 {
                     var mytext = new TextRange(txt_logout.Document.ContentStart, txt_logout.Document.ContentEnd);
-                    if (countLog++ > 100)
+                    if (countLog++ > 1000)
                     {
                          txt_logout.Document.Blocks.Clear();
                          countLog = 0;
