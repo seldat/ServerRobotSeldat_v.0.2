@@ -74,7 +74,6 @@ namespace SeldatMRMS
             UpdateInformationInProc(this, ProcessStatus.F);
             order.endTimeProcedure = DateTime.Now;
             order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-            SaveOrderItem(order);
         }
         public void Procedure(object ojb)
         {
@@ -357,7 +356,6 @@ namespace SeldatMRMS
                         UpdateInformationInProc(this, ProcessStatus.S);
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-                        SaveOrderItem(order);
                         KillEvent();
                         break;
                     default:

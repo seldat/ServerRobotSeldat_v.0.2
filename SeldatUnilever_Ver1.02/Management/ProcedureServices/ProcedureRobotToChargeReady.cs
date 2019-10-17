@@ -90,7 +90,6 @@ namespace SeldatMRMS
             selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
             order.endTimeProcedure = DateTime.Now;
             order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-            SaveOrderItem(order);
             //   this.robot.DestroyRegistrySolvedForm();
         }
         public void Procedure(object ojb)
@@ -395,7 +394,6 @@ namespace SeldatMRMS
                         UpdateInformationInProc(this, ProcessStatus.S);
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-                        SaveOrderItem(order);
                         KillEvent();
                         break; // trả robot về robotmanagement để nhận quy trình mới
                     default:
@@ -511,7 +509,6 @@ namespace SeldatMRMS
             selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
             order.endTimeProcedure = DateTime.Now;
             order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-            SaveOrderItem(order);
         }
         protected String GetPointOfCharger()
         {
@@ -632,7 +629,6 @@ namespace SeldatMRMS
                         UpdateInformationInProc(this, ProcessStatus.S);
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-                        SaveOrderItem(order);
                         KillEvent();
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITINGREADY_FORCERELEASED:

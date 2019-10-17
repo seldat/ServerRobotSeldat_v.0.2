@@ -64,7 +64,6 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
             order.endTimeProcedure = DateTime.Now;
             order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-            SaveOrderItem(order);
             TrafficRountineConstants.ReleaseAll(robot);
             robot.bayId = -1;
             robot.bayIdReg = false;
@@ -481,7 +480,6 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         order.status = StatusOrderResponseCode.FINISHED;
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-                        SaveOrderItem(order);
                         KillEvent();
                         break;
                     default:

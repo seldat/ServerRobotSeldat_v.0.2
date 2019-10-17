@@ -68,7 +68,6 @@ namespace SeldatMRMS
             selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
             order.endTimeProcedure = DateTime.Now;
             order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-            SaveOrderItem(order);
             TrafficRountineConstants.ReleaseAll(robot);
         }
         public void Procedure(object ojb)
@@ -459,7 +458,6 @@ namespace SeldatMRMS
                         order.status = StatusOrderResponseCode.FINISHED;
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-                        SaveOrderItem(order);
                         KillEvent();
                         break;
                     default:

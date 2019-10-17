@@ -210,7 +210,6 @@ namespace SeldatMRMS
                             order.status = StatusOrderResponseCode.ERROR_GET_FRONTLINE;
                             order.endTimeProcedure = DateTime.Now;
                             order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-                            SaveOrderItem(order);
                             KillEvent();
                         }
                         else
@@ -661,13 +660,11 @@ namespace SeldatMRMS
                         order.status = StatusOrderResponseCode.FINISHED;
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-                        SaveOrderItem(order);
                         KillEvent();
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_DESTROY:
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-                        SaveOrderItem(order);
                         robot.SwitchToDetectLine(false);
                         robot.ReleaseWorkingZone();
                         // StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_RELEASED;

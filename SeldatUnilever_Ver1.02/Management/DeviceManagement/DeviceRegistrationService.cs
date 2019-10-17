@@ -116,55 +116,25 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             return deviceItemList;
         }
        
-        public bool SaveDeviceOrderList()
-        {
-            foreach(DeviceItem device in deviceItemList)
-            {
-                if (!SaveFileOrders(device))
-                    return false;
-            }
-            return true;
-        }
-        public bool SaveFileOrders(DeviceItem device)
+        public void SaveDeviceOrderList()
         {
             List<OrderItem> listCol = new List<OrderItem>();
-            foreach (OrderItem item in device.OrderedItemList)
+            foreach (DeviceItem device in deviceItemList)
             {
-                if(item.status==StatusOrderResponseCode.DELIVERING)
+                if (device.OrderedItemList.Count > 0)
                 {
-                    return false;
-                }
-                else if(item.status == StatusOrderResponseCode.PENDING)
-                {
-                    device.RemoveCallBack(item);
-                    listCol.Add(item);
-
+                    foreach (OrderItem item in device.OrderedItemList)
+                    {
+                        listCol.Add(item);
+                    }
                 }
             }
-            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "OrderStore.txt");
+            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "OrderStore_"+DateTime.Now.ToString("yyyy-MM-dd--HH-mm-ss_tt") +".txt");
             using (StreamWriter fs = File.CreateText(path))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(fs, listCol);
             }
-            return true;
-        }
-
-        public List<OrderItem> LoadFileOrders()
-        {
-            List<OrderItem> returnList = new List<OrderItem>();
-            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "OrderStore.txt");
-            using (StreamReader sr = File.OpenText(path))
-            {
-                string s = "";
-                while ((s = sr.ReadLine()) != null)
-                {
-                    Console.WriteLine(s);
-                    dynamic response = JsonConvert.DeserializeObject(s);
-                    returnList = response.ToObject<List<OrderItem>>();
-                }
-            }
-            return returnList;
         }
     }
 }

@@ -529,14 +529,12 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         order.status = StatusOrderResponseCode.FINISHED;
                         order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-                        SaveOrderItem(order);
                         KillEvent();
                         break;
                     case BufferToBuffer.BUFTOBUF_ROBOT_DESTROY:
                         TrafficRountineConstants.ReleaseAll(robot);
                        order.endTimeProcedure = DateTime.Now;
                         order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
-                        SaveOrderItem(order);
                         robot.SwitchToDetectLine(false);
                         robot.ReleaseWorkingZone();
                         // StateBufferToBuffer = BufferToBuffer.BUFTOBUF_ROBOT_RELEASED;
