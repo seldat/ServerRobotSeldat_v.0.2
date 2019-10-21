@@ -28,6 +28,12 @@ namespace SeldatMRMS
         public ListCollectionView GroupedOrderItems { get; set; }
         public List<DeviceItem> deviceItemsList;
         public List<DeviceItem.OrderItem> orderItemsList;
+
+        #region Khanh added 1
+        public ListCollectionView ALL_OrderItems { get; set; }
+        public List<DeviceItem.OrderItem> ALL_orderItemsList;
+        #endregion
+
         //=================VARIABLE==================
         private int stationCount = 0;
         //---------------MAP-------------------
@@ -82,6 +88,12 @@ namespace SeldatMRMS
             orderItemsList = new List<DeviceItem.OrderItem>();
             GroupedDeviceItems = (ListCollectionView)CollectionViewSource.GetDefaultView(deviceItemsList);
             GroupedOrderItems = (ListCollectionView)CollectionViewSource.GetDefaultView(orderItemsList);
+
+            #region Khanh added 2
+            ALL_orderItemsList = new List<DeviceItem.OrderItem>();
+            // for test//ALL_orderItemsList.Add(new DeviceItem.OrderItem { userName = "kkk", robot = "Mike", typeReq = TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE, status = StatusOrderResponseCode.ORDER_STATUS_RESPONSE_SUCCESS });
+            ALL_OrderItems = (ListCollectionView)CollectionViewSource.GetDefaultView(ALL_orderItemsList);
+            #endregion
         }
 
         //########################################################
@@ -848,6 +860,24 @@ namespace SeldatMRMS
                         }
 
                     }
+
+                    #region Khanh added 3
+                    ALL_orderItemsList.Clear();
+                    foreach (DeviceItem device in mainWindow.unityService.deviceRegistrationService.deviceItemList)
+                    {
+                        //deviceItemsList.Add(device);
+                        foreach (DeviceItem.OrderItem item in device.OrderedItemList)
+                        {
+                            ALL_orderItemsList.Add(item);
+                        }
+                    }
+                    ALL_OrderItems.Refresh();
+                    //ALL_OrderItems.SortDescriptions.Clear();
+                    //ALL_OrderItems.SortDescriptions.Add(new SortDescription("dateTime", ListSortDirection.Descending));
+                    #endregion
+
+
+
                 }
             }
             catch { Console.WriteLine("Error in ReloadListDeviceItems"); }

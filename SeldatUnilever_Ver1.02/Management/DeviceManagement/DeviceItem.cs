@@ -101,26 +101,26 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public String userName { get; set; }
             public String robot { get; set; }
             public TyeRequest typeReq { get; set; } // FL: ForkLift// BM: BUFFER MACHINE // PR: Pallet return
-            public Point frontLinePos { get; set; }
+            public Point frontLinePos;
             public StatusOrderResponseCode status { get; set; }
-            private String OrderId { get; set; }
-            public int planId { get; set; }
+            private String OrderId;
+            public int planId;
             public int deviceId;
             public int deviceIdPut;
             public String productDetailName { get; set; }
-            public int productId { get; set; }
+            public int productId;
             public int gate { get; set; }
-            public int palletBay{ get; set; }
-            public int palletRow{ get; set; }
+            public int palletBay;
+            public int palletRow;
 
-            public int palletId_H { get; set; }
-            public int palletId_P { get; set; }
-            public int palletId_F { get; set; }
-            public int productDetailId { get; set; }
+            public int palletId_H;
+            public int palletId_P;
+            public int palletId_F;
+            public int productDetailId;
 
 
             public String activeDate;
-            public String dateTime { get; set; }
+            public String dateTime;
 
             public int timeWorkId;
             public String palletStatus;
@@ -133,8 +133,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             // public bool status = false; // chua hoan thanh
             public DataPallet palletAtMachine;
 
-            public int bufferId { get; set; }
-            public int bayId { get; set; }
+            public int bufferId;
+            public int bayId;
             public int bufferIdPut;
             public int palletAmount;
 
