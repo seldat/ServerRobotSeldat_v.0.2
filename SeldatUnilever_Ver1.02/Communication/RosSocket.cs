@@ -139,7 +139,8 @@ namespace SeldatMRMS.Management.RobotManagent
                 Unsubscribe(subscribers.First().Key);
             try
             {
-                webSocket.Close();
+                if(isConnected)
+                    webSocket.Close();
             }
             catch { }
         }

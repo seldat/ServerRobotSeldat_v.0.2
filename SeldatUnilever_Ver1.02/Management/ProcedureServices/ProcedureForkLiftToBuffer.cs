@@ -75,6 +75,7 @@ namespace SeldatMRMS
             registryRobotJourney = new RegistryRobotJourney();
             registryRobotJourney.robot = robot;
             registryRobotJourney.traffic = Traffic;
+            robot.onForceGoToGate = false;
             ProForkLift.Start();
         }
         public void Destroy()
@@ -352,8 +353,9 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_OPEN_DOOR: //doi mo cong
                         RetState ret = ds.checkOpen(DoorService.DoorType.DOOR_BACK);
-                      if (RetState.DOOR_CTRL_SUCCESS == ret)
+                      if (RetState.DOOR_CTRL_SUCCESS == ret || robot.onForceGoToGate)
                         {
+                            robot.onForceGoToGate = false;
                             StateForkLift = ForkLift.FORBUF_ROBOT_OPEN_DOOR_SUCCESS;
                             robot.ShowText("FORBUF_ROBOT_OPEN_DOOR_SUCCESS");
                         }

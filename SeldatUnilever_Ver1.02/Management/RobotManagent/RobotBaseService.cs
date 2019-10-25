@@ -55,6 +55,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public ProcedureControlAssign  PreProcedureAs;
         public ProcedureControlAssign ProcedureRobotAssigned;
         public ProcedureControlAssign ProcedureAs;
+        public bool onForceGoToGate = false;
         public bool SelectedATask { get; set; }
         public OrderItem orderItem { get; set; }
 

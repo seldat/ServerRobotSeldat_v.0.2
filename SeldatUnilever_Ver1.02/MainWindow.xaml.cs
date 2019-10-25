@@ -71,7 +71,7 @@ namespace SeldatUnilever_Ver1._02
             DataContext = canvasControlService;
             pie = new PieChartPercent(this);
             pieTime = new PieChartPercent(this);
-            Global_Object.startTimeProgram = DateTime.Now;
+            Global_Object.startTimeProgram = DateTime.Now.Ticks;
             //DataContext = this;
             //DataContext = new ViewModel();
         }
@@ -186,7 +186,9 @@ namespace SeldatUnilever_Ver1._02
         {
             List<ChartInfo> listRealChart = new List<ChartInfo>();
             List<ChartInfo> listRealChartTime = new List<ChartInfo>();
-            double diffTimeProgram = DateTime.Now.Subtract(Global_Object.startTimeProgram).Minutes;
+            long diffTicksProgram = DateTime.Now.Ticks-Global_Object.startTimeProgram;
+            double tickMinutes = new TimeSpan(diffTicksProgram).Minutes;
+
             double readyTime = 24*60- TotalWorkingTime()+15;
 
 
@@ -197,8 +199,8 @@ namespace SeldatUnilever_Ver1._02
             listRealChartTime.Add(_temp_WT);
 
             ChartInfo _temp_RT = new ChartInfo();
-            _temp_RT.name = "Ready Time";
-            _temp_RT.value = readyTime;
+            _temp_RT.name = "Present Time";
+            _temp_RT.value = tickMinutes + 1;
             _temp_RT.color = Colors.DarkGray;
             listRealChartTime.Add(_temp_RT);
 

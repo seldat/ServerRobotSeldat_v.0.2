@@ -112,6 +112,7 @@ namespace SeldatMRMS.Management.RobotManagent
         MenuItem logOutItem = new MenuItem();
         MenuItem chargeManualStart = new MenuItem();
         MenuItem chargeManualStop = new MenuItem();
+        MenuItem forcedGate = new MenuItem();
         public void Initialize(Canvas canvas)
         {
             this.canvas = canvas;
@@ -200,6 +201,11 @@ namespace SeldatMRMS.Management.RobotManagent
             chargeManualStop.IsEnabled = true;
 
 
+            forcedGate.Header = "Force Gate";
+            forcedGate.Click += ForceGateMenu;
+            forcedGate.IsEnabled = true;
+
+
 
             border.ContextMenu.Items.Add(problemSolutionItem);
             border.ContextMenu.Items.Add(startItem);
@@ -224,6 +230,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
             border.ContextMenu.Items.Add(chargeManualStart);
             border.ContextMenu.Items.Add(chargeManualStop);
+            border.ContextMenu.Items.Add(forcedGate);
 
             //====================EVENT=====================
             //MouseLeave += MouseLeavePath;
@@ -383,6 +390,14 @@ namespace SeldatMRMS.Management.RobotManagent
             }).Start();
             //  robotLogOut.SetName(properties.Label);
 
+        }
+
+        private void ForceGateMenu(object sender, RoutedEventArgs e)
+        {
+            //ForceGate forceGateF = new ForceGate(this);
+            //forceGateF.Show();
+            if (!onForceGoToGate)
+                onForceGoToGate = true;
         }
 
         private void KeepOnTraffic(object sender, MouseButtonEventArgs e)
@@ -612,6 +627,7 @@ namespace SeldatMRMS.Management.RobotManagent
             onFlagFinishPalletUpDownINsideBuffer = false;
             onFlagGoBackReady = false;
             onFlagReadyGo = false;
+            onForceGoToGate = false;
             Draw();
         }
         private void DisConnectMenu(object sender, RoutedEventArgs e)
@@ -658,6 +674,7 @@ namespace SeldatMRMS.Management.RobotManagent
             onFlagFinishPalletUpDownINsideBuffer = false;
             onFlagGoBackReady = false;
             onFlagReadyGo = false;
+            onForceGoToGate = false;
             setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
 
             // reset lost position
