@@ -100,9 +100,10 @@ namespace SeldatMRMS
         {
             ProcedureForkLiftToBuffer FlToBuf = (ProcedureForkLiftToBuffer)ojb;
             RobotUnity rb = FlToBuf.robot;
+            doorServiceCtrl = new DoorServiceCtrl();
             doorServiceCtrl = getDoorService();
             
-          ds = doorServiceCtrl.doorService;
+            ds = doorServiceCtrl.doorService;
             ds.setRb(rb);
             TrafficManagementService Traffic = FlToBuf.Traffic;
             ForkLiftToMachineInfo flToMachineInfo = new ForkLiftToMachineInfo();
