@@ -28,6 +28,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
         private DoorService ds;
+        private DoorServiceCtrl doorServiceCtrl;
 
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
@@ -76,7 +77,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             ProcedureBufferToGate BuffToGate = (ProcedureBufferToGate)ojb;
             RobotUnity rb = BuffToGate.robot;
             // DataBufferToGate p = BuffToGate.points;
-            ds = getDoorService();
+            doorServiceCtrl = new DoorServiceCtrl();
+            doorServiceCtrl = getDoorService();
+
+            ds = doorServiceCtrl.doorService;
             ds.setRb(rb);
             TrafficManagementService Traffic = BuffToGate.Traffic;
             rb.mcuCtrl.lampRbOn();
@@ -348,16 +352,16 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         break;
                     case BufferToGate.BUFGATE_SELECT_BEHAVIOR_ONZONE_TO_GATE:
                         String startNamePoint = Traffic.DetermineArea(registryRobotJourney.startPoint, TypeZone.MAIN_ZONE);
-                        Pose destPos = ds.config.PointFrontLine;
+                        Pose destPos = doorServiceCtrl.PointFrontLine;
                         String destName = Traffic.DetermineArea(destPos.Position, TypeZone.MAIN_ZONE);
                             // đi tới đầu line cổng theo tọa độ chỉ định. gate 1 , 2, 3
-                        if (rb.SendPoseStamped(ds.config.PointFrontLine))
+                        if (rb.SendPoseStamped(doorServiceCtrl.PointFrontLine))
                         {
                                 StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_GOTO_GATE_FROM_VIM_REG;
                                 // Cap Nhat Thong Tin CHuyen Di
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
-                                registryRobotJourney.endPoint = ds.config.PointFrontLine.Position;
+                                registryRobotJourney.endPoint = doorServiceCtrl.PointFrontLine.Position;
                                 ////robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_GATE");
                         }
                         break;
@@ -411,7 +415,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         RetState ret = ds.checkOpen(DoorService.DoorType.DOOR_BACK);
                         if (ret == RetState.DOOR_CTRL_SUCCESS)
                         {
-                            if (rb.SendCmdAreaPallet(ds.config.infoPallet))
+                            if (rb.SendCmdAreaPallet(doorServiceCtrl.infoPallet))
                             {
                                 StateBufferToGate = BufferToGate.BUFGATE_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER;
                                 ////robot.ShowText("BUFGATE_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER");
