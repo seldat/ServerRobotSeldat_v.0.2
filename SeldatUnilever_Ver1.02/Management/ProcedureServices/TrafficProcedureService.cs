@@ -128,70 +128,101 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             }
             return  true;
         }
-        protected DoorService getDoorService()
+        public class DoorServiceCtrl
         {
-            DoorService door=null;     
+            public DoorService doorService;
+            public Pose PointFrontLine;
+            public String infoPallet;
+        }
+        protected DoorServiceCtrl getDoorService()
+        {
+            DoorServiceCtrl doorServiceCtrl = null;
+   
             if (this.traffic.RobotIsInArea("OUTER", robot.properties.pose.Position) || this.traffic.RobotIsInArea("READY", robot.properties.pose.Position,TypeZone.OPZS))
             {
                 if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP)
                 {
-                    door = this.doorservice.DoorMezzamineUp;
+                    doorServiceCtrl.doorService = this.doorservice.DoorMezzamineUp;
+                    doorServiceCtrl.PointFrontLine = this.doorservice.DoorMezzamineUp.config.PointFrontLine;
+                    doorServiceCtrl.infoPallet = this.doorservice.DoorMezzamineUp.config.infoPallet;
                 }
                 else if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP_NEW)
                 {
-                    door = this.doorservice.DoorMezzamineUpNew;
+                    doorServiceCtrl.doorService = this.doorservice.DoorMezzamineUpNew;
+                    doorServiceCtrl.PointFrontLine = this.doorservice.DoorMezzamineUpNew.config.PointFrontLine;
+                    doorServiceCtrl.infoPallet = this.doorservice.DoorMezzamineUpNew.config.infoPallet;
                 }
                 else if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_RETURN)
                 {
-                    door = this.doorservice.DoorMezzamineReturn;
+                    doorServiceCtrl.doorService = this.doorservice.DoorMezzamineReturn;
+                    doorServiceCtrl.PointFrontLine = this.doorservice.DoorMezzamineReturn.config.PointFrontLine;
+                    doorServiceCtrl.infoPallet = this.doorservice.DoorMezzamineReturn.config.infoPallet;
                 }
             }
             else if (this.traffic.RobotIsInArea("VIM-BTLCAP", robot.properties.pose.Position))
             {
                 if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP)
                 {
-                    door = this.doorservice.DoorMezzamineUp_InV;
+                    doorServiceCtrl.doorService = this.doorservice.DoorMezzamineUp;
+                    doorServiceCtrl.PointFrontLine = this.doorservice.DoorMezzamineUp.config.PointFrontLineInv;
+                    doorServiceCtrl.infoPallet = this.doorservice.DoorMezzamineUp.config.infoPalletInv;
                 }
                 else if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP_NEW)
                 {
-                    door = this.doorservice.DoorMezzamineUpNew_InV;
+                    doorServiceCtrl.doorService = this.doorservice.DoorMezzamineUpNew;
+                    doorServiceCtrl.PointFrontLine = this.doorservice.DoorMezzamineUpNew.config.PointFrontLineInv;
+                    doorServiceCtrl.infoPallet = this.doorservice.DoorMezzamineUpNew.config.infoPalletInv;
                 }
                 else if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_RETURN)
                 {
-                    door = this.doorservice.DoorMezzamineReturn;
+                    doorServiceCtrl.doorService = this.doorservice.DoorMezzamineReturn;
+                    doorServiceCtrl.PointFrontLine = this.doorservice.DoorMezzamineReturn.config.PointFrontLine;
+                    doorServiceCtrl.infoPallet = this.doorservice.DoorMezzamineReturn.config.infoPallet;
                 }
             }
             else if (this.traffic.RobotIsInArea("ELEVATOR", robot.properties.pose.Position)) // VIM1 khu cạnh elevator
             {
                 if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP)
                 {
-                    door = this.doorservice.DoorMezzamineUpNew_InV;
+                    doorServiceCtrl.doorService = this.doorservice.DoorMezzamineUp;
+                    doorServiceCtrl.PointFrontLine = this.doorservice.DoorMezzamineUp.config.PointFrontLineInv;
+                    doorServiceCtrl.infoPallet = this.doorservice.DoorMezzamineUp.config.infoPalletInv;
                 }
                 else if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP_NEW)
                 {
-                    door = this.doorservice.DoorMezzamineUpNew_InV;
+                    doorServiceCtrl.doorService = this.doorservice.DoorMezzamineUpNew;
+                    doorServiceCtrl.PointFrontLine = this.doorservice.DoorMezzamineUpNew.config.PointFrontLineInv;
+                    doorServiceCtrl.infoPallet= this.doorservice.DoorMezzamineUpNew.config.infoPalletInv;
                 }
                 else if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_RETURN)
                 {
-                    door = this.doorservice.DoorMezzamineReturn;
+                    doorServiceCtrl.doorService = this.doorservice.DoorMezzamineReturn;
+                    doorServiceCtrl.PointFrontLine = this.doorservice.DoorMezzamineReturn.config.PointFrontLine;
+                    doorServiceCtrl.infoPallet = this.doorservice.DoorMezzamineReturn.config.infoPallet;
                 }
             }
             else if (this.traffic.RobotIsInArea("GATE3", robot.properties.pose.Position)) // VIM2 khu cạnh gate3
             {
                 if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP)
                 {
-                    door = this.doorservice.DoorMezzamineUpNew_InV;
+                    doorServiceCtrl.doorService = this.doorservice.DoorMezzamineUp;
+                    doorServiceCtrl.PointFrontLine = this.doorservice.DoorMezzamineUp.config.PointFrontLineInv;
+                    doorServiceCtrl.infoPallet = this.doorservice.DoorMezzamineUp.config.infoPalletInv;
                 }
                 else if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_UP_NEW)
                 {
-                    door = this.doorservice.DoorMezzamineUpNew_InV;
+                    doorServiceCtrl.doorService = this.doorservice.DoorMezzamineUpNew;
+                    doorServiceCtrl.PointFrontLine = this.doorservice.DoorMezzamineUpNew.config.PointFrontLineInv;
+                    doorServiceCtrl.infoPallet = this.doorservice.DoorMezzamineUpNew.config.infoPalletInv;
                 }
                 else if ((DoorId)order.gate == DoorId.DOOR_MEZZAMINE_RETURN)
                 {
-                    door = this.doorservice.DoorMezzamineReturn_InV;
+                    doorServiceCtrl.doorService = this.doorservice.DoorMezzamineReturn;
+                    doorServiceCtrl.PointFrontLine = this.doorservice.DoorMezzamineReturn.config.PointFrontLineInv;
+                    doorServiceCtrl.infoPallet = this.doorservice.DoorMezzamineReturn.config.infoPalletInv;
                 }
             }
-            return door;
+            return doorServiceCtrl;
         }
 
     }

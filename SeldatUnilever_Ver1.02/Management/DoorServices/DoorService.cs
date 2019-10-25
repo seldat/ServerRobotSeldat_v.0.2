@@ -88,8 +88,13 @@ namespace DoorControllerService
             private String _PointCheckInGateStr;
             public String PointCheckInGateStr { get => _PointCheckInGateStr; set { _PointCheckInGateStr = value; RaisePropertyChanged("PointCheckInGateStr"); } }
             public Pose PointFrontLine;
+            public Pose PointFrontLineInv;
             private String _PointFrontLineStr;
             public String PointFrontLineStr { get => _PointFrontLineStr; set { _PointFrontLineStr = value; RaisePropertyChanged("PointFrontLineStr"); } }
+            
+            private String _PointFrontLineStrInv;
+            public String PointFrontLineStrInv { get => _PointFrontLineStrInv; set { _PointFrontLineStrInv = value; RaisePropertyChanged("PointFrontLineStr"); } }
+
 
             private String _infoPallet;
             private String _infoPalletInv;
@@ -107,6 +112,7 @@ namespace DoorControllerService
                 }
                 catch { }
             }
+
             public void ParsePointFrontLineValue(String value)
             {
                 try
@@ -115,6 +121,17 @@ namespace DoorControllerService
                     double yy = double.Parse(value.Split(',')[1]);
                     double angle = double.Parse(value.Split(',')[2]);
                     PointFrontLine = new Pose(xx, yy, angle);
+                }
+                catch { }
+            }
+            public void ParsePointFrontLineValueInv(String value)
+            {
+                try
+                {
+                    double xx = double.Parse(value.Split(',')[0]);
+                    double yy = double.Parse(value.Split(',')[1]);
+                    double angle = double.Parse(value.Split(',')[2]);
+                    PointFrontLineInv = new Pose(xx, yy, angle);
                 }
                 catch { }
             }

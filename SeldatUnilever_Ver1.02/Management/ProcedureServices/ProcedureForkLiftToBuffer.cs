@@ -39,6 +39,7 @@ namespace SeldatMRMS
         public override event Action<Object> ReleaseProcedureHandler;
         public Pose endPointBuffer;
         private DoorService ds;
+        private DoorServiceCtrl doorServiceCtrl;
         public JPallet JResult;
         public void Registry(DeviceRegistrationService deviceService)
         {
@@ -99,7 +100,9 @@ namespace SeldatMRMS
         {
             ProcedureForkLiftToBuffer FlToBuf = (ProcedureForkLiftToBuffer)ojb;
             RobotUnity rb = FlToBuf.robot;
-            ds = getDoorService();
+            doorServiceCtrl = getDoorService();
+            
+          ds = doorServiceCtrl.doorService;
             ds.setRb(rb);
             TrafficManagementService Traffic = FlToBuf.Traffic;
             ForkLiftToMachineInfo flToMachineInfo = new ForkLiftToMachineInfo();
@@ -201,12 +204,12 @@ namespace SeldatMRMS
                         {
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
                             {
-                               //if (false == rb.CheckInGateFromReadyZoneBehavior(ds.config.PointFrontLine.Position))
+                               //if (false == rb.CheckInGateFromReadyZoneBehavior(doorServiceCtrl.PointFrontLine.Position))
                                 {
                                     robot.ShowText("FORBUF_ROBOT_GOTO_BACK_FRONTLINE_READY");
                                     registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                     registryRobotJourney.startPoint = robot.properties.pose.Position;
-                                    registryRobotJourney.endPoint = ds.config.PointFrontLine.Position;
+                                    registryRobotJourney.endPoint = doorServiceCtrl.PointFrontLine.Position;
                                     StateForkLift = ForkLift.FORBUF_ROBOT_GOTO_BACK_FRONTLINE_READY;
 
                                 }
@@ -215,13 +218,13 @@ namespace SeldatMRMS
                         else if (Traffic.RobotIsInArea("VIM",robot.properties.pose.Position))
                         {
                             robot.robotTag = RobotStatus.WORKING;
-                            if (rb.SendPoseStamped(ds.config.PointFrontLine))
+                            if (rb.SendPoseStamped(doorServiceCtrl.PointFrontLine))
                             {
                                 StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM_REG;
                                 // Cap Nhat Thong Tin CHuyen Di
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
-                                registryRobotJourney.endPoint = ds.config.PointFrontLine.Position;
+                                registryRobotJourney.endPoint = doorServiceCtrl.PointFrontLine.Position;
                                 robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_GATE");
                             }
                         }
@@ -229,13 +232,13 @@ namespace SeldatMRMS
                         {
                             // public void Start (ForkLiftToBuffer state = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED) {
                             robot.robotTag = RobotStatus.WORKING;
-                            if (rb.SendPoseStamped(ds.config.PointFrontLine))
+                            if (rb.SendPoseStamped(doorServiceCtrl.PointFrontLine))
                             {
                                 
                                 StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_FROM_VIM_REG;
                                 registryRobotJourney.startPlaceName = Traffic.DetermineArea(robot.properties.pose.Position, TypeZone.OPZS);
                                 registryRobotJourney.startPoint = robot.properties.pose.Position;
-                                registryRobotJourney.endPoint = ds.config.PointFrontLine.Position;
+                                registryRobotJourney.endPoint = doorServiceCtrl.PointFrontLine.Position;
                                 robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE");
                             }
                         }
@@ -257,7 +260,7 @@ namespace SeldatMRMS
                                 {
                                     robot.onFlagGoBackReady = false;
                                     robot.robotTag = RobotStatus.WORKING;
-                                    if (rb.SendPoseStamped(ds.config.PointFrontLine))
+                                    if (rb.SendPoseStamped(doorServiceCtrl.PointFrontLine))
                                     {
                                         resCmd = ResponseCommand.RESPONSE_NONE;
                                         StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE_READY;
@@ -368,7 +371,7 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_OPEN_DOOR_SUCCESS: // mo cua thang cong ,gui toa do line de robot di vao gap hang
                         // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
-                        if (rb.SendCmdAreaPallet(ds.config.infoPallet))
+                        if (rb.SendCmdAreaPallet(doorServiceCtrl.infoPallet))
                         {
                             StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_PICKUP_PALLET_IN;
                             robot.ShowText("FORBUF_ROBOT_WAITTING_PICKUP_PALLET_IN");

@@ -41,9 +41,14 @@
                                         Binding="{Binding Path=PointCheckInGateStr, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="PointFrontLine" 
                                         Binding="{Binding Path=PointFrontLineStr, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="PointFrontLineInv" 
+                                        Binding="{Binding Path=PointFrontLineStrInv, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                     <DataGridTextColumn Width="*" Header="PointOfPallet" 
                                         Binding="{Binding Path=infoPallet, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="PointOfPalletInv" 
+                                        Binding="{Binding Path=infoPalletInv, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
                     <DataGridTemplateColumn Header="Fixed" x:Name="btnFixed">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
