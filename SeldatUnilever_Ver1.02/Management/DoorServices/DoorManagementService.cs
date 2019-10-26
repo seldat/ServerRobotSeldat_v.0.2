@@ -80,7 +80,7 @@ namespace SeldatMRMS.Management.DoorServices
             PropertiesDoor_List.Add(doorICF_MUB_New);
             DoorInfoConfigList.Add(doorICF_MUB_New);
 
-            DoorInfoConfig doorICF_MUB_NEW_INV = new DoorInfoConfig()
+        /*    DoorInfoConfig doorICF_MUB_NEW_INV = new DoorInfoConfig()
             {
                 Name = "GATE1-INV",
                 Id = DoorId.DOOR_MEZZAMINE_UP_NEW,
@@ -93,7 +93,7 @@ namespace SeldatMRMS.Management.DoorServices
             doorICF_MUB_NEW_INV.ParsePointCheckInGateValue(doorICF_MUB_NEW_INV.PointCheckInGateStr);
             doorICF_MUB_NEW_INV.ParsePointFrontLineValue(doorICF_MUB_NEW_INV.PointFrontLineStr);
            // PropertiesDoor_List.Add(doorICF_MUB_NEW_INV);
-           // DoorInfoConfigList.Add(doorICF_MUB_NEW_INV);
+           // DoorInfoConfigList.Add(doorICF_MUB_NEW_INV);*/
 
             DoorInfoConfig doorICF_MUB = new DoorInfoConfig()
             {
@@ -113,7 +113,7 @@ namespace SeldatMRMS.Management.DoorServices
             PropertiesDoor_List.Add(doorICF_MUB);
             DoorInfoConfigList.Add(doorICF_MUB);
 
-            DoorInfoConfig doorICF_MUB_INV = new DoorInfoConfig()
+            /*DoorInfoConfig doorICF_MUB_INV = new DoorInfoConfig()
             {
                 Name = "GATE2-INV",
                 Id = DoorId.DOOR_MEZZAMINE_UP,
@@ -126,7 +126,7 @@ namespace SeldatMRMS.Management.DoorServices
             doorICF_MUB_INV.ParsePointCheckInGateValue(doorICF_MUB_INV.PointCheckInGateStr);
             doorICF_MUB_INV.ParsePointFrontLineValue(doorICF_MUB_INV.PointFrontLineStr);
           //  PropertiesDoor_List.Add(doorICF_MUB_INV);
-          //  DoorInfoConfigList.Add(doorICF_MUB_INV);
+          //  DoorInfoConfigList.Add(doorICF_MUB_INV);*/
 
 
 
@@ -147,7 +147,7 @@ namespace SeldatMRMS.Management.DoorServices
             PropertiesDoor_List.Add(doorICF_MRB);
             DoorInfoConfigList.Add(doorICF_MRB);
 
-            DoorInfoConfig doorICF_MRB_INV = new DoorInfoConfig()
+          /*  DoorInfoConfig doorICF_MRB_INV = new DoorInfoConfig()
             {
                 Name = "GATE_RETURN_INV",
                 Id = DoorId.DOOR_MEZZAMINE_RETURN,
@@ -160,7 +160,7 @@ namespace SeldatMRMS.Management.DoorServices
             doorICF_MRB_INV.ParsePointCheckInGateValue(doorICF_MRB_INV.PointCheckInGateStr);
             doorICF_MRB_INV.ParsePointFrontLineValue(doorICF_MRB_INV.PointFrontLineStr);
           //  PropertiesDoor_List.Add(doorICF_MRB_INV);
-          //  DoorInfoConfigList.Add(doorICF_MRB_INV);
+          //  DoorInfoConfigList.Add(doorICF_MRB_INV);*/
 
             Grouped_PropertiesDoor.Refresh();
         }

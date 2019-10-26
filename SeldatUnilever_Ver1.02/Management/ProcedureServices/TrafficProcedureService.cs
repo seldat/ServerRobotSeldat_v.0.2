@@ -136,7 +136,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         protected DoorServiceCtrl getDoorService()
         {
-            DoorServiceCtrl doorServiceCtrl = null;
+            DoorServiceCtrl doorServiceCtrl = new DoorServiceCtrl();
    
             if (this.traffic.RobotIsInArea("OUTER", robot.properties.pose.Position) || this.traffic.RobotIsInArea("READY", robot.properties.pose.Position,TypeZone.OPZS))
             {
