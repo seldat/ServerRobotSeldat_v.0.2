@@ -441,6 +441,14 @@ namespace DoorControllerService
                                             //if (this.rb != null)
                                             Console.WriteLine("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + "DOOR_ST_OPEN_SUCCESS");
                                             this.stateCtrlDoor = StateCtrl.DOOR_ST_OPEN_SUCCESS;
+                                            if (resCmd.dType == DoorType.DOOR_FRONT)
+                                            {
+                                                doorFrontStatus = DoorStatus.DOOR_OPEN;
+                                            }
+                                            else
+                                            {
+                                                doorBackStatus = DoorStatus.DOOR_OPEN;
+                                            }
                                             break;
                                         }
                                     }
