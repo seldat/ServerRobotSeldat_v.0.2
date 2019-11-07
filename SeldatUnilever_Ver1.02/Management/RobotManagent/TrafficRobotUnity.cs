@@ -897,7 +897,7 @@ namespace SeldatMRMS.Management
                     || FindHeaderInsideCircleArea(MiddleHeaderCv1(), cG, r.Radius_G))
                     {
                         // tim do ưu tien tai cac diem giao nhau
-                        if (checkAllRobotsHasInsideBayIdNear(r))
+                        if (checkAllRobotsHasInsideBayIdNearHW(r))
                         {
                             STATE_SPEED = "GREEN_STOP_HIGHWAY " + r.properties.Label;
                             SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
@@ -922,6 +922,19 @@ namespace SeldatMRMS.Management
             }
             return false;
         }
+
+        protected bool checkAllRobotsHasInsideBayIdNearHW(RobotUnity robot)
+        {
+            if (robot.bayId >= 0 && this.bayId>=0)
+            {
+                if (Math.Abs(robot.bayId - this.bayId) <= 4)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public bool CheckYellowCircle() // khi robot bặt vòng tròn vàng. tất cả robot khác ngưng nếu dò ra có robot nào trong vùng vòng tròn này
         {
             bool onstop = false;
