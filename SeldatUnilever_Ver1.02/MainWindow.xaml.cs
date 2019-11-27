@@ -193,14 +193,14 @@ namespace SeldatUnilever_Ver1._02
 
 
             ChartInfo _temp_WT = new ChartInfo();
-            _temp_WT.name = "Woking Time";
-            _temp_WT.value = TotalWorkingTime();
+            _temp_WT.name = "Woking Mode";
+            _temp_WT.value = (int)TotalWorkingTime()+600;
             _temp_WT.color = Colors.LightSalmon;
             listRealChartTime.Add(_temp_WT);
 
             ChartInfo _temp_RT = new ChartInfo();
-            _temp_RT.name = "Present Time";
-            _temp_RT.value = tickMinutes + 1;
+            _temp_RT.name = "Ready Mode";
+            _temp_RT.value = tickMinutes + 100;
             _temp_RT.color = Colors.DarkGray;
             listRealChartTime.Add(_temp_RT);
 

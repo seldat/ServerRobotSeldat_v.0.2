@@ -327,6 +327,15 @@ namespace DoorControllerService
             }
             return RetState.DOOR_CTRL_WAITTING;
         }
+
+        public DoorStatus getStatusDoor(DoorType type)
+        {
+            if (type == DoorType.DOOR_FRONT)
+            {
+                return doorFrontStatus;
+            }
+            return doorBackStatus;
+        }
         public void doorCtrlProcess(object ojb)
         {
             DataReceive status = new DataReceive();
@@ -707,6 +716,22 @@ namespace DoorControllerService
                         Thread.Sleep(50);
                     }
                 }
+                else
+                {
+                    if (true == this.doorBusy)
+                    {
+                        Thread.Sleep(250);
+                        if (true == this.GetStatus(ref status, DoorType.DOOR_BACK))
+                        {
+                            doorBackStatus = (DoorStatus)status.data[0];
+                        }
+                        Thread.Sleep(250);
+                        if (true == this.GetStatus(ref status, DoorType.DOOR_FRONT))
+                        {
+                            doorFrontStatus = (DoorStatus)status.data[0];
+                        }
+                    }
+                }
                 Thread.Sleep(100);
             }
         }
@@ -725,9 +750,10 @@ namespace DoorControllerService
             dataSend[5] = (byte)id;
             dataSend[6] = CalChecksum(dataSend, 4);
             ret = this.Tranfer(dataSend, ref data);
-            if (this.rb != null)
-                this.rb.ShowText("Status door : " + id + ": " + (DoorStatus)data.data[0]);
-            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "Status door : " + id + ": " + (DoorStatus)data.data[0]);
+            //if (this.rb != null)
+            //    this.rb.ShowText("Status door : " + id + ": " + (DoorStatus)data.data[0]);
+            if(ret)
+                Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "Status door : " + id + ": " + (DoorStatus)data.data[0]);
             return ret;
         }
 
