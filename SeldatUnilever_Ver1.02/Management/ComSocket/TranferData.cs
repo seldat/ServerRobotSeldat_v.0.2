@@ -60,7 +60,8 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                     return false;
                 }
                 if (this.rb != null)
-                    this.rb.ShowText("try sent socket : " + numResent);
+                    if(numResent > 1)
+                        this.rb.ShowText("try sent socket : " + numResent);
                 Console.WriteLine("try sent socket ------------------ {0} ----------------", numResent);
                 this.Close();
                 if (this.StartClient())// open socket
