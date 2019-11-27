@@ -720,19 +720,19 @@ namespace DoorControllerService
                 {
                     if (true == this.doorBusy)
                     {
-                        Thread.Sleep(250);
+                        Thread.Sleep(350);
                         if (true == this.GetStatus(ref status, DoorType.DOOR_BACK))
                         {
                             doorBackStatus = (DoorStatus)status.data[0];
                         }
-                        Thread.Sleep(250);
-                        if (true == this.GetStatus(ref status, DoorType.DOOR_FRONT))
-                        {
-                            doorFrontStatus = (DoorStatus)status.data[0];
-                        }
+                        //Thread.Sleep(250);
+                        //if (true == this.GetStatus(ref status, DoorType.DOOR_FRONT))
+                        //{
+                        //    doorFrontStatus = (DoorStatus)status.data[0];
+                        //}
                     }
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(150);
             }
         }
 
