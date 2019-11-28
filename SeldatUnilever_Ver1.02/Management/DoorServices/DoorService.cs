@@ -154,10 +154,16 @@ namespace DoorControllerService
         private const long TIMEOUT_REMOVE_COMMAND = 300000000; //30 second
         private bool doorBusy;
         private bool kProcess = true;
+        private bool waitOpenBack = false;
+
+        public void resetWaitOpenBack()
+        {
+            waitOpenBack = false;
+        }
 
         private List<cmdRqDoor> listCmdRqCtrl = new List<cmdRqDoor>();
 
-        public bool getDoorBusy()
+        public bool getDoorBusy()   
         {
             return doorBusy;
         }
@@ -431,6 +437,7 @@ namespace DoorControllerService
                                                 //if (this.rb != null)
                                                 Console.WriteLine("StateCtrl.DOOR_ST_OPEN" + resCmd.dType + ':' + DoorType.DOOR_FRONT + "is open");
                                                 removeItemListCtrlDoor(resCmd);
+                                                waitOpenBack = true;
                                                 doorBackStatus = DoorStatus.DOOR_ERROR;
                                                 kProcess = false;
                                                 break;
@@ -718,7 +725,7 @@ namespace DoorControllerService
                 }
                 else
                 {
-                    if (true == this.doorBusy)
+                    if ((true == this.doorBusy)&&(this.waitOpenBack == false))
                     {
                         Thread.Sleep(350);
                         if (true == this.GetStatus(ref status, DoorType.DOOR_BACK))
@@ -750,10 +757,9 @@ namespace DoorControllerService
             dataSend[5] = (byte)id;
             dataSend[6] = CalChecksum(dataSend, 4);
             ret = this.Tranfer(dataSend, ref data);
-            //if (this.rb != null)
-            //    this.rb.ShowText("Status door : " + id + ": " + (DoorStatus)data.data[0]);
-            if(ret)
-                Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "Status door : " + id + ": " + (DoorStatus)data.data[0]);
+            if (this.rb != null)
+                this.rb.ShowText("Status door : " + id + ": " + (DoorStatus)data.data[0]);
+            Console.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + "Status door : " + id + ": " + (DoorStatus)data.data[0]);
             return ret;
         }
 
