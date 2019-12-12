@@ -610,6 +610,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         private void DisposeMenu(object sender, RoutedEventArgs e)
         {
+            laserBackOffRb();
             DisposeF();
         }
         public void DisposeF()
