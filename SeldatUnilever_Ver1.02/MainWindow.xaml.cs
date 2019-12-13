@@ -74,7 +74,9 @@ namespace SeldatUnilever_Ver1._02
             Global_Object.startTimeProgram = DateTime.Now.Ticks;
             //DataContext = this;
             //DataContext = new ViewModel();
+
         }
+        
 
         private void MainWindow_Closed(object sender, EventArgs e)
         {
