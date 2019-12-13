@@ -9,7 +9,7 @@
         xmlns:pie="clr-namespace:PieControls;assembly=PieControls"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="600"
-        WindowStyle="None"
+        WindowStyle="SingleBorderWindow"
         
        Closing="Window_Closing"
         >
