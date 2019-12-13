@@ -74,7 +74,7 @@
                                 Style="{DynamicResource MaterialDesignToolBar}"
                                 ClipToBounds="False">
                                 <Button 
-                                    IsEnabled="False"
+                                    IsEnabled="True"
                                     Name="btn_MapReCenter"
                                     Margin="5 0"
                                     ToolTip="{DynamicResource MainWindow_Toolbar_MapReCenter}"
@@ -84,7 +84,7 @@
                                 </Button>
                                 <Separator/>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_robotConfigure}"
-                                        IsEnabled="False"
+                                        IsEnabled="True"
                                         Name="btn_Robot"
                                         Margin="5 0"
                                         Click="Btn_Robot_Click"
@@ -94,7 +94,7 @@
                                 </Button>
                                 <Separator/>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_areaConfigure}"
-                                        IsEnabled="False"
+                                        IsEnabled="True"
                                         Name="btn_Area"
                                         Margin="5 0"
                                         Click="Btn_Area_Click"
@@ -103,7 +103,7 @@
                                         Kind="ImageArea"/>
                                 </Button>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_trafficareaConfigure}"
-                                        IsEnabled="False"
+                                        IsEnabled="True"
                                         Name="btn_RiskArea"
                                         Margin="5 0"
                                         Click="btn_RiskArea_Click"
@@ -113,7 +113,7 @@
                                 </Button>
                                 <Separator/>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_chargerConfigure}"
-                                        IsEnabled="False"
+                                        IsEnabled="True"
                                         Name="btn_Charge"
                                         Margin="5 0"
                                         Click="Btn_Charge_Click"
@@ -123,7 +123,7 @@
                                 </Button>
                                 <Separator/>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_doorConfigure}"
-                                        IsEnabled="False"
+                                        IsEnabled="True"
                                         Name="btn_Door"
                                         Margin="5 0"
                                         Click="Btn_Door_Click"
