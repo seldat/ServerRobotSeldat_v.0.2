@@ -745,6 +745,7 @@ namespace SeldatMRMS.Management
                     SetSafeSmallcircle(false);
                     SetSafeBluecircle(false);
                     SetSafeYellowcircle(false);
+                    SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_READY:
                     SetSafeGreencircle(false);
@@ -752,6 +753,7 @@ namespace SeldatMRMS.Management
                     SetSafeSmallcircle(false);
                     SetSafeBluecircle(false);
                     SetSafeYellowcircle(false);
+                    SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
                     break;
             }
         }

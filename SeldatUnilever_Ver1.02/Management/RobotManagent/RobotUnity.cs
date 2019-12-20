@@ -203,7 +203,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
             forcedGate.Header = "Force Gate";
             forcedGate.Click += ForceGateMenu;
-            forcedGate.IsEnabled = true;
+            forcedGate.IsEnabled = false;
 
 
 
@@ -617,6 +617,7 @@ namespace SeldatMRMS.Management.RobotManagent
             DisposeProcedure();
             KillPID();
             KillActionLib();
+            laserBackOffRb();
             TurnOnSupervisorTraffic(true);
             SwitchToDetectLine(false);
             robotService.RemoveRobotUnityReadyList(this);
@@ -632,6 +633,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         private void DisConnectMenu(object sender, RoutedEventArgs e)
         {
+            laserBackOffRb();
             DisposeProcedure();
             Dispose();
             KillPID();

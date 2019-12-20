@@ -191,6 +191,7 @@ namespace SeldatMRMS
                             robot.bayIdReg = false;
                             robot.orderItem = null;
                             robot.SwitchToDetectLine(false);
+                            robot.ShowText("Error Data Request FrontLine Buffer" + order.dataRequest);
                             if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
                             {
                                 TrafficRountineConstants.RegIntZone_READY.Release(robot);
@@ -204,13 +205,15 @@ namespace SeldatMRMS
                             }
                             else
                                 procedureCode = ProcedureCode.PROC_CODE_BUFFER_TO_MACHINE;
-                            ReleaseProcedureHandler(this);
+                           
                             ProRun = false;
+                            robot.ShowText("RELEASED BF---");
                             UpdateInformationInProc(this, ProcessStatus.S);
                             order.status = StatusOrderResponseCode.ERROR_GET_FRONTLINE;
                             order.endTimeProcedure = DateTime.Now;
                             order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
                             KillEvent();
+                            ReleaseProcedureHandler(this);
                         }
                         else
                         {

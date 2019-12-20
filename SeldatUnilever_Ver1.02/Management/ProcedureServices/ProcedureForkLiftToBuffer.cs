@@ -166,7 +166,7 @@ namespace SeldatMRMS
                             }
                             countFrontLineNull = 0;
                             robot.bayId = -1;
-                            Console.WriteLine("Error Data Request" + order.dataRequest);
+                            robot.ShowText("Error Data Request FrontLine ForkLift" + order.dataRequest);
                             order.status = StatusOrderResponseCode.ERROR_GET_FRONTLINE;
                             TrafficRountineConstants.ReleaseAll(robot);
                             robot.orderItem = null;
@@ -185,14 +185,15 @@ namespace SeldatMRMS
                             }
                             else
                                 procedureCode = ProcedureCode.PROC_CODE_FORKLIFT_TO_BUFFER;
-                            ReleaseProcedureHandler(this);
+                            
                             ProRun = false;
-                            robot.ShowText("RELEASED");
+                            robot.ShowText("RELEASED FL---");
                             UpdateInformationInProc(this, ProcessStatus.S);
                             order.endTimeProcedure = DateTime.Now;
                             order.totalTimeProcedure = order.endTimeProcedure.Subtract(order.startTimeProcedure).TotalMinutes;
                             SaveOrderItem(order);
                             KillEvent();
+                            ReleaseProcedureHandler(this);
                         }
                         else
                         {

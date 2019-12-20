@@ -602,7 +602,7 @@ namespace SeldatMRMS
         }
         public void SaveOrderItem(OrderItem order)
         {
-            Task.Run(() =>
+           /* Task.Run(() =>
             {
                 try
                 {
@@ -641,7 +641,7 @@ namespace SeldatMRMS
                 }
                 catch { }
             }
-            );
+            );*/
         }
     }
 }
