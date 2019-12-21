@@ -726,6 +726,7 @@ namespace SeldatMRMS.Management.RobotManagent
             string txt = "Cảnh báo";
             MessageBoxButton button = MessageBoxButton.OKCancel;
             MessageBoxResult result = MessageBox.Show(msgtext, txt, button);
+         
             switch (result)
             {
                 case MessageBoxResult.OK:

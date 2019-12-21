@@ -94,7 +94,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL,false);
             return false;
         }
-        protected List<RobotUnity> checkAllRobotsHasInsideBayIdNear(int bayId,int step)
+        protected List<RobotUnity> checkAllRobotsHasInsideBayIdNear(int bayId,int numLine)
         {
                 List<RobotUnity> robotList = new List<RobotUnity>();
                 foreach (RobotUnity robot in robotService.RobotUnityRegistedList.Values)
@@ -103,7 +103,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     {
                         if (robot.bayId >= 0)
                         {
-                            if (Math.Abs(robot.bayId-bayId)<=2)
+                            if (Math.Abs(robot.bayId-bayId)<= numLine)
                             {
                                 if (!robot.bayIdReg)
                                     robotList.Add(robot);
