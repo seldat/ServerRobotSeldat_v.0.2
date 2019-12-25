@@ -13,7 +13,6 @@ using System.Windows;
 using System.Windows.Media;
 using WebSocketSharp;
 using static SeldatMRMS.Management.RobotManagent.RobotUnity;
-using static SeldatMRMS.Management.RobotManagent.RobotUnity;
 
 namespace SeldatMRMS.Management.RobotManagent
 {

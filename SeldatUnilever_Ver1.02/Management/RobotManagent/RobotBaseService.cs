@@ -1,9 +1,5 @@
 ﻿using SeldatUnilever_Ver1._02.Management.ProcedureServices;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static SeldatMRMS.ProcedureControlServices;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 

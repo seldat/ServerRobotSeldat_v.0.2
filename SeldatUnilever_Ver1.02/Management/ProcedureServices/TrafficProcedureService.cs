@@ -45,7 +45,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                 {
                     robot.bayId = bayId;
                 }*/
-                List<RobotUnity> rCompList = checkAllRobotsHasInsideBayIdNear(bayId, 2);
+                List<RobotUnity> rCompList = checkAllRobotsHasInsideBayIdNear(bayId, 4);
                 if (rCompList == null) // đã có 1 robot đã đăng ký thành công bayid
                 {
                     robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);

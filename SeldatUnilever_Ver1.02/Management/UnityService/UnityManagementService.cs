@@ -3,24 +3,16 @@ using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
 using SeldatUnilever_Ver1._02;
 using SeldatUnilever_Ver1._02.DTO;
-using SeldatUnilever_Ver1._02.Management.RobotManagent;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using SelDatUnilever_Ver1._00.Management.UnityService;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using static DoorControllerService.DoorService;
 
 namespace SeldatMRMS.Management.UnityService
 {
     public class UnityManagementService : NotifyUIBase
     {
-       //SolvedProblem sf; 
+        //SolvedProblem sf; 
 
         public RobotManagementService robotManagementService { get; set; }
         public DoorManagementService doorManagementService { get; set; }
@@ -29,11 +21,11 @@ namespace SeldatMRMS.Management.UnityService
         public AssigmentTaskService assigmentTaskService { get; set; }
         public DeviceRegistrationService deviceRegistrationService { get; set; }
         public ChargerManagementService chargerService;
-    
+
 
 
         private MainWindow mainWindow;
-        public UnityManagementService(MainWindow mainWindow )
+        public UnityManagementService(MainWindow mainWindow)
         {
             this.mainWindow = mainWindow;
         }
@@ -92,9 +84,9 @@ namespace SeldatMRMS.Management.UnityService
             deviceRegistrationService.RegistryMainWindow(this.mainWindow);
 
             //assigmentTaskService.Start();
-            MessageBox.Show("Bấm Start Để Bắt Đầu !");
-            RobotMoving robotMoving = new RobotMoving(robotManagementService.RobotUnityRegistedList);
-      //    robotMoving.Show();
+            //MessageBox.Show("Bấm Start Để Bắt Đầu !");
+            //RobotMoving robotMoving = new RobotMoving(robotManagementService.RobotUnityRegistedList);
+            //    robotMoving.Show();
 
             //assigmentTaskService.Start();
         }
@@ -104,7 +96,7 @@ namespace SeldatMRMS.Management.UnityService
         }
         public void OpenConfigureForm(String frm)
         {
-            switch(frm)
+            switch (frm)
             {
                 case "ACF":
                     trafficService.configureArea.Show();
@@ -123,6 +115,6 @@ namespace SeldatMRMS.Management.UnityService
                     break;
             }
         }
-       
+
     }
 }

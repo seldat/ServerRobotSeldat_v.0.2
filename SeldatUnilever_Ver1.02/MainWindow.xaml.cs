@@ -51,7 +51,7 @@ namespace SeldatUnilever_Ver1._02
         public bool drag = true;
         public UnityManagementService unityService;
         public CanvasControlService canvasControlService;
-        CtrlRobot ctrR;
+        //CtrlRobot ctrR;
 
         public MainWindow()
         {
@@ -167,7 +167,7 @@ namespace SeldatUnilever_Ver1._02
                 myManagementWindow.Visibility = Visibility.Visible;
                 unityService = new UnityManagementService(this);
                 unityService.Initialize();
-                ctrR = new CtrlRobot(unityService.robotManagementService);
+                //ctrR = new CtrlRobot(unityService.robotManagementService);
                 Global_Object.mainWindowCtrl = this;
                 stationtimer = new System.Timers.Timer();
                 stationtimer.Interval = 20000;
@@ -372,7 +372,7 @@ namespace SeldatUnilever_Ver1._02
         {
             try
             {
-                ctrR.Show();
+                //ctrR.Show();
             }
             catch { }
         }
@@ -420,7 +420,7 @@ namespace SeldatUnilever_Ver1._02
 
             try
             {
-                ctrR.Show();
+                //ctrR.Show();
             }
             catch { }
         }

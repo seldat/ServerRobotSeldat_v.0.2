@@ -1,6 +1,5 @@
 ﻿#define USE_AUTO_CHARGE
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using SeldatMRMS.Management.RobotManagent;
