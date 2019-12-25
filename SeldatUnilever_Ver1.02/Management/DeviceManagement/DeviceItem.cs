@@ -1,17 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
 using SeldatMRMS;
-using SeldatMRMS.Management.DoorServices;
 using SeldatUnilever_Ver1._02;
-using SeldatUnilever_Ver1._02.Management.DeviceManagement;
-using SelDatUnilever_Ver1._00.Communication.HttpBridge;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using static DoorControllerService.DoorService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SelDatUnilever_Ver1.CollectionDataService;

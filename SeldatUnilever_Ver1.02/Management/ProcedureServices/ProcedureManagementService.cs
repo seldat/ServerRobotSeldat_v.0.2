@@ -229,10 +229,6 @@ namespace SeldatMRMS
                 robot.ShowText("Procedure :" + procItem.procedureCode);
                 robot.ShowText("Robot Rleased :" + robot.properties.Label);
                 robot.ShowText(">>>>>>>>>");
-                robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
-                    new Action (delegate () {
-                        robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_OK);
-                    }));
                 if (procItem.procedureCode == ProcedureControlServices.ProcedureCode.PROC_CODE_ROBOT_TO_READY) {
                     
                     robotManagementService.AddRobotUnityReadyList (robot);
