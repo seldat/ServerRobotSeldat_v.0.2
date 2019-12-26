@@ -358,13 +358,10 @@ namespace SeldatMRMS.Management.RobotManagent
             ResultRobotReady result = null;
             foreach (RobotUnity rbWt in RobotUnityWaitTaskList)
             {
-                if (rbWt != null)
+                if (rbWt.properties.IsConnected)
                 {
-                    if (rbWt.properties.IsConnected)
-                    {
-                        result = new ResultRobotReady() { robot = rbWt, onReristryCharge = rbWt.getBattery() };
-                        break;
-                    }
+                    result = new ResultRobotReady() { robot = rbWt, onReristryCharge = rbWt.getBattery() };
+                    break;
                 }
             }
             //ResultRobotReady result = null;
