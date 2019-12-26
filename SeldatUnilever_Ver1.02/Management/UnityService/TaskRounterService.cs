@@ -90,6 +90,18 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         public OrderItem CheckHastask()
         {
             OrderItem item = null;
+#if true
+            if (deviceItemsList.Count > 0)
+            {
+                foreach (DeviceItem dvIt in deviceItemsList)
+                {
+                    item = dvIt.GetOrder();
+                    if (item != null) {
+                        return item;
+                    }
+                }
+            }
+#else
             if (deviceItemsList.Count > 0)
             {
                 try
@@ -103,6 +115,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
 
                 }
             }
+#endif
             return item;
         }
         public OrderItem Gettask()

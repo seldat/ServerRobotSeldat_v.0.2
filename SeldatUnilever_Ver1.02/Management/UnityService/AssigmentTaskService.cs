@@ -41,6 +41,45 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         }
         public void MainProcessAssignTask()
         {
+#if true
+            while (Alive)
+            {
+                OrderItem odCheck = CheckHastask();
+                if (odCheck != null)
+                {
+                    for (int i = 0; i < deviceItemsList.Count; i++)
+                    {
+                        OrderItem order = Gettask();
+                        if (order != null)
+                        {
+                            //cntWaitTask = 0;
+                            if (AssignTaskAtReady(order))
+                            {
+                                Console.WriteLine("order __ AssignTaskAtReady");
+                            }
+                            else
+                            {
+                                if (AssignWaitTask(order))
+                                {
+                                    Console.WriteLine("order __ AssignWaitTask");
+                                }
+                                else {
+                                    break;
+                                }
+                            }
+                        }
+                        MoveElementToEnd();
+                    }
+                }
+                else
+                {
+                    AssignWaitTask(null);
+                    /*Check battery at ready and manual charge when rb in area ready*/
+                    AssignTaskAtReady(null);
+                }
+                Thread.Sleep(100);
+            }
+#else
             int cntWaitTask = 0;
             while (Alive)
             {
@@ -51,7 +90,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     if (AssignTaskAtReady(order))
                     {
                         MoveElementToEnd();
-                        Thread.Sleep(200);
+                        Thread.Sleep(100);
                         continue;
                     }
                     else
@@ -59,7 +98,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         if (AssignWaitTask(order))
                         {
                             MoveElementToEnd();
-                            Thread.Sleep(200);
+                            Thread.Sleep(100);
                             continue;
                         }
                     }
@@ -78,8 +117,9 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     /*Check battery at ready and manual charge when rb in area ready*/
                     AssignTaskAtReady(null);
                 }
-                Thread.Sleep(200);
+                Thread.Sleep(100);
             }
+#endif
         }
 
         public bool AssignWaitTask(OrderItem order)
@@ -190,39 +230,6 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
 #endif
         }
 
-        public void SelectProcedureItem(RobotUnity robot, OrderItem orderItem)
-        {
-            if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
-            {
-                procedureService.Register(ProcedureItemSelected.PROCEDURE_FORLIFT_TO_BUFFER, robot, orderItem); //yes
-            }
-            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
-            {
-                procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_MACHINE, robot, orderItem); // yes
-            }
-            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_PALLET_EMPTY_MACHINE_TO_RETURN) // yes
-            {
-                procedureService.Register(ProcedureItemSelected.PROCEDURE_PALLETEMPTY_MACHINE_TO_RETURN, robot, orderItem);
-            }
-            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFER_TO_GATE)  // yes
-            {
-                procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_GATE, robot, orderItem);
-            }
-            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_FORLIFT_TO_MACHINE)
-            {
-                procedureService.Register(ProcedureItemSelected.PROCEDURE_FORLIFT_TO_MACHINE, robot, orderItem);
-            }
-            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN) // yes
-            {
-                procedureService.Register(ProcedureItemSelected.PROCEDURE_MACHINE_TO_BUFFER_RETURN, robot, orderItem);
-            }
-            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401) // yes
-            {
-                procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_BUFFER, robot, orderItem);
-            }
-            // procedure;
-        }
-
         public bool AssignTaskAtReady(OrderItem order)
         {
             processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST;
@@ -255,22 +262,15 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 }
                                 if (TrafficRountineConstants.RegIntZone_READY.ProcessRegistryIntersectionZone(robotatready))
                                 {
-                                    // processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_HAS_ANTASK;
                                     orderItem_ready = order;
-                                    //  orderItem_ready.onAssiged = true;
-                                    Console.WriteLine(processAssignTaskReady);
                                     orderItem_ready.robot = robotatready.properties.Label;
                                     robotatready.orderItem = orderItem_ready;
-                                    processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_ASSIGN_ANTASK;
-                                    // MoveElementToEnd();
                                     TrafficRountineConstants.RegIntZone_READY.Release(robotatready);
                                     robotatready.TurnOnSupervisorTraffic(true);
-                                    Console.WriteLine(processAssignTaskReady);
                                     SelectProcedureItem(robotatready, orderItem_ready);
                                     deviceItemsList[0].RemoveFirstOrder();
                                     robotManageService.RemoveRobotUnityReadyList(robotatready);
                                     orderItem_ready.status = StatusOrderResponseCode.DELIVERING;
-                                    processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_ROBOT_OUTSIDEREADY;
                                     return true;
                                 }
                                 else
@@ -368,6 +368,40 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 Thread.Sleep(10);
             }
 #endif
+        }
+
+
+        public void SelectProcedureItem(RobotUnity robot, OrderItem orderItem)
+        {
+            if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
+            {
+                procedureService.Register(ProcedureItemSelected.PROCEDURE_FORLIFT_TO_BUFFER, robot, orderItem); //yes
+            }
+            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
+            {
+                procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_MACHINE, robot, orderItem); // yes
+            }
+            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_PALLET_EMPTY_MACHINE_TO_RETURN) // yes
+            {
+                procedureService.Register(ProcedureItemSelected.PROCEDURE_PALLETEMPTY_MACHINE_TO_RETURN, robot, orderItem);
+            }
+            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFER_TO_GATE)  // yes
+            {
+                procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_GATE, robot, orderItem);
+            }
+            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_FORLIFT_TO_MACHINE)
+            {
+                procedureService.Register(ProcedureItemSelected.PROCEDURE_FORLIFT_TO_MACHINE, robot, orderItem);
+            }
+            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN) // yes
+            {
+                procedureService.Register(ProcedureItemSelected.PROCEDURE_MACHINE_TO_BUFFER_RETURN, robot, orderItem);
+            }
+            else if (orderItem.typeReq == DeviceItem.TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401) // yes
+            {
+                procedureService.Register(ProcedureItemSelected.PROCEDURE_BUFFER_TO_BUFFER, robot, orderItem);
+            }
+            // procedure;
         }
         public bool FindRobotUnitySameOrderItem(String userName)
         {
