@@ -1,25 +1,15 @@
-﻿using SeldatMRMS.Communication;
-using SeldatMRMS.RobotView;
+﻿using SeldatMRMS.RobotView;
 using SeldatUnilever_Ver1._02.Management.RobotManagent;
 using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.OleDb;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 using static DoorControllerService.DoorService;
-using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
 using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterService;
 
 namespace SeldatMRMS.Management.RobotManagent
@@ -190,7 +180,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
             turnOnOffItem.Header = "Set On/Off Traffic";
             turnOnOffItem.Click += SetOnOffTrafficMenu;
-            turnOnOffItem.IsEnabled = true;
+            turnOnOffItem.IsEnabled = false;
 
             chargeManualStart.Header = "Request Charge";
             chargeManualStart.Click += ChargeManualStartMenu;
@@ -203,7 +193,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
             forcedGate.Header = "Force Gate";
             forcedGate.Click += ForceGateMenu;
-            forcedGate.IsEnabled = true;
+            forcedGate.IsEnabled = false;
 
 
 
@@ -610,6 +600,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         private void DisposeMenu(object sender, RoutedEventArgs e)
         {
+            laserBackOffRb();
             DisposeF();
         }
         public void DisposeF()
@@ -617,6 +608,7 @@ namespace SeldatMRMS.Management.RobotManagent
             DisposeProcedure();
             KillPID();
             KillActionLib();
+            laserBackOffRb();
             TurnOnSupervisorTraffic(true);
             SwitchToDetectLine(false);
             robotService.RemoveRobotUnityReadyList(this);
@@ -632,10 +624,13 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         private void DisConnectMenu(object sender, RoutedEventArgs e)
         {
+            laserBackOffRb();
             DisposeProcedure();
             Dispose();
             KillPID();
             KillActionLib();
+            robotService.RemoveRobotUnityReadyList(this);
+            robotService.RemoveRobotUnityWaitTaskList(this);
             MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
             onBinding = false;
             connectItem.IsEnabled = true;
@@ -724,6 +719,7 @@ namespace SeldatMRMS.Management.RobotManagent
             string txt = "Cảnh báo";
             MessageBoxButton button = MessageBoxButton.OKCancel;
             MessageBoxResult result = MessageBox.Show(msgtext, txt, button);
+         
             switch (result)
             {
                 case MessageBoxResult.OK:
@@ -742,6 +738,7 @@ namespace SeldatMRMS.Management.RobotManagent
             SwitchToDetectLine(false);
             this.PreProcedureAs = ProcedureControlAssign.PRO_IDLE;
             robotService.RemoveRobotUnityReadyList(this);
+            robotService.RemoveRobotUnityWaitTaskList(this);
             robotService.AddRobotUnityWaitTaskList(this);
             Draw();
         }

@@ -3,22 +3,14 @@ using SeldatMRMS.Management.TrafficManager;
 using SeldatUnilever_Ver1._02.Management.RobotManagent;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Data.OleDb;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Forms;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
-using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using SeldatUnilever_Ver1._02.Management.McuCom;
 using static SeldatMRMS.Management.TrafficRobotUnity;
 using static SeldatMRMS.Management.RobotManagent.RobotUnity;
@@ -30,6 +22,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public const Int32 AmountofRobotUnity = 3;
         private const Int32 BAT_LOW_LEVEL = 15;
         public static int indexRd = 0;
+        public static int indexWt = 0;
         public class ResultRobotReady
         {
             public RobotUnity robot;
@@ -317,8 +310,8 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 if (!RobotUnityWaitTaskList.Contains(robot))
                 {
-                    robot.ShowText(robot.properties.Label + "Add wait tasklist");
                     RobotUnityWaitTaskList.Add(robot);
+                    robot.ShowText(robot.properties.Label + " Add wait tasklist " + RobotUnityWaitTaskList.Count);
                 }
             }
             catch {
@@ -332,8 +325,8 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 if (RobotUnityWaitTaskList.Contains(robot))
                 {
-                    robot.ShowText(robot.properties.Label + "Remove wait tasklist");
                     RobotUnityWaitTaskList.Remove(robot);
+                    robot.ShowText(robot.properties.Label + " Remove wait tasklist " + RobotUnityWaitTaskList.Count);
                 }
             }
             catch
@@ -361,6 +354,50 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public ResultRobotReady GetRobotUnityWaitTaskItem0()
         {
+#if true
+            ResultRobotReady result = null;
+            foreach (RobotUnity rbWt in RobotUnityWaitTaskList)
+            {
+                if (rbWt != null)
+                {
+                    if (rbWt.properties.IsConnected)
+                    {
+                        result = new ResultRobotReady() { robot = rbWt, onReristryCharge = rbWt.getBattery() };
+                        break;
+                    }
+                }
+            }
+            //ResultRobotReady result = null;
+            //while (RobotUnityWaitTaskList.Count > 0)
+            //{
+            //    try
+            //    {
+            //        if (indexWt >= RobotUnityWaitTaskList.Count)
+            //        {
+            //            indexWt = 0;
+            //        }
+            //        RobotUnity robot = RobotUnityWaitTaskList[indexWt];
+            //        indexWt++;
+            //        if (robot != null)
+            //        {
+            //            if (robot.properties.IsConnected)
+            //            {
+            //                result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
+            //                break;
+            //            }
+            //        }
+
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        indexWt = 0;
+            //        Console.WriteLine("Error ReadyTask in  RobotManagement Service Remove Robot");
+            //        Console.WriteLine(e);
+            //    }
+            //}
+
+            return result;
+#else
 
             ResultRobotReady result = null;
 
@@ -389,6 +426,7 @@ namespace SeldatMRMS.Management.RobotManagent
             }
 
             return result;
+#endif
         }
         public void MoveRobotWaitTask()
         {
@@ -407,38 +445,50 @@ namespace SeldatMRMS.Management.RobotManagent
         {
 #if true
             ResultRobotReady result = null;
-            while (RobotUnityReadyList.Count > 0)
-            {
-                try
+            foreach (RobotUnity rbRd in RobotUnityReadyList) {
+                if (rbRd.properties.IsConnected)
                 {
-                    if (indexRd >= RobotUnityReadyList.Count)
+                    result = new ResultRobotReady() { robot = rbRd, onReristryCharge = rbRd.getBattery() };
+                    if (rbRd.getBattery())
                     {
-                        indexRd = 0;
+                        rbRd.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CHARGING);
+                        RemoveRobotUnityReadyList(rbRd);
                     }
-                    RobotUnity robot = RobotUnityReadyList[indexRd];
-                    indexRd++;
-                    if (robot != null)
-                    {
-                        if (robot.properties.IsConnected)
-                        {
-                            result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
-                            if (robot.getBattery())
-                            {
-                                robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CHARGING);
-                                RemoveRobotUnityReadyList(robot);
-                            }
-                            break;
-                        }
-                    }
-
-                }
-                catch (Exception e)
-                {
-                    indexRd = 0;
-                    Console.WriteLine("Error ReadyTask in  RobotManagement Service Remove Robot");
-                    Console.WriteLine(e);
+                    break;
                 }
             }
+            //while (RobotUnityReadyList.Count > 0)
+            //{
+            //    try
+            //    {
+            //        if (indexRd >= RobotUnityReadyList.Count)
+            //        {
+            //            indexRd = 0;
+            //        }
+            //        RobotUnity robot = RobotUnityReadyList[indexRd];
+            //        indexRd++;
+            //        if (robot != null)
+            //        {
+            //            if (robot.properties.IsConnected)
+            //            {
+            //                result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
+            //                if (robot.getBattery())
+            //                {
+            //                    robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CHARGING);
+            //                    RemoveRobotUnityReadyList(robot);
+            //                }
+            //                break;
+            //            }
+            //        }
+
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        indexRd = 0;
+            //        Console.WriteLine("Error ReadyTask in  RobotManagement Service Remove Robot");
+            //        Console.WriteLine(e);
+            //    }
+            //}
 
             return result;
 #else

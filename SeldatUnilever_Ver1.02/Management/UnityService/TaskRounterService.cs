@@ -1,7 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using SeldatMRMS;
-using SeldatMRMS.Management;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
 using SelDatUnilever_Ver1._00.Communication.HttpBridge;
@@ -9,16 +7,12 @@ using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
-using static SeldatMRMS.Management.TrafficRobotUnity;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 using static SelDatUnilever_Ver1.CollectionDataService;
 
 namespace SelDatUnilever_Ver1._00.Management.UnityService
 {
-   public class TaskRounterService
+    public class TaskRounterService
     {
         public class PalletINF
         {
@@ -50,7 +44,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             PROC_READY_CHECK_ROBOT_OUTSIDEREADY,
         }
         protected ProcessAssignTaskReady processAssignTaskReady;
-        
+
         protected ProcessAssignAnTaskWait processAssignAnTaskWait;
         protected ProcedureManagementService procedureService;
         public RobotManagementService robotManageService;
@@ -75,7 +69,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         {
             this.deviceItemsList = deviceItemsList;
         }
-        public TaskRounterService() {
+        public TaskRounterService()
+        {
             //processAssignAnTaskState = ProcessAssignAnTask.PROC_IDLE;
         }
         public void MoveElementToEnd()
@@ -95,6 +90,18 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         public OrderItem CheckHastask()
         {
             OrderItem item = null;
+#if true
+            if (deviceItemsList.Count > 0)
+            {
+                foreach (DeviceItem dvIt in deviceItemsList)
+                {
+                    item = dvIt.GetOrder();
+                    if (item != null) {
+                        return item;
+                    }
+                }
+            }
+#else
             if (deviceItemsList.Count > 0)
             {
                 try
@@ -108,6 +115,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
 
                 }
             }
+#endif
             return item;
         }
         public OrderItem Gettask()
@@ -115,7 +123,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             OrderItem item = null;
             int palletId = -1;
             {
-                onFlagBusyGetTask = true;             
+                onFlagBusyGetTask = true;
                 if (deviceItemsList.Count > 0)
                 {
                     try
@@ -127,7 +135,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         switch (item.typeReq)
                         {
                             case TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE:
-                            {
+                                {
                                     if (item.onAssiged == false)
                                     {
                                         PalletINF palletIFBM = GetPalletId(item.dataRequest);
@@ -176,11 +184,11 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                             return item;
                                         }
                                     }
-                            }
+                                }
                             case TyeRequest.TYPEREQUEST_WMS_RETURN_PALLET_BUFFERRETURN_TO_BUFFER401:
                                 {
                                     PalletINF palletIFBRB401 = GetPalletId(item.dataRequest);
-                                    if (palletIFBRB401!=null)
+                                    if (palletIFBRB401 != null)
                                     {
                                         palletId = palletIFBRB401.palletId;
                                         dynamic productBR = new JObject();
@@ -219,7 +227,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                     if (palletId > 0)
                                     {
                                         dynamic product = new JObject();
-                                      //  UpdatePalletStateToReturn(palletId, item);
+                                        //  UpdatePalletStateToReturn(palletId, item);
                                         product.timeWorkId = item.timeWorkId;
                                         product.activeDate = item.activeDate;
                                         product.productId = item.productId;
@@ -237,10 +245,10 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                         return null;
                                     }
                                 }
-                              case TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN:
+                            case TyeRequest.TYPEREQUEST_MACHINE_TO_BUFFERRETURN:
                                 {
                                     PalletINF palletIFMBR = GetPalletId(item.dataRequest);
-                                    if (palletIFMBR !=null)
+                                    if (palletIFMBR != null)
                                     {
                                         palletId = palletIFMBR.palletId;
                                         item.palletBay = palletIFMBR.bay;
@@ -301,20 +309,20 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 break;
                             default:
                                 return item;
-                               
+
 
                         }
                     }
                     catch { }
-                    
+
                 }
                 onFlagBusyGetTask = false;
             }
             return item;
-            
+
         }
 
-        public void UpdatePalletStateToHold(int palletId,OrderItem item)
+        public void UpdatePalletStateToHold(int palletId, OrderItem item)
         {
             String url = Global_Object.url + "pallet/updatePalletStatus";
             dynamic product = new JObject();
@@ -350,7 +358,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             Console.WriteLine(collectionData);
         }
 
-        public PalletINF GetRowBayPalletPlaned(String dataRequest,int palletId_P)
+        public PalletINF GetRowBayPalletPlaned(String dataRequest, int palletId_P)
         {
             PalletINF palletINF = new PalletINF();
             try
@@ -360,41 +368,41 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 {
                     JArray results = JArray.Parse(collectionData);
                     foreach (var result in results)
+                    {
+                        int temp_planId = (int)result["planId"];
                         {
-                            int temp_planId = (int)result["planId"];
+                            foreach (var buffer in result["buffers"])
                             {
-                                foreach (var buffer in result["buffers"])
+                                int bufferId = (int)buffer["bufferId"];
+                                if (buffer["pallets"].Count() > 0)
                                 {
-                                    int bufferId = (int)buffer["bufferId"];
-                                    if (buffer["pallets"].Count() > 0)
+                                    foreach (var palletInfo in buffer["pallets"])
                                     {
-                                        foreach (var palletInfo in buffer["pallets"])
-                                        {
                                         int bay = (int)palletInfo["bay"];
                                         int row = (int)palletInfo["row"];
                                         int palletId = (int)palletInfo["palletId"];
-                                            if (palletId == palletId_P)
-                                            {
-                                                palletINF.palletId = palletId;
-                                                palletINF.bay = bay;
-                                                palletINF.row = row;
-                                                palletINF.ofBufferId = bufferId;
-                                            
-                                                return palletINF;
-                                            }
+                                        if (palletId == palletId_P)
+                                        {
+                                            palletINF.palletId = palletId;
+                                            palletINF.bay = bay;
+                                            palletINF.row = row;
+                                            palletINF.ofBufferId = bufferId;
 
+                                            return palletINF;
                                         }
-                                    }
-                                    else
-                                    {
-                                        continue;
+
                                     }
                                 }
-                                break;
-
+                                else
+                                {
+                                    continue;
+                                }
                             }
+                            break;
+
                         }
                     }
+                }
             }
             catch
             {
@@ -405,7 +413,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
 
         public bool checkRobotSameBayId(int bayId)
         {
-            foreach(RobotUnity robot in this.robotManageService.RobotUnityRegistedList.Values)
+            foreach (RobotUnity robot in this.robotManageService.RobotUnityRegistedList.Values)
             {
                 if (robot.bayId == bayId)
                     return true;
@@ -420,35 +428,35 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
                 if (collectionData.Length > 0)
                 {
-                        JArray results = JArray.Parse(collectionData);                  
-                        var result = results[0];
-                        foreach (var buffer in result["buffers"])
+                    JArray results = JArray.Parse(collectionData);
+                    var result = results[0];
+                    foreach (var buffer in result["buffers"])
+                    {
+                        int bufferId = (int)buffer["bufferId"];
+                        String bufferDataStr = (String)buffer["bufferData"];
+                        JObject stuffBData = JObject.Parse(bufferDataStr);
+                        bool canOpEdit = (bool)stuffBData["canOpEdit"];
+                        if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy
+                            continue;
+                        if (buffer["pallets"].Count() > 0 && bufferId == order.bufferId)
                         {
-                            int bufferId = (int)buffer["bufferId"];
-                            String bufferDataStr = (String)buffer["bufferData"];
-                            JObject stuffBData = JObject.Parse(bufferDataStr);
-                            bool canOpEdit = (bool)stuffBData["canOpEdit"];
-                            if (canOpEdit) // buffer có edit nên bỏ qua lý do bởi buffer có edit nằm gần các máy
-                                continue;
-                            if (buffer["pallets"].Count() > 0 && bufferId == order.bufferId)
+                            foreach (var palletInfo in buffer["pallets"])
                             {
-                                foreach (var palletInfo in buffer["pallets"])
+                                int palletId = (int)palletInfo["palletId"];
+                                if (palletId == order.palletId_H)
                                 {
-                                    int palletId = (int)palletInfo["palletId"];
-                                    if (palletId == order.palletId_H)
-                                    {
-                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                                        bayId = (int)stuff["bayId"];
-                                        break;
-                                    }
-
+                                    JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                    bayId = (int)stuff["bayId"];
+                                    break;
                                 }
-                            }
-                            else
-                            {
-                                continue;
+
                             }
                         }
+                        else
+                        {
+                            continue;
+                        }
+                    }
 
                 }
             }
@@ -487,7 +495,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             int bayId = (int)stuff["bayId"];
                             palletINF.palletId = palletId;
                             palletINF.bayId = bayId;
-                            palletINF.bay =bay;
+                            palletINF.bay = bay;
                             palletINF.row = row;
                             palletINF.ofBufferId = bufferId;
                             return palletINF;
@@ -513,9 +521,9 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     {
                         if (result["pallets"].Count() > 0)
                         {
-                                var palletInfo = result["pallets"][0];
-                                palletId = (int)palletInfo["palletId"];
-                                break;
+                            var palletInfo = result["pallets"][0];
+                            palletId = (int)palletInfo["palletId"];
+                            break;
                         }
                     }
                 }

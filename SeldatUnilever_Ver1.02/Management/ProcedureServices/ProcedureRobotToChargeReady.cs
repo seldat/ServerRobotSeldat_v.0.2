@@ -1,6 +1,5 @@
 ﻿#define USE_AUTO_CHARGE
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using SeldatMRMS.Management.RobotManagent;
@@ -677,10 +676,10 @@ namespace SeldatMRMS
                 OrderItem order = assigmentTask.CheckHastask();
                 if (order != null)
                 {
-                    cntOrderItem++;
-                }
-                if (cntOrderItem > 1) //
-                {
+                //    cntOrderItem++;
+                //}
+                //if (cntOrderItem >= 1) //
+                //{
                     if (robotService.RobotUnityWaitTaskList.Count > 0 || robotService.RobotUnityReadyList.Count > 0)
                     {
                         return false;

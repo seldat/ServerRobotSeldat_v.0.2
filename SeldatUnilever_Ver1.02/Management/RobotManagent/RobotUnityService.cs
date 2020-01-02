@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using SeldatUnilever_Ver1._02.Management.RobotManagent;
 /*L1=10
 L2=5
 H=6

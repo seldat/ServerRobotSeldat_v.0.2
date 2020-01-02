@@ -3,14 +3,9 @@ using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
 using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterService;
 
 namespace SeldatMRMS.Management
@@ -745,6 +740,7 @@ namespace SeldatMRMS.Management
                     SetSafeSmallcircle(false);
                     SetSafeBluecircle(false);
                     SetSafeYellowcircle(false);
+                    SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_READY:
                     SetSafeGreencircle(false);
@@ -752,6 +748,7 @@ namespace SeldatMRMS.Management
                     SetSafeSmallcircle(false);
                     SetSafeBluecircle(false);
                     SetSafeYellowcircle(false);
+                    SetSpeedTraffic(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
                     break;
             }
         }

@@ -33,7 +33,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 
         public void RegistryMainWindow (MainWindow mainWindow)
         {
-            this.mainWindow = new MainWindow();
+            //this.mainWindow = new MainWindow();
             this.mainWindow = mainWindow;
         }
 

@@ -468,18 +468,18 @@ namespace SeldatMRMS
         {
             ProcedureControlServices p = (ProcedureControlServices)obj;
             robot.ShowText("ErrorCode -> " + getStringError(p.errorCode));
-            robot.border.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
-            new Action(delegate ()
-            {
+            //robot.border.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
+            //new Action(delegate ()
+            //{
                 robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_ERROR);
-            }));
-            Thread.Sleep(1000);
-            robot.border.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
-            new Action(delegate ()
-            {
+            //}));
+            Thread.Sleep(5000);
+            //robot.border.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
+            //new Action(delegate ()
+            //{
                 robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_RUNNING);
-            }));
-            Thread.Sleep(1000);
+            //}));
+            //Thread.Sleep(1000);
             /* bool keepRun = true;
             
              robot.ShowText ("ErrorCode -> " + getStringError(p.errorCode));
@@ -602,7 +602,7 @@ namespace SeldatMRMS
         }
         public void SaveOrderItem(OrderItem order)
         {
-            Task.Run(() =>
+           /* Task.Run(() =>
             {
                 try
                 {
@@ -641,7 +641,7 @@ namespace SeldatMRMS
                 }
                 catch { }
             }
-            );
+            );*/
         }
     }
 }
