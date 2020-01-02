@@ -45,27 +45,29 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             {
                 foreach (RobotUnity item in RobotList)
                 {
-                    
-                    Point rP = Global_Object.CoorCanvas(item.properties.pose.Position);
-                    Point md = item.MiddleHeaderCv();
-                    Point md1 = item.MiddleHeaderCv1();
-                    Point md2 = item.MiddleHeaderCv2();
-                    Point md3 = item.MiddleHeaderCv3();
+                    if (!item.Equals(robot))
+                    {
+                        Point rP = Global_Object.CoorCanvas(item.properties.pose.Position);
+                        Point md = item.MiddleHeaderCv();
+                        Point md1 = item.MiddleHeaderCv1();
+                        Point md2 = item.MiddleHeaderCv2();
+                        Point md3 = item.MiddleHeaderCv3();
 
-                    bool onTouchR = ExtensionService.FindHeaderInsideCircleArea(rP, rPFrontLine, radius);
-                    bool onTouch0 = ExtensionService.FindHeaderInsideCircleArea(md, rPFrontLine, radius);
-                    bool onTouch1 = ExtensionService.FindHeaderInsideCircleArea(md1, rPFrontLine, radius);
-                    bool onTouch2 = ExtensionService.FindHeaderInsideCircleArea(md2, rPFrontLine, radius);
-                    bool onTouch3 = ExtensionService.FindHeaderInsideCircleArea(md3, rPFrontLine, radius);
-                    if (onTouchR || onTouch0 || onTouch1 || onTouch2 || onTouch3)
-                    {
-                        robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
-                        return true;// tiep tuc check
-                    }
-                    else
-                    {
-                        robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
-                        return false; // ket thuc check
+                        bool onTouchR = ExtensionService.FindHeaderInsideCircleArea(rP, rPFrontLine, radius);
+                        bool onTouch0 = ExtensionService.FindHeaderInsideCircleArea(md, rPFrontLine, radius);
+                        bool onTouch1 = ExtensionService.FindHeaderInsideCircleArea(md1, rPFrontLine, radius);
+                        bool onTouch2 = ExtensionService.FindHeaderInsideCircleArea(md2, rPFrontLine, radius);
+                        bool onTouch3 = ExtensionService.FindHeaderInsideCircleArea(md3, rPFrontLine, radius);
+                        if (onTouchR || onTouch0 || onTouch1 || onTouch2 || onTouch3)
+                        {
+                            robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+                            return true;// tiep tuc check
+                        }
+                        else
+                        {
+                            robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
+                            return false; // ket thuc check
+                        }
                     }
 
                 }
