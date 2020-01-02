@@ -36,6 +36,49 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         {
             this.robot = robot;
         }
+
+        protected bool _TrafficCheckInBuffer(Pose frontLinePoint, int bayId)
+        {
+            Point rPFrontLine= Global_Object.CoorCanvas(frontLinePoint.Position);
+            int radius = 50;
+            if (ExtensionService.CalDistance(robot.properties.pose.Position, frontLinePoint.Position) < DISTANCE_CHECk_BAYID)
+            {
+                foreach (RobotUnity item in RobotList)
+                {
+                    
+                    Point rP = Global_Object.CoorCanvas(item.properties.pose.Position);
+                    Point md = item.MiddleHeaderCv();
+                    Point md1 = item.MiddleHeaderCv1();
+                    Point md2 = item.MiddleHeaderCv2();
+                    Point md3 = item.MiddleHeaderCv3();
+
+                    bool onTouchR = ExtensionService.FindHeaderInsideCircleArea(rP, rPFrontLine, radius);
+                    bool onTouch0 = ExtensionService.FindHeaderInsideCircleArea(md, rPFrontLine, radius);
+                    bool onTouch1 = ExtensionService.FindHeaderInsideCircleArea(md1, rPFrontLine, radius);
+                    bool onTouch2 = ExtensionService.FindHeaderInsideCircleArea(md2, rPFrontLine, radius);
+                    bool onTouch3 = ExtensionService.FindHeaderInsideCircleArea(md3, rPFrontLine, radius);
+                    if (onTouchR || onTouch0 || onTouch1 || onTouch2 || onTouch3)
+                    {
+                        robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+                        return true;// tiep tuc check
+                    }
+                    else
+                    {
+                        robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
+                        return false; // ket thuc check
+                    }
+
+                }
+                robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
+                return false; // ket thuc check
+
+            }
+            else
+            {
+                robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
+                return false;// tiep tuc check
+            }
+        }
         protected bool TrafficCheckInBuffer(Pose frontLinePoint,int bayId)
         {
 
