@@ -304,7 +304,10 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 }
                                 else
                                 {
-                                    return item;
+                                    
+                                        return item;
+                                
+                                    
                                 }
                                 break;
                             default:
@@ -415,7 +418,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         {
             foreach (RobotUnity robot in this.robotManageService.RobotUnityRegistedList.Values)
             {
-                if (robot.bayId == bayId)
+               
+                if (Math.Abs(robot.bayId - bayId)<=3)
                     return true;
             }
             return false;

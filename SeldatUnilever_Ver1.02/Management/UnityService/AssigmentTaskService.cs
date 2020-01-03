@@ -73,6 +73,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 }
                 else
                 {
+                    
                     AssignWaitTask(null);
                     /*Check battery at ready and manual charge when rb in area ready*/
                     AssignTaskAtReady(null);
@@ -138,6 +139,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     {
                         procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robotwait, null);
                         robotManageService.RemoveRobotUnityWaitTaskList(robotwait);
+                        
                     }
                     else
                     {
@@ -159,7 +161,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robotwait, null);
                             Console.WriteLine(robotwait.properties.Label + " Assign goto ready_____________(-_-)______________");
                             robotManageService.RemoveRobotUnityWaitTaskList(robotwait);
-                            return false;
+                            return true;
                         }
                     }
                 }

@@ -289,14 +289,14 @@
                                  </ToolBarTray>
                                  </Border>-->
                         </Grid>
-                        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="14">
+                        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="22">
                             <Grid Name="Cursorhehe" VerticalAlignment="Bottom">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                    <Label Name="MouseCoor" Foreground="Black" Content="X:Y" FontSize="9" Margin="0,-6,0,0"></Label>
-                                    <Label Name="MouseCoor2" Foreground="Black" Content="X:Y" FontSize="9" Margin="0,-6,0,0"></Label>
+                                    <Label Name="MouseCoor" Foreground="Black" Content="X:Y" FontSize="9" Margin="0,-8,0,0"></Label>
+                                    <Label Name="MouseCoor2" Foreground="Black" Content="X:Y" FontSize="9" Margin="0,-8,0,0"></Label>
                                 </StackPanel>
                                 <StackPanel>
-                                    <Label Name="txt_Info" Foreground="Green" Content="Information" FontSize="10" Margin="0 -6 0 0" HorizontalContentAlignment="Right"></Label>
+                                    <Label Name="txt_Info"  Foreground="Red" Content="" FontSize="13" Margin="0 -16 0 0" HorizontalContentAlignment="Center"></Label>
                                 </StackPanel>
                             </Grid>
                         </Grid>

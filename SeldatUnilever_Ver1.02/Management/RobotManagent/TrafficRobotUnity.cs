@@ -455,7 +455,7 @@ namespace SeldatMRMS.Management
                     if (!flagLostPosition)
                     {
                        
-                        MessageBox.Show("Robot :" + properties.Label + " Lost Position");
+                        //MessageBox.Show("Robot :" + properties.Label + " Lost Position");
                     }
                     flagLostPosition = true;
 
