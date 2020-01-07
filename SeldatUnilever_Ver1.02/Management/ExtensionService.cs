@@ -56,5 +56,16 @@ namespace SeldatMRMS
         {
             return p.Position.X + "," + p.Position.Y + "," + p.AngleW;
         }
+
+        public static bool FindHeaderInsideCircleArea(Point pheader, Point center, double r)
+        {
+
+            double leftSideEq = (pheader.X - center.X) * (pheader.X - center.X) + (pheader.Y - center.Y) * (pheader.Y - center.Y);
+            if (Math.Sqrt(leftSideEq) <= r)
+                return true;
+            else
+                return false;
+        }
+
     }
 }

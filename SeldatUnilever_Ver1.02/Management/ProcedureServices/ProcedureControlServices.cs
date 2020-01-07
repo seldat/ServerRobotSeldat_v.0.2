@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,6 +34,7 @@ namespace SeldatMRMS
         public const UInt32 TIME_OUT_CLOSE_DOOR = 5000; /* ms */
         protected RegistryRobotJourney registryRobotJourney;
         protected RobotManagementService robotService;
+        public List<RobotUnity> RobotList;
         public enum ProcedureStatus
         {
             PROC_ALIVE,
@@ -396,6 +398,7 @@ namespace SeldatMRMS
         public void Registry(RobotManagementService robotService)
         {
             this.robotService = robotService;
+            this.RobotList = new List<RobotUnity>(this.robotService.RobotUnityRegistedList.Values);
         }
         public enum RobotGoToCharge
         {
