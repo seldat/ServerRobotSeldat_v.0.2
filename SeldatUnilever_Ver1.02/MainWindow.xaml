@@ -204,14 +204,16 @@
                                 <Separator/>
                                 <Button 
                                     Name="btn_ResetSpeed"
-                                    IsEnabled="False"
+                                    IsEnabled="True"
                                     Margin="5 0"
                                     Click="Btn_ResetSpeed_Click"
                                   
                                     ToolBar.OverflowMode="AsNeeded">
                                     <iconPacks:PackIconMaterial Name="btn_ResetBack"
                                                                 Foreground="Green"
-                                                                Kind="Amazon"/>
+                                                                Kind="Amazon"
+                                                                
+                                                                />
                                 </Button>
 
 

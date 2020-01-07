@@ -21,7 +21,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 {
     public class DeviceRegistrationService : HttpServer
     {
-
+        public static Mutex mutexDeviceList = new Mutex();
         public MainWindow mainWindow;
         public List<DeviceItem> deviceItemList;
 
