@@ -77,14 +77,18 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         {
             try
             {
+                DeviceRegistrationService.mutexDeviceList.WaitOne();
                 if (deviceItemsList.Count > 1)
                 {
                     var element = deviceItemsList[0];
                     deviceItemsList.RemoveAt(0);
                     deviceItemsList.Add(element);
                 }
+                DeviceRegistrationService.mutexDeviceList.ReleaseMutex();
             }
-            catch { }
+            catch {
+                ExtensionService.LogOut.ShowText("Error in MoveElementToEnd() !");
+            }
         }
 
         public OrderItem CheckHastask()

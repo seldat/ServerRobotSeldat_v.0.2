@@ -3,6 +3,7 @@ using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.UnityService;
 using SeldatMRMS.RobotView;
 using SeldatUnilever_Ver1._02.Form;
+using SeldatUnilever_Ver1._02.Management.RobotManagent;
 using SeldatUnilever_Ver1._02.Management.Statistics;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using System;
@@ -56,7 +57,7 @@ namespace SeldatUnilever_Ver1._02
         public MainWindow()
         {
             InitializeComponent();
-
+             ExtensionService.LogOut = new RobotLogOut("Log");
             ApplyLanguage();
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
@@ -99,7 +100,9 @@ namespace SeldatUnilever_Ver1._02
                 {
                     try
                     {
+                        DeviceRegistrationService.mutexDeviceList.WaitOne();
                         canvasControlService.ReloadListDeviceItems();
+                        DeviceRegistrationService.mutexDeviceList.ReleaseMutex();
                     }
                     catch { Console.WriteLine("Error reload device list"); }
                 }
@@ -186,6 +189,7 @@ namespace SeldatUnilever_Ver1._02
 
         private void OnChartIntterupTimer(object sender, ElapsedEventArgs e)
         {
+            DeviceRegistrationService.mutexDeviceList.WaitOne();
             List<ChartInfo> listRealChart = new List<ChartInfo>();
             List<ChartInfo> listRealChartTime = new List<ChartInfo>();
             long diffTicksProgram = DateTime.Now.Ticks-Global_Object.startTimeProgram;
@@ -230,6 +234,7 @@ namespace SeldatUnilever_Ver1._02
             pieTime.Draw(listRealChartTime);
             pieChart.Data = pie.pieCollection;
             pieChartTime.Data = pieTime.pieCollection;
+            DeviceRegistrationService.mutexDeviceList.ReleaseMutex();
         }
         public double TotalWorkingTime()
         {
@@ -596,7 +601,7 @@ namespace SeldatUnilever_Ver1._02
 
         private void Btn_ResetSpeed_Click(object sender, RoutedEventArgs e)
         {
-
+            ExtensionService.LogOut.Show();
         }
 
         private void Btn_ResetSpeed_Click_1(object sender, RoutedEventArgs e)

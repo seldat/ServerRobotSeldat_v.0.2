@@ -362,8 +362,13 @@ namespace SeldatMRMS.Management.RobotManagent
                 {
                     if (rbWt.properties.IsConnected)
                     {
+                       
                         result = new ResultRobotReady() { robot = rbWt, onReristryCharge = rbWt.getBattery() };
                         break;
+                    }
+                    else
+                    {
+                        ExtensionService.LogOut.ShowText("GetRobotUnityWaitTaskItem0 Robot " + rbWt.properties.Label + "Connected "+ rbWt.properties.IsConnected);
                     }
                 }
             }
@@ -455,6 +460,9 @@ namespace SeldatMRMS.Management.RobotManagent
                         RemoveRobotUnityReadyList(rbRd);
                     }
                     break;
+                }
+                else {
+                    ExtensionService.LogOut.ShowText("GetRobotUnityReadyItem0 Robot " + rbRd.properties.Label + "Connected " + rbRd.properties.IsConnected);
                 }
             }
             //while (RobotUnityReadyList.Count > 0)
