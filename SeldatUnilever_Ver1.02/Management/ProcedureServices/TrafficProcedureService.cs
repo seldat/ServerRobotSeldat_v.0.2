@@ -36,50 +36,101 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         {
             this.robot = robot;
         }
-
+        public class ZoneRegCheckIn
+        {
+            List<Point> ZoneReg;
+            List<Point> ZoneCheckIn;
+        }
         protected bool _TrafficCheckInBuffer(Pose frontLinePoint, int bayId)
         {
-            Point rPFrontLine= Global_Object.CoorCanvas(frontLinePoint.Position);
-            int radius = 50;
-            if (ExtensionService.CalDistance(robot.properties.pose.Position, frontLinePoint.Position) < DISTANCE_CHECk_BAYID)
-            {
-                foreach (RobotUnity item in RobotList)
-                {
-                    if (!item.Equals(robot))
-                    {
-                        Point rP = Global_Object.CoorCanvas(item.properties.pose.Position);
-                        Point md = item.MiddleHeaderCv();
-                        Point md1 = item.MiddleHeaderCv1();
-                        Point md2 = item.MiddleHeaderCv2();
-                        Point md3 = item.MiddleHeaderCv3();
+            // khu vực check in
 
-                        bool onTouchR = ExtensionService.FindHeaderInsideCircleArea(rP, rPFrontLine, radius);
-                        bool onTouch0 = ExtensionService.FindHeaderInsideCircleArea(md, rPFrontLine, radius);
-                        bool onTouch1 = ExtensionService.FindHeaderInsideCircleArea(md1, rPFrontLine, radius);
-                        bool onTouch2 = ExtensionService.FindHeaderInsideCircleArea(md2, rPFrontLine, radius);
-                        bool onTouch3 = ExtensionService.FindHeaderInsideCircleArea(md3, rPFrontLine, radius);
-                        if (onTouchR || onTouch0 || onTouch1 || onTouch2 || onTouch3)
-                        {
-                            robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
-                            return true;// tiep tuc check
-                        }
-                        else
-                        {
-                            robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
-                            return false; // ket thuc check
-                        }
+            List<Point> ListZonePo123 = new List<Point>();
+            List<Point> ListAkas123 = new List<Point>();
+
+            // tìm vị trí đầu line có nằm trong khu vực check in
+            // nếu có trong check in kiểm tra đã tới vùng check in chưa // check in chia ra cho từng vủng
+            // đã tới check in check tiếp vị trí robot khác trong vùng này đang làm việc
+
+            // PO123  { -49,-9}  {-11,-9}  {-11,-23}  {-49,-23}
+            // CHECKINPO123_JUJ   {-49,-6} {-39,-6} {-39,-13} {-49,-13}
+            // CHECKINPO123_VLP   {-64,-9} {-49,-9} {-49,-18} {-64,-18}
+            // AKAS123  { -11,-9}  {6,-9}  {6,-23}  {-11,-23}
+            // CHECKINAKAS123 {-12,-6} {-5,-6} {-5,-13} {-12,-13}
+            // JULEVO/CHECKINPO123_VLP   {-64,-9} {-49,-9} {-49,-18} {-64,-18}
+            // CHECKINJULEVO {-64,-6} {-57,-6} {-57,-13} {-64,-13} 
+
+
+            Point rPFrontLine = Global_Object.CoorCanvas(frontLinePoint.Position);
+            Point rP= Global_Object.CoorCanvas(robot.properties.pose.Position);
+            if (this.traffic.RobotIsInArea("PO123", rPFrontLine))
+            {
+                if(this.traffic.RobotIsInArea("CHECKINPO123_JUJ", rP) )
+                {
+                    if (this.traffic.HasOtherRobotUnityinArea("PO123", robot))
+                    {
+                        robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+                        return true;// tiep tuc check
+                    }
+                    else
+                    {
+                        robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
+                        return false; // ket thuc check
                     }
 
                 }
-                robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
-                return false; // ket thuc check
+                else if (this.traffic.RobotIsInArea("CHECKINPO123_VLP", rP))
+                {
+                    if (this.traffic.HasOtherRobotUnityinArea("PO123", robot) || this.traffic.HasOtherRobotUnityinArea("CHECKINPO123_JUJ", robot))
+                    {
+                        robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+                        return true;// tiep tuc check
+                    }
+                    else
+                    {
+                        robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
+                        return false; // ket thuc check
+                    }
+                }
 
             }
-            else
+            else if(this.traffic.RobotIsInArea("AKAS123", rPFrontLine))
             {
-                robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
-                return false;// tiep tuc check
+                if (this.traffic.RobotIsInArea("CHECKINAKAS123", rP))
+                {
+                    if (this.traffic.HasOtherRobotUnityinArea("AKAS123", robot))
+                    {
+                        robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+                        return true;// tiep tuc check
+                    }
+                    else
+                    {
+                        robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
+                        return false; // ket thuc check
+                    }
+
+                }
             }
+            else if (this.traffic.RobotIsInArea("JULEVO", rPFrontLine))
+            {
+                if (this.traffic.RobotIsInArea("CHECKINJULEVO", rP))
+                {
+                    if (this.traffic.HasOtherRobotUnityinArea("JULEVO", robot))
+                    {
+                        robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_STOP, true);
+                        return true;// tiep tuc check
+                    }
+                    else
+                    {
+                        robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
+                        return false; // ket thuc check
+                    }
+
+                }
+            }
+
+            robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
+            return false;// tiep tuc check
         }
         protected bool TrafficCheckInBuffer(Pose frontLinePoint,int bayId)
         {
