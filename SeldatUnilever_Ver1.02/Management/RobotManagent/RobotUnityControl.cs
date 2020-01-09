@@ -1210,8 +1210,8 @@ namespace SeldatMRMS.Management.RobotManagent
         protected override void OnClosedEvent(object sender, CloseEventArgs e)
         {
             //ConnectionStatusHandler(this, ConnectionStatus.CON_FAILED);
-            //  robotLogOut.ShowText(this.properties.Label,  "Disconnected to Ros Master");
-            //  robotLogOut.ShowText(this.properties.Label,  "Reconnecting...");
+            robotLogOut.ShowText(this.properties.Label, "Disconnected to Ros Master");
+            robotLogOut.ShowText(this.properties.Label, " try Reconnecting...");
             properties.IsConnected = false;
             this.url = properties.URL;
             base.OnClosedEvent(sender, e);

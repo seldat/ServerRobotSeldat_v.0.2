@@ -30,6 +30,12 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
            
 
         }
+        public RobotLogOut(String name)
+        {
+            InitializeComponent();
+            this.Title = name;
+
+        }
         public void SetName(String name)
         {
             this.Title = name;
@@ -51,6 +57,23 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
                     log.Info(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + " [" + src + "] [" + mytext.Text.Length + "] >> " + txt + Environment.NewLine);
                 });
            // });
+        }
+        public void ShowText(String txt)
+        {
+            // Task.Run(() =>
+            // {
+            txt_logout.Dispatcher.Invoke(() =>
+            {
+                var mytext = new TextRange(txt_logout.Document.ContentStart, txt_logout.Document.ContentEnd);
+                if (countLog++ > 1000)
+                {
+                    txt_logout.Document.Blocks.Clear();
+                    countLog = 0;
+                }
+                txt_logout.AppendText(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + " [" + this.Title + "] [" + mytext.Text.Length + "] >> " + txt + Environment.NewLine);
+                log.Info(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + " [" + this.Title + "] [" + mytext.Text.Length + "] >> " + txt + Environment.NewLine);
+            });
+            // });
         }
         public void ShowTextTraffic(String txt)
         {

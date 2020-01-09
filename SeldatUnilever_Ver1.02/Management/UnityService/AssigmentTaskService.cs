@@ -14,6 +14,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
     public class AssigmentTaskService : TaskRounterService
     {
 
+  
         public AssigmentTaskService() { }
         public void FinishTask(String userName)
         {
@@ -44,9 +45,11 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
 #if true
             while (Alive)
             {
+                ExtensionService.LogOut.ShowText("Error in MoveElementToEnd() !");
                 OrderItem odCheck = CheckHastask();
                 if (odCheck != null)
                 {
+                    
                     for (int i = 0; i < deviceItemsList.Count; i++)
                     {
                         OrderItem order = Gettask();

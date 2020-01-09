@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SeldatUnilever_Ver1._02.Management.RobotManagent;
+using System;
 using System.Windows;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 
@@ -6,6 +7,7 @@ namespace SeldatMRMS
 {
     public static class ExtensionService
     {
+        public static RobotLogOut LogOut;
         public static double CalDistance(Point p1, Point p2)
         {
             return Math.Sqrt((p2.X - p1.X) * (p2.X - p1.X) + (p2.Y - p1.Y) * (p2.Y - p1.Y));
@@ -54,5 +56,16 @@ namespace SeldatMRMS
         {
             return p.Position.X + "," + p.Position.Y + "," + p.AngleW;
         }
+
+        public static bool FindHeaderInsideCircleArea(Point pheader, Point center, double r)
+        {
+
+            double leftSideEq = (pheader.X - center.X) * (pheader.X - center.X) + (pheader.Y - center.Y) * (pheader.Y - center.Y);
+            if (Math.Sqrt(leftSideEq) <= r)
+                return true;
+            else
+                return false;
+        }
+
     }
 }
