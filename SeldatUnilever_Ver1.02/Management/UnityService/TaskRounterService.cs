@@ -77,17 +77,17 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         {
             try
             {
-                DeviceRegistrationService.mutexDeviceList.WaitOne();
+               // DeviceRegistrationService.mutexDeviceList.WaitOne();
                 if (deviceItemsList.Count > 1)
                 {
                     var element = deviceItemsList[0];
                     deviceItemsList.RemoveAt(0);
                     deviceItemsList.Add(element);
                 }
-                DeviceRegistrationService.mutexDeviceList.ReleaseMutex();
+                //DeviceRegistrationService.mutexDeviceList.ReleaseMutex();
             }
             catch {
-                ExtensionService.LogOut.ShowText("Error in MoveElementToEnd() !");
+                ExtensionService.LogOut.ShowText("Error in MoveElementToEnd() amount of device List =" + deviceItemsList.Count);
             }
         }
 

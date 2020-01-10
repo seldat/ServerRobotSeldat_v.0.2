@@ -49,7 +49,8 @@ namespace SeldatMRMS.Management.RobotManagent
             ROBOT_STATUS_CONNECT,
             ROBOT_STATUS_RECONNECT,
             ROBOT_STATUS_CHARGING,
-            ROBOT_STATUS_CAN_NOTGET_DATA
+            ROBOT_STATUS_CAN_NOTGET_DATA,
+            ROBOT_STOP_BUUFER_SAME_LINE
         }
         public struct Props
         {
@@ -774,6 +775,12 @@ namespace SeldatMRMS.Management.RobotManagent
             this.canvas.Children.Remove(headerPoint);
             this.canvas.Children.Remove(safetyArea);
             //RemoveHandle(props.name);
+        }
+
+       public override bool SetSpeedHighPrioprity(RobotSpeedLevel robotspeed, bool highpriority)
+        {
+            setColorRobotStatus(RobotStatusColorCode.ROBOT_STOP_BUUFER_SAME_LINE);
+           return  base.SetSpeedHighPrioprity(robotspeed, highpriority);
         }
         public override void Draw()
         {

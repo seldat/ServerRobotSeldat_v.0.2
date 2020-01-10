@@ -94,7 +94,7 @@
                                 </Button>
                                 <Separator/>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_areaConfigure}"
-                                        IsEnabled="False"
+                                        IsEnabled="True"
                                         Name="btn_Area"
                                         Margin="5 0"
                                         Click="Btn_Area_Click"

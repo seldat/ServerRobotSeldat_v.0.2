@@ -45,10 +45,10 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
 #if true
             while (Alive)
             {
-                ExtensionService.LogOut.ShowText("Error in MoveElementToEnd() !");
-                OrderItem odCheck = CheckHastask();
-                if (odCheck != null)
-                {
+               
+                //OrderItem odCheck = CheckHastask();
+                //if (odCheck != null)
+                //{
                     
                     for (int i = 0; i < deviceItemsList.Count; i++)
                     {
@@ -73,14 +73,14 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         }
                         MoveElementToEnd();
                     }
-                }
-                else
-                {
-                    
-                    AssignWaitTask(null);
-                    /*Check battery at ready and manual charge when rb in area ready*/
-                    AssignTaskAtReady(null);
-                }
+                //}
+                //else
+                //{
+
+                AssignWaitTask(null);
+                /*Check battery at ready and manual charge when rb in area ready*/
+                AssignTaskAtReady(null);
+                //}
                 Thread.Sleep(100);
             }
 #else
@@ -132,8 +132,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             OrderItem orderItem_wait = null;
             RobotUnity robotwait = null;
 #if true
-            if (robotManageService.RobotUnityWaitTaskList.Count > 0)
-            {
+            //if (robotManageService.RobotUnityWaitTaskList.Count > 0)
+            //{
                 ResultRobotReady result = robotManageService.GetRobotUnityWaitTaskItem0();
                 if (result != null)
                 {
@@ -168,7 +168,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         }
                     }
                 }
-            }
+            //}
             return false;
 #else
             while (true)
@@ -241,8 +241,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             OrderItem orderItem_ready = null;
             RobotUnity robotatready = null;
 #if true
-            if (robotManageService.RobotUnityReadyList.Count > 0)
-            {
+            //if (robotManageService.RobotUnityReadyList.Count > 0)
+            //{
                 ResultRobotReady result = robotManageService.GetRobotUnityReadyItem0();
                 if (result != null)
                 {
@@ -286,7 +286,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         }
                     }
                 }
-            }
+            //}
             return false;
 #else
             while (true)

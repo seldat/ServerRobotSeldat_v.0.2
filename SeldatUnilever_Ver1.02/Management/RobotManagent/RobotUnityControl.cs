@@ -331,6 +331,11 @@ namespace SeldatMRMS.Management.RobotManagent
                                 robotTemp.border.Background = new SolidColorBrush(Colors.LightGreen);
                                 break;
                             }
+                        case RobotStatusColorCode.ROBOT_STOP_BUUFER_SAME_LINE:
+                            {
+                                robotTemp.border.Background = new SolidColorBrush(Colors.LightSlateGray);
+                                break;
+                            }
                     }
                 });
             }
@@ -901,7 +906,7 @@ namespace SeldatMRMS.Management.RobotManagent
             return true;
         }
 
-        public bool SetSpeedHighPrioprity(RobotSpeedLevel robotspeed, bool highpriority)
+        public virtual bool SetSpeedHighPrioprity(RobotSpeedLevel robotspeed, bool highpriority)
         {
             if (this.trafficMod == TrafficMode.AUTO_MODE)
             {
@@ -910,6 +915,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 {
                     try
                     {
+
                         properties.speedInSpecicalArea = robotspeed + "_HIGH_PRIORITY";
                         StandardInt32 msg = new StandardInt32();
                         msg.data = Convert.ToInt32(RobotSpeedLevel.ROBOT_SPEED_STOP);

@@ -41,7 +41,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             List<Point> ZoneReg;
             List<Point> ZoneCheckIn;
         }
-        protected bool _TrafficCheckInBuffer(Pose frontLinePoint, int bayId)
+        protected bool TrafficCheckInBuffer(Pose frontLinePoint, int bayId)
         {
             // khu vực check in
 
@@ -61,8 +61,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             // CHECKINJULEVO {-64,-6} {-57,-6} {-57,-13} {-64,-13} 
 
 
-            Point rPFrontLine = Global_Object.CoorCanvas(frontLinePoint.Position);
-            Point rP= Global_Object.CoorCanvas(robot.properties.pose.Position);
+            Point rPFrontLine = frontLinePoint.Position;
+            Point rP=robot.properties.pose.Position;
             if (this.traffic.RobotIsInArea("PO123", rPFrontLine))
             {
                 if(this.traffic.RobotIsInArea("CHECKINPO123_JUJ", rP) )
@@ -132,7 +132,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             robot.SetSpeedHighPrioprity(RobotSpeedLevel.ROBOT_SPEED_NORMAL, false);
             return false;// tiep tuc check
         }
-        protected bool TrafficCheckInBuffer(Pose frontLinePoint,int bayId)
+        protected bool _____TrafficCheckInBuffer(Pose frontLinePoint,int bayId)
         {
 
             if (ExtensionService.CalDistance(robot.properties.pose.Position, frontLinePoint.Position) < DISTANCE_CHECk_BAYID)

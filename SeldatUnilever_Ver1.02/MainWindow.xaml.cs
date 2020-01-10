@@ -100,9 +100,9 @@ namespace SeldatUnilever_Ver1._02
                 {
                     try
                     {
-                        DeviceRegistrationService.mutexDeviceList.WaitOne();
+                       // DeviceRegistrationService.mutexDeviceList.WaitOne();
                         canvasControlService.ReloadListDeviceItems();
-                        DeviceRegistrationService.mutexDeviceList.ReleaseMutex();
+                       // DeviceRegistrationService.mutexDeviceList.ReleaseMutex();
                     }
                     catch { Console.WriteLine("Error reload device list"); }
                 }
@@ -189,7 +189,7 @@ namespace SeldatUnilever_Ver1._02
 
         private void OnChartIntterupTimer(object sender, ElapsedEventArgs e)
         {
-            DeviceRegistrationService.mutexDeviceList.WaitOne();
+           // DeviceRegistrationService.mutexDeviceList.WaitOne();
             List<ChartInfo> listRealChart = new List<ChartInfo>();
             List<ChartInfo> listRealChartTime = new List<ChartInfo>();
             long diffTicksProgram = DateTime.Now.Ticks-Global_Object.startTimeProgram;
@@ -234,7 +234,7 @@ namespace SeldatUnilever_Ver1._02
             pieTime.Draw(listRealChartTime);
             pieChart.Data = pie.pieCollection;
             pieChartTime.Data = pieTime.pieCollection;
-            DeviceRegistrationService.mutexDeviceList.ReleaseMutex();
+           // DeviceRegistrationService.mutexDeviceList.ReleaseMutex();
         }
         public double TotalWorkingTime()
         {
